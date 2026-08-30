@@ -1,7 +1,18 @@
 # Crooked Lane Book Nook — Engineering Design Plan (v1, for approval)
 
 A modular, fully-paintable, LED-lit miniature alley book nook.
-**Status: architecture only. No geometry is generated until this document is approved.**
+**Status: v2 — revised after your answers. Architecture only; no geometry generated yet.**
+
+### v2 changes
+| # | Your answer | Effect |
+|---|---|---|
+| 1 | Printer LED lamp kit / battery fairy lights | **Lighting fully re-architected around fairy lights.** See §7. The lamp kit is kept as an *optional* rear sky wash only — reasoning in §7.0 |
+| 2 | ok | `PERSP_STRENGTH 0.42`, `WALL_CANT 1.75°` locked |
+| 3 | ok | Shop names locked, text embossed by default |
+| 4 | **Bambu P2S** | Bed grows to 256³ → **no part needs splitting.** Walls and case panels now print in one piece |
+| 5 | PLA glazing | Printed PLA diffusers/glazing are now the **default**; slots still take sheet material |
+| 6 | Torn brick both sides | Locked |
+| — | *(my error, caught on re-check)* | v1 put a 3 mm wire channel into a 2.5 mm wall plate — impossible. Walls are now a 10 mm ribbed assembly with a real service cavity. See §2 |
 
 Design language: Victorian/Dickensian magical shopping lane. Original shop names and
 original geometry — the reference photos were used for *functional* analysis
@@ -62,30 +73,53 @@ BOOKNOOK_WIDTH   = 100.0   # X, across the alley
 BOOKNOOK_HEIGHT  = 240.0   # Z
 BOOKNOOK_DEPTH   = 200.0   # Y, front (0) to back
 SHELL_THICKNESS  = 2.2
-PLINTH_THICKNESS = 6.0
+PLINTH_HEIGHT    = 24.0    # v2: now houses the battery/controller drawer
+
+# ---- printer: Bambu P2S ---------------------------------------------------
+BED_X, BED_Y, BED_Z = 256.0, 256.0, 256.0   # <-- confirm on the machine
+NOZZLE, LAYER       = 0.4, 0.20
+MATERIAL            = "PLA"
+PANEL_SPLIT = (BOOKNOOK_HEIGHT + 6) > min(BED_X, BED_Y)   # False at 256 -> one-piece panels
 
 # ---- tolerances (the three that matter) -----------------------------------
-FIT_CLEARANCE       = 0.25  # structural mating faces, per side
-DECORATIVE_CLEARANCE= 0.20  # decorative snap-ins, per side
-SLIP_CLEARANCE      = 0.35  # chassis sliding into case, per side
-CRUSH_RIB           = 0.30  # sacrificial rib height inside sockets
-LEAD_IN_CHAMFER     = 0.50  # 45 deg at every socket mouth  <-- do not remove
+FIT_CLEARANCE        = 0.25  # structural mating faces, per side
+DECORATIVE_CLEARANCE = 0.20  # decorative snap-ins, per side
+SLIP_CLEARANCE       = 0.35  # chassis sliding into case, per side
+CRUSH_RIB            = 0.30  # sacrificial rib inside sockets
+LEAD_IN_CHAMFER      = 0.50  # 45 deg at every socket mouth  <-- do not remove
 
-# ---- structure ------------------------------------------------------------
-WALL_PLATE_T     = 2.5
+# ---- wall build-up (v2: walls are ribbed assemblies, not bare plates) ------
+WALL_FACE_T      = 2.5   # the brick plate the viewer sees
+WALL_SERVICE_D   = 7.5   # ribbed cavity behind it: channels, bead pockets, coil bays
+WALL_ASSEMBLY_D  = 10.0  # = FACE + SERVICE
 DETAIL_MIN_T     = 1.2
 STRUCT_MIN_T     = 2.0
-LIGHT_BLOCK_MIN_T= 1.5     # min solid left in front of any LED pocket
+LIGHT_BLOCK_MIN_T= 1.5   # min solid left in front of any emitter
 
-# ---- lighting -------------------------------------------------------------
-LED_DIAMETER       = 3.0
-LED_BORE           = 3.0 + 2*FIT_CLEARANCE
-LED_BORE_DEPTH     = 6.0
-WIRE_CHANNEL_WIDTH = 3.0
+# ---- lighting: fairy-light string (primary) -------------------------------
+LIGHT_SYSTEM       = "fairy"   # "fairy" | "discrete3mm" | "both"
+BEAD_POCKET_W      = 3.2   # micro-LED bead seat  (bead approx 2.0 x 4.0)
+BEAD_POCKET_H      = 5.0
+BEAD_POCKET_D      = 3.2
+WIRE_DIA           = 0.6   # enamelled copper pair
+WIRE_SLOT_W        = 1.4   # PASS-THROUGH slot on BOTH sides of every pocket
+WIRE_CHANNEL_WIDTH = 3.0   # carries up to 4 strands (out + return legs)
 WIRE_CHANNEL_DEPTH = 3.0
-WIRE_CAPTURE_MOUTH = 2.4   # channel mouth narrowed so wire snaps in and stays
-DIFFUSER_SLOT_T    = 1.2   # accepts vellum / acetate / 0.8-1.0 acrylic
-BUS_CHANNEL_WIDTH  = 4.5
+WIRE_CAPTURE_MOUTH = 2.2   # pinched mouth: wire snaps in and stays, no tape
+COIL_BAY = (34.0, 46.0, 5.0)   # stow unused string length (W, H, D) x4
+LED_BORE = 3.0 + 2*FIT_CLEARANCE   # retained for the "discrete3mm" option
+
+# ---- lighting: optional RGB/CCT bar as rear sky wash -----------------------
+SKY_BAR_ENABLE = True
+SKY_BAR_MAX    = (90.0, 16.0, 10.0)   # cradle accepts up to this (L, W, T)
+
+# ---- power drawer ---------------------------------------------------------
+DRAWER_INNER   = (150.0, 86.0, 18.0)  # L, W, H -- 2 battery boxes + controller
+BATT_BOX       = (64.0, 28.0, 17.0)   # 3xAAA default; shims for 2xCR2032
+
+# ---- glazing / diffusers (v2: printed PLA is the default) -----------------
+DIFFUSER_PRINT_T = 0.8   # natural/white PLA, 3 walls, 0 % infill
+DIFFUSER_SLOT_T  = 1.2   # also takes vellum / acetate / PET / 1.0 acrylic
 
 # ---- surface detail -------------------------------------------------------
 BRICK_RELIEF       = 0.6
@@ -97,27 +131,26 @@ COBBLE_SIZE_FRONT  = 10.0
 RANDOM_SEED        = 20260830   # deterministic: same seed = same STLs
 
 # ---- forced perspective ---------------------------------------------------
-PERSP_STRENGTH  = 0.42   # element scale at rear = 1 - 0.42 = 0.58
-WALL_CANT_DEG   = 1.75   # each wall leans inward toward the rear
-FACADE_LEAN_MAX = 4.0    # per-block "crooked" lean, from the facade table
-
-# ---- print constraints ----------------------------------------------------
-BED_X, BED_Y, BED_Z = 220.0, 220.0, 250.0
-NOZZLE, LAYER       = 0.4, 0.20
+PERSP_STRENGTH  = 0.42
+WALL_CANT_DEG   = 1.75
+FACADE_LEAN_MAX = 4.0
 ```
 
 ### Derived envelope
 
-| Quantity | Value | Check |
-|---|---|---|
-| Case cavity (X × Z × Y) | 95.6 × 231.2 × 197.8 | — |
-| Chassis envelope | 94.8 × 230.4 × 196.5 | slides on 0.35/side |
-| Clear alley at front (wall face to wall face) | 88.6 | |
-| Clear alley at rear (after 1.75° cant) | 76.6 | subtle, not cartoonish |
-| Visible alley aperture at rear block | ≈ 30 | after facades step in |
-| Perceived depth | ≈ 500–600 mm | 2.5–3× actual |
+| Quantity | v1 | **v2** | Note |
+|---|---|---|---|
+| Case cavity (X × Z × Y) | 95.6 × 231.2 × 197.8 | **95.6 × 209.6 × 197.8** | plinth grew to hold the drawer |
+| Chassis envelope | 94.8 × 230.4 × 196.5 | **94.8 × 208.9 × 196.5** | |
+| Wall assembly depth | 2.5 | **10.0** | face plate + service cavity |
+| Clear alley, front | 88.6 | **74.8** | narrower — better proportion, 1 : 2.8 |
+| Clear alley, rear (after cant) | 76.6 | **62.8** | |
+| Visible aperture at rear block | ≈ 30 | **≈ 28** | after facades step in |
+| Perceived depth | — | **≈ 500–600** | 2.5–3× actual |
 
----
+Losing 21 mm of scene height to the drawer is the right trade: a battery swap becomes a
+five-second drawer pull instead of a disassembly, and the alley proportion actually
+improves.
 
 ## 3. Forced perspective — the scale ladder
 
@@ -194,24 +227,33 @@ generates both halves and the clearances are guaranteed to match.
 
 ### 5.1 Structure — inner chassis (00–09)
 
+**P2S dividend:** at 256 × 256 nothing needs splitting. Walls and case panels that v1
+had to cut in half now print in one piece — fewer seams, fewer parts, better alignment.
+
 | ID | Part | Size (mm) | Print | Notes |
 |---|---|---|---|---|
-| 00 | `Chassis_Base_Pan` | 196 × 95 × 10 | flat, no support | floor rails, rear junction bay, 2 case dovetails underneath |
-| 01A | `Left_Wall_Lower` | 196 × 118 × 2.5+relief | flat on outer face | brick relief up, LED pockets & channels on back |
-| 01B | `Left_Wall_Upper` | 196 × 116 | flat | dovetail + 2 pins to 01A |
-| 02A | `Right_Wall_Lower` | 196 × 118 | flat | mirror |
-| 02B | `Right_Wall_Upper` | 196 × 116 | flat | mirror |
-| 03A | `Rear_Perspective_Block` | 76 × 92 × 46 | upright | miniature converging facades, 4 compressed storeys |
-| 03B | `Rear_Archway` | 44 × 60 × 14 | flat | the "lane continues" arch |
-| 03C | `Rear_Silhouette_Screen` | 70 × 80 × 1.6 | flat | distant rooftops/chimneys, backlit |
-| 03D | `Rear_Glow_Diffuser_Frame` | 72 × 84 × 6 | flat | holds diffuser sheet + 2 LEDs |
-| 04 | `Cobblestone_Floor` | 194 × 84 × 4 | flat, cobbles up | tapered, cambered, slides on 00 rails |
+| 00 | `Chassis_Base_Pan` | 196 × 95 × 10 | flat, no support | floor rails, wire bus, drawer roof |
+| 01 | `Left_Wall` | 196 × 209 × 2.5 | flat, brick up | **one piece** on a 256 bed |
+| 01R | `Left_Wall_Service_Rib` | 196 × 209 × 7.5 | flat | channels, bead pockets, coil bays; bonds/clips to 01 |
+| 02 | `Right_Wall` | 196 × 209 × 2.5 | flat | mirror |
+| 02R | `Right_Wall_Service_Rib` | 196 × 209 × 7.5 | flat | mirror |
+| 03A | `Rear_Perspective_Block` | 62 × 84 × 46 | upright | converging facades, 4 compressed storeys |
+| 03B | `Rear_Archway` | 40 × 54 × 14 | flat | the "lane continues" arch |
+| 03C | `Rear_Silhouette_Screen` | 66 × 72 × 1.6 | flat | distant rooftops/chimneys, backlit |
+| 03D | `Rear_Glow_Diffuser_Frame` | 68 × 76 × 6 | flat | diffuser + fairy beads **or** sky bar |
+| 03E | `Sky_Bar_Cradle` | 92 × 20 × 12 | flat | optional; parametric to `SKY_BAR_MAX` |
+| 04 | `Cobblestone_Floor` | 194 × 72 × 4 | flat, cobbles up | tapered, cambered, slides on 00 rails |
 | 04B/04C | `Gutter_Left / _Right` | 190 × 6 × 3 | flat | drain channel + 3 grates |
-| 05A/05B | `Ceiling_Baffle_Front / _Rear` | 90 × 98 × 1.6 | flat | sky occluder, overhead sign rail, top wire race |
-| 06 | `Front_Bezel_Left` | 196*… 44 × 232 × 5 | flat | **torn broken-brick edge** |
-| 07 | `Front_Bezel_Right` | 44 × 232 × 5 | flat | mirror, different break pattern |
-| 08 | `Front_Arch_Header` | 90 × 26 × 8 | flat | ties the two bezels, hides the ceiling seam |
-| 09 | `Chassis_Rear_Wall` | 94 × 90 × 2.5 | flat | closes the cartridge, wire grommet |
+| 05 | `Ceiling_Baffle` | 76 × 196 × 1.6 | flat | sky occluder, overhead sign rail, top wire race |
+| 06 | `Front_Bezel_Left` | 40 × 208 × 5 | flat | **torn broken-brick edge** |
+| 07 | `Front_Bezel_Right` | 40 × 208 × 5 | flat | mirror, different break pattern |
+| 08 | `Front_Arch_Header` | 90 × 24 × 8 | flat | ties the bezels, hides the ceiling seam |
+| 09 | `Chassis_Rear_Wall` | 94 × 80 × 2.5 | flat | closes the cartridge, wire grommet |
+
+Wall face (01/02) and service rib (01R/02R) are separate parts on purpose: the face
+prints brick-up with no supports and gets painted; the rib prints flat and stays unseen.
+They join with four T3 tongues + two locating pins, so the rib can come off if you need
+to re-route a string.
 
 ### 5.2 Left facade (10–19) — shops, front → rear
 
@@ -307,38 +349,51 @@ generates both halves and the clearances are guaranteed to match.
 
 ### 5.5 Lighting parts (40–49)
 
-| 40A–40F | `Light_Baffle_A..F` — snap-on caps sealing each LED pocket, 1.2 mm walls |
-| 41A–41D | `Diffuser_Holder_A..D` — 1.2 mm slot, takes vellum/acetate/acrylic |
-| 42A–42E | `Diffuser_Plate_Printed_A..E` — 0.8 mm printed fallback, natural PLA, 0 % infill |
-| 43 | `Junction_Bay_Cover` — snaps over the rear-bottom electronics bay |
-| 44 | `Wire_Clip` ×10 — printed channel retainers |
-| 45 | `LED_Collar` ×6 — 3 mm→2 mm bore reducer for smaller LEDs |
+| ID | Part | Purpose |
+|---|---|---|
+| 40A–40F | `Light_Baffle_A..F` | snap-on caps sealing each bead pocket, 1.2 mm walls — stops cross-talk between shops |
+| 41A–41D | `Diffuser_Holder_A..D` | 1.2 mm slot |
+| 42A–42H | `Diffuser_Plate_A..H` | **0.8 mm printed PLA, natural/white, 3 walls, 0 % infill** — the default glazing |
+| 42J–42L | `Glazing_Clear_A..C` | thin printed frame for a scrap of clear PET, for the two shop windows you want to see *into* |
+| 43 | `Bus_Cover` | snaps over the base-pan wire bus |
+| 44 | `Wire_Clip` ×12 | printed channel retainers |
+| 45A–45D | `Coil_Bay_Cover` | traps stowed surplus string so it can't rattle or migrate |
+| 46 | `Bead_Shim` ×8 | 0.5 mm packers if your bead is smaller than the 3.2 pocket |
+| 47 | `String_Entry_Grommet` ×4 | plinth-to-chassis wire pass-through |
 
 ### 5.6 Outer case (50–59)
 
-| 50A/50B | `Outer_Left_Lower / _Upper` — 200 × 118 each, dovetail-joined |
-| 51A/51B | `Outer_Right_Lower / _Upper` |
-| 52 | `Outer_Top` — 200 × 100 × 2.2 |
-| 53A/53B | `Outer_Back_Lower / _Upper` — **service hatch**, 2 × C4 clips |
-| 54 | `Outer_Base_Plinth` — 200 × 100 × 6, carries the chassis rails |
-| 55A/55B | `Case_Spine_Trim_L / _R` — hides the front vertical seams |
-| 56A–56F | `Case_Clip_Insert` ×6 — separate C4 clips (printable in a tougher filament) |
-| 57 | `Foot_Pad` ×4 |
+| ID | Part | Size | Note |
+|---|---|---|---|
+| 50 | `Outer_Left` | 200 × 240 × 2.2 | **one piece** on the P2S |
+| 51 | `Outer_Right` | 200 × 240 × 2.2 | one piece |
+| 52 | `Outer_Top` | 200 × 100 × 2.2 | |
+| 53 | `Outer_Back` | 100 × 216 × 2.2 | **service hatch**, 2 × C4 clips |
+| 54 | `Plinth_Body` | 200 × 100 × 24 | drawer housing + chassis rails |
+| 55 | `Power_Drawer` | 150 × 86 × 18 | **slides out the back**; battery boxes + controller |
+| 56 | `Drawer_Face` | 96 × 22 × 3 | flush black face, finger notch, detent |
+| 57 | `Batt_Box_Cradle` ×2 | parametric to `BATT_BOX` | shims for coin-cell packs |
+| 58A/58B | `Case_Spine_Trim_L / _R` | | hides the front vertical seams |
+| 59A–59F | `Case_Clip_Insert` ×6 | | separate C4 clips |
+| 59G | `Foot_Pad` ×4 | | |
 
-Nothing larger than 200 × 118 — every case panel prints flat, no supports, no tall
-thin walls.
+Largest part 200 × 240 — fits a 256 bed flat, no supports, no tall thin walls. If you
+confirm a smaller bed, `PANEL_SPLIT` flips to `True` and the same source emits
+dovetail-joined halves instead.
 
-### 5.7 Switch module (60–69)
+### 5.7 Power & switch module (60–69)
 
-| 60 | `Switch_Housing` — 34 × 24 × 14, clips into a keyhole in 53A |
-| 61 | `Switch_Cover` — snap-on, integral cable clamp |
-| 62A | `Switch_Bezel_Rocker` (KCD11 ~ 20 × 13) |
-| 62B | `Switch_Bezel_Slide` (SS12D00) |
-| 62C | `Switch_Bezel_Button` (12 mm) |
-| 63 | `Jack_Plate_DC` (5.5 × 2.1 barrel jack) |
-| 64 | `Strain_Relief_Insert` — serpentine, parametric for Ø3.0–4.5 cable |
+No soldering required in the default build.
 
-One housing, four swappable bezels — you pick the switch after the print, not before.
+| ID | Part | Note |
+|---|---|---|
+| 60 | `Switch_Housing` | 34 × 24 × 14, clips into a keyhole in 53 |
+| 61 | `Switch_Cover` | snap-on, integral cable clamp |
+| 62A–62C | `Switch_Bezel_Rocker / _Slide / _Button` | swappable — pick the switch after printing |
+| 62D | `Bezel_Blank` | if you just use the fairy-light packs' own switches in the drawer |
+| 63 | `Jack_Plate_DC` | 5.5 × 2.1 barrel jack, for a future mains conversion |
+| 64 | `Strain_Relief_Insert` | serpentine, parametric Ø3.0–4.5 cable |
+| 65 | `Remote_Clip` | holds the lamp kit's IR/RF remote to the case back, if you fit the sky bar |
 
 ### 5.8 Jigs & aids (70–79)
 
@@ -354,9 +409,9 @@ One housing, four swappable bezels — you pick the switch after the print, not 
 ```
                                  [52 Outer_Top]
                                         |
-   [50A/50B Outer_Left] ---- CASE SLEEVE ---- [51A/51B Outer_Right]
+      [50 Outer_Left] -------- CASE SLEEVE -------- [51 Outer_Right]
                                         |
-                              [54 Outer_Base_Plinth]
+                                 [54 Plinth_Body]
                                         |
                    ══ chassis slides in from rear on rails ══
                                         |
@@ -364,75 +419,142 @@ One housing, four swappable bezels — you pick the switch after the print, not 
    │                                                                     │
    │  [05 Ceiling_Baffle] ── overhead sign rail ── [30A banner, 32 chain] │
    │        |                                                            │
-   │  [01A/01B Left Wall] <-P2/T3- 10*,11*,12*,13*,14*,15*,16*,17*,19*   │
+   │  [01 Left_Wall] + [01R Service_Rib] <-P2/T3- 10*..19*               │
    │        |                                                            │
-   │  [02A/02B Right Wall] <-P2/T3- 20*,21*,22*,23*,24*,25*,26*,27*,29*  │
+   │  [02 Right_Wall] + [02R Service_Rib] <-P2/T3- 20*..29*              │
    │        |                                                            │
-   │  [03A Rear_Block] + [03B Arch] + [03C Silhouette] + [03D Glow]      │
+   │  [03A Rear_Block] +[03B Arch] +[03C Silhouette] +[03D Glow]         │
+   │                                   +[03E Sky_Bar_Cradle] (optional)  │
    │        |                                                            │
    │  [04 Cobblestone_Floor] <-P1- 35*,36*,37*,38*,39*                   │
    │        |                                                            │
-   │  [00 Chassis_Base_Pan] --> [43 Junction_Bay_Cover]                  │
+   │  [00 Chassis_Base_Pan] --> [43 Bus_Cover]                           │
    └─────────────────────────────────────────────────────────────────────┘
                                         |
-                        [53A/53B Rear hatch] + [60-64 Switch]
+              STRING A loop ↺        STRING B loop ↺
+                                        |
+   [55 Power_Drawer] + [57 Batt_Cradles] + [56 Drawer_Face]  ← slides out the back
+                                        |
+                        [53 Rear hatch] + [60-65 Switch module]
 ```
 
 ### Build sequence (the order the kit is designed around)
 
 1. Print **70 Tolerance_Test_Coupon**. Pick the clearance that feels right, set it in
    `params.py`, re-export. *Everything downstream depends on this one step.*
-2. Print structure (00–09), case (50–57), then decorative parts in batches.
-3. Prime + paint structure: brick, stone, cobbles, weathering.
+2. Print structure (00–09), case (50–59), then decorative parts in batches.
+3. Prime + paint structure: brick, stone, cobbles, weathering. **Mask every socket** —
+   paint film eats 0.15–0.25 mm of fit.
 4. Paint decorative parts **on the sprue handles (72)**, off the model.
-5. Dry-fit every decorative part before paint is fully cured — mark any tight socket.
+5. Dry-fit every decorative part before paint fully cures — mark any tight socket.
 6. Snap decorative parts into walls and floor.
-7. Fit diffusers (41/42), then glazing (10C, 11C, …).
-8. Seat LEDs in their bores, cap with baffles (40A–40F).
-9. Route wire into the 3 × 3 channels, clip with 44, down to the junction bay.
-10. Land the four branches in the bay, cover with 43.
+7. Fit diffusers (42) and glazing (42J–42L) into their holders.
+8. **Thread string A**, bead by bead, front to back: seat each bead in its pass-through
+   pocket, press the wire into the 3 × 3 channel, cap with a baffle (40x) as you go.
+   Then string B. Clip with 44.
+9. Coil the surplus into bays 45A–45D and cover.
+10. Both string tails down the bus, through grommets 47, into the drawer.
 11. **Power up and test on the bench** — everything is still open and reachable.
-12. Assemble chassis: base pan + walls + rear block + floor + ceiling baffle.
-13. Fit front bezels (06/07) and arch header (08).
-14. Clip the case sleeve together (50/51/52/54/56).
-15. Slide the chassis in from the rear.
-16. Fit switch module to the hatch (60–64), connect, clip hatch on.
+    *Do not skip this.* Rethreading a string after the chassis closes is miserable.
+12. Fit the service ribs (01R/02R) to the wall faces.
+13. Assemble chassis: base pan + walls + rear block + floor + ceiling baffle.
+14. Fit front bezels (06/07) and arch header (08).
+15. Clip the case sleeve together (50/51/52/54/59).
+16. Slide the chassis in from the rear.
+17. Battery boxes into cradles (57), into drawer (55), face on (56).
+18. Switch module to the hatch (60–65), clip hatch on.
+
+Optional sky bar: fit into cradle 03E at step 13, controller into the drawer at step 17.
 
 ---
 
-## 7. LED routing plan
+## 7. Lighting plan (v2 — fairy-light architecture)
 
-**Topology:** 4 branches → one rear-bottom junction bay → one switch → one supply.
+### 7.0 Which of your two options, and why
 
-| Branch | Positions | Count | Route |
-|---|---|---|---|
-| **A** left facade | L1 bow ×2, L1 fanlight, L2 bay ×2, L2 door, L3 oriel, L attic | 8 | back of left wall → vertical trunk at y=170 → base pan |
-| **B** right facade | R1 window ×2, R1 door lamp, R2 shop ×2, R3 shop, R upper | 7 | mirror |
-| **C** lanterns + signs | 33A, 34A, 34C, banner backlight 30A | 4 | ceiling baffle race → down the rear corner |
-| **D** rear glow | archway ×2, distant window | 3 | direct into the bay |
-| | | **22** | |
+**Use the Minetom battery fairy lights as the primary system. Do not use the printer
+lamp kit for the main lighting.** Three reasons, in order of weight:
 
-**Channels.** 3 × 3 mm troughs on the *outer* face of both walls, mouth pinched to
-2.4 mm so wire snaps in and stays without tape. Lateral spurs run from each LED bore to
-the nearest vertical trunk. The ceiling baffle carries a top race for the overhead
-lanterns and the banner. A 4.5 mm bus channel runs along the rear edge of the base pan.
+1. **It cannot get light behind individual windows.** That is the entire book-nook
+   effect — twenty small pools of warm light, each trapped behind its own shopfront.
+   A bar lights the *volume*, which is the one thing you must avoid.
+2. **Flood light kills the depth.** Forced perspective depends on the rear being dimmer
+   and cooler than the front. Even illumination flattens the alley and throws away most
+   of §3.
+3. **It almost certainly won't fit.** Printer chamber bars are typically 250–300 mm rigid
+   aluminium channels. The chassis cavity is 94.8 mm wide and each wall service cavity is
+   7.5 mm deep. Unless yours are short flexible strips with cut marks, they physically
+   can't go in.
 
-**Pass-throughs.** Ø4 grommeted holes between wall halves (01A↔01B, 02A↔02B) and at the
-wall/base junctions, so no wire is ever visible from the alley.
+The fairy lights are, by contrast, exactly the right tool: 2 mm beads on 0.6 mm enamelled
+wire, warm white, no soldering, and six strings gives you generous spares.
 
-**Junction bay.** 30 × 22 × 12 cavity at rear-centre of the base pan: two tie-off posts,
-space for a small resistor board or JST header, and cover 43. One Ø6 grommet through
-09 and 53A to the switch.
+**But the lamp kit is not wasted.** One bar — or one cut segment, if the strip is
+cuttable — mounted behind the rear silhouette screen (03C) in cradle 03E makes an
+excellent **adjustable sky**. The 3000 K–6000 K range dials dusk → moonlight, and the RGB
+mode gives you a green or violet "something magical is happening down the lane" setting,
+against the warm shop windows in front of it. That contrast is the single best-looking
+thing you can do with this build. It is `SKY_BAR_ENABLE = True`, fully optional, and the
+nook works completely without it.
 
-**No-see rules, enforced in geometry:**
-- Every LED bore leaves ≥ `LIGHT_BLOCK_MIN_T` (1.5 mm) of solid toward the viewer.
-- Every bore is capped by a baffle (40x) so light cannot bleed to the neighbouring bay —
-  each window is an optically closed box.
-- Diffuser sits between the LED and the glazing in every case; no bare emitter is ever on
-  a sight line from the front opening.
-- Brick relief never thins the wall below 1.9 mm in front of a lit cavity.
+### 7.1 The architectural consequence: strings pass *through*, they don't terminate
 
----
+This is the change that rewrites v1's plan. A discrete 3 mm LED is a dead end — one
+blind bore, one wire exit. A fairy-light bead is a **point on a continuous series
+circuit**: the wire arrives, the bead sits, the wire leaves. So:
+
+- Every emitter site is a **pass-through pocket**: 3.2 × 5.0 × 3.2 seat with a 1.4 mm
+  wire slot on **both** sides.
+- The channel network is a **path, not a tree**. Two strings, each a loop that leaves the
+  drawer, threads every pocket on its route, and returns to the drawer.
+- **A fairy-light string cannot be shortened** without killing it — it's one series
+  circuit. You will have 1–2 m of surplus per string. So the design includes four
+  **coil bays** (34 × 46 × 5) behind the walls with snap covers (45A–45D). This is the
+  detail most book-nook builds get wrong and end up hot-gluing surplus wire to the back.
+
+### 7.2 The two routes
+
+| String | Route (drawer → … → drawer) | Beads used |
+|---|---|---|
+| **A — left + front** | drawer → left grommet → up rear trunk → L attic 14A → L oriel 12A → upper sash 13A-D → L2 apothecary bay ×2 → L2 door fanlight → L1 bow window ×2 → L1 fanlight → lantern 33A → *return leg shares the channel* → drawer | 13 |
+| **B — right + rear** | drawer → right grommet → R1 tall window ×2 → R1 door lamp → R2 broom shop ×2 → banner backlight 30A → lantern 34A → R upper 23A-C → R3 shop → lantern 34C → rear archway ×2 → rear distant window → drawer | 16 |
+
+29 lit points from two of your six strings. The remaining four are spares — which is why
+I'm not worried about a bead failing mid-build.
+
+Both walls' channels are 3.0 × 3.0, so the out and return legs share one channel
+comfortably (4 strands of 0.6 mm). The mouth pinches to 2.2 mm: press the wire in with a
+fingernail and it stays. No tape, no glue.
+
+### 7.3 Pass-throughs, bus, drawer
+
+- Ø4 grommeted holes at every wall/base junction (47) — no wire is ever visible from the
+  alley.
+- The ceiling baffle (05) carries a top race for the overhead lanterns and the banner.
+- A 4.5 mm bus channel runs the rear edge of the base pan, covered by 43, down through
+  the plinth roof into the drawer.
+- **Drawer (55/56):** 150 × 86 × 18 internal, slides out the back below the hatch. Holds
+  two battery boxes in cradles (57) plus the sky-bar controller. Battery change = pull the
+  drawer. You never open the nook again after final assembly.
+- Cradle 57 is parametric to `BATT_BOX` and ships with shims, so it takes a 3×AAA box, a
+  2×AA box, or a flat coin-cell pack.
+
+### 7.4 No-see rules, enforced in the geometry
+
+- Every pocket leaves ≥ `LIGHT_BLOCK_MIN_T` (1.5 mm) of solid toward the viewer.
+- Every pocket is capped by a baffle (40x) — each shop window is an optically closed box,
+  so one bead cannot wash its neighbour.
+- A diffuser always sits between bead and glazing. No bare bead is on a sight line from
+  the front opening.
+- Brick relief never thins the wall face below 1.9 mm in front of a lit cavity.
+
+### 7.5 One honest caveat about coin cells
+
+If your Minetom packs turn out to use 2×CR2032 rather than AAA cells, they will be dim
+and will need replacing often. The drawer makes that survivable, but the better fix is a
+$3 3×AA holder wired to one string's leads — a two-wire splice, no electronics. I've
+sized the drawer so an AA box fits, so this stays an option you can take later without
+reprinting anything.
 
 ## 8. Brick and cobblestone generation
 
@@ -457,7 +579,7 @@ follows mortar lines like a real demolished wall, and the two sides break differ
 
 | Rule | How it's enforced |
 |---|---|
-| Fits 220 × 220 × 250 | Largest part 200 × 118. Automated bounding-box assertion on every export. |
+| Fits 256 × 256 × 256 (P2S) | Largest part 200 × 240. Automated bbox assertion on every export; `PANEL_SPLIT` auto-splits if you confirm a smaller bed. |
 | No supports | Every part has a flat print face; overhangs held ≤ 45°; bay-window undersides corbelled, not cantilevered |
 | Min thickness | 1.2 detail / 2.0 structural, asserted where checkable |
 | No bridges over voids | Bay roofs and awnings print as separate flat parts and snap on |
@@ -465,7 +587,11 @@ follows mortar lines like a real demolished wall, and the two sides break differ
 | Layer direction | Clips oriented so layers run along the beam |
 | Seam hiding | All part splits fall on mortar lines, cornices, or behind trim |
 
-Estimate: **~104 parts, ~14 plates, 55–70 h print time, 450–600 g PLA.**
+| Enclosed-chamber PLA | P2S is enclosed — run the big flat panels with the door cracked to avoid heat creep on long prints |
+| Textured plate | Case panels print face-down: the textured PEI finish gives a free matte-black book-cover look |
+
+Estimate: **~101 parts, ~11 plates, 50–65 h print time, 430–580 g PLA.** Fewer parts and
+plates than v1 because the P2S bed removed every split.
 
 ---
 
@@ -513,21 +639,21 @@ Remaining real risks:
    socket costs roughly 0.15–0.25 mm of fit. The design assumes sockets are masked or the
    pegs are scraped; I'll call this out at every mount in the assembly guide.
 
-## 12. Decisions I need before cutting geometry
+## 12. Status — decisions resolved
 
-1. **Power.** 5 V USB (recommended: cheap, safe, no batteries, resistors in the junction
-   bay), 3 V pre-wired LEDs on 2×AA, or 12 V? Changes junction bay size and rear plate.
-2. **Perspective strength.** `PERSP_STRENGTH = 0.42` and `WALL_CANT_DEG = 1.75` — stronger,
-   weaker, or as proposed?
-3. **Sign text.** Blank plates only, embossed with my fictional names, or your own names?
-   Proposed: Moonwright & Daughters, The Brass Cauldron, Pennyquill's, Grimsby's Owlery &
-   Post, Holloway Broom Co., The Inkwell, Crooked Lane.
-4. **Printer confirm.** 220 × 220 × 250, 0.4 nozzle — and is a two-piece split of the case
-   side panels acceptable? (A 240 mm panel cannot print flat on a 220 bed; the alternative
-   is printing it on edge, which I do not recommend.)
-5. **Glazing material** you plan to use — vellum, acetate, or 0.8 mm frosted acrylic?
-   Fixes the diffuser slot at 1.2 mm or adjusts it.
-6. **Front opening.** Full-height torn brick break on both sides (as proposed), or a
-   framed rectangular opening with the break only at the top?
+All six questions are answered and locked into §2. Nothing is blocking geometry
+generation.
 
-Reply with changes, or "approved" and I'll generate the full CadQuery source.
+Two measurements I'd like **when convenient** — neither blocks the build, both are
+one-line parameter edits afterwards:
+
+1. **Bed size on the P2S.** I've assumed 256 × 256 × 256. If it's smaller, `PANEL_SPLIT`
+   flips itself and re-emits split panels; nothing else changes.
+2. **The lamp kit's bar dimensions and voltage** (length × width × thickness; USB 5 V,
+   12 V or 24 V), and whether the strip has cut marks. Only affects the optional sky-bar
+   cradle 03E. If the bars turn out to be long rigid aluminium, we simply leave
+   `SKY_BAR_ENABLE = False` and the nook is complete without it.
+
+One thing worth checking before you print: whether the fairy-light bead really is about
+2 × 4 mm. Pocket 46 shims cover a smaller bead; a much larger one is a one-line change to
+`BEAD_POCKET_*`.
