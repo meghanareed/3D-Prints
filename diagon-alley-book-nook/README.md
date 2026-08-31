@@ -36,6 +36,7 @@ python3 verify.py        # fit, keying, grip, envelope and manifest checks
 python3 plates.py        # arrange the parts onto print plates -> out/plates
 python3 render.py        # the preview images above
 python3 render_coupon.py # a raked view of the tolerance coupon
+python3 smoke.py         # every file parses, imports and exposes its entry point
 ```
 
 **Everything under `lib/`, `parts/` and `data/` is import-only** — library modules the
