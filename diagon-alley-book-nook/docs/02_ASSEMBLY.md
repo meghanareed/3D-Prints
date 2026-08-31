@@ -19,8 +19,16 @@ cut at a different clearance, with the value raised beside it:
  [ o   o ] │ [ o   o ] │ [ o   o ] │ [ o   o ]     <- keyed P2 pair
 ```
 
-`70B` is **four loose tabs**, numbered 1–4, each carrying nominal pegs at the same row
-spacing as a station. Press one tab into one station — both mount types engage at once.
+`70B` is **four loose tabs**, numbered 1–4. Snap them off the runner.
+
+**The tab is a mirror of the station, not a copy.** You turn the tab over to use it, and
+turning it over swaps the rows — so the tab carries its single P1 peg on the row where
+the station has its *pair* of holes. Both parts have a **chamfered corner**: turn the
+tab over so the two chamfers meet, and everything lines up. Press it home and both
+mount types engage at once.
+
+The coupon itself is **one piece** — the lines between stations are 1 mm grooves in a
+6 mm plate, there so you can find a station by thumbnail. Do not try to split them.
 
 Use a **fresh tab for each station**. The crush ribs shear on first insertion, and
 re-using one tab burnishes its pegs and biases every test after the first.

@@ -3574,7 +3574,7 @@
   "name": "Tolerance_Test_Coupon",
   "group": "jigs",
   "status": "ok",
-  "grams": 25.7,
+  "grams": 25.5,
   "solids": 1,
   "bbox": [
    104.0,
@@ -3591,7 +3591,7 @@
   "name": "Tolerance_Test_Pegs",
   "group": "jigs",
   "status": "ok",
-  "grams": 7.5,
+  "grams": 7.4,
   "solids": 1,
   "bbox": [
    95.0,

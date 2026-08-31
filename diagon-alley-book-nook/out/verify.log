@@ -33,6 +33,12 @@ Crooked Lane Book Nook -- verification
   ok    clearance 0.35: clears the bore, grip 2.94 mm^3
   ok    clearance 0.40: clears the bore, grip 2.94 mm^3
 
+[jigs] tolerance tab seats after being turned over
+  ok    station 0.20: turned-over tab seats, grip 1.58 mm^3
+  ok    station 0.25: turned-over tab seats, grip 1.65 mm^3
+  ok    station 0.30: turned-over tab seats, grip 1.72 mm^3
+  ok    station 0.35: turned-over tab seats, grip 1.76 mm^3
+
 [jigs] paint handles accept a real part's peg
   ok    P1 parts drop into the paint handle and lift back out
   ok    P2 parts drop into the paint handle and lift back out

@@ -65,6 +65,20 @@ def _place(solid, point, axis="+Z", rot=0.0):
 
 # ============================================================== P1: micro peg ==
 #
+# THE RECURRING BUG IN THIS FILE: A MATING PART IS A MIRROR, NOT A COPY.
+#
+# Two parts that join are brought together by turning one of them over, and turning a
+# part over mirrors it. Generating the second part in the same frame as the first looks
+# correct in CAD, renders correctly, and does not fit. It has been shipped three times
+# here: wall sockets built as the mirror of their pegs, paint handles given a peg where
+# they needed a socket, and coupon tabs built as a copy of the station instead of its
+# mirror. Every one of them was caught by a person looking at the printed part, not by
+# the geometry checks.
+#
+# So: whenever you add a mating pair, add a check to verify.py that applies the REAL
+# physical transform -- the flip, the rotation into place -- and measures the
+# interference. Not a check that the two halves were built from the same numbers.
+#
 # CONVENTION -- read this before changing anything below.
 #
 # `axis` is the direction the PEG TRAVELS, for both the peg and its socket. A socket
@@ -267,6 +281,14 @@ def _label(solid, txt, x, y, top_z, size=4.2):
         return solid
 
 
+def _corner_mark(x, y, sx, sy, t, leg=4.0):
+    """A 45-degree corner cut, used as an orientation mark on both the coupon stations
+    and the tabs."""
+    return (cq.Workplane("XY")
+            .polyline([(x, y), (x + sx * leg, y), (x, y + sy * leg)])
+            .close().extrude(t * 2).translate((0, 0, -t * 0.5)))
+
+
 def tolerance_coupon():
     """Part 70. Print this FIRST.
 
@@ -277,6 +299,14 @@ def tolerance_coupon():
 
     A fresh tab per station matters: crush ribs shear on first insertion, and reusing
     one peg burnishes it and biases every test after the first.
+
+    THE TAB IS THE MIRROR OF THE STATION, NOT A COPY. You turn the tab over to use it,
+    and turning it over about its long axis mirrors the rows -- so the tab carries its
+    P1 peg on the row where the station carries its P2 pair. Built as a straight copy
+    (which is how it shipped first) the tab cannot seat in any orientation: tip it
+    toward you and the single peg meets the pair of holes; turn it sideways instead and
+    the keyed pair swaps wide-for-narrow. A chamfered corner on both parts shows which
+    way round it goes.
     """
     n = len(COUPON_VALUES)
     plate = cq.Workplane("XY").box(COUPON_STATION_W * n, COUPON_H, COUPON_T,
@@ -289,6 +319,10 @@ def tolerance_coupon():
             plate = socket_p1(plate, (cx, COUPON_P1_Y, COUPON_T), axis="-Z")
             plate = socket_p2(plate, (cx, COUPON_P2_Y, COUPON_T), axis="-Z")
             plate = _label(plate, f"{v:.2f}", cx, 18.0, COUPON_T)
+            # alignment mark: the station's TOP-LEFT corner is chamfered, and so is the
+            # tab's BOTTOM-LEFT. Turning the tab over brings the two marks together.
+            plate = plate.cut(_corner_mark(cx - COUPON_STATION_W / 2, COUPON_H,
+                                           +1, -1, COUPON_T))
             if i:                       # a groove between stations, findable by feel
                 plate = plate.cut(cq.Workplane("XY")
                                   .box(1.2, COUPON_H, 1.0, centered=(True, False, False))
@@ -298,15 +332,19 @@ def tolerance_coupon():
 
     # four loose tabs, pegs at the same row spacing as the stations
     dy = COUPON_P1_Y - COUPON_P2_Y
-    tab_p2_y = (TAB_H - dy) / 2
+    lo = (TAB_H - dy) / 2
+    # MIRRORED rows: P1 low, P2 high, so that turning the tab over lands P1 on the
+    # station's upper socket and the pair on its lower one.
+    tab_p1_y, tab_p2_y = lo, lo + dy
     tabs, sprue = None, None
     for i in range(n):
         x0 = i * (TAB_W + 5.0)
         t = cq.Workplane("XY").box(TAB_W, TAB_H, TAB_T, centered=(False, False, False)) \
             .translate((x0, 0, 0))
-        t = t.union(peg_p1((x0 + TAB_W / 2, tab_p2_y + dy, TAB_T), axis="+Z"))
+        t = t.cut(_corner_mark(x0, 0.0, +1, +1, TAB_T))
+        t = t.union(peg_p1((x0 + TAB_W / 2, tab_p1_y, TAB_T), axis="+Z"))
         t = t.union(peg_p2((x0 + TAB_W / 2, tab_p2_y, TAB_T), axis="+Z"))
-        t = _label(t, str(i + 1), x0 + 4.0, 3.5, TAB_T, size=3.4)
+        t = _label(t, str(i + 1), x0 + TAB_W - 7.0, TAB_H - 6.0, TAB_T, size=3.4)
         tabs = t if tabs is None else tabs.union(t)
         if i:                            # runner joining the tabs
             r = cq.Workplane("XY").box(5.2, 4.0, 1.2, centered=(False, False, False)) \
