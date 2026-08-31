@@ -1,7 +1,7 @@
 building parts ...
   00_CALIBRATE_FIRST       2 parts      35 g   footprint 208.0 x  34.0 mm
-  02_wall_faces            1 parts     107 g   footprint 203.1 x 196.5 mm
-  02_wall_faces_2          1 parts     110 g   footprint 203.1 x 196.5 mm
+  02_wall_faces            1 parts     106 g   footprint 203.1 x 193.1 mm
+  02_wall_faces_2          1 parts     108 g   footprint 203.1 x 193.1 mm
   03_wall_ribs             1 parts      60 g   footprint 203.1 x 197.1 mm
   03_wall_ribs_2           1 parts      62 g   footprint 203.1 x 197.1 mm
   04_chassis               2 parts     349 g   footprint 200.9 x 200.0 mm
@@ -12,11 +12,11 @@ building parts ...
   08_case                  6 parts     136 g   footprint 220.0 x 242.8 mm
   08_case_2                1 parts     121 g   footprint 200.0 x 213.8 mm
   08_case_3                2 parts     115 g   footprint 202.9 x 213.3 mm
-  08_case_4                3 parts     273 g   footprint 229.2 x 200.0 mm
+  08_case_4                2 parts      48 g   footprint 123.2 x 150.0 mm
   09_facade_left          64 parts      44 g   footprint 238.5 x 225.1 mm
   10_facade_right         55 parts      33 g   footprint 240.2 x 176.8 mm
   11_signs_props          38 parts      19 g   footprint 240.9 x  89.0 mm
-  12_hardware             24 parts      54 g   footprint 234.0 x 187.3 mm
-  13_bench_tools           8 parts      63 g   footprint 224.0 x 125.0 mm
+  12_hardware             22 parts      31 g   footprint 232.0 x 104.5 mm
+  13_bench_tools           6 parts      28 g   footprint 212.0 x  95.0 mm
 
-19 plates -> /home/user/3D-Prints/diagon-alley-book-nook/out/plates
+19 plates, 218 of 218 parts -> /home/user/3D-Prints/diagon-alley-book-nook/out/plates

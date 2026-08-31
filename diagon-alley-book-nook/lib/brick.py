@@ -36,16 +36,31 @@ def brick_field(length, height, tag, scale_fn=None, y0=0.0,
             sx = sf(max(0.0, min(length, x)))
             bl = P.BRICK_LENGTH_FRONT * sx * r.uniform(0.86, 1.0)
             x0, x1 = max(0.0, x), min(length, x + bl)
-            if x1 - x0 > 1.5:
-                cx, cz = (x0 + x1) / 2, z + bh / 2
-                keep = True
-                if broken_edge is not None and cx < broken_edge(cz):
+            cz = z + bh / 2
+            keep = True
+            # CLIP to the torn edge rather than testing the brick's centre. A brick is
+            # up to 18 mm long: judged by its centre, one whose centre lands just
+            # inside the break still hangs half its length out over the void where the
+            # plate has been cut away, and prints as a floating cantilever.
+            if broken_edge is not None:
+                # Clip to the break at its FURTHEST-RIGHT point anywhere over the
+                # height the brick spans, sampled across the whole span rather than at
+                # its centre or its two ends. The brick rows and the break's staircase
+                # are on different pitches -- the course height scales with
+                # perspective, the break steps on the nominal course -- so a brick
+                # straddles steps, and any part of it left of the plate edge at that
+                # height is printing over thin air.
+                x0 = max([x0] + [broken_edge(z + bh * k / 6.0) for k in range(7)])
+            # DROP on any overlap with an opening, again not on the centre -- an
+            # aperture is a hole right through the plate, so a brick that merely
+            # overlaps it is unsupported. The frame covers the bare margin anyway.
+            for (ax0, az0, ax1, az1) in openings:
+                if x0 < ax1 and ax0 < x1 and cz > az0 and cz < az1:
                     keep = False
-                for (ax0, az0, ax1, az1) in openings:
-                    if ax0 - 0.6 < cx < ax1 + 0.6 and az0 - 0.6 < cz < az1 + 0.6:
-                        keep = False
-                        break
-                if keep and r.random() > P.BRICK_MISSING_FRAC:
+                    break
+            if keep and x1 - x0 > 1.5:
+                cx = (x0 + x1) / 2
+                if r.random() > P.BRICK_MISSING_FRAC:
                     rec = r.random() < P.BRICK_WORN_FRAC
                     jitter = r.uniform(-0.12, 0.12)
                     d = (P.BRICK_RELIEF * 0.35) if rec else (P.BRICK_RELIEF + jitter)

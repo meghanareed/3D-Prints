@@ -44,8 +44,12 @@ Crooked Lane Book Nook -- verification
   ok    P1 parts drop into the paint handle and lift back out
   ok    P2 parts drop into the paint handle and lift back out
 
+[print] relief is not left hanging over a hole
+  ok    L wall: 0.08 mm^2 of relief over a void (nothing to support)
+  ok    R wall: 0.84 mm^2 of relief over a void (nothing to support)
+
 [build] manifest
   ok    218 parts, all single-solid and all inside the build volume
-        1605 g PLA total across 218 parts
+        1602 g PLA total across 218 parts
 
 0 failures, 0 warnings

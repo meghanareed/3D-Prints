@@ -134,7 +134,17 @@ def wall_face(side):
                          openings=openings,
                          broken_edge=lambda zz: break_profile(zz, tag))
     if bricks is not None:
-        plate = plate.union(bricks.rotate((0, 0, 0), (1, 1, 1), 120).translate((FACE, 0, 0)))
+        bricks = bricks.rotate((0, 0, 0), (1, 1, 1), 120).translate((FACE, 0, 0))
+        # Keep only relief that has plate directly beneath it. The plate is a constant
+        # 2.5 mm slab, so a copy of it shifted up by the relief height covers exactly
+        # the volume the relief may occupy; anything outside that is printing over air.
+        #
+        # This is exact, and it replaces reasoning about whether the brick grid and the
+        # torn edge's staircase agree. They did not -- the measured plate edge and
+        # break_profile() disagreed by 3-4 mm at some heights -- and every attempt to
+        # reconcile them analytically left slivers behind.
+        bricks = bricks.intersect(plate.translate((P.BRICK_RELIEF, 0, 0)))
+        plate = plate.union(bricks)
 
     plate = batch_cut(plate, cuts)
     plate = batch_add(plate, adds)

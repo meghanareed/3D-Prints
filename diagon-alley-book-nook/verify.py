@@ -274,6 +274,41 @@ def check_paint_handles():
         P.DECORATIVE_CLEARANCE = real
 
 
+def check_unsupported_relief():
+    """Surface relief must not hang over a hole.
+
+    Bricks are up to 18 mm long and the torn front edge and the window apertures both
+    remove the plate underneath them. Judged by their centres, bricks half over the
+    void were kept and printed as floating cantilevers -- 147 mm^2 of them, which the
+    slicer flagged and the geometry checks did not, because a cantilever is perfectly
+    valid geometry.
+    """
+    print("\n[print] relief is not left hanging over a hole")
+    import numpy as np
+    import build as B
+    from parts import walls as WL
+
+    for side in ("L", "R"):
+        w = B.drop_to_bed(B.print_orient(WL.wall_face(side), ("Y", -90)))
+        v, t = w.val().tessellate(0.08)
+        V = np.array([[p.x, p.y, p.z] for p in v])
+        tri = V[np.array(t)]
+        nrm = np.cross(tri[:, 1] - tri[:, 0], tri[:, 2] - tri[:, 0])
+        ln = np.linalg.norm(nrm, axis=1)
+        ln[ln == 0] = 1.0
+        area = 0.5 * ln
+        zc = tri[:, :, 2].mean(axis=1)
+        # relief sits above the plate; anything there facing down is over a void
+        floating = ((nrm / ln[:, None])[:, 2] < -0.5) & (zc > P.WALL_FACE_T - 0.1)
+        a = area[floating].sum()
+        if a > 10.0:
+            fail(f"{side} wall: {a:.1f} mm^2 of brick relief hangs over a void")
+        elif a > 3.0:
+            warn(f"{side} wall: {a:.1f} mm^2 of relief overhangs -- check the torn edge")
+        else:
+            ok(f"{side} wall: {a:.2f} mm^2 of relief over a void (nothing to support)")
+
+
 def check_manifest():
     print("\n[build] manifest")
     path = os.path.join(OUT, "manifest.json")
@@ -313,6 +348,7 @@ if __name__ == "__main__":
     check_grip_across_clearances()
     check_coupon_tab_flips()
     check_paint_handles()
+    check_unsupported_relief()
     check_manifest()
     print(f"\n{len(FAILS)} failures, {len(WARNS)} warnings")
     sys.exit(1 if FAILS else 0)

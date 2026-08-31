@@ -188,6 +188,20 @@ Nothing prints standing on end and nothing needs supports. Specifically:
   that reads well for brick and timber; if you want a glossy sign face, run plate 11
   on a smooth sheet.
 
+### Slicer warnings — do not turn supports on
+
+Bambu Studio will flag the wall faces for **floating cantilevers**. What it is seeing is
+the crush ribs inside the mounting sockets and the small counterbore ledges at the mouth
+of each groove: little shelves 0.5–0.9 mm wide starting part way down a hole. PLA bridges
+those without help.
+
+**Never enable supports on any part in this kit.** Support material inside a 2.9 mm blind
+socket cannot be got out again, and what is left behind destroys the fit the whole design
+depends on. If a slicer offers to add supports, decline.
+
+`verify.py` measures the genuinely unsupported area on every build. Brick relief hanging
+over a hole currently measures 0.08 mm² and 0.84 mm² on the two walls — nothing.
+
 Settings: 0.4 mm nozzle, 0.2 mm layer, PLA, 3 walls, 15 % infill (structure) / 0 %
 (diffusers, printed in natural or white). No supports anywhere — every part has a flat
 print face and no overhang steeper than 45°.
