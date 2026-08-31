@@ -12,6 +12,10 @@ lane, 100 × 240 × 200 mm, engineered as a real model kit rather than a single 
   routes, plus a 59.5 mm RGB/CCT puck as an adjustable sky.
 * **Nothing needs splitting** on a 256 mm bed (Bambu P2S).
 
+![assembled chassis](out/preview/assembly.png)
+
+![exploded](out/preview/exploded.png)
+
 ## Build it
 
 ```bash
@@ -19,6 +23,8 @@ pip install cadquery
 python3 build.py --list      # 218 parts
 python3 build.py             # STLs + assembly + exploded previews
 python3 verify.py            # fit, keying, envelope and manifest checks
+python3 plates.py            # arrange the STLs onto 14 print plates
+python3 render.py            # the preview images above
 ```
 
 Outputs: `out/stl/*.stl`, `out/preview/assembly.step`, `out/preview/exploded.step`,
