@@ -199,13 +199,36 @@ around.
 
 For every part over about 150 mm across:
 
-1. **5 mm brim.** Single biggest fix, and it peels off the textured plate cleanly.
+1. **Brim type: outer brim only. Width 5 mm.** Not mouse ears — see below.
 2. **Bed at 60–65 °C**, not 55. The Bambu PLA default is fine for small parts and low
    for these.
 3. **Wash the plate with dish soap and hot water.** IPA alone smears skin oils around on
    textured PEI rather than removing them.
 4. **Door closed** for these parts — they are short prints and draughts cause the lift.
    (Crack it only for the tall multi-hour prints where heat creep matters.)
+
+**Outer brim, not mouse ears.** Ears anchor a few discrete points, which is the right
+tool for a part whose bed contact is a handful of small footprints. This part has
+31,000 mm² of contact — area was never the problem. What lifts is the perimeter: 2,480 mm
+of free edge, most of it the jagged torn front edge, curling along its length. Only a
+continuous brim holds that down.
+
+**Outer only, never "outer and inner".** An inner brim lays brim inside every window
+aperture, and those apertures are exactly where the window frames seat. Brim residue
+there would wreck the fit and is miserable to pick out.
+
+Leave brim-object gap at the default — attached, but it still peels.
+
+Which plates want a 5 mm brim: the four single-part plates that hold the big thin sheets,
+plus the outer side panel.
+
+| Plate | Footprint | Brim |
+|---|---|---|
+| `02_wall_faces`, `02_wall_faces_2` | 203 × 193 | **5 mm** |
+| `03_wall_ribs`, `03_wall_ribs_2` | 203 × 197 | **5 mm** |
+| `08_case_2` (outer side panel) | 200 × 214 | **5 mm** |
+| `04_chassis`, `05_floor`, `06_rear`, `07_front`, `08_case*` | multi-part | 3 mm — parts sit 6 mm apart, so a 5 mm brim merges them into one sheet |
+| `09`–`13` (small parts) | multi-part | none — they are small enough not to warp, and brims would fuse dozens of tiny parts together |
 
 ### Slicer warnings — do not turn supports on
 
