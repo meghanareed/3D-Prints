@@ -188,6 +188,25 @@ Nothing prints standing on end and nothing needs supports. Specifically:
   that reads well for brick and timber; if you want a glossy sign face, run plate 11
   on a smooth sheet.
 
+### The big flat parts need a brim
+
+The wall faces, ribs, case panels and base pan are all very wide and very thin — the wall
+face is 203 × 193 mm and only 3.1 mm tall, an aspect ratio of about 66:1. There is
+31,000 mm² of bed contact, so adhesion area is not the issue; the issue is that a large
+thin PLA sheet shrinks as it cools and has almost no height to resist peeling, so the
+corners and the long jagged torn edge lift first and the nozzle then drags the part
+around.
+
+For every part over about 150 mm across:
+
+1. **5 mm brim.** Single biggest fix, and it peels off the textured plate cleanly.
+2. **Bed at 60–65 °C**, not 55. The Bambu PLA default is fine for small parts and low
+   for these.
+3. **Wash the plate with dish soap and hot water.** IPA alone smears skin oils around on
+   textured PEI rather than removing them.
+4. **Door closed** for these parts — they are short prints and draughts cause the lift.
+   (Crack it only for the tall multi-hour prints where heat creep matters.)
+
 ### Slicer warnings — do not turn supports on
 
 Bambu Studio will flag the wall faces for **floating cantilevers**. What it is seeing is
