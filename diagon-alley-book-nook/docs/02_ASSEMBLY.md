@@ -56,6 +56,31 @@ and re-run `python3 build.py`.
 > and a 2.4 mm hole look identical.** If you want to confirm the coupon is right before
 > printing, `python3 render_coupon.py` draws it raked over so the holes and pegs read.
 
+### The lumps inside the holes are supposed to be there
+
+Look into any socket and you will see small bits protruding from the side walls, part
+way down, so the hole is not a clean square all the way through. Those are the **crush
+ribs** — two per side. They are the entire retention mechanism.
+
+Measured down a 0.20 P1 socket:
+
+| Depth below the surface | Clear opening |
+|---|---|
+| 0 – 0.5 mm | 3.9 mm — the lead-in counterbore |
+| 0.5 – 0.9 mm | 2.9 mm — the clean bore |
+| **0.9 – 3.2 mm** | **2.1 mm — the ribs** |
+| 3.2 – 4.1 mm | 2.9 mm — clean again, down to the floor |
+
+The peg is 2.5 mm. It passes freely for the first millimetre, then meets 2.1 mm of
+opening and shears its way through, and that shearing is what holds the part in.
+
+**Do not clean them out.** A knife through those ribs leaves you with a socket that a
+peg drops into and falls straight back out of. The correct feel is loose, then a
+distinct bite, then firm.
+
+`python3 render_socket.py` draws this section from the generated geometry if you want to
+see it.
+
 **Grip does not depend on which value you pick.** The crush ribs are sized *from* the
 clearance, so each rib bites `CRUSH_INTERFERENCE` (0.15 mm) into the peg whether you run
 0.15 or 0.40. An earlier version used a fixed rib height measured from the bore wall,
