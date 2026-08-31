@@ -1,7 +1,31 @@
 # Crooked Lane Book Nook — Engineering Design Plan (v1, for approval)
 
 A modular, fully-paintable, LED-lit miniature alley book nook.
-**Status: v2 — revised after your answers. Architecture only; no geometry generated yet.**
+**Status: v3 — all decisions resolved, geometry generated.**
+
+### v3 change — the lamp kit is a 59.5 mm puck, not a bar
+The product photo settles it: **D 59.5 × H 8.3 mm aluminium puck, 12 LED beads, PC light
+guide, inline switch cycling 3000/4000/6000 K, IR remote, 1.5 m lead.** That is a very
+different object from the 300 mm chamber bar I assumed, and it changes the verdict:
+
+* It **fits** — 59.5 mm across a 94.8 mm chassis, 8.3 mm thick.
+* It is **promoted from "optional if it fits" to a default fitted part**: one puck behind
+  the rear silhouette screen is now the standard build (`SKY_PUCK_REAR = True`).
+* It still cannot do the shop windows — a sealed puck with a light guide can't be
+  distributed behind twenty separate frames. Fairy lights remain primary. Unchanged.
+* **The IR remote will not work once the nook is closed** — the receiver looks out of the
+  emitting face, which will be buried behind the sky diffuser. But the listing says the
+  puck *saves its mode before shutdown*, so you set the colour with the remote during
+  bench testing and it keeps it. The inline switch stays accessible on the case back and
+  still cycles 3000/4000/6000 K — dusk / neutral / moonlight — which is the control that
+  actually matters here.
+* A hotspot fix is required: 12 discrete beads 4 mm behind a screen would read as twelve
+  dots. The rear now uses a **diffuser sandwich** — puck → 6 mm air → 0.8 mm printed sky
+  diffuser → 4 mm air → opaque silhouette screen. 22 mm total, absorbed inside the space
+  the rear block already occupied, so no alley depth is lost.
+* A second puck in a top plenum (down-lit sky fill) is offered but **off by default** —
+  it costs 12 mm of scene height. Pucks 3 and 4 stay in the printer, which is what they
+  were bought for.
 
 ### v2 changes
 | # | Your answer | Effect |
@@ -9,7 +33,7 @@ A modular, fully-paintable, LED-lit miniature alley book nook.
 | 1 | Printer LED lamp kit / battery fairy lights | **Lighting fully re-architected around fairy lights.** See §7. The lamp kit is kept as an *optional* rear sky wash only — reasoning in §7.0 |
 | 2 | ok | `PERSP_STRENGTH 0.42`, `WALL_CANT 1.75°` locked |
 | 3 | ok | Shop names locked, text embossed by default |
-| 4 | **Bambu P2S** | Bed grows to 256³ → **no part needs splitting.** Walls and case panels now print in one piece |
+| 4 | **Bambu P2S, 256³ confirmed** | **No part needs splitting.** Walls and case panels print in one piece |
 | 5 | PLA glazing | Printed PLA diffusers/glazing are now the **default**; slots still take sheet material |
 | 6 | Torn brick both sides | Locked |
 | — | *(my error, caught on re-check)* | v1 put a 3 mm wire channel into a 2.5 mm wall plate — impossible. Walls are now a 10 mm ribbed assembly with a real service cavity. See §2 |

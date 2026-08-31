@@ -1,0 +1,3708 @@
+[
+ {
+  "id": "00",
+  "name": "Chassis_Base_Pan",
+  "group": "structure",
+  "status": "ok",
+  "grams": 124.9,
+  "solids": 1,
+  "bbox": [
+   94.9,
+   197.1,
+   15.0
+  ],
+  "fits_bed": true,
+  "colour": "grey",
+  "note": "",
+  "file": "00_Chassis_Base_Pan.stl"
+ },
+ {
+  "id": "01",
+  "name": "L_Wall_Face",
+  "group": "structure",
+  "status": "ok",
+  "grams": 107.4,
+  "solids": 1,
+  "bbox": [
+   203.1,
+   196.5,
+   3.2
+  ],
+  "fits_bed": true,
+  "colour": "brick",
+  "note": "print brick-up, no supports",
+  "file": "01_L_Wall_Face.stl"
+ },
+ {
+  "id": "01R",
+  "name": "L_Wall_Rib",
+  "group": "structure",
+  "status": "ok",
+  "grams": 59.7,
+  "solids": 1,
+  "bbox": [
+   203.1,
+   197.1,
+   10.0
+  ],
+  "fits_bed": true,
+  "colour": "grey",
+  "note": "hidden; print flat",
+  "file": "01R_L_Wall_Rib.stl"
+ },
+ {
+  "id": "02",
+  "name": "R_Wall_Face",
+  "group": "structure",
+  "status": "ok",
+  "grams": 109.6,
+  "solids": 1,
+  "bbox": [
+   203.1,
+   196.5,
+   3.2
+  ],
+  "fits_bed": true,
+  "colour": "brick",
+  "note": "print brick-up, no supports",
+  "file": "02_R_Wall_Face.stl"
+ },
+ {
+  "id": "02R",
+  "name": "R_Wall_Rib",
+  "group": "structure",
+  "status": "ok",
+  "grams": 61.8,
+  "solids": 1,
+  "bbox": [
+   203.1,
+   197.1,
+   10.0
+  ],
+  "fits_bed": true,
+  "colour": "grey",
+  "note": "hidden; print flat",
+  "file": "02R_R_Wall_Rib.stl"
+ },
+ {
+  "id": "03A",
+  "name": "Rear_Perspective_Block",
+  "group": "structure",
+  "status": "ok",
+  "grams": 60.5,
+  "solids": 1,
+  "bbox": [
+   65.7,
+   22.2,
+   170.0
+  ],
+  "fits_bed": true,
+  "colour": "brick",
+  "note": "",
+  "file": "03A_Rear_Perspective_Block.stl"
+ },
+ {
+  "id": "03B",
+  "name": "Rear_Archway",
+  "group": "structure",
+  "status": "ok",
+  "grams": 5.8,
+  "solids": 1,
+  "bbox": [
+   38.0,
+   9.0,
+   42.0
+  ],
+  "fits_bed": true,
+  "colour": "stone",
+  "note": "",
+  "file": "03B_Rear_Archway.stl"
+ },
+ {
+  "id": "03C",
+  "name": "Rear_Silhouette",
+  "group": "structure",
+  "status": "ok",
+  "grams": 4.9,
+  "solids": 1,
+  "bbox": [
+   70.0,
+   48.3,
+   5.1
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "03C_Rear_Silhouette.stl"
+ },
+ {
+  "id": "03D",
+  "name": "Rear_Glow_Frame",
+  "group": "structure",
+  "status": "ok",
+  "grams": 36.4,
+  "solids": 1,
+  "bbox": [
+   78.0,
+   20.1,
+   87.5
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "03D_Rear_Glow_Frame.stl"
+ },
+ {
+  "id": "03E",
+  "name": "Sky_Puck_Cradle",
+  "group": "lighting",
+  "status": "ok",
+  "grams": 17.7,
+  "solids": 1,
+  "bbox": [
+   68.7,
+   68.7,
+   11.7
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "holds the 59.5 x 8.3 RGB/CCT puck",
+  "file": "03E_Sky_Puck_Cradle.stl"
+ },
+ {
+  "id": "03F",
+  "name": "Sky_Diffuser",
+  "group": "lighting",
+  "status": "ok",
+  "grams": 5.7,
+  "solids": 1,
+  "bbox": [
+   72.0,
+   80.0,
+   0.8
+  ],
+  "fits_bed": true,
+  "colour": "white",
+  "note": "natural/white PLA, 3 walls, 0 % infill",
+  "file": "03F_Sky_Diffuser.stl"
+ },
+ {
+  "id": "04",
+  "name": "Cobblestone_Floor",
+  "group": "structure",
+  "status": "ok",
+  "grams": 62.5,
+  "solids": 1,
+  "bbox": [
+   74.9,
+   151.2,
+   6.0
+  ],
+  "fits_bed": true,
+  "colour": "stone",
+  "note": "",
+  "file": "04_Cobblestone_Floor.stl"
+ },
+ {
+  "id": "04B",
+  "name": "Gutter_L",
+  "group": "structure",
+  "status": "ok",
+  "grams": 1.9,
+  "solids": 1,
+  "bbox": [
+   4.0,
+   150.6,
+   6.1
+  ],
+  "fits_bed": true,
+  "colour": "stone",
+  "note": "",
+  "file": "04B_Gutter_L.stl"
+ },
+ {
+  "id": "04C",
+  "name": "Gutter_R",
+  "group": "structure",
+  "status": "ok",
+  "grams": 1.9,
+  "solids": 1,
+  "bbox": [
+   4.0,
+   150.6,
+   6.1
+  ],
+  "fits_bed": true,
+  "colour": "stone",
+  "note": "",
+  "file": "04C_Gutter_R.stl"
+ },
+ {
+  "id": "05",
+  "name": "Ceiling_Baffle",
+  "group": "structure",
+  "status": "ok",
+  "grams": 22.0,
+  "solids": 1,
+  "bbox": [
+   78.9,
+   150.1,
+   15.5
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "05_Ceiling_Baffle.stl"
+ },
+ {
+  "id": "06",
+  "name": "Front_Bezel_L",
+  "group": "structure",
+  "status": "ok",
+  "grams": 15.9,
+  "solids": 1,
+  "bbox": [
+   15.4,
+   9.7,
+   203.1
+  ],
+  "fits_bed": true,
+  "colour": "brick",
+  "note": "the torn brick edge -- the signature part",
+  "file": "06_Front_Bezel_L.stl"
+ },
+ {
+  "id": "07",
+  "name": "Front_Bezel_R",
+  "group": "structure",
+  "status": "ok",
+  "grams": 16.3,
+  "solids": 1,
+  "bbox": [
+   15.4,
+   9.7,
+   203.1
+  ],
+  "fits_bed": true,
+  "colour": "brick",
+  "note": "the torn brick edge -- the signature part",
+  "file": "07_Front_Bezel_R.stl"
+ },
+ {
+  "id": "08",
+  "name": "Front_Arch_Header",
+  "group": "structure",
+  "status": "ok",
+  "grams": 14.5,
+  "solids": 1,
+  "bbox": [
+   82.9,
+   10.7,
+   22.0
+  ],
+  "fits_bed": true,
+  "colour": "brick",
+  "note": "",
+  "file": "08_Front_Arch_Header.stl"
+ },
+ {
+  "id": "09",
+  "name": "Chassis_Rear_Wall",
+  "group": "structure",
+  "status": "ok",
+  "grams": 42.4,
+  "solids": 1,
+  "bbox": [
+   74.9,
+   6.0,
+   182.8
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "09_Chassis_Rear_Wall.stl"
+ },
+ {
+  "id": "10B",
+  "name": "L_L1_Bow_Window",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 4.1,
+  "solids": 1,
+  "bbox": [
+   37.8,
+   43.4,
+   16.0
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "10B_L_L1_Bow_Window.stl"
+ },
+ {
+  "id": "10Bg",
+  "name": "L_L1_Bow_Window_Glazing",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.7,
+  "solids": 1,
+  "bbox": [
+   27.6,
+   23.8,
+   0.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "10Bg_L_L1_Bow_Window_Glazing.stl"
+ },
+ {
+  "id": "10Bd",
+  "name": "L_L1_Bow_Window_Diffuser",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.7,
+  "solids": 1,
+  "bbox": [
+   29.1,
+   25.5,
+   0.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "10Bd_L_L1_Bow_Window_Diffuser.stl"
+ },
+ {
+  "id": "10Bc",
+  "name": "L_L1_Bow_Window_Cornice",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.6,
+  "solids": 1,
+  "bbox": [
+   45.8,
+   3.2,
+   6.5
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "10Bc_L_L1_Bow_Window_Cornice.stl"
+ },
+ {
+  "id": "10E",
+  "name": "L_L1_Stallriser",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 1.0,
+  "solids": 1,
+  "bbox": [
+   37.8,
+   9.4,
+   6.0
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "10E_L_L1_Stallriser.stl"
+ },
+ {
+  "id": "10D",
+  "name": "L_L1_Cornice",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.4,
+  "solids": 1,
+  "bbox": [
+   45.8,
+   3.0,
+   5.5
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "10D_L_L1_Cornice.stl"
+ },
+ {
+  "id": "10G",
+  "name": "L_L1_Door",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 1.8,
+  "solids": 1,
+  "bbox": [
+   19.3,
+   38.6,
+   6.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "10G_L_L1_Door.stl"
+ },
+ {
+  "id": "10Gf",
+  "name": "L_L1_Door_Frame",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 1.1,
+  "solids": 1,
+  "bbox": [
+   25.7,
+   42.4,
+   6.4
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "10Gf_L_L1_Door_Frame.stl"
+ },
+ {
+  "id": "10Gl",
+  "name": "L_L1_Door_Fanlight",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   18.1,
+   5.3,
+   5.9
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "10Gl_L_L1_Door_Fanlight.stl"
+ },
+ {
+  "id": "19A",
+  "name": "L_L_Quoin_Front",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 1.4,
+  "solids": 1,
+  "bbox": [
+   8.6,
+   69.6,
+   6.1
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "19A_L_L_Quoin_Front.stl"
+ },
+ {
+  "id": "11A",
+  "name": "L_L2_Bay_Window_Body",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 2.9,
+  "solids": 1,
+  "bbox": [
+   23.8,
+   31.7,
+   12.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "11A_L_L2_Bay_Window_Body.stl"
+ },
+ {
+  "id": "11Ag",
+  "name": "L_L2_Bay_Window_Glazing",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.3,
+  "solids": 1,
+  "bbox": [
+   16.0,
+   18.7,
+   0.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "11Ag_L_L2_Bay_Window_Glazing.stl"
+ },
+ {
+  "id": "11Ar",
+  "name": "L_L2_Bay_Window_Roof",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.7,
+  "solids": 1,
+  "bbox": [
+   26.8,
+   4.6,
+   15.3
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "11Ar_L_L2_Bay_Window_Roof.stl"
+ },
+ {
+  "id": "11Ac",
+  "name": "L_L2_Bay_Window_Corbel",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   5.5,
+   7.0,
+   7.2
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "11Ac_L_L2_Bay_Window_Corbel.stl"
+ },
+ {
+  "id": "11J",
+  "name": "L_L2_Awning",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.4,
+  "solids": 1,
+  "bbox": [
+   23.8,
+   9.0,
+   9.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "11J_L_L2_Awning.stl"
+ },
+ {
+  "id": "11F",
+  "name": "L_L2_Door",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.9,
+  "solids": 1,
+  "bbox": [
+   13.1,
+   26.2,
+   6.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "11F_L_L2_Door.stl"
+ },
+ {
+  "id": "11Ff",
+  "name": "L_L2_Door_Frame",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.7,
+  "solids": 1,
+  "bbox": [
+   19.5,
+   30.0,
+   5.9
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "11Ff_L_L2_Door_Frame.stl"
+ },
+ {
+  "id": "11Fl",
+  "name": "L_L2_Door_Fanlight",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.1,
+  "solids": 1,
+  "bbox": [
+   12.3,
+   4.4,
+   5.9
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "11Fl_L_L2_Door_Fanlight.stl"
+ },
+ {
+  "id": "11K",
+  "name": "L_L2_Fascia",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.7,
+  "solids": 1,
+  "bbox": [
+   27.8,
+   8.6,
+   7.3
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "11K_L_L2_Fascia.stl"
+ },
+ {
+  "id": "12A",
+  "name": "L_L3_Shop_Window_Frame",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.8,
+  "solids": 1,
+  "bbox": [
+   21.7,
+   23.0,
+   6.3
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "12A_L_L3_Shop_Window_Frame.stl"
+ },
+ {
+  "id": "12Ag",
+  "name": "L_L3_Shop_Window_Glazing",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.3,
+  "solids": 1,
+  "bbox": [
+   16.9,
+   18.2,
+   0.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "12Ag_L_L3_Shop_Window_Glazing.stl"
+ },
+ {
+  "id": "12Al",
+  "name": "L_L3_Shop_Window_Lintel",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.1,
+  "solids": 1,
+  "bbox": [
+   23.7,
+   2.0,
+   5.5
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "12Al_L_L3_Shop_Window_Lintel.stl"
+ },
+ {
+  "id": "12D",
+  "name": "L_L3_Stallriser",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   15.7,
+   4.6,
+   5.5
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "12D_L_L3_Stallriser.stl"
+ },
+ {
+  "id": "12G",
+  "name": "L_L3_Door",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.4,
+  "solids": 1,
+  "bbox": [
+   8.5,
+   15.7,
+   6.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "12G_L_L3_Door.stl"
+ },
+ {
+  "id": "12Gf",
+  "name": "L_L3_Door_Frame",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.5,
+  "solids": 1,
+  "bbox": [
+   14.9,
+   19.5,
+   5.9
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "12Gf_L_L3_Door_Frame.stl"
+ },
+ {
+  "id": "13A",
+  "name": "L_L_Window_A_Frame",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 1.3,
+  "solids": 1,
+  "bbox": [
+   27.0,
+   34.7,
+   6.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "13A_L_L_Window_A_Frame.stl"
+ },
+ {
+  "id": "13Ag",
+  "name": "L_L_Window_A_Glazing",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.7,
+  "solids": 1,
+  "bbox": [
+   22.2,
+   29.9,
+   0.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "13Ag_L_L_Window_A_Glazing.stl"
+ },
+ {
+  "id": "13As",
+  "name": "L_L_Window_A_Sill",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.3,
+  "solids": 1,
+  "bbox": [
+   27.0,
+   2.6,
+   7.3
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "13As_L_L_Window_A_Sill.stl"
+ },
+ {
+  "id": "13B",
+  "name": "L_L_Window_B_Frame",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 1.1,
+  "solids": 1,
+  "bbox": [
+   23.4,
+   30.4,
+   6.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "13B_L_L_Window_B_Frame.stl"
+ },
+ {
+  "id": "13Bg",
+  "name": "L_L_Window_B_Glazing",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.5,
+  "solids": 1,
+  "bbox": [
+   18.6,
+   25.6,
+   0.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "13Bg_L_L_Window_B_Glazing.stl"
+ },
+ {
+  "id": "13Bs",
+  "name": "L_L_Window_B_Sill",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   23.4,
+   2.6,
+   7.0
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "13Bs_L_L_Window_B_Sill.stl"
+ },
+ {
+  "id": "12B",
+  "name": "L_L_Oriel_Body",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 1.8,
+  "solids": 1,
+  "bbox": [
+   18.9,
+   23.6,
+   10.4
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "12B_L_L_Oriel_Body.stl"
+ },
+ {
+  "id": "12Bg",
+  "name": "L_L_Oriel_Glazing",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   12.9,
+   14.2,
+   0.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "12Bg_L_L_Oriel_Glazing.stl"
+ },
+ {
+  "id": "12Br",
+  "name": "L_L_Oriel_Roof",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.5,
+  "solids": 1,
+  "bbox": [
+   21.9,
+   4.6,
+   12.9
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "12Br_L_L_Oriel_Roof.stl"
+ },
+ {
+  "id": "12Bc",
+  "name": "L_L_Oriel_Corbel",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   5.5,
+   5.2,
+   7.1
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "12Bc_L_L_Oriel_Corbel.stl"
+ },
+ {
+  "id": "13C",
+  "name": "L_L_Window_C_Frame",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.7,
+  "solids": 1,
+  "bbox": [
+   18.6,
+   22.8,
+   6.3
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "13C_L_L_Window_C_Frame.stl"
+ },
+ {
+  "id": "13Cg",
+  "name": "L_L_Window_C_Glazing",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   13.8,
+   18.0,
+   0.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "13Cg_L_L_Window_C_Glazing.stl"
+ },
+ {
+  "id": "13Cs",
+  "name": "L_L_Window_C_Sill",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   18.6,
+   2.6,
+   6.3
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "13Cs_L_L_Window_C_Sill.stl"
+ },
+ {
+  "id": "13D",
+  "name": "L_L_Window_D_Frame",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.5,
+  "solids": 1,
+  "bbox": [
+   15.4,
+   18.5,
+   6.3
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "13D_L_L_Window_D_Frame.stl"
+ },
+ {
+  "id": "13Dg",
+  "name": "L_L_Window_D_Glazing",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.1,
+  "solids": 1,
+  "bbox": [
+   10.6,
+   13.7,
+   0.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "13Dg_L_L_Window_D_Glazing.stl"
+ },
+ {
+  "id": "13Ds",
+  "name": "L_L_Window_D_Sill",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.1,
+  "solids": 1,
+  "bbox": [
+   15.4,
+   2.6,
+   6.0
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "13Ds_L_L_Window_D_Sill.stl"
+ },
+ {
+  "id": "13E",
+  "name": "L_L_Window_E_Frame",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 1.1,
+  "solids": 1,
+  "bbox": [
+   24.7,
+   30.3,
+   6.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "13E_L_L_Window_E_Frame.stl"
+ },
+ {
+  "id": "13Eg",
+  "name": "L_L_Window_E_Glazing",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.5,
+  "solids": 1,
+  "bbox": [
+   19.9,
+   25.5,
+   0.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "13Eg_L_L_Window_E_Glazing.stl"
+ },
+ {
+  "id": "13Es",
+  "name": "L_L_Window_E_Sill",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.3,
+  "solids": 1,
+  "bbox": [
+   24.7,
+   2.6,
+   7.2
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "13Es_L_L_Window_E_Sill.stl"
+ },
+ {
+  "id": "13F",
+  "name": "L_L_Window_F_Frame",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.8,
+  "solids": 1,
+  "bbox": [
+   20.9,
+   25.9,
+   6.3
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "13F_L_L_Window_F_Frame.stl"
+ },
+ {
+  "id": "13Fg",
+  "name": "L_L_Window_F_Glazing",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.3,
+  "solids": 1,
+  "bbox": [
+   16.1,
+   21.1,
+   0.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "13Fg_L_L_Window_F_Glazing.stl"
+ },
+ {
+  "id": "13Fs",
+  "name": "L_L_Window_F_Sill",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   20.9,
+   2.6,
+   6.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "13Fs_L_L_Window_F_Sill.stl"
+ },
+ {
+  "id": "13G",
+  "name": "L_L_Window_G_Frame",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.6,
+  "solids": 1,
+  "bbox": [
+   16.8,
+   20.4,
+   6.3
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "13G_L_L_Window_G_Frame.stl"
+ },
+ {
+  "id": "13Gg",
+  "name": "L_L_Window_G_Glazing",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   12.0,
+   15.6,
+   0.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "13Gg_L_L_Window_G_Glazing.stl"
+ },
+ {
+  "id": "13Gs",
+  "name": "L_L_Window_G_Sill",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   16.8,
+   2.6,
+   6.4
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "13Gs_L_L_Window_G_Sill.stl"
+ },
+ {
+  "id": "14A",
+  "name": "L_L_Attic_Dormer_Frame",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.6,
+  "solids": 1,
+  "bbox": [
+   20.4,
+   24.0,
+   6.3
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "14A_L_L_Attic_Dormer_Frame.stl"
+ },
+ {
+  "id": "14Ag",
+  "name": "L_L_Attic_Dormer_Glazing",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.3,
+  "solids": 1,
+  "bbox": [
+   15.6,
+   19.2,
+   0.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "14Ag_L_L_Attic_Dormer_Glazing.stl"
+ },
+ {
+  "id": "14As",
+  "name": "L_L_Attic_Dormer_Sill",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   20.4,
+   2.6,
+   7.1
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "14As_L_L_Attic_Dormer_Sill.stl"
+ },
+ {
+  "id": "14B",
+  "name": "L_L_Attic_B_Frame",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.4,
+  "solids": 1,
+  "bbox": [
+   15.8,
+   18.1,
+   6.3
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "14B_L_L_Attic_B_Frame.stl"
+ },
+ {
+  "id": "14Bg",
+  "name": "L_L_Attic_B_Glazing",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.1,
+  "solids": 1,
+  "bbox": [
+   11.0,
+   13.3,
+   0.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "14Bg_L_L_Attic_B_Glazing.stl"
+ },
+ {
+  "id": "14Bs",
+  "name": "L_L_Attic_B_Sill",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   15.8,
+   2.6,
+   6.5
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "14Bs_L_L_Attic_B_Sill.stl"
+ },
+ {
+  "id": "15A",
+  "name": "L_L_Drainpipe_Lower",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.8,
+  "solids": 1,
+  "bbox": [
+   4.3,
+   91.6,
+   6.1
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "15A_L_L_Drainpipe_Lower.stl"
+ },
+ {
+  "id": "15B",
+  "name": "L_L_Drainpipe_Upper",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.4,
+  "solids": 1,
+  "bbox": [
+   3.7,
+   63.3,
+   5.7
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "15B_L_L_Drainpipe_Upper.stl"
+ },
+ {
+  "id": "15C",
+  "name": "L_L_Hopper",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.1,
+  "solids": 1,
+  "bbox": [
+   6.7,
+   6.3,
+   7.6
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "15C_L_L_Hopper.stl"
+ },
+ {
+  "id": "17A",
+  "name": "L_L_Cornice_Front",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 2.2,
+  "solids": 1,
+  "bbox": [
+   78.0,
+   6.0,
+   8.5
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "17A_L_L_Cornice_Front.stl"
+ },
+ {
+  "id": "17B",
+  "name": "L_L_Cornice_Rear",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 1.2,
+  "solids": 1,
+  "bbox": [
+   70.0,
+   4.7,
+   7.4
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "17B_L_L_Cornice_Rear.stl"
+ },
+ {
+  "id": "18A",
+  "name": "L_L_Chimney",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 2.7,
+  "solids": 1,
+  "bbox": [
+   13.8,
+   23.5,
+   14.3
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "18A_L_L_Chimney.stl"
+ },
+ {
+  "id": "19B",
+  "name": "L_L_Keystone",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.1,
+  "solids": 1,
+  "bbox": [
+   6.9,
+   5.5,
+   5.7
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "19B_L_L_Keystone.stl"
+ },
+ {
+  "id": "19C",
+  "name": "L_L_Wall_Plaque",
+  "group": "facade_L",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   11.0,
+   8.2,
+   6.4
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "19C_L_L_Wall_Plaque.stl"
+ },
+ {
+  "id": "20B",
+  "name": "R_R1_Arched_Door",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 2.1,
+  "solids": 1,
+  "bbox": [
+   21.0,
+   43.9,
+   6.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "20B_R_R1_Arched_Door.stl"
+ },
+ {
+  "id": "20Bf",
+  "name": "R_R1_Arched_Door_Frame",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 1.1,
+  "solids": 1,
+  "bbox": [
+   27.4,
+   47.7,
+   6.4
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "20Bf_R_R1_Arched_Door_Frame.stl"
+ },
+ {
+  "id": "20E",
+  "name": "R_R1_Tall_Window_Frame",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 1.3,
+  "solids": 1,
+  "bbox": [
+   23.7,
+   41.3,
+   6.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "20E_R_R1_Tall_Window_Frame.stl"
+ },
+ {
+  "id": "20Eg",
+  "name": "R_R1_Tall_Window_Glazing",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.7,
+  "solids": 1,
+  "bbox": [
+   18.9,
+   36.5,
+   0.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "20Eg_R_R1_Tall_Window_Glazing.stl"
+ },
+ {
+  "id": "20Es",
+  "name": "R_R1_Tall_Window_Sill",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.3,
+  "solids": 1,
+  "bbox": [
+   23.7,
+   2.6,
+   7.0
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "20Es_R_R1_Tall_Window_Sill.stl"
+ },
+ {
+  "id": "20G",
+  "name": "R_R1_Door_Keystone",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   11.5,
+   7.6,
+   6.6
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "20G_R_R1_Door_Keystone.stl"
+ },
+ {
+  "id": "29A",
+  "name": "R_R_Quoin_Front",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 1.4,
+  "solids": 1,
+  "bbox": [
+   8.6,
+   69.6,
+   6.1
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "29A_R_R_Quoin_Front.stl"
+ },
+ {
+  "id": "21B",
+  "name": "R_R2_Shop_Window_Frame",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 1.2,
+  "solids": 1,
+  "bbox": [
+   33.2,
+   31.6,
+   6.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "21B_R_R2_Shop_Window_Frame.stl"
+ },
+ {
+  "id": "21Bg",
+  "name": "R_R2_Shop_Window_Glazing",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.8,
+  "solids": 1,
+  "bbox": [
+   28.4,
+   26.8,
+   0.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "21Bg_R_R2_Shop_Window_Glazing.stl"
+ },
+ {
+  "id": "21Bl",
+  "name": "R_R2_Shop_Window_Lintel",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   35.2,
+   2.4,
+   5.5
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "21Bl_R_R2_Shop_Window_Lintel.stl"
+ },
+ {
+  "id": "21D",
+  "name": "R_R2_Pilaster_Left",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.8,
+  "solids": 1,
+  "bbox": [
+   7.9,
+   37.4,
+   8.0
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "21D_R_R2_Pilaster_Left.stl"
+ },
+ {
+  "id": "21E",
+  "name": "R_R2_Pilaster_Right",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.6,
+  "solids": 1,
+  "bbox": [
+   7.3,
+   33.0,
+   7.6
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "21E_R_R2_Pilaster_Right.stl"
+ },
+ {
+  "id": "21F",
+  "name": "R_R2_Fascia",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.9,
+  "solids": 1,
+  "bbox": [
+   34.0,
+   9.0,
+   7.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "21F_R_R2_Fascia.stl"
+ },
+ {
+  "id": "21G",
+  "name": "R_R2_Stallriser",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.5,
+  "solids": 1,
+  "bbox": [
+   27.2,
+   6.4,
+   6.0
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "21G_R_R2_Stallriser.stl"
+ },
+ {
+  "id": "22A",
+  "name": "R_R3_Shop_Window_Frame",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.7,
+  "solids": 1,
+  "bbox": [
+   20.6,
+   22.0,
+   6.3
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "22A_R_R3_Shop_Window_Frame.stl"
+ },
+ {
+  "id": "22Ag",
+  "name": "R_R3_Shop_Window_Glazing",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.3,
+  "solids": 1,
+  "bbox": [
+   15.8,
+   17.2,
+   0.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "22Ag_R_R3_Shop_Window_Glazing.stl"
+ },
+ {
+  "id": "22Al",
+  "name": "R_R3_Shop_Window_Lintel",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.1,
+  "solids": 1,
+  "bbox": [
+   22.6,
+   2.0,
+   5.5
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "22Al_R_R3_Shop_Window_Lintel.stl"
+ },
+ {
+  "id": "22D",
+  "name": "R_R3_Door",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.3,
+  "solids": 1,
+  "bbox": [
+   8.0,
+   14.8,
+   6.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "22D_R_R3_Door.stl"
+ },
+ {
+  "id": "22Df",
+  "name": "R_R3_Door_Frame",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.5,
+  "solids": 1,
+  "bbox": [
+   14.4,
+   18.6,
+   5.9
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "22Df_R_R3_Door_Frame.stl"
+ },
+ {
+  "id": "24A",
+  "name": "R_R_Bay_Window_Body",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 2.9,
+  "solids": 1,
+  "bbox": [
+   23.8,
+   31.2,
+   13.5
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "24A_R_R_Bay_Window_Body.stl"
+ },
+ {
+  "id": "24Ag",
+  "name": "R_R_Bay_Window_Glazing",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.3,
+  "solids": 1,
+  "bbox": [
+   16.0,
+   18.3,
+   0.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "24Ag_R_R_Bay_Window_Glazing.stl"
+ },
+ {
+  "id": "24Ar",
+  "name": "R_R_Bay_Window_Roof",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.8,
+  "solids": 1,
+  "bbox": [
+   26.8,
+   4.6,
+   16.0
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "24Ar_R_R_Bay_Window_Roof.stl"
+ },
+ {
+  "id": "24Ac",
+  "name": "R_R_Bay_Window_Corbel",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   5.9,
+   6.9,
+   7.5
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "24Ac_R_R_Bay_Window_Corbel.stl"
+ },
+ {
+  "id": "23A",
+  "name": "R_R_Window_A_Frame",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 1.1,
+  "solids": 1,
+  "bbox": [
+   22.5,
+   29.2,
+   6.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "23A_R_R_Window_A_Frame.stl"
+ },
+ {
+  "id": "23Ag",
+  "name": "R_R_Window_A_Glazing",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.4,
+  "solids": 1,
+  "bbox": [
+   17.7,
+   24.4,
+   0.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "23Ag_R_R_Window_A_Glazing.stl"
+ },
+ {
+  "id": "23As",
+  "name": "R_R_Window_A_Sill",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   22.5,
+   2.6,
+   6.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "23As_R_R_Window_A_Sill.stl"
+ },
+ {
+  "id": "23B",
+  "name": "R_R_Window_B_Frame",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.7,
+  "solids": 1,
+  "bbox": [
+   18.5,
+   23.0,
+   6.3
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "23B_R_R_Window_B_Frame.stl"
+ },
+ {
+  "id": "23Bg",
+  "name": "R_R_Window_B_Glazing",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   13.7,
+   18.2,
+   0.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "23Bg_R_R_Window_B_Glazing.stl"
+ },
+ {
+  "id": "23Bs",
+  "name": "R_R_Window_B_Sill",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   18.5,
+   2.6,
+   6.5
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "23Bs_R_R_Window_B_Sill.stl"
+ },
+ {
+  "id": "23C",
+  "name": "R_R_Window_C_Frame",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.5,
+  "solids": 1,
+  "bbox": [
+   15.2,
+   18.4,
+   6.3
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "23C_R_R_Window_C_Frame.stl"
+ },
+ {
+  "id": "23Cg",
+  "name": "R_R_Window_C_Glazing",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.1,
+  "solids": 1,
+  "bbox": [
+   10.4,
+   13.6,
+   0.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "23Cg_R_R_Window_C_Glazing.stl"
+ },
+ {
+  "id": "23Cs",
+  "name": "R_R_Window_C_Sill",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.1,
+  "solids": 1,
+  "bbox": [
+   15.2,
+   2.6,
+   6.1
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "23Cs_R_R_Window_C_Sill.stl"
+ },
+ {
+  "id": "23D",
+  "name": "R_R_Window_D_Frame",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 1.2,
+  "solids": 1,
+  "bbox": [
+   24.9,
+   30.5,
+   6.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "23D_R_R_Window_D_Frame.stl"
+ },
+ {
+  "id": "23Dg",
+  "name": "R_R_Window_D_Glazing",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.5,
+  "solids": 1,
+  "bbox": [
+   20.1,
+   25.7,
+   0.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "23Dg_R_R_Window_D_Glazing.stl"
+ },
+ {
+  "id": "23Ds",
+  "name": "R_R_Window_D_Sill",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.3,
+  "solids": 1,
+  "bbox": [
+   24.9,
+   2.6,
+   7.3
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "23Ds_R_R_Window_D_Sill.stl"
+ },
+ {
+  "id": "23E",
+  "name": "R_R_Window_E_Frame",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.8,
+  "solids": 1,
+  "bbox": [
+   20.3,
+   25.3,
+   6.3
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "23E_R_R_Window_E_Frame.stl"
+ },
+ {
+  "id": "23Eg",
+  "name": "R_R_Window_E_Glazing",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.3,
+  "solids": 1,
+  "bbox": [
+   15.5,
+   20.5,
+   0.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "23Eg_R_R_Window_E_Glazing.stl"
+ },
+ {
+  "id": "23Es",
+  "name": "R_R_Window_E_Sill",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   20.3,
+   2.6,
+   6.9
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "23Es_R_R_Window_E_Sill.stl"
+ },
+ {
+  "id": "23F",
+  "name": "R_R_Window_F_Frame",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.5,
+  "solids": 1,
+  "bbox": [
+   16.3,
+   19.9,
+   6.3
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "23F_R_R_Window_F_Frame.stl"
+ },
+ {
+  "id": "23Fg",
+  "name": "R_R_Window_F_Glazing",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   11.5,
+   15.1,
+   0.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "23Fg_R_R_Window_F_Glazing.stl"
+ },
+ {
+  "id": "23Fs",
+  "name": "R_R_Window_F_Sill",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   16.3,
+   2.6,
+   6.4
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "23Fs_R_R_Window_F_Sill.stl"
+ },
+ {
+  "id": "23G",
+  "name": "R_R_Attic_A_Frame",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.6,
+  "solids": 1,
+  "bbox": [
+   19.2,
+   22.7,
+   6.3
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "23G_R_R_Attic_A_Frame.stl"
+ },
+ {
+  "id": "23Gg",
+  "name": "R_R_Attic_A_Glazing",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   14.4,
+   17.9,
+   0.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "23Gg_R_R_Attic_A_Glazing.stl"
+ },
+ {
+  "id": "23Gs",
+  "name": "R_R_Attic_A_Sill",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   19.2,
+   2.6,
+   7.0
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "23Gs_R_R_Attic_A_Sill.stl"
+ },
+ {
+  "id": "23H",
+  "name": "R_R_Attic_B_Frame",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.4,
+  "solids": 1,
+  "bbox": [
+   14.8,
+   17.0,
+   6.3
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "23H_R_R_Attic_B_Frame.stl"
+ },
+ {
+  "id": "23Hg",
+  "name": "R_R_Attic_B_Glazing",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.1,
+  "solids": 1,
+  "bbox": [
+   10.0,
+   12.2,
+   0.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "23Hg_R_R_Attic_B_Glazing.stl"
+ },
+ {
+  "id": "23Hs",
+  "name": "R_R_Attic_B_Sill",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.1,
+  "solids": 1,
+  "bbox": [
+   14.8,
+   2.6,
+   6.4
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "23Hs_R_R_Attic_B_Sill.stl"
+ },
+ {
+  "id": "25A",
+  "name": "R_R_Drainpipe_Lower",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.4,
+  "solids": 1,
+  "bbox": [
+   3.4,
+   74.9,
+   5.6
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "25A_R_R_Drainpipe_Lower.stl"
+ },
+ {
+  "id": "25B",
+  "name": "R_R_Drainpipe_Upper",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   2.9,
+   52.7,
+   5.2
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "25B_R_R_Drainpipe_Upper.stl"
+ },
+ {
+  "id": "25C",
+  "name": "R_R_Hopper",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.1,
+  "solids": 1,
+  "bbox": [
+   4.9,
+   4.6,
+   6.5
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "25C_R_R_Hopper.stl"
+ },
+ {
+  "id": "27A",
+  "name": "R_R_Cornice_Front",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 2.2,
+  "solids": 1,
+  "bbox": [
+   76.0,
+   6.0,
+   8.5
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "27A_R_R_Cornice_Front.stl"
+ },
+ {
+  "id": "27B",
+  "name": "R_R_Cornice_Rear",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 1.3,
+  "solids": 1,
+  "bbox": [
+   72.0,
+   4.7,
+   7.4
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "27B_R_R_Cornice_Rear.stl"
+ },
+ {
+  "id": "28A",
+  "name": "R_R_Chimney",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 1.0,
+  "solids": 1,
+  "bbox": [
+   10.3,
+   15.6,
+   11.7
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "28A_R_R_Chimney.stl"
+ },
+ {
+  "id": "29B",
+  "name": "R_R_Keystone",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.1,
+  "solids": 1,
+  "bbox": [
+   6.0,
+   4.7,
+   5.6
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "29B_R_R_Keystone.stl"
+ },
+ {
+  "id": "29C",
+  "name": "R_R_Guild_Badge",
+  "group": "facade_R",
+  "status": "ok",
+  "grams": 0.1,
+  "solids": 1,
+  "bbox": [
+   8.7,
+   6.3,
+   6.0
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "29C_R_R_Guild_Badge.stl"
+ },
+ {
+  "id": "30A",
+  "name": "Sign_Vertical_Banner",
+  "group": "signs",
+  "status": "ok",
+  "grams": 1.2,
+  "solids": 1,
+  "bbox": [
+   12.8,
+   47.3,
+   6.5
+  ],
+  "fits_bed": true,
+  "colour": "iron",
+  "note": "",
+  "file": "30A_Sign_Vertical_Banner.stl"
+ },
+ {
+  "id": "30B",
+  "name": "Sign_Swing_A",
+  "group": "signs",
+  "status": "ok",
+  "grams": 0.7,
+  "solids": 1,
+  "bbox": [
+   26.1,
+   14.9,
+   2.3
+  ],
+  "fits_bed": true,
+  "colour": "iron",
+  "note": "",
+  "file": "30B_Sign_Swing_A.stl"
+ },
+ {
+  "id": "30C",
+  "name": "Sign_Swing_B",
+  "group": "signs",
+  "status": "ok",
+  "grams": 0.5,
+  "solids": 1,
+  "bbox": [
+   21.6,
+   13.3,
+   2.3
+  ],
+  "fits_bed": true,
+  "colour": "iron",
+  "note": "",
+  "file": "30C_Sign_Swing_B.stl"
+ },
+ {
+  "id": "30D",
+  "name": "Sign_Shield_A",
+  "group": "signs",
+  "status": "ok",
+  "grams": 0.5,
+  "solids": 1,
+  "bbox": [
+   14.8,
+   14.3,
+   6.3
+  ],
+  "fits_bed": true,
+  "colour": "iron",
+  "note": "",
+  "file": "30D_Sign_Shield_A.stl"
+ },
+ {
+  "id": "30E",
+  "name": "Sign_Fascia_Long",
+  "group": "signs",
+  "status": "ok",
+  "grams": 0.5,
+  "solids": 1,
+  "bbox": [
+   31.5,
+   6.4,
+   5.8
+  ],
+  "fits_bed": true,
+  "colour": "iron",
+  "note": "",
+  "file": "30E_Sign_Fascia_Long.stl"
+ },
+ {
+  "id": "30F",
+  "name": "Sign_Directional",
+  "group": "signs",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   14.6,
+   4.7,
+   5.8
+  ],
+  "fits_bed": true,
+  "colour": "iron",
+  "note": "",
+  "file": "30F_Sign_Directional.stl"
+ },
+ {
+  "id": "30G1",
+  "name": "Sign_Lozenge_1",
+  "group": "signs",
+  "status": "ok",
+  "grams": 0.1,
+  "solids": 1,
+  "bbox": [
+   10.6,
+   4.3,
+   5.8
+  ],
+  "fits_bed": true,
+  "colour": "iron",
+  "note": "",
+  "file": "30G1_Sign_Lozenge_1.stl"
+ },
+ {
+  "id": "30G2",
+  "name": "Sign_Lozenge_2",
+  "group": "signs",
+  "status": "ok",
+  "grams": 0.1,
+  "solids": 1,
+  "bbox": [
+   10.6,
+   4.3,
+   5.8
+  ],
+  "fits_bed": true,
+  "colour": "iron",
+  "note": "",
+  "file": "30G2_Sign_Lozenge_2.stl"
+ },
+ {
+  "id": "30G3",
+  "name": "Sign_Lozenge_3",
+  "group": "signs",
+  "status": "ok",
+  "grams": 0.1,
+  "solids": 1,
+  "bbox": [
+   9.9,
+   4.3,
+   5.8
+  ],
+  "fits_bed": true,
+  "colour": "iron",
+  "note": "",
+  "file": "30G3_Sign_Lozenge_3.stl"
+ },
+ {
+  "id": "30G4",
+  "name": "Sign_Lozenge_4",
+  "group": "signs",
+  "status": "ok",
+  "grams": 0.1,
+  "solids": 1,
+  "bbox": [
+   9.9,
+   4.3,
+   5.8
+  ],
+  "fits_bed": true,
+  "colour": "iron",
+  "note": "",
+  "file": "30G4_Sign_Lozenge_4.stl"
+ },
+ {
+  "id": "30H",
+  "name": "Sign_Small_Rear_A",
+  "group": "signs",
+  "status": "ok",
+  "grams": 0.1,
+  "solids": 1,
+  "bbox": [
+   9.8,
+   7.9,
+   2.3
+  ],
+  "fits_bed": true,
+  "colour": "iron",
+  "note": "",
+  "file": "30H_Sign_Small_Rear_A.stl"
+ },
+ {
+  "id": "30J",
+  "name": "Sign_Fascia_L2",
+  "group": "signs",
+  "status": "ok",
+  "grams": 0.3,
+  "solids": 1,
+  "bbox": [
+   25.6,
+   5.3,
+   5.8
+  ],
+  "fits_bed": true,
+  "colour": "iron",
+  "note": "",
+  "file": "30J_Sign_Fascia_L2.stl"
+ },
+ {
+  "id": "30K",
+  "name": "Sign_Blank_Swing",
+  "group": "signs",
+  "status": "ok",
+  "grams": 0.8,
+  "solids": 1,
+  "bbox": [
+   26.0,
+   16.0,
+   1.8
+  ],
+  "fits_bed": true,
+  "colour": "iron",
+  "note": "loose part / spare",
+  "file": "30K_Sign_Blank_Swing.stl"
+ },
+ {
+  "id": "30L",
+  "name": "Sign_Blank_Shield",
+  "group": "signs",
+  "status": "ok",
+  "grams": 0.7,
+  "solids": 1,
+  "bbox": [
+   19.0,
+   19.0,
+   6.3
+  ],
+  "fits_bed": true,
+  "colour": "iron",
+  "note": "loose part / spare",
+  "file": "30L_Sign_Blank_Shield.stl"
+ },
+ {
+  "id": "30M",
+  "name": "Sign_Blank_Lozenge",
+  "group": "signs",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   15.0,
+   6.0,
+   5.3
+  ],
+  "fits_bed": true,
+  "colour": "iron",
+  "note": "loose part / spare",
+  "file": "30M_Sign_Blank_Lozenge.stl"
+ },
+ {
+  "id": "30N",
+  "name": "Sign_Blank_Fascia",
+  "group": "signs",
+  "status": "ok",
+  "grams": 0.7,
+  "solids": 1,
+  "bbox": [
+   38.0,
+   8.0,
+   5.3
+  ],
+  "fits_bed": true,
+  "colour": "iron",
+  "note": "loose part / spare",
+  "file": "30N_Sign_Blank_Fascia.stl"
+ },
+ {
+  "id": "31A",
+  "name": "Bracket_Scroll_A",
+  "group": "signs",
+  "status": "ok",
+  "grams": 0.4,
+  "solids": 1,
+  "bbox": [
+   17.4,
+   2.6,
+   17.6
+  ],
+  "fits_bed": true,
+  "colour": "iron",
+  "note": "",
+  "file": "31A_Bracket_Scroll_A.stl"
+ },
+ {
+  "id": "31B",
+  "name": "Bracket_Scroll_B",
+  "group": "signs",
+  "status": "ok",
+  "grams": 0.3,
+  "solids": 1,
+  "bbox": [
+   15.7,
+   2.6,
+   15.7
+  ],
+  "fits_bed": true,
+  "colour": "iron",
+  "note": "",
+  "file": "31B_Bracket_Scroll_B.stl"
+ },
+ {
+  "id": "31C",
+  "name": "Bracket_Scroll_C",
+  "group": "signs",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   12.8,
+   2.6,
+   12.6
+  ],
+  "fits_bed": true,
+  "colour": "iron",
+  "note": "",
+  "file": "31C_Bracket_Scroll_C.stl"
+ },
+ {
+  "id": "31D",
+  "name": "Bracket_Scroll_D",
+  "group": "signs",
+  "status": "ok",
+  "grams": 0.1,
+  "solids": 1,
+  "bbox": [
+   8.6,
+   2.6,
+   8.2
+  ],
+  "fits_bed": true,
+  "colour": "iron",
+  "note": "",
+  "file": "31D_Bracket_Scroll_D.stl"
+ },
+ {
+  "id": "32A",
+  "name": "Sign_Hanging_Chain_A",
+  "group": "signs",
+  "status": "ok",
+  "grams": 0.0,
+  "solids": 1,
+  "bbox": [
+   5.0,
+   13.6,
+   1.7
+  ],
+  "fits_bed": true,
+  "colour": "iron",
+  "note": "loose part / spare",
+  "file": "32A_Sign_Hanging_Chain_A.stl"
+ },
+ {
+  "id": "32B",
+  "name": "Sign_Hanging_Chain_B",
+  "group": "signs",
+  "status": "ok",
+  "grams": 0.0,
+  "solids": 1,
+  "bbox": [
+   5.0,
+   9.4,
+   1.7
+  ],
+  "fits_bed": true,
+  "colour": "iron",
+  "note": "loose part / spare",
+  "file": "32B_Sign_Hanging_Chain_B.stl"
+ },
+ {
+  "id": "32C",
+  "name": "Sign_Rail_Hook",
+  "group": "signs",
+  "status": "ok",
+  "grams": 0.1,
+  "solids": 1,
+  "bbox": [
+   5.5,
+   4.0,
+   11.5
+  ],
+  "fits_bed": true,
+  "colour": "iron",
+  "note": "loose part / spare",
+  "file": "32C_Sign_Rail_Hook.stl"
+ },
+ {
+  "id": "33A",
+  "name": "Lantern_Large",
+  "group": "signs",
+  "status": "ok",
+  "grams": 0.7,
+  "solids": 1,
+  "bbox": [
+   16.7,
+   11.2,
+   18.3
+  ],
+  "fits_bed": true,
+  "colour": "iron",
+  "note": "",
+  "file": "33A_Lantern_Large.stl"
+ },
+ {
+  "id": "34A",
+  "name": "Lantern_Small",
+  "group": "signs",
+  "status": "ok",
+  "grams": 0.4,
+  "solids": 1,
+  "bbox": [
+   15.1,
+   8.1,
+   13.2
+  ],
+  "fits_bed": true,
+  "colour": "iron",
+  "note": "",
+  "file": "34A_Lantern_Small.stl"
+ },
+ {
+  "id": "34C",
+  "name": "Lantern_Rear_Tiny",
+  "group": "signs",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   13.6,
+   7.4,
+   8.7
+  ],
+  "fits_bed": true,
+  "colour": "iron",
+  "note": "",
+  "file": "34C_Lantern_Rear_Tiny.stl"
+ },
+ {
+  "id": "35A",
+  "name": "Barrel_Large",
+  "group": "props",
+  "status": "ok",
+  "grams": 2.7,
+  "solids": 1,
+  "bbox": [
+   14.0,
+   14.0,
+   20.5
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "35A_Barrel_Large.stl"
+ },
+ {
+  "id": "35B",
+  "name": "Barrel_Small",
+  "group": "props",
+  "status": "ok",
+  "grams": 1.2,
+  "solids": 1,
+  "bbox": [
+   10.8,
+   10.8,
+   16.5
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "35B_Barrel_Small.stl"
+ },
+ {
+  "id": "36A",
+  "name": "Crate_Stack",
+  "group": "props",
+  "status": "ok",
+  "grams": 0.9,
+  "solids": 1,
+  "bbox": [
+   13.0,
+   11.1,
+   19.5
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "36A_Crate_Stack.stl"
+ },
+ {
+  "id": "36B",
+  "name": "Crate_Single",
+  "group": "props",
+  "status": "ok",
+  "grams": 0.3,
+  "solids": 1,
+  "bbox": [
+   9.0,
+   8.0,
+   10.5
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "36B_Crate_Single.stl"
+ },
+ {
+  "id": "37A",
+  "name": "Cauldron_Stack",
+  "group": "props",
+  "status": "ok",
+  "grams": 1.1,
+  "solids": 1,
+  "bbox": [
+   21.1,
+   13.1,
+   13.6
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "37A_Cauldron_Stack.stl"
+ },
+ {
+  "id": "37B",
+  "name": "Broom_Rack",
+  "group": "props",
+  "status": "ok",
+  "grams": 0.6,
+  "solids": 1,
+  "bbox": [
+   14.5,
+   4.7,
+   26.0
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "37B_Broom_Rack.stl"
+ },
+ {
+  "id": "37C",
+  "name": "Post_Box",
+  "group": "props",
+  "status": "ok",
+  "grams": 1.5,
+  "solids": 1,
+  "bbox": [
+   10.4,
+   9.4,
+   20.9
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "37C_Post_Box.stl"
+ },
+ {
+  "id": "38A",
+  "name": "Notice_Board",
+  "group": "props",
+  "status": "ok",
+  "grams": 0.7,
+  "solids": 1,
+  "bbox": [
+   22.0,
+   17.0,
+   5.5
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "38A_Notice_Board.stl"
+ },
+ {
+  "id": "38B",
+  "name": "Poster_Layer",
+  "group": "props",
+  "status": "ok",
+  "grams": 0.1,
+  "solids": 1,
+  "bbox": [
+   16.5,
+   9.7,
+   0.8
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "38B_Poster_Layer.stl"
+ },
+ {
+  "id": "39A",
+  "name": "Kerb_Step",
+  "group": "props",
+  "status": "ok",
+  "grams": 0.4,
+  "solids": 1,
+  "bbox": [
+   18.0,
+   6.0,
+   6.5
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "39A_Kerb_Step.stl"
+ },
+ {
+  "id": "39B",
+  "name": "Cellar_Hatch",
+  "group": "props",
+  "status": "ok",
+  "grams": 0.4,
+  "solids": 1,
+  "bbox": [
+   14.0,
+   11.0,
+   5.5
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "39B_Cellar_Hatch.stl"
+ },
+ {
+  "id": "39C",
+  "name": "Boot_Scraper",
+  "group": "props",
+  "status": "ok",
+  "grams": 0.1,
+  "solids": 1,
+  "bbox": [
+   10.5,
+   2.0,
+   6.0
+  ],
+  "fits_bed": true,
+  "colour": "wood",
+  "note": "",
+  "file": "39C_Boot_Scraper.stl"
+ },
+ {
+  "id": "40A",
+  "name": "Light_Baffle_A",
+  "group": "lighting",
+  "status": "ok",
+  "grams": 0.6,
+  "solids": 1,
+  "bbox": [
+   12.0,
+   14.0,
+   6.0
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "40A_Light_Baffle_A.stl"
+ },
+ {
+  "id": "40B",
+  "name": "Light_Baffle_B",
+  "group": "lighting",
+  "status": "ok",
+  "grams": 0.7,
+  "solids": 1,
+  "bbox": [
+   14.0,
+   16.0,
+   6.0
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "40B_Light_Baffle_B.stl"
+ },
+ {
+  "id": "40C",
+  "name": "Light_Baffle_C",
+  "group": "lighting",
+  "status": "ok",
+  "grams": 0.4,
+  "solids": 1,
+  "bbox": [
+   10.0,
+   12.0,
+   5.0
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "40C_Light_Baffle_C.stl"
+ },
+ {
+  "id": "40D",
+  "name": "Light_Baffle_D",
+  "group": "lighting",
+  "status": "ok",
+  "grams": 1.0,
+  "solids": 1,
+  "bbox": [
+   16.0,
+   18.0,
+   7.0
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "40D_Light_Baffle_D.stl"
+ },
+ {
+  "id": "40E",
+  "name": "Light_Baffle_E",
+  "group": "lighting",
+  "status": "ok",
+  "grams": 0.3,
+  "solids": 1,
+  "bbox": [
+   9.0,
+   10.0,
+   5.0
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "40E_Light_Baffle_E.stl"
+ },
+ {
+  "id": "40F",
+  "name": "Light_Baffle_F",
+  "group": "lighting",
+  "status": "ok",
+  "grams": 1.1,
+  "solids": 1,
+  "bbox": [
+   18.0,
+   20.0,
+   7.0
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "40F_Light_Baffle_F.stl"
+ },
+ {
+  "id": "45A",
+  "name": "Coil_Bay_Cover_A",
+  "group": "lighting",
+  "status": "ok",
+  "grams": 2.3,
+  "solids": 1,
+  "bbox": [
+   33.4,
+   45.4,
+   4.7
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "45A_Coil_Bay_Cover_A.stl"
+ },
+ {
+  "id": "45B",
+  "name": "Coil_Bay_Cover_B",
+  "group": "lighting",
+  "status": "ok",
+  "grams": 2.3,
+  "solids": 1,
+  "bbox": [
+   33.4,
+   45.4,
+   4.7
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "45B_Coil_Bay_Cover_B.stl"
+ },
+ {
+  "id": "45C",
+  "name": "Coil_Bay_Cover_C",
+  "group": "lighting",
+  "status": "ok",
+  "grams": 2.3,
+  "solids": 1,
+  "bbox": [
+   33.4,
+   45.4,
+   4.7
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "45C_Coil_Bay_Cover_C.stl"
+ },
+ {
+  "id": "43",
+  "name": "Bus_Cover",
+  "group": "lighting",
+  "status": "ok",
+  "grams": 1.4,
+  "solids": 1,
+  "bbox": [
+   80.9,
+   9.5,
+   4.9
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "43_Bus_Cover.stl"
+ },
+ {
+  "id": "44",
+  "name": "Wire_Clip_x12",
+  "group": "lighting",
+  "status": "ok",
+  "grams": 1.0,
+  "solids": 1,
+  "bbox": [
+   96.0,
+   8.8,
+   3.8
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "44_Wire_Clip_x12.stl"
+ },
+ {
+  "id": "46",
+  "name": "Bead_Shim_x8",
+  "group": "lighting",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   56.0,
+   9.1,
+   1.0
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "46_Bead_Shim_x8.stl"
+ },
+ {
+  "id": "47",
+  "name": "String_Entry_Grommet_x4",
+  "group": "lighting",
+  "status": "ok",
+  "grams": 0.5,
+  "solids": 1,
+  "bbox": [
+   40.0,
+   11.0,
+   3.0
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "47_String_Entry_Grommet_x4.stl"
+ },
+ {
+  "id": "50",
+  "name": "Outer_Left",
+  "group": "case",
+  "status": "ok",
+  "grams": 121.1,
+  "solids": 1,
+  "bbox": [
+   200.0,
+   5.2,
+   213.8
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "50_Outer_Left.stl"
+ },
+ {
+  "id": "51",
+  "name": "Outer_Right",
+  "group": "case",
+  "status": "ok",
+  "grams": 121.1,
+  "solids": 1,
+  "bbox": [
+   200.0,
+   5.2,
+   213.8
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "51_Outer_Right.stl"
+ },
+ {
+  "id": "52",
+  "name": "Outer_Top",
+  "group": "case",
+  "status": "ok",
+  "grams": 61.2,
+  "solids": 1,
+  "bbox": [
+   100.0,
+   200.0,
+   9.4
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "52_Outer_Top.stl"
+ },
+ {
+  "id": "53",
+  "name": "Outer_Back",
+  "group": "case",
+  "status": "ok",
+  "grams": 54.0,
+  "solids": 1,
+  "bbox": [
+   96.9,
+   4.0,
+   213.3
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "service hatch -- pops off for LED access",
+  "file": "53_Outer_Back.stl"
+ },
+ {
+  "id": "54",
+  "name": "Plinth_Body",
+  "group": "case",
+  "status": "ok",
+  "grams": 224.5,
+  "solids": 1,
+  "bbox": [
+   100.0,
+   200.0,
+   28.0
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "54_Plinth_Body.stl"
+ },
+ {
+  "id": "55",
+  "name": "Power_Drawer",
+  "group": "case",
+  "status": "ok",
+  "grams": 41.7,
+  "solids": 1,
+  "bbox": [
+   86.0,
+   150.0,
+   18.0
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "55_Power_Drawer.stl"
+ },
+ {
+  "id": "56",
+  "name": "Drawer_Face",
+  "group": "case",
+  "status": "ok",
+  "grams": 7.5,
+  "solids": 1,
+  "bbox": [
+   92.0,
+   6.5,
+   23.0
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "56_Drawer_Face.stl"
+ },
+ {
+  "id": "57",
+  "name": "Batt_Cradle_x2",
+  "group": "case",
+  "status": "ok",
+  "grams": 6.4,
+  "solids": 1,
+  "bbox": [
+   31.2,
+   67.2,
+   9.4
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "57_Batt_Cradle_x2.stl"
+ },
+ {
+  "id": "58A",
+  "name": "Case_Spine_Trim_L",
+  "group": "case",
+  "status": "ok",
+  "grams": 3.5,
+  "solids": 1,
+  "bbox": [
+   4.0,
+   7.5,
+   213.8
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "58A_Case_Spine_Trim_L.stl"
+ },
+ {
+  "id": "58B",
+  "name": "Case_Spine_Trim_R",
+  "group": "case",
+  "status": "ok",
+  "grams": 3.5,
+  "solids": 1,
+  "bbox": [
+   4.0,
+   7.5,
+   213.8
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "58B_Case_Spine_Trim_R.stl"
+ },
+ {
+  "id": "59",
+  "name": "Case_Clip_x6",
+  "group": "case",
+  "status": "ok",
+  "grams": 0.2,
+  "solids": 1,
+  "bbox": [
+   20.0,
+   8.0,
+   2.9
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "59_Case_Clip_x6.stl"
+ },
+ {
+  "id": "59G",
+  "name": "Foot_Pad_x4",
+  "group": "case",
+  "status": "ok",
+  "grams": 0.3,
+  "solids": 1,
+  "bbox": [
+   9.1,
+   9.1,
+   3.6
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "59G_Foot_Pad_x4.stl"
+ },
+ {
+  "id": "60",
+  "name": "Switch_Housing",
+  "group": "switch",
+  "status": "ok",
+  "grams": 3.9,
+  "solids": 1,
+  "bbox": [
+   34.0,
+   17.0,
+   24.0
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "60_Switch_Housing.stl"
+ },
+ {
+  "id": "61",
+  "name": "Switch_Cover",
+  "group": "switch",
+  "status": "ok",
+  "grams": 2.4,
+  "solids": 1,
+  "bbox": [
+   33.4,
+   5.0,
+   23.4
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "61_Switch_Cover.stl"
+ },
+ {
+  "id": "62A",
+  "name": "Switch_Bezel_Rocker",
+  "group": "switch",
+  "status": "ok",
+  "grams": 0.5,
+  "solids": 1,
+  "bbox": [
+   26.0,
+   5.5,
+   18.0
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "62A_Switch_Bezel_Rocker.stl"
+ },
+ {
+  "id": "62B",
+  "name": "Switch_Bezel_Slide",
+  "group": "switch",
+  "status": "ok",
+  "grams": 1.0,
+  "solids": 1,
+  "bbox": [
+   26.0,
+   5.5,
+   18.0
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "62B_Switch_Bezel_Slide.stl"
+ },
+ {
+  "id": "62C",
+  "name": "Switch_Bezel_Button",
+  "group": "switch",
+  "status": "ok",
+  "grams": 0.9,
+  "solids": 1,
+  "bbox": [
+   26.0,
+   5.5,
+   18.0
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "62C_Switch_Bezel_Button.stl"
+ },
+ {
+  "id": "62D",
+  "name": "Switch_Bezel_Blank",
+  "group": "switch",
+  "status": "ok",
+  "grams": 1.2,
+  "solids": 1,
+  "bbox": [
+   26.0,
+   5.5,
+   18.0
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "62D_Switch_Bezel_Blank.stl"
+ },
+ {
+  "id": "63",
+  "name": "Jack_Plate_DC",
+  "group": "switch",
+  "status": "ok",
+  "grams": 1.1,
+  "solids": 1,
+  "bbox": [
+   26.0,
+   5.5,
+   18.0
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "63_Jack_Plate_DC.stl"
+ },
+ {
+  "id": "64",
+  "name": "Strain_Relief",
+  "group": "switch",
+  "status": "ok",
+  "grams": 1.6,
+  "solids": 1,
+  "bbox": [
+   26.0,
+   14.0,
+   12.9
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "64_Strain_Relief.stl"
+ },
+ {
+  "id": "65",
+  "name": "Remote_Clip",
+  "group": "switch",
+  "status": "ok",
+  "grams": 3.9,
+  "solids": 1,
+  "bbox": [
+   44.0,
+   15.5,
+   14.0
+  ],
+  "fits_bed": true,
+  "colour": "black",
+  "note": "",
+  "file": "65_Remote_Clip.stl"
+ },
+ {
+  "id": "70A",
+  "name": "Tolerance_Test_Coupon",
+  "group": "jigs",
+  "status": "ok",
+  "grams": 23.8,
+  "solids": 1,
+  "bbox": [
+   96.0,
+   34.0,
+   6.0
+  ],
+  "fits_bed": true,
+  "colour": "white",
+  "note": "",
+  "file": "70A_Tolerance_Test_Coupon.stl"
+ },
+ {
+  "id": "70B",
+  "name": "Tolerance_Test_Pegs",
+  "group": "jigs",
+  "status": "ok",
+  "grams": 2.8,
+  "solids": 1,
+  "bbox": [
+   46.0,
+   16.0,
+   7.0
+  ],
+  "fits_bed": true,
+  "colour": "white",
+  "note": "",
+  "file": "70B_Tolerance_Test_Pegs.stl"
+ },
+ {
+  "id": "72",
+  "name": "Paint_Handle_Sprue",
+  "group": "jigs",
+  "status": "ok",
+  "grams": 7.9,
+  "solids": 1,
+  "bbox": [
+   96.0,
+   11.3,
+   22.5
+  ],
+  "fits_bed": true,
+  "colour": "white",
+  "note": "",
+  "file": "72_Paint_Handle_Sprue.stl"
+ },
+ {
+  "id": "73",
+  "name": "Assembly_ID_Card",
+  "group": "jigs",
+  "status": "ok",
+  "grams": 10.0,
+  "solids": 1,
+  "bbox": [
+   90.0,
+   55.0,
+   2.1
+  ],
+  "fits_bed": true,
+  "colour": "white",
+  "note": "",
+  "file": "73_Assembly_ID_Card.stl"
+ },
+ {
+  "id": "71A",
+  "name": "Glazing_Cut_Template_A",
+  "group": "jigs",
+  "status": "ok",
+  "grams": 0.9,
+  "solids": 1,
+  "bbox": [
+   34.0,
+   42.0,
+   1.6
+  ],
+  "fits_bed": true,
+  "colour": "white",
+  "note": "",
+  "file": "71A_Glazing_Cut_Template_A.stl"
+ },
+ {
+  "id": "71B",
+  "name": "Glazing_Cut_Template_B",
+  "group": "jigs",
+  "status": "ok",
+  "grams": 1.0,
+  "solids": 1,
+  "bbox": [
+   42.0,
+   40.0,
+   1.6
+  ],
+  "fits_bed": true,
+  "colour": "white",
+  "note": "",
+  "file": "71B_Glazing_Cut_Template_B.stl"
+ },
+ {
+  "id": "71C",
+  "name": "Glazing_Cut_Template_C",
+  "group": "jigs",
+  "status": "ok",
+  "grams": 0.8,
+  "solids": 1,
+  "bbox": [
+   32.0,
+   34.0,
+   1.6
+  ],
+  "fits_bed": true,
+  "colour": "white",
+  "note": "",
+  "file": "71C_Glazing_Cut_Template_C.stl"
+ },
+ {
+  "id": "71D",
+  "name": "Glazing_Cut_Template_D",
+  "group": "jigs",
+  "status": "ok",
+  "grams": 0.9,
+  "solids": 1,
+  "bbox": [
+   28.0,
+   48.0,
+   1.6
+  ],
+  "fits_bed": true,
+  "colour": "white",
+  "note": "",
+  "file": "71D_Glazing_Cut_Template_D.stl"
+ }
+]

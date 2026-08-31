@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+diagon-alley-book-nook/out/stl/
+diagon-alley-book-nook/out/plates/
+diagon-alley-book-nook/out/preview/*.step
+diagon-alley-book-nook/out/build.log
