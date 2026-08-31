@@ -32,25 +32,30 @@ def order(tris, elev, azim):
     view = np.array([math.cos(e)*math.cos(a), math.cos(e)*math.sin(a), math.sin(e)])
     return np.argsort(tris.mean(axis=1)@view)
 
-coupon, pegs = tolerance_coupon()
-fig = plt.figure(figsize=(15,6.5), facecolor="white")
-for i,(obj,elev,azim,title,lim) in enumerate([
-        (coupon, 88, -90, "70A coupon — from directly above (what the slicer shows)", (96,34)),
-        (coupon, 26, -78, "70A coupon — raked, so the holes read", (96,34)),
-        (pegs,   26, -78, "70B pegs — raked, pegs stand 4 mm proud", (46,16))]):
-    tris = tess(obj)
-    ax = fig.add_subplot(1,3,i+1, projection="3d", facecolor="white")
-    o = order(tris, elev, azim)
-    pc = Poly3DCollection(tris[o], linewidths=0, zsort="average")
-    pc.set_facecolor(shade(tris[o], (0.86,0.82,0.66)))
-    ax.add_collection3d(pc)
-    b = tris.reshape(-1,3)
-    ax.set_xlim(b[:,0].min()-2, b[:,0].max()+2)
-    ax.set_ylim(b[:,1].min()-2, b[:,1].max()+2)
-    ax.set_zlim(0, max(12, b[:,2].max()))
-    ax.set_box_aspect((lim[0], lim[1], 14))
-    ax.view_init(elev=elev, azim=azim); ax.set_axis_off()
-    ax.set_title(title, fontsize=10, color="#333")
-fig.tight_layout()
-fig.savefig("out/preview/coupon_check.png", dpi=130, bbox_inches="tight", facecolor="white")
-print("written")
+def main():
+        coupon, pegs = tolerance_coupon()
+    fig = plt.figure(figsize=(15,6.5), facecolor="white")
+    for i,(obj,elev,azim,title,lim) in enumerate([
+            (coupon, 88, -90, "70A coupon — from directly above (what the slicer shows)", (96,34)),
+            (coupon, 26, -78, "70A coupon — raked, so the holes read", (96,34)),
+            (pegs,   26, -78, "70B pegs — raked, pegs stand 4 mm proud", (46,16))]):
+        tris = tess(obj)
+        ax = fig.add_subplot(1,3,i+1, projection="3d", facecolor="white")
+        o = order(tris, elev, azim)
+        pc = Poly3DCollection(tris[o], linewidths=0, zsort="average")
+        pc.set_facecolor(shade(tris[o], (0.86,0.82,0.66)))
+        ax.add_collection3d(pc)
+        b = tris.reshape(-1,3)
+        ax.set_xlim(b[:,0].min()-2, b[:,0].max()+2)
+        ax.set_ylim(b[:,1].min()-2, b[:,1].max()+2)
+        ax.set_zlim(0, max(12, b[:,2].max()))
+        ax.set_box_aspect((lim[0], lim[1], 14))
+        ax.view_init(elev=elev, azim=azim); ax.set_axis_off()
+        ax.set_title(title, fontsize=10, color="#333")
+    fig.tight_layout()
+    fig.savefig("out/preview/coupon_check.png", dpi=130, bbox_inches="tight", facecolor="white")
+    print("written")
+
+
+if __name__ == "__main__":
+    main()

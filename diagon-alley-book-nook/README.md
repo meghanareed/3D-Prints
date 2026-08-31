@@ -16,16 +16,30 @@ lane, 100 × 240 × 200 mm, engineered as a real model kit rather than a single 
 
 ![exploded](out/preview/exploded.png)
 
-## Build it
+## To print, you do not need to run anything
+
+The STLs are committed. Clone or download the repo, open `out/plates/` and slice.
+Start with `00_CALIBRATE_FIRST.stl`.
+
+## To change it, five scripts
+
+You only need Python and CadQuery if you want to alter the model — most likely to set
+`FIT_CLEARANCE` after the calibration print, then re-export.
 
 ```bash
 pip install cadquery
-python3 build.py --list      # 218 parts
-python3 build.py             # STLs + assembly + exploded previews
-python3 verify.py            # fit, keying, envelope and manifest checks
-python3 plates.py            # arrange the STLs onto 14 print plates
-python3 render.py            # the preview images above
+
+python3 params.py        # print the derived dimensions; changes nothing
+python3 build.py         # every part -> out/stl, plus assembly and exploded previews
+python3 build.py --list  # just list the 218 part IDs
+python3 verify.py        # fit, keying, grip, envelope and manifest checks
+python3 plates.py        # arrange the parts onto print plates -> out/plates
+python3 render.py        # the preview images above
+python3 render_coupon.py # a raked view of the tolerance coupon
 ```
+
+**Everything under `lib/`, `parts/` and `data/` is import-only** — library modules the
+scripts above pull from. Running one directly does nothing.
 
 Outputs: `out/stl/*.stl`, `out/preview/assembly.step`, `out/preview/exploded.step`,
 `out/manifest.json`.
