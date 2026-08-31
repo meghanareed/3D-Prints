@@ -223,6 +223,17 @@ def check_coupon_tab_flips():
     way round and 2.6 mm^3 the other, so it could not seat at all.
     """
     print("\n[jigs] tolerance tab seats after being turned over")
+    if abs(MT.TAB_PITCH - MT.COUPON_STATION_W) > 1e-6:
+        fail(f"tab pitch {MT.TAB_PITCH} does not match station pitch "
+             f"{MT.COUPON_STATION_W} -- the tabs will drift out of their holes")
+    else:
+        ok(f"tab pitch matches the station pitch ({MT.TAB_PITCH} mm)")
+    depth_p1, depth_p2 = MT.P1_L + 0.6, MT.P2_L + 0.6
+    if depth_p1 <= MT.P1_L or depth_p2 <= MT.P2_L:
+        fail("sockets are not deeper than the pegs -- the pegs will bottom out")
+    else:
+        ok(f"sockets clear the pegs by 0.6 mm (P1 {MT.P1_L}->{depth_p1}, "
+           f"P2 {MT.P2_L}->{depth_p2})")
     dy = MT.COUPON_P1_Y - MT.COUPON_P2_Y
     lo = (MT.TAB_H - dy) / 2
     real = (P.DECORATIVE_CLEARANCE, P.FIT_CLEARANCE)

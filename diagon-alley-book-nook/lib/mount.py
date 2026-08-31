@@ -261,7 +261,13 @@ COUPON_H = 34.0
 COUPON_T = 6.0
 COUPON_P1_Y = 25.0        # the two mount rows, shared by the coupon and the tabs
 COUPON_P2_Y = 11.0
-TAB_W, TAB_H, TAB_T = 20.0, 24.0, 3.0
+TAB_W, TAB_H, TAB_T = 20.0, 24.0, 4.0
+TAB_PITCH = COUPON_STATION_W    # the tabs MUST sit on the station pitch. At 25 mm on a
+                                # 26 mm station pitch they drifted 1 mm per station, so
+                                # only the first tab could ever enter its holes -- the
+                                # rest sat on the surface with their pegs looking far
+                                # too long. Off by 1 mm against a 0.2 mm clearance is
+                                # simply a wall.
 
 
 def _label(solid, txt, x, y, top_z, size=4.2):
@@ -338,7 +344,9 @@ def tolerance_coupon():
     tab_p1_y, tab_p2_y = lo, lo + dy
     tabs, sprue = None, None
     for i in range(n):
-        x0 = i * (TAB_W + 5.0)
+        # centred in its station, so laying the whole strip on the coupon lines every
+        # tab up with its own holes
+        x0 = TAB_PITCH * (i + 0.5) - TAB_W / 2
         t = cq.Workplane("XY").box(TAB_W, TAB_H, TAB_T, centered=(False, False, False)) \
             .translate((x0, 0, 0))
         t = t.cut(_corner_mark(x0, 0.0, +1, +1, TAB_T))
@@ -346,9 +354,13 @@ def tolerance_coupon():
         t = t.union(peg_p2((x0 + TAB_W / 2, tab_p2_y, TAB_T), axis="+Z"))
         t = _label(t, str(i + 1), x0 + TAB_W - 7.0, TAB_H - 6.0, TAB_T, size=3.4)
         tabs = t if tabs is None else tabs.union(t)
-        if i:                            # runner joining the tabs
-            r = cq.Workplane("XY").box(5.2, 4.0, 1.2, centered=(False, False, False)) \
-                .translate((x0 - 5.1, TAB_H / 2 - 2.0, 0))
+        if i:
+            # Runner: thin and narrow so it snaps cleanly with a thumbnail. The tabs
+            # are meant to come apart -- one tab per station, fresh crush ribs each
+            # time -- but the strip also seats as a whole if you would rather.
+            gap = TAB_PITCH - TAB_W
+            r = cq.Workplane("XY").box(gap + 0.4, 3.0, 0.8, centered=(False, False, False)) \
+                .translate((x0 - gap - 0.2, TAB_H / 2 - 1.5, 0))
             sprue = r if sprue is None else sprue.union(r)
     if sprue is not None:
         tabs = tabs.union(sprue)

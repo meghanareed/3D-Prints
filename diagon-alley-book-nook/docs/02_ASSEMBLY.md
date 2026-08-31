@@ -19,7 +19,15 @@ cut at a different clearance, with the value raised beside it:
  [ o   o ] │ [ o   o ] │ [ o   o ] │ [ o   o ]     <- keyed P2 pair
 ```
 
-`70B` is **four loose tabs**, numbered 1–4. Snap them off the runner.
+`70B` is **four tabs**, numbered 1–4, on a thin runner. **Snap them apart first** — a
+thumbnail does it. One tab per station: the crush ribs shear on first insertion, so
+re-using a tab burnishes its pegs and biases every test after the first.
+
+The tabs sit on the same 26 mm pitch as the stations, so the whole strip does line up if
+you would rather drop it on in one go. (It did not in the first version — the tabs were
+on a 25 mm pitch, which drifts 1 mm per station. Against a 0.2 mm clearance that is a
+wall, so only the leftmost tab could ever enter its holes and the other three sat on the
+surface with their pegs looking far too long.)
 
 **The tab is a mirror of the station, not a copy.** You turn the tab over to use it, and
 turning it over swaps the rows — so the tab carries its single P1 peg on the row where

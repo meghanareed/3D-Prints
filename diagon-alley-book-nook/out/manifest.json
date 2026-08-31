@@ -3591,12 +3591,12 @@
   "name": "Tolerance_Test_Pegs",
   "group": "jigs",
   "status": "ok",
-  "grams": 7.4,
+  "grams": 9.7,
   "solids": 1,
   "bbox": [
-   95.0,
+   98.0,
    24.0,
-   7.0
+   8.0
   ],
   "fits_bed": true,
   "colour": "white",
