@@ -1,7 +1,7 @@
 Crooked Lane Book Nook -- verification
 
 [params] tolerance sanity
-  ok    lead-in 0.5, clearances 0.25/0.2, crush rib 0.3
+  ok    lead-in 0.5, clearances 0.25/0.2, rib bite 0.15
 
 [envelope] the numbers hang together
   ok    height 240.0 = plinth 24.0 + cavity 213.8 + top 2.2
@@ -18,12 +18,20 @@ Crooked Lane Book Nook -- verification
   ok    P2: seats one way only (wrong way fouls by 4.00 mm^3)
 
 [fit] real parts against a real wall
-  ok    13A P2 keyed pair, sash window: clears the bore, grip 1.44 mm^3
-  ok    19C P1 micro peg, wall ornament: clears the bore, grip 0.26 mm^3
+  ok    13A P2 keyed pair, sash window: clears the bore, grip 2.16 mm^3
+  ok    19C P1 micro peg, wall ornament: clears the bore, grip 0.40 mm^3
   ok    11A T3 tongue, projecting bay: clears the bore, detent retained
 
 [fit] all 119 facade parts against their walls
   ok    all facade parts clear their walls (no interference anywhere)
+
+[fit] crush-rib grip across the usable clearance range
+  ok    clearance 0.15: clears the bore, grip 2.53 mm^3
+  ok    clearance 0.20: clears the bore, grip 2.64 mm^3
+  ok    clearance 0.25: clears the bore, grip 2.75 mm^3
+  ok    clearance 0.30: clears the bore, grip 2.86 mm^3
+  ok    clearance 0.35: clears the bore, grip 2.94 mm^3
+  ok    clearance 0.40: clears the bore, grip 2.94 mm^3
 
 [jigs] paint handles accept a real part's peg
   ok    P1 parts drop into the paint handle and lift back out
@@ -31,6 +39,6 @@ Crooked Lane Book Nook -- verification
 
 [build] manifest
   ok    218 parts, all single-solid and all inside the build volume
-        1596 g PLA total across 218 parts
+        1603 g PLA total across 218 parts
 
 0 failures, 0 warnings

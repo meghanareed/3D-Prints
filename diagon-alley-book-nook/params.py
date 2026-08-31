@@ -21,7 +21,12 @@ PANEL_SPLIT = (BOOKNOOK_HEIGHT + 6.0) > min(BED_X, BED_Y)   # False at 256
 FIT_CLEARANCE        = 0.25   # structural mating faces, per side
 DECORATIVE_CLEARANCE = 0.20   # decorative snap-ins, per side
 SLIP_CLEARANCE       = 0.35   # chassis sliding into the case, per side
-CRUSH_RIB            = 0.30   # sacrificial rib inside sockets
+CRUSH_INTERFERENCE   = 0.15  # how far each sacrificial rib bites INTO the peg. This
+                             # is an interference, NOT a rib height: the rib is sized
+                             # from the clearance so the bite stays constant however
+                             # you set the clearances above. A fixed rib measured from
+                             # the bore wall stops touching the peg once clearance
+                             # reaches that height, and every part falls out.
 LEAD_IN_CHAMFER      = 0.50   # 45 deg at every socket mouth -- do not remove
 PEG_TIP_CHAMFER      = 0.30
 

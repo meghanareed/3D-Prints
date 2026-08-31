@@ -110,7 +110,7 @@ def socket_p1_solids(point, axis="+Z", rot=0.0, depth=None, decorative=True):
     w, h = P1_W + 2 * c, P1_H + 2 * c
     bore = _p1_profile(w, h).extrude(d)
     bore = bore.union(_leadin(w, h))
-    ribs = _rib_solid(w, h, d, n=2)
+    ribs = _rib_solid(w, h, d, c, n=2)
     return _place(bore, point, axis, rot), _place(ribs, point, axis, rot)
 
 
@@ -142,7 +142,7 @@ def socket_p2_solids(point, axis="+Z", rot=0.0, depth=None, decorative=True):
         b = (cq.Workplane("XY").rect(ww, hh).extrude(d)
              .union(_leadin(ww, hh)).translate((dx, 0, 0)))
         bores = b if bores is None else bores.union(b)
-        r = _rib_solid(ww, hh, d, n=2).translate((dx, 0, 0))
+        r = _rib_solid(ww, hh, d, c, n=2).translate((dx, 0, 0))
         ribs = r if ribs is None else ribs.union(r)
     return _place(bores, point, axis, rot), _place(ribs, point, axis, rot)
 
@@ -164,22 +164,31 @@ def _leadin(w, h):
 RIB_EMBED = 0.6   # how far a crush rib buries itself in the parent material
 
 
-def _rib_solid(w, h, depth, n=2):
+def _rib_solid(w, h, depth, clearance, n=2):
     """Sacrificial crush ribs: they shear on first insertion and give a firm grip
     regardless of the printer's real-world dimensional accuracy.
 
-    Each rib spans from CRUSH_RIB inside the bore to RIB_EMBED inside the wall. The
-    embed matters: a rib sized exactly to the bore wall is merely tangent to it, and
-    OCCT then leaves it as a detached solid.
+    Each rib runs from CRUSH_INTERFERENCE inside the PEG's surface out to RIB_EMBED
+    inside the parent material. Sizing it from the clearance is the whole point: a rib
+    of fixed height measured from the BORE wall stops reaching the peg as soon as the
+    clearance grows past that height, and then nothing grips. With the old fixed
+    0.30 rib, setting FIT_CLEARANCE to 0.30 or 0.35 -- which the tolerance coupon
+    invites you to do -- silently gave every part in the kit zero retention.
+
+    The embed matters too: a rib sized exactly to the bore wall is merely tangent to
+    it, and OCCT leaves it as a detached solid.
     """
     ribs = None
-    width = P.CRUSH_RIB + RIB_EMBED
+    peg_half = w / 2 - clearance
+    inner = peg_half - P.CRUSH_INTERFERENCE
+    outer = w / 2 + RIB_EMBED
+    width = outer - inner
     for sx in (-1, 1):
         for k in range(n):
             zc = depth * (k + 1) / (n + 1)
             r = (cq.Workplane("XY")
                  .box(width, min(h * 0.6, 1.6), depth / (n + 2))
-                 .translate((sx * (w / 2 - P.CRUSH_RIB + width / 2), 0, zc)))
+                 .translate((sx * (inner + width / 2), 0, zc)))
             ribs = r if ribs is None else ribs.union(r)
     return ribs
 
@@ -232,29 +241,77 @@ def c4_catch(wp, point, axis="+Z", rot=0.0, width=C4_W, barb=C4_BARB):
 
 
 # =========================================================== self-test coupon ===
+COUPON_VALUES = [0.20, 0.25, 0.30, 0.35]
+COUPON_STATION_W = 26.0
+COUPON_H = 34.0
+COUPON_T = 6.0
+COUPON_P1_Y = 25.0        # the two mount rows, shared by the coupon and the tabs
+COUPON_P2_Y = 11.0
+TAB_W, TAB_H, TAB_T = 20.0, 24.0, 3.0
+
+
+def _label(solid, txt, x, y, top_z, size=4.2):
+    """Raised lettering, built as its own solid and fused.
+
+    Not `faces(">Z").text(..., combine="cut")`: the first cut splits the top face, the
+    next call then selects several faces and throws, and the surrounding try/except
+    silently swallowed it. Three of the coupon's four labels were missing because of
+    exactly that.
+    """
+    try:
+        t = (cq.Workplane("XY", origin=(x, y, top_z - 0.4))
+             .text(txt, size, 0.9, font="DejaVu Sans", kind="bold"))
+        return solid.union(t)
+    except Exception as e:
+        print(f"  !! coupon label {txt!r} failed to render: {e}")
+        return solid
+
+
 def tolerance_coupon():
-    """Part 70. Print this FIRST: P1 and P2 sockets at four clearances with the value
-    engraved beside each, plus loose pegs to test them with. Pick the fit that feels
-    right, set it in params.py, re-export everything."""
-    base = cq.Workplane("XY").box(96, 34, 6, centered=(False, False, False))
-    values = [0.20, 0.25, 0.30, 0.35]
+    """Part 70. Print this FIRST.
+
+    Four stations, each with a P1 socket and a keyed P2 pair cut at a different
+    clearance, with the value raised beside it. Four loose tabs carry nominal pegs at
+    the matching spacing, so one tab presses into one station and tests both mount
+    types at once.
+
+    A fresh tab per station matters: crush ribs shear on first insertion, and reusing
+    one peg burnishes it and biases every test after the first.
+    """
+    n = len(COUPON_VALUES)
+    plate = cq.Workplane("XY").box(COUPON_STATION_W * n, COUPON_H, COUPON_T,
+                                   centered=(False, False, False))
     real_dec, real_fit = P.DECORATIVE_CLEARANCE, P.FIT_CLEARANCE
     try:
-        for i, v in enumerate(values):
+        for i, v in enumerate(COUPON_VALUES):
             P.DECORATIVE_CLEARANCE = P.FIT_CLEARANCE = v
-            cx = 12 + i * 23
-            base = socket_p1(base, (cx, 25, 6), axis="-Z")
-            base = socket_p2(base, (cx, 11, 6), axis="-Z")
-            try:
-                base = (base.faces(">Z").workplane(centerOption="CenterOfBoundBox")
-                        .center(cx - 48, 15.0)
-                        .text(f"{v:.2f}", 3.2, -0.4, font="DejaVu Sans",
-                              kind="bold", combine="cut"))
-            except Exception:
-                pass
+            cx = COUPON_STATION_W * (i + 0.5)
+            plate = socket_p1(plate, (cx, COUPON_P1_Y, COUPON_T), axis="-Z")
+            plate = socket_p2(plate, (cx, COUPON_P2_Y, COUPON_T), axis="-Z")
+            plate = _label(plate, f"{v:.2f}", cx, 18.0, COUPON_T)
+            if i:                       # a groove between stations, findable by feel
+                plate = plate.cut(cq.Workplane("XY")
+                                  .box(1.2, COUPON_H, 1.0, centered=(True, False, False))
+                                  .translate((COUPON_STATION_W * i, 0, COUPON_T - 1.0)))
     finally:
         P.DECORATIVE_CLEARANCE, P.FIT_CLEARANCE = real_dec, real_fit
-    pegs = cq.Workplane("XY").box(46, 16, 3, centered=(False, False, False))
-    pegs = pegs.union(peg_p1((10, 8, 3), axis="+Z"))
-    pegs = pegs.union(peg_p2((30, 8, 3), axis="+Z"))
-    return base, pegs.translate((0, 40, 0))
+
+    # four loose tabs, pegs at the same row spacing as the stations
+    dy = COUPON_P1_Y - COUPON_P2_Y
+    tab_p2_y = (TAB_H - dy) / 2
+    tabs, sprue = None, None
+    for i in range(n):
+        x0 = i * (TAB_W + 5.0)
+        t = cq.Workplane("XY").box(TAB_W, TAB_H, TAB_T, centered=(False, False, False)) \
+            .translate((x0, 0, 0))
+        t = t.union(peg_p1((x0 + TAB_W / 2, tab_p2_y + dy, TAB_T), axis="+Z"))
+        t = t.union(peg_p2((x0 + TAB_W / 2, tab_p2_y, TAB_T), axis="+Z"))
+        t = _label(t, str(i + 1), x0 + 4.0, 3.5, TAB_T, size=3.4)
+        tabs = t if tabs is None else tabs.union(t)
+        if i:                            # runner joining the tabs
+            r = cq.Workplane("XY").box(5.2, 4.0, 1.2, centered=(False, False, False)) \
+                .translate((x0 - 5.1, TAB_H / 2 - 2.0, 0))
+            sprue = r if sprue is None else sprue.union(r)
+    if sprue is not None:
+        tabs = tabs.union(sprue)
+    return plate, tabs

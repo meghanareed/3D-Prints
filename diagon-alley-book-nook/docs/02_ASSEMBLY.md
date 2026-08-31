@@ -9,19 +9,43 @@ cannot drift apart. Part IDs match the filenames in `out/stl/`.
 
 **Print `70A_Tolerance_Test_Coupon` and `70B_Tolerance_Test_Pegs` first.**
 
-The coupon carries P1 and P2 sockets at 0.20 / 0.25 / 0.30 / 0.35 mm, with the value
-engraved beside each. Try the loose pegs in each. Pick the one that goes in with firm
-thumb pressure and does not fall out when inverted. Then:
+The coupon is four stations separated by a shallow groove you can find with a thumbnail.
+Each station has one **P1 socket** (upper row) and one **keyed P2 pair** (lower row),
+cut at a different clearance, with the value raised beside it:
 
-```bash
-# edit params.py
-FIT_CLEARANCE        = 0.25   # -> whatever the coupon told you
-DECORATIVE_CLEARANCE = 0.20
-python3 build.py              # re-export everything
+```
+   0.20        0.25        0.30        0.35
+ [   o   ] │ [   o   ] │ [   o   ] │ [   o   ]     <- P1 socket
+ [ o   o ] │ [ o   o ] │ [ o   o ] │ [ o   o ]     <- keyed P2 pair
 ```
 
-Everything else in this kit depends on that one number. Twenty minutes here saves a
-weekend of filing.
+`70B` is **four loose tabs**, numbered 1–4, each carrying nominal pegs at the same row
+spacing as a station. Press one tab into one station — both mount types engage at once.
+
+Use a **fresh tab for each station**. The crush ribs shear on first insertion, and
+re-using one tab burnishes its pegs and biases every test after the first.
+
+You are looking for the station where the tab goes in with firm thumb pressure and does
+not drop out when you turn the coupon over. Then:
+
+```python
+# params.py
+FIT_CLEARANCE        = 0.25   # -> the value under the station that felt right
+DECORATIVE_CLEARANCE = 0.20   # -> usually 0.05 tighter
+```
+
+and re-run `python3 build.py`.
+
+> **Seen from directly above — which is how the slicer shows a flat plate — a 2 mm peg
+> and a 2.4 mm hole look identical.** If you want to confirm the coupon is right before
+> printing, `python3 render_coupon.py` draws it raked over so the holes and pegs read.
+
+**Grip does not depend on which value you pick.** The crush ribs are sized *from* the
+clearance, so each rib bites `CRUSH_INTERFERENCE` (0.15 mm) into the peg whether you run
+0.15 or 0.40. An earlier version used a fixed rib height measured from the bore wall,
+which meant anything at or above 0.30 had literally zero retention — the parts were a
+slip fit and would have fallen out. `verify.py` now checks grip across the whole range
+on every build.
 
 **Paint eats clearance.** Two coats of primer plus colour on both halves of a joint is
 worth 0.15–0.25 mm. Either mask the sockets, or scrape the pegs before final assembly.

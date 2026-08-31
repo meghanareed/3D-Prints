@@ -131,15 +131,18 @@ def check_clearance_sanity():
     if P.DECORATIVE_CLEARANCE > P.FIT_CLEARANCE:
         warn("DECORATIVE_CLEARANCE > FIT_CLEARANCE: decorative parts will be looser "
              "than structural ones, which is usually backwards")
-    if P.CRUSH_RIB >= P.DECORATIVE_CLEARANCE * 2:
-        warn(f"CRUSH_RIB {P.CRUSH_RIB} is large next to the clearance "
-             f"{P.DECORATIVE_CLEARANCE} -- parts may need real force")
+    if P.CRUSH_INTERFERENCE > 0.30:
+        warn(f"CRUSH_INTERFERENCE {P.CRUSH_INTERFERENCE} is a lot of material to shear "
+             "-- parts will need real force")
+    if P.CRUSH_INTERFERENCE < 0.06:
+        warn(f"CRUSH_INTERFERENCE {P.CRUSH_INTERFERENCE} may not grip once painted")
     if P.LEAD_IN_CHAMFER <= 0:
         fail("LEAD_IN_CHAMFER is 0: sockets will be undersize after elephant's foot "
              "and the kit will not assemble")
     else:
         ok(f"lead-in {P.LEAD_IN_CHAMFER}, clearances "
-           f"{P.FIT_CLEARANCE}/{P.DECORATIVE_CLEARANCE}, crush rib {P.CRUSH_RIB}")
+           f"{P.FIT_CLEARANCE}/{P.DECORATIVE_CLEARANCE}, "
+           f"rib bite {P.CRUSH_INTERFERENCE}")
 
 
 def check_light_block():
@@ -176,6 +179,39 @@ def check_envelope():
         fail("chassis will not slide into the case")
     else:
         ok(f"chassis {P.CHASSIS_W:.1f} slides into cavity {P.CASE_CAVITY_W:.1f}")
+
+
+def check_grip_across_clearances():
+    """Retention must survive the user actually changing the clearance.
+
+    The tolerance coupon invites setting FIT_CLEARANCE anywhere from 0.20 to 0.35. With
+    a fixed-height crush rib measured from the bore wall, everything at or above 0.30
+    had ZERO grip and every part in the kit would have fallen out -- silently, because
+    the geometry is still perfectly valid.
+    """
+    print("\n[fit] crush-rib grip across the usable clearance range")
+    real = (P.DECORATIVE_CLEARANCE, P.FIT_CLEARANCE)
+    try:
+        for v in (0.15, 0.20, 0.25, 0.30, 0.35, 0.40):
+            P.DECORATIVE_CLEARANCE = P.FIT_CLEARANCE = v
+            plate = cq.Workplane("XY").box(30, 30, 6, centered=(True, True, False))
+            c1, r1 = MT.socket_p1_solids((0, 8, 6), axis="-Z")
+            c2, r2 = MT.socket_p2_solids((0, -6, 6), axis="-Z")
+            bored = plate.cut(c1).cut(c2)
+            ribbed = bored.union(r1).union(r2)
+            pegs = MT.peg_p1((0, 8, 6), axis="-Z").union(MT.peg_p2((0, -6, 6), axis="-Z"))
+            f = bored.intersect(pegs)
+            g = ribbed.intersect(pegs)
+            fv = f.val().Volume() if f.val().Solids() else 0.0
+            gv = (g.val().Volume() if g.val().Solids() else 0.0) - fv
+            if fv > 0.05:
+                fail(f"clearance {v:.2f}: peg fouls the bore by {fv:.2f} mm^3")
+            elif gv < 0.30:
+                fail(f"clearance {v:.2f}: grip is only {gv:.2f} mm^3 -- parts fall out")
+            else:
+                ok(f"clearance {v:.2f}: clears the bore, grip {gv:.2f} mm^3")
+    finally:
+        P.DECORATIVE_CLEARANCE, P.FIT_CLEARANCE = real
 
 
 def check_paint_handles():
@@ -236,6 +272,7 @@ if __name__ == "__main__":
     check_keying()
     check_fits()
     check_all_mates()
+    check_grip_across_clearances()
     check_paint_handles()
     check_manifest()
     print(f"\n{len(FAILS)} failures, {len(WARNS)} warnings")

@@ -3574,12 +3574,12 @@
   "name": "Tolerance_Test_Coupon",
   "group": "jigs",
   "status": "ok",
-  "grams": 23.8,
+  "grams": 25.7,
   "solids": 1,
   "bbox": [
-   96.0,
+   104.0,
    34.0,
-   6.0
+   6.5
   ],
   "fits_bed": true,
   "colour": "white",
@@ -3591,11 +3591,11 @@
   "name": "Tolerance_Test_Pegs",
   "group": "jigs",
   "status": "ok",
-  "grams": 2.8,
+  "grams": 7.5,
   "solids": 1,
   "bbox": [
-   46.0,
-   16.0,
+   95.0,
+   24.0,
    7.0
   ],
   "fits_bed": true,
