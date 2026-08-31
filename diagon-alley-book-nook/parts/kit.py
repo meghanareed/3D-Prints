@@ -256,6 +256,14 @@ def _paint_handles(n=8):
                               .box(13.0, 11.0, 3.5, centered=(True, True, False))
                               .translate((0, 0, 18.0)))
             top = 21.5
+            # the mount type it takes, on the side of the pad -- with eight identical
+            # sticks on a runner there is otherwise no way to tell P1 from P2
+            try:
+                body = body.union(
+                    cq.Workplane("XZ", origin=(0, -5.5, 19.7))
+                    .text(kind.upper(), 2.6, 1.0, font="DejaVu Sans", kind="bold"))
+            except Exception:
+                pass
             if kind == "p1":
                 cut, _ = socket_p1_solids((0.0, 0.0, top), axis="-Z", depth=P1_L + 0.4)
             else:

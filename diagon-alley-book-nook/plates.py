@@ -32,7 +32,10 @@ MARGIN = 6.0
 # Grouped so one plate is one painting session: brickwork together, joinery together,
 # ironwork together.
 PLATE_GROUPS = [
-    ("01_jigs_first", ("jigs",), None),
+    # Split deliberately. Plate 00 is the calibration print and nothing else, so
+    # "print this first and stop" costs ten minutes rather than an hour of tools you
+    # do not need until much later.
+    ("00_CALIBRATE_FIRST", None, ["70A", "70B"]),
     ("02_wall_faces", None, ["01", "02"]),
     ("03_wall_ribs", None, ["01R", "02R"]),
     ("04_chassis", None, ["00", "54"]),
@@ -44,6 +47,7 @@ PLATE_GROUPS = [
     ("10_facade_right", ("facade_R",), None),
     ("11_signs_props", ("signs", "props"), None),
     ("12_hardware", ("lighting", "switch"), None),
+    ("13_bench_tools", ("jigs",), None),      # paint handles, ID card, cut templates
 ]
 
 

@@ -60,7 +60,7 @@ lying in its print orientation. Drop one straight into the slicer.
 
 | Plate | Parts | PLA | Notes |
 |---|---|---|---|
-| `01_jigs_first` | 8 | 48 g | **print this one first and stop** |
+| `00_CALIBRATE_FIRST` | 2 | 33 g | **print this one first and stop.** The coupon and its four tabs, nothing else |
 | `02_wall_faces` ×2 | 1 each | 107 / 110 g | brick side UP |
 | `03_wall_ribs` ×2 | 1 each | 60 / 62 g | hidden; flat |
 | `04_chassis` | 2 | 349 g | base pan and plinth |
@@ -72,6 +72,7 @@ lying in its print orientation. Drop one straight into the slicer.
 | `10_facade_right` | 55 | 33 g | face DOWN, pegs UP |
 | `11_signs_props` | 38 | 19 g | |
 | `12_hardware` | 24 | 54 g | lighting and switch parts |
+| `13_bench_tools` | 8 | 61 g | paint handles, ID card, glazing templates — **none of these go into the nook**, and you do not need them until you start painting |
 
 **18 plates, 218 parts, 1590 g.** All 157 decorative parts together are under 100 g;
 the mass is in the case and the plinth, and the plinth is deliberately heavy — it is
@@ -114,8 +115,15 @@ hides exactly the surface detail this model depends on.
 | `73` | ID card | records the clearance and random seed this kit was generated with. Keep it with the kit; if you ever reprint a lost part you need those numbers |
 | `71A`–`71D` | glazing cut templates | **only needed for sheet glazing.** You are printing PLA glazing, so you can delete these four from plate 01 |
 
-Plate `01_jigs_first` is the whole set. Print it, use the coupon, and everything else on
-that plate is bench equipment rather than model.
+The calibration parts are on their own plate (`00_CALIBRATE_FIRST`, 33 g, about
+ten minutes) precisely so that "print this first and stop" costs you ten minutes rather
+than an hour of tools you will not touch until painting day. Everything else in this
+table is on `13_bench_tools`.
+
+The eight identical sticks on the tools plate are the **paint handles**. Each carries a
+socket on top and the mount type embossed on the side of its pad — `P1` takes signs,
+props, brackets, pipes and ornaments; `P2` takes window frames, doors, stallrisers and
+fascias. They are not testing anything.
 
 ### Orientation policy
 
