@@ -93,12 +93,12 @@
   "solids": 1,
   "bbox": [
    65.7,
-   22.2,
-   170.0
+   170.0,
+   22.2
   ],
   "fits_bed": true,
   "colour": "brick",
-  "note": "",
+  "note": "lies on its back; 170 mm tall is too tippy upright",
   "file": "03A_Rear_Perspective_Block.stl"
  },
  {
@@ -110,8 +110,8 @@
   "solids": 1,
   "bbox": [
    38.0,
-   9.0,
-   42.0
+   42.0,
+   9.0
   ],
   "fits_bed": true,
   "colour": "stone",
@@ -144,8 +144,8 @@
   "solids": 1,
   "bbox": [
    78.0,
-   20.1,
-   87.5
+   87.5,
+   20.1
   ],
   "fits_bed": true,
   "colour": "black",
@@ -191,7 +191,7 @@
   "name": "Cobblestone_Floor",
   "group": "structure",
   "status": "ok",
-  "grams": 62.5,
+  "grams": 61.2,
   "solids": 1,
   "bbox": [
    74.9,
@@ -263,12 +263,12 @@
   "solids": 1,
   "bbox": [
    15.4,
-   9.7,
-   203.1
+   203.1,
+   9.7
   ],
   "fits_bed": true,
   "colour": "brick",
-  "note": "the torn brick edge -- the signature part",
+  "note": "torn brick edge, the signature part -- prints flat, relief up",
   "file": "06_Front_Bezel_L.stl"
  },
  {
@@ -280,12 +280,12 @@
   "solids": 1,
   "bbox": [
    15.4,
-   9.7,
-   203.1
+   203.1,
+   9.7
   ],
   "fits_bed": true,
   "colour": "brick",
-  "note": "the torn brick edge -- the signature part",
+  "note": "torn brick edge, the signature part -- prints flat, relief up",
   "file": "07_Front_Bezel_R.stl"
  },
  {
@@ -314,8 +314,8 @@
   "solids": 1,
   "bbox": [
    74.9,
-   6.0,
-   182.8
+   182.8,
+   6.0
   ],
   "fits_bed": true,
   "colour": "black",
@@ -336,7 +336,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "10B_L_L1_Bow_Window.stl"
  },
  {
@@ -353,7 +353,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "10Bg_L_L1_Bow_Window_Glazing.stl"
  },
  {
@@ -370,7 +370,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "10Bd_L_L1_Bow_Window_Diffuser.stl"
  },
  {
@@ -387,7 +387,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "10Bc_L_L1_Bow_Window_Cornice.stl"
  },
  {
@@ -404,7 +404,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "10E_L_L1_Stallriser.stl"
  },
  {
@@ -421,7 +421,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "10D_L_L1_Cornice.stl"
  },
  {
@@ -438,7 +438,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "10G_L_L1_Door.stl"
  },
  {
@@ -455,7 +455,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "10Gf_L_L1_Door_Frame.stl"
  },
  {
@@ -472,7 +472,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "10Gl_L_L1_Door_Fanlight.stl"
  },
  {
@@ -489,7 +489,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "19A_L_L_Quoin_Front.stl"
  },
  {
@@ -506,7 +506,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "11A_L_L2_Bay_Window_Body.stl"
  },
  {
@@ -523,7 +523,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "11Ag_L_L2_Bay_Window_Glazing.stl"
  },
  {
@@ -540,7 +540,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "11Ar_L_L2_Bay_Window_Roof.stl"
  },
  {
@@ -557,7 +557,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "11Ac_L_L2_Bay_Window_Corbel.stl"
  },
  {
@@ -574,7 +574,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "11J_L_L2_Awning.stl"
  },
  {
@@ -591,7 +591,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "11F_L_L2_Door.stl"
  },
  {
@@ -608,7 +608,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "11Ff_L_L2_Door_Frame.stl"
  },
  {
@@ -625,7 +625,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "11Fl_L_L2_Door_Fanlight.stl"
  },
  {
@@ -642,7 +642,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "11K_L_L2_Fascia.stl"
  },
  {
@@ -659,7 +659,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "12A_L_L3_Shop_Window_Frame.stl"
  },
  {
@@ -676,7 +676,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "12Ag_L_L3_Shop_Window_Glazing.stl"
  },
  {
@@ -693,7 +693,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "12Al_L_L3_Shop_Window_Lintel.stl"
  },
  {
@@ -710,7 +710,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "12D_L_L3_Stallriser.stl"
  },
  {
@@ -727,7 +727,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "12G_L_L3_Door.stl"
  },
  {
@@ -744,7 +744,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "12Gf_L_L3_Door_Frame.stl"
  },
  {
@@ -761,7 +761,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "13A_L_L_Window_A_Frame.stl"
  },
  {
@@ -778,7 +778,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "13Ag_L_L_Window_A_Glazing.stl"
  },
  {
@@ -795,7 +795,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "13As_L_L_Window_A_Sill.stl"
  },
  {
@@ -812,7 +812,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "13B_L_L_Window_B_Frame.stl"
  },
  {
@@ -829,7 +829,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "13Bg_L_L_Window_B_Glazing.stl"
  },
  {
@@ -846,7 +846,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "13Bs_L_L_Window_B_Sill.stl"
  },
  {
@@ -863,7 +863,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "12B_L_L_Oriel_Body.stl"
  },
  {
@@ -880,7 +880,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "12Bg_L_L_Oriel_Glazing.stl"
  },
  {
@@ -897,7 +897,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "12Br_L_L_Oriel_Roof.stl"
  },
  {
@@ -914,7 +914,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "12Bc_L_L_Oriel_Corbel.stl"
  },
  {
@@ -931,7 +931,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "13C_L_L_Window_C_Frame.stl"
  },
  {
@@ -948,7 +948,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "13Cg_L_L_Window_C_Glazing.stl"
  },
  {
@@ -965,7 +965,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "13Cs_L_L_Window_C_Sill.stl"
  },
  {
@@ -982,7 +982,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "13D_L_L_Window_D_Frame.stl"
  },
  {
@@ -999,7 +999,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "13Dg_L_L_Window_D_Glazing.stl"
  },
  {
@@ -1016,7 +1016,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "13Ds_L_L_Window_D_Sill.stl"
  },
  {
@@ -1033,7 +1033,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "13E_L_L_Window_E_Frame.stl"
  },
  {
@@ -1050,7 +1050,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "13Eg_L_L_Window_E_Glazing.stl"
  },
  {
@@ -1067,7 +1067,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "13Es_L_L_Window_E_Sill.stl"
  },
  {
@@ -1084,7 +1084,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "13F_L_L_Window_F_Frame.stl"
  },
  {
@@ -1101,7 +1101,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "13Fg_L_L_Window_F_Glazing.stl"
  },
  {
@@ -1118,7 +1118,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "13Fs_L_L_Window_F_Sill.stl"
  },
  {
@@ -1135,7 +1135,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "13G_L_L_Window_G_Frame.stl"
  },
  {
@@ -1152,7 +1152,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "13Gg_L_L_Window_G_Glazing.stl"
  },
  {
@@ -1169,7 +1169,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "13Gs_L_L_Window_G_Sill.stl"
  },
  {
@@ -1186,7 +1186,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "14A_L_L_Attic_Dormer_Frame.stl"
  },
  {
@@ -1203,7 +1203,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "14Ag_L_L_Attic_Dormer_Glazing.stl"
  },
  {
@@ -1220,7 +1220,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "14As_L_L_Attic_Dormer_Sill.stl"
  },
  {
@@ -1237,7 +1237,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "14B_L_L_Attic_B_Frame.stl"
  },
  {
@@ -1254,7 +1254,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "14Bg_L_L_Attic_B_Glazing.stl"
  },
  {
@@ -1271,7 +1271,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "14Bs_L_L_Attic_B_Sill.stl"
  },
  {
@@ -1288,7 +1288,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "15A_L_L_Drainpipe_Lower.stl"
  },
  {
@@ -1305,7 +1305,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "15B_L_L_Drainpipe_Upper.stl"
  },
  {
@@ -1322,7 +1322,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "15C_L_L_Hopper.stl"
  },
  {
@@ -1339,7 +1339,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "17A_L_L_Cornice_Front.stl"
  },
  {
@@ -1356,7 +1356,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "17B_L_L_Cornice_Rear.stl"
  },
  {
@@ -1373,7 +1373,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "18A_L_L_Chimney.stl"
  },
  {
@@ -1390,7 +1390,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "19B_L_L_Keystone.stl"
  },
  {
@@ -1407,7 +1407,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "19C_L_L_Wall_Plaque.stl"
  },
  {
@@ -1424,7 +1424,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "20B_R_R1_Arched_Door.stl"
  },
  {
@@ -1441,7 +1441,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "20Bf_R_R1_Arched_Door_Frame.stl"
  },
  {
@@ -1458,7 +1458,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "20E_R_R1_Tall_Window_Frame.stl"
  },
  {
@@ -1475,7 +1475,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "20Eg_R_R1_Tall_Window_Glazing.stl"
  },
  {
@@ -1492,7 +1492,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "20Es_R_R1_Tall_Window_Sill.stl"
  },
  {
@@ -1509,7 +1509,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "20G_R_R1_Door_Keystone.stl"
  },
  {
@@ -1526,7 +1526,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "29A_R_R_Quoin_Front.stl"
  },
  {
@@ -1543,7 +1543,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "21B_R_R2_Shop_Window_Frame.stl"
  },
  {
@@ -1560,7 +1560,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "21Bg_R_R2_Shop_Window_Glazing.stl"
  },
  {
@@ -1577,7 +1577,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "21Bl_R_R2_Shop_Window_Lintel.stl"
  },
  {
@@ -1594,7 +1594,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "21D_R_R2_Pilaster_Left.stl"
  },
  {
@@ -1611,7 +1611,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "21E_R_R2_Pilaster_Right.stl"
  },
  {
@@ -1628,7 +1628,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "21F_R_R2_Fascia.stl"
  },
  {
@@ -1645,7 +1645,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "21G_R_R2_Stallriser.stl"
  },
  {
@@ -1662,7 +1662,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "22A_R_R3_Shop_Window_Frame.stl"
  },
  {
@@ -1679,7 +1679,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "22Ag_R_R3_Shop_Window_Glazing.stl"
  },
  {
@@ -1696,7 +1696,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "22Al_R_R3_Shop_Window_Lintel.stl"
  },
  {
@@ -1713,7 +1713,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "22D_R_R3_Door.stl"
  },
  {
@@ -1730,7 +1730,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "22Df_R_R3_Door_Frame.stl"
  },
  {
@@ -1747,7 +1747,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "24A_R_R_Bay_Window_Body.stl"
  },
  {
@@ -1764,7 +1764,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "24Ag_R_R_Bay_Window_Glazing.stl"
  },
  {
@@ -1781,7 +1781,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "24Ar_R_R_Bay_Window_Roof.stl"
  },
  {
@@ -1798,7 +1798,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "24Ac_R_R_Bay_Window_Corbel.stl"
  },
  {
@@ -1815,7 +1815,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "23A_R_R_Window_A_Frame.stl"
  },
  {
@@ -1832,7 +1832,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "23Ag_R_R_Window_A_Glazing.stl"
  },
  {
@@ -1849,7 +1849,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "23As_R_R_Window_A_Sill.stl"
  },
  {
@@ -1866,7 +1866,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "23B_R_R_Window_B_Frame.stl"
  },
  {
@@ -1883,7 +1883,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "23Bg_R_R_Window_B_Glazing.stl"
  },
  {
@@ -1900,7 +1900,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "23Bs_R_R_Window_B_Sill.stl"
  },
  {
@@ -1917,7 +1917,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "23C_R_R_Window_C_Frame.stl"
  },
  {
@@ -1934,7 +1934,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "23Cg_R_R_Window_C_Glazing.stl"
  },
  {
@@ -1951,7 +1951,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "23Cs_R_R_Window_C_Sill.stl"
  },
  {
@@ -1968,7 +1968,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "23D_R_R_Window_D_Frame.stl"
  },
  {
@@ -1985,7 +1985,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "23Dg_R_R_Window_D_Glazing.stl"
  },
  {
@@ -2002,7 +2002,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "23Ds_R_R_Window_D_Sill.stl"
  },
  {
@@ -2019,7 +2019,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "23E_R_R_Window_E_Frame.stl"
  },
  {
@@ -2036,7 +2036,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "23Eg_R_R_Window_E_Glazing.stl"
  },
  {
@@ -2053,7 +2053,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "23Es_R_R_Window_E_Sill.stl"
  },
  {
@@ -2070,7 +2070,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "23F_R_R_Window_F_Frame.stl"
  },
  {
@@ -2087,7 +2087,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "23Fg_R_R_Window_F_Glazing.stl"
  },
  {
@@ -2104,7 +2104,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "23Fs_R_R_Window_F_Sill.stl"
  },
  {
@@ -2121,7 +2121,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "23G_R_R_Attic_A_Frame.stl"
  },
  {
@@ -2138,7 +2138,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "23Gg_R_R_Attic_A_Glazing.stl"
  },
  {
@@ -2155,7 +2155,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "23Gs_R_R_Attic_A_Sill.stl"
  },
  {
@@ -2172,7 +2172,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "23H_R_R_Attic_B_Frame.stl"
  },
  {
@@ -2189,7 +2189,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "23Hg_R_R_Attic_B_Glazing.stl"
  },
  {
@@ -2206,7 +2206,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "23Hs_R_R_Attic_B_Sill.stl"
  },
  {
@@ -2223,7 +2223,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "25A_R_R_Drainpipe_Lower.stl"
  },
  {
@@ -2240,7 +2240,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "25B_R_R_Drainpipe_Upper.stl"
  },
  {
@@ -2257,7 +2257,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "25C_R_R_Hopper.stl"
  },
  {
@@ -2274,7 +2274,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "27A_R_R_Cornice_Front.stl"
  },
  {
@@ -2291,7 +2291,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "27B_R_R_Cornice_Rear.stl"
  },
  {
@@ -2308,7 +2308,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "28A_R_R_Chimney.stl"
  },
  {
@@ -2325,7 +2325,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "29B_R_R_Keystone.stl"
  },
  {
@@ -2342,7 +2342,7 @@
   ],
   "fits_bed": true,
   "colour": "wood",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "29C_R_R_Guild_Badge.stl"
  },
  {
@@ -2359,7 +2359,7 @@
   ],
   "fits_bed": true,
   "colour": "iron",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "30A_Sign_Vertical_Banner.stl"
  },
  {
@@ -2376,7 +2376,7 @@
   ],
   "fits_bed": true,
   "colour": "iron",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "30B_Sign_Swing_A.stl"
  },
  {
@@ -2393,7 +2393,7 @@
   ],
   "fits_bed": true,
   "colour": "iron",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "30C_Sign_Swing_B.stl"
  },
  {
@@ -2410,7 +2410,7 @@
   ],
   "fits_bed": true,
   "colour": "iron",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "30D_Sign_Shield_A.stl"
  },
  {
@@ -2427,7 +2427,7 @@
   ],
   "fits_bed": true,
   "colour": "iron",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "30E_Sign_Fascia_Long.stl"
  },
  {
@@ -2444,7 +2444,7 @@
   ],
   "fits_bed": true,
   "colour": "iron",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "30F_Sign_Directional.stl"
  },
  {
@@ -2461,7 +2461,7 @@
   ],
   "fits_bed": true,
   "colour": "iron",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "30G1_Sign_Lozenge_1.stl"
  },
  {
@@ -2478,7 +2478,7 @@
   ],
   "fits_bed": true,
   "colour": "iron",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "30G2_Sign_Lozenge_2.stl"
  },
  {
@@ -2495,7 +2495,7 @@
   ],
   "fits_bed": true,
   "colour": "iron",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "30G3_Sign_Lozenge_3.stl"
  },
  {
@@ -2512,7 +2512,7 @@
   ],
   "fits_bed": true,
   "colour": "iron",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "30G4_Sign_Lozenge_4.stl"
  },
  {
@@ -2529,7 +2529,7 @@
   ],
   "fits_bed": true,
   "colour": "iron",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "30H_Sign_Small_Rear_A.stl"
  },
  {
@@ -2546,7 +2546,7 @@
   ],
   "fits_bed": true,
   "colour": "iron",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "30J_Sign_Fascia_L2.stl"
  },
  {
@@ -2563,7 +2563,7 @@
   ],
   "fits_bed": true,
   "colour": "iron",
-  "note": "loose part / spare",
+  "note": "blank spare -- face down, pegs up",
   "file": "30K_Sign_Blank_Swing.stl"
  },
  {
@@ -2580,7 +2580,7 @@
   ],
   "fits_bed": true,
   "colour": "iron",
-  "note": "loose part / spare",
+  "note": "blank spare -- face down, pegs up",
   "file": "30L_Sign_Blank_Shield.stl"
  },
  {
@@ -2597,7 +2597,7 @@
   ],
   "fits_bed": true,
   "colour": "iron",
-  "note": "loose part / spare",
+  "note": "blank spare -- face down, pegs up",
   "file": "30M_Sign_Blank_Lozenge.stl"
  },
  {
@@ -2614,7 +2614,7 @@
   ],
   "fits_bed": true,
   "colour": "iron",
-  "note": "loose part / spare",
+  "note": "blank spare -- face down, pegs up",
   "file": "30N_Sign_Blank_Fascia.stl"
  },
  {
@@ -2631,7 +2631,7 @@
   ],
   "fits_bed": true,
   "colour": "iron",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "31A_Bracket_Scroll_A.stl"
  },
  {
@@ -2648,7 +2648,7 @@
   ],
   "fits_bed": true,
   "colour": "iron",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "31B_Bracket_Scroll_B.stl"
  },
  {
@@ -2665,7 +2665,7 @@
   ],
   "fits_bed": true,
   "colour": "iron",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "31C_Bracket_Scroll_C.stl"
  },
  {
@@ -2682,7 +2682,7 @@
   ],
   "fits_bed": true,
   "colour": "iron",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "31D_Bracket_Scroll_D.stl"
  },
  {
@@ -2699,7 +2699,7 @@
   ],
   "fits_bed": true,
   "colour": "iron",
-  "note": "loose part / spare",
+  "note": "blank spare -- face down, pegs up",
   "file": "32A_Sign_Hanging_Chain_A.stl"
  },
  {
@@ -2716,7 +2716,7 @@
   ],
   "fits_bed": true,
   "colour": "iron",
-  "note": "loose part / spare",
+  "note": "blank spare -- face down, pegs up",
   "file": "32B_Sign_Hanging_Chain_B.stl"
  },
  {
@@ -2733,7 +2733,7 @@
   ],
   "fits_bed": true,
   "colour": "iron",
-  "note": "loose part / spare",
+  "note": "blank spare -- face down, pegs up",
   "file": "32C_Sign_Rail_Hook.stl"
  },
  {
@@ -2750,7 +2750,7 @@
   ],
   "fits_bed": true,
   "colour": "iron",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "33A_Lantern_Large.stl"
  },
  {
@@ -2767,7 +2767,7 @@
   ],
   "fits_bed": true,
   "colour": "iron",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "34A_Lantern_Small.stl"
  },
  {
@@ -2784,7 +2784,7 @@
   ],
   "fits_bed": true,
   "colour": "iron",
-  "note": "",
+  "note": "face down, pegs up",
   "file": "34C_Lantern_Rear_Tiny.stl"
  },
  {
@@ -2797,7 +2797,7 @@
   "bbox": [
    14.0,
    14.0,
-   20.5
+   17.0
   ],
   "fits_bed": true,
   "colour": "wood",
@@ -2814,7 +2814,7 @@
   "bbox": [
    10.8,
    10.8,
-   16.5
+   13.0
   ],
   "fits_bed": true,
   "colour": "wood",
@@ -2826,12 +2826,12 @@
   "name": "Crate_Stack",
   "group": "props",
   "status": "ok",
-  "grams": 0.9,
+  "grams": 0.8,
   "solids": 1,
   "bbox": [
    13.0,
    11.1,
-   19.5
+   16.0
   ],
   "fits_bed": true,
   "colour": "wood",
@@ -2848,7 +2848,7 @@
   "bbox": [
    9.0,
    8.0,
-   10.5
+   7.0
   ],
   "fits_bed": true,
   "colour": "wood",
@@ -2865,7 +2865,7 @@
   "bbox": [
    21.1,
    13.1,
-   13.6
+   10.3
   ],
   "fits_bed": true,
   "colour": "wood",
@@ -2881,8 +2881,8 @@
   "solids": 1,
   "bbox": [
    14.5,
-   4.7,
-   26.0
+   26.0,
+   4.7
   ],
   "fits_bed": true,
   "colour": "wood",
@@ -2899,7 +2899,7 @@
   "bbox": [
    10.4,
    9.4,
-   20.9
+   17.4
   ],
   "fits_bed": true,
   "colour": "wood",
@@ -2950,7 +2950,7 @@
   "bbox": [
    18.0,
    6.0,
-   6.5
+   3.0
   ],
   "fits_bed": true,
   "colour": "wood",
@@ -2967,7 +2967,7 @@
   "bbox": [
    14.0,
    11.0,
-   5.5
+   2.0
   ],
   "fits_bed": true,
   "colour": "wood",
@@ -3221,12 +3221,12 @@
   "solids": 1,
   "bbox": [
    200.0,
-   5.2,
-   213.8
+   213.8,
+   5.2
   ],
   "fits_bed": true,
   "colour": "black",
-  "note": "",
+  "note": "lies flat, 200 x 214 -- never print this on edge",
   "file": "50_Outer_Left.stl"
  },
  {
@@ -3238,12 +3238,12 @@
   "solids": 1,
   "bbox": [
    200.0,
-   5.2,
-   213.8
+   213.8,
+   5.2
   ],
   "fits_bed": true,
   "colour": "black",
-  "note": "",
+  "note": "lies flat",
   "file": "51_Outer_Right.stl"
  },
  {
@@ -3272,8 +3272,8 @@
   "solids": 1,
   "bbox": [
    96.9,
-   4.0,
-   213.3
+   213.3,
+   4.0
   ],
   "fits_bed": true,
   "colour": "black",
@@ -3323,8 +3323,8 @@
   "solids": 1,
   "bbox": [
    92.0,
-   6.5,
-   23.0
+   23.0,
+   6.5
   ],
   "fits_bed": true,
   "colour": "black",
@@ -3357,12 +3357,12 @@
   "solids": 1,
   "bbox": [
    4.0,
-   7.5,
-   213.8
+   213.8,
+   7.5
   ],
   "fits_bed": true,
   "colour": "black",
-  "note": "",
+  "note": "214 mm long -- lies down",
   "file": "58A_Case_Spine_Trim_L.stl"
  },
  {
@@ -3374,12 +3374,12 @@
   "solids": 1,
   "bbox": [
    4.0,
-   7.5,
-   213.8
+   213.8,
+   7.5
   ],
   "fits_bed": true,
   "colour": "black",
-  "note": "",
+  "note": "214 mm long -- lies down",
   "file": "58B_Case_Spine_Trim_R.stl"
  },
  {
@@ -3442,8 +3442,8 @@
   "solids": 1,
   "bbox": [
    33.4,
-   5.0,
-   23.4
+   23.4,
+   5.0
   ],
   "fits_bed": true,
   "colour": "black",
@@ -3459,8 +3459,8 @@
   "solids": 1,
   "bbox": [
    26.0,
-   5.5,
-   18.0
+   18.0,
+   5.5
   ],
   "fits_bed": true,
   "colour": "black",
@@ -3476,8 +3476,8 @@
   "solids": 1,
   "bbox": [
    26.0,
-   5.5,
-   18.0
+   18.0,
+   5.5
   ],
   "fits_bed": true,
   "colour": "black",
@@ -3493,8 +3493,8 @@
   "solids": 1,
   "bbox": [
    26.0,
-   5.5,
-   18.0
+   18.0,
+   5.5
   ],
   "fits_bed": true,
   "colour": "black",
@@ -3510,8 +3510,8 @@
   "solids": 1,
   "bbox": [
    26.0,
-   5.5,
-   18.0
+   18.0,
+   5.5
   ],
   "fits_bed": true,
   "colour": "black",
@@ -3527,8 +3527,8 @@
   "solids": 1,
   "bbox": [
    26.0,
-   5.5,
-   18.0
+   18.0,
+   5.5
   ],
   "fits_bed": true,
   "colour": "black",

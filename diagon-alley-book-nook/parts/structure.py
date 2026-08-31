@@ -125,16 +125,20 @@ def cobblestone_floor():
                     .box(RAIL_W + 2 * P.FIT_CLEARANCE, L + 3.0, 2.0 + P.FIT_CLEARANCE,
                          centered=(True, False, False))
                     .translate((sx * (_hw(0) - RAIL_W / 2 - 1.0), -1.5, 0)))
-    # prop sockets
+    # Shallow locating recesses for the free-standing props. 0.8 mm deep with a
+    # DECORATIVE_CLEARANCE margin: enough to place a barrel positively and stop it
+    # wandering, shallow enough that it does not read as a hole in the paving.
     import data.facade as FD
     for row in FD.PROPS:
-        if row["kind"] in ("notice", "posters"):
+        foot = row.get("foot")
+        if not foot:
             continue
         sx = -1 if row["side"] == "L" else 1
-        x = sx * (_hw(row["u"]) - 7.0)
-        c, a = socket_p1_solids((x, row["u"], FLOOR_T + P.CAMBER), axis="-Z")
-        cuts.append(c)
-        adds.append(a)
+        x = sx * (_hw(row["u"]) - foot[0] / 2 - 2.0)
+        fw = foot[0] + 2 * P.DECORATIVE_CLEARANCE
+        fd = foot[1] + 2 * P.DECORATIVE_CLEARANCE
+        cuts.append(cq.Workplane("XY").box(fw, fd, 3.0, centered=(True, True, False))
+                    .translate((x, row["u"], camber_at(x, row["u"]) - 0.8)))
 
     deck = batch_cut(deck, cuts)
     deck = batch_add(deck, adds)

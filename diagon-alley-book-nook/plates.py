@@ -1,133 +1,133 @@
 #!/usr/bin/env python3
-"""Arrange the exported STLs onto print plates.
+"""Arrange the parts onto print plates.
 
     python3 plates.py
 
-Reads out/manifest.json and out/stl/*.stl, shelf-packs each group onto
-BED_X x BED_Y plates with a 6 mm gap, and writes one STL per plate to out/plates/.
-Drop a plate file straight into the slicer: everything is already laid out and every
-part is already in its print orientation.
+Builds each part from the model (in its print orientation), shelf-packs them onto
+BED_X x BED_Y plates with a gap, and writes one STL per plate to out/plates/.
+Drop a plate file straight into the slicer -- everything is already laid out flat and
+the right way up.
+
+This works from the MODEL, not from the exported STLs. Round-tripping through STL
+produced a face carrying only a triangulation and no surface; translating one of those
+moves the shape's location but the mesh comes back out at its original coordinates, so
+every plate exported with all its parts stacked on top of each other at the origin.
 """
 import json
 import os
 import sys
 
 import cadquery as cq
-from cadquery.occ_impl.shapes import Shape
 
 import params as P
+import build as B
+from lib.util import compound
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "out")
-STL = os.path.join(OUT, "stl")
 PLATES = os.path.join(OUT, "plates")
 GAP = 6.0
-MARGIN = 5.0
+MARGIN = 6.0
 
-# Parts are grouped so that one plate is one painting session: all the brickwork
-# together, all the joinery together, all the ironwork together.
+# Grouped so one plate is one painting session: brickwork together, joinery together,
+# ironwork together.
 PLATE_GROUPS = [
-    ("01_jigs_first", ["jigs"]),
+    ("01_jigs_first", ("jigs",), None),
     ("02_wall_faces", None, ["01", "02"]),
     ("03_wall_ribs", None, ["01R", "02R"]),
     ("04_chassis", None, ["00", "54"]),
     ("05_floor", None, ["04", "04B", "04C", "05"]),
     ("06_rear", None, ["03A", "03B", "03C", "03D", "03E", "03F", "09"]),
     ("07_front", None, ["06", "07", "08"]),
-    ("08_case", None, ["50", "51", "52", "53", "55", "56"]),
-    ("09_facade_left", ["facade_L"]),
-    ("10_facade_right", ["facade_R"]),
-    ("11_signs_props", ["signs", "props"]),
-    ("12_hardware", ["lighting", "switch"]),
+    ("08_case", ("case",), None),
+    ("09_facade_left", ("facade_L",), None),
+    ("10_facade_right", ("facade_R",), None),
+    ("11_signs_props", ("signs", "props"), None),
+    ("12_hardware", ("lighting", "switch"), None),
 ]
 
 
-def load(rec):
-    path = os.path.join(STL, rec["file"])
-    if not os.path.exists(path):
-        return None
-    return cq.Workplane("XY").newObject([Shape.importBrep(path)]) \
-        if path.endswith(".brep") else cq.importers.importStep(path) \
-        if path.endswith(".step") else _import_stl(path)
-
-
-def _import_stl(path):
-    from OCP.RWStl import RWStl
-    from OCP.TopoDS import TopoDS_Face
-    from OCP.BRep import BRep_Builder
-    poly = RWStl.ReadFile_s(path)
-    face = TopoDS_Face()
-    BRep_Builder().MakeFace(face, poly)
-    return cq.Workplane("XY").newObject([cq.Shape.cast(face)])
-
-
 def shelf_pack(items):
-    """Simple shelf packing: sort tall-first, fill rows left to right."""
-    placed, x, y, row_h = [], MARGIN, MARGIN, 0.0
-    for name, shp, w, d in sorted(items, key=lambda t: -t[3]):
-        if x + w > P.BED_X - MARGIN:
+    """Shelf packing, tallest row first. Returns (placed, leftover)."""
+    placed, leftover = [], []
+    x, y, row_d = MARGIN, MARGIN, 0.0
+    for it in sorted(items, key=lambda t: -t["d"]):
+        w, d = it["w"], it["d"]
+        if w > P.BED_X - 2 * MARGIN or d > P.BED_Y - 2 * MARGIN:
+            print(f"    {it['id']} is {w:.0f} x {d:.0f} -- larger than the bed, skipped")
+            continue
+        if x + w > P.BED_X - MARGIN:          # next shelf
             x = MARGIN
-            y += row_h + GAP
-            row_h = 0.0
-        if y + d > P.BED_Y - MARGIN:
-            return placed, (name, shp, w, d)      # overflow: caller starts a new plate
-        placed.append((name, shp, x, y))
+            y += row_d + GAP
+            row_d = 0.0
+        if y + d > P.BED_Y - MARGIN:          # plate full
+            leftover.append(it)
+            continue
+        placed.append((it, x, y))
         x += w + GAP
-        row_h = max(row_h, d)
-    return placed, None
+        row_d = max(row_d, d)
+    return placed, leftover
+
+
+def _assert_no_overlap(placed, label):
+    """Guard the thing that actually went wrong: parts silently stacked on top of each
+    other. Cheap AABB check -- if two footprints overlap, the layout is broken."""
+    boxes = [(x, y, x + it["w"], y + it["d"], it["id"]) for it, x, y in placed]
+    for i in range(len(boxes)):
+        ax0, ay0, ax1, ay1, aid = boxes[i]
+        for j in range(i + 1, len(boxes)):
+            bx0, by0, bx1, by1, bid = boxes[j]
+            if ax0 < bx1 - 1e-6 and bx0 < ax1 - 1e-6 and \
+               ay0 < by1 - 1e-6 and by0 < ay1 - 1e-6:
+                raise AssertionError(
+                    f"{label}: {aid} and {bid} overlap on the plate")
 
 
 def main():
     os.makedirs(PLATES, exist_ok=True)
+    grams = {}
     mpath = os.path.join(OUT, "manifest.json")
-    if not os.path.exists(mpath):
-        print("run build.py first")
-        return 1
-    rep = {r["id"]: r for r in json.load(open(mpath)) if r.get("status") == "ok"}
+    if os.path.exists(mpath):
+        grams = {r["id"]: r.get("grams", 0.0) for r in json.load(open(mpath))}
+
+    print("building parts ...")
+    built = {}
+    for m in B.manifest():
+        try:
+            solid = B.drop_to_bed(B.print_orient(m["fn"](), m["print_rot"]))
+        except Exception as e:
+            print(f"  {m['id']}: {type(e).__name__}: {e}")
+            continue
+        bb = solid.val().BoundingBox()
+        built[m["id"]] = dict(id=m["id"], group=m["group"],
+                              solid=solid.translate((-bb.xmin, -bb.ymin, 0)),
+                              w=bb.xlen, d=bb.ylen)
 
     n_plates = 0
-    for spec in PLATE_GROUPS:
-        label = spec[0]
-        groups = spec[1]
-        ids = spec[2] if len(spec) > 2 else None
-        chosen = [r for r in rep.values()
-                  if (ids is not None and r["id"] in ids)
-                  or (groups is not None and r.get("group") in groups)]
+    for label, groups, ids in PLATE_GROUPS:
+        chosen = [b for b in built.values()
+                  if (ids is not None and b["id"] in ids)
+                  or (groups is not None and b["group"] in groups)]
         if not chosen:
             continue
-
-        items = []
-        for r in sorted(chosen, key=lambda r: r["id"]):
-            shp = _import_stl(os.path.join(STL, r["file"]))
-            bb = shp.val().BoundingBox()
-            items.append((r["id"], shp.translate((-bb.xmin, -bb.ymin, -bb.zmin)),
-                          bb.xlen, bb.ylen))
-
+        items = sorted(chosen, key=lambda b: b["id"])
         part_no = 0
         while items:
-            placed, overflow = shelf_pack(items)
+            placed, items = shelf_pack(items)
             if not placed:
-                print(f"  {label}: {items[0][0]} does not fit a plate on its own")
-                items = items[1:]
-                continue
-            comp = None
-            for name, shp, x, y in placed:
-                moved = shp.translate((x, y, 0))
-                comp = moved if comp is None else comp.union(moved) \
-                    if False else (comp + [moved.val()] if isinstance(comp, list)
-                                   else [comp.val(), moved.val()] if comp is not None
-                                   else [moved.val()])
-            shapes = comp if isinstance(comp, list) else [comp.val()]
-            out = cq.Workplane("XY").newObject([cq.Compound.makeCompound(shapes)])
+                break
+            _assert_no_overlap(placed, label)
+            solids = [it["solid"].translate((x, y, 0)) for it, x, y in placed]
+            out = compound(solids)
             part_no += 1
             suffix = "" if part_no == 1 else f"_{part_no}"
             fn = os.path.join(PLATES, f"{label}{suffix}.stl")
-            cq.exporters.export(out, fn, tolerance=0.05, angularTolerance=0.3)
-            g = sum(rep[n]["grams"] for n, _, _, _ in placed if n in rep)
-            print(f"  {os.path.basename(fn):<28} {len(placed):3d} parts  {g:6.0f} g")
+            cq.exporters.export(out, fn, tolerance=0.04, angularTolerance=0.25)
+            bb = out.val().BoundingBox()
+            g = sum(grams.get(it["id"], 0.0) for it, _, _ in placed)
+            print(f"  {label + suffix:<22} {len(placed):3d} parts  {g:6.0f} g   "
+                  f"footprint {bb.xlen:5.1f} x {bb.ylen:5.1f} mm")
             n_plates += 1
-            done = {n for n, _, _, _ in placed}
-            items = [it for it in items if it[0] not in done]
     print(f"\n{n_plates} plates -> {PLATES}")
     return 0
 

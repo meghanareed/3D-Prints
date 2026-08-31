@@ -31,27 +31,42 @@ The crush ribs give you some margin, but not that much.
 
 ## 1. Print plan
 
-`python3 plates.py` writes these ready-arranged, already in print orientation, to
-`out/plates/`. Drop one straight into the slicer.
+`python3 plates.py` writes these ready-arranged to `out/plates/`, every part already
+lying in its print orientation. Drop one straight into the slicer.
 
 | Plate | Parts | PLA | Notes |
 |---|---|---|---|
 | `01_jigs_first` | 8 | 48 g | **print this one first and stop** |
-| `02_wall_faces` (×2) | 1 each | 107 / 110 g | brick side UP, no supports |
-| `03_wall_ribs` (×2) | 1 each | 60 / 62 g | hidden; flat |
+| `02_wall_faces` ×2 | 1 each | 107 / 110 g | brick side UP |
+| `03_wall_ribs` ×2 | 1 each | 60 / 62 g | hidden; flat |
 | `04_chassis` | 2 | 349 g | base pan and plinth |
-| `05_floor` | 4 | 88 g | cobbles UP |
-| `06_rear` | 7 | 173 g | rear perspective assembly |
-| `07_front` | 3 | 47 g | bezels and arch header, broken edge UP |
-| `08_case` | 6 | 407 g | face DOWN on the textured plate — free matte finish |
-| `09_facade_left` | 64 | 44 g | front face DOWN, pegs up |
-| `10_facade_right` | 55 | 33 g | |
+| `05_floor` | 4 | 87 g | cobbles UP |
+| `06_rear` ×2 | 5 + 2 | 150 / 23 g | rear perspective assembly |
+| `07_front` | 3 | 47 g | bezels and header, broken edge UP |
+| `08_case` ×4 | 6 / 1 / 2 / 3 | 136 / 121 / 115 / 273 g | panels lie flat, outer face DOWN |
+| `09_facade_left` | 64 | 44 g | face DOWN, pegs UP |
+| `10_facade_right` | 55 | 33 g | face DOWN, pegs UP |
 | `11_signs_props` | 38 | 19 g | |
 | `12_hardware` | 24 | 54 g | lighting and switch parts |
 
-**14 plates, 218 parts, 1591 g.** Note how little filament the decoration costs: all 157
-decorative parts together are under 100 g. The mass is in the case and the plinth, and
-the plinth is deliberately heavy — it is the ballast under a 240 mm tall narrow object.
+**18 plates, 218 parts, 1590 g.** All 157 decorative parts together are under 100 g;
+the mass is in the case and the plinth, and the plinth is deliberately heavy — it is
+the ballast under a 240 mm tall narrow object.
+
+### Orientation policy
+
+Nothing prints standing on end and nothing needs supports. Specifically:
+
+- **Case panels lie flat** (200 × 214), never on edge. A 5 mm-thick panel standing
+  214 mm tall would be a lost print.
+- **Facade parts and signs print face DOWN with their pegs UP.** Pegs-down would make
+  each frame bridge over its own 4 mm pegs.
+- **Free-standing floor props have flat bottoms and no peg** — they locate in shallow
+  recesses moulded into the cobbles. A peg underneath would force the whole body to
+  start as an overhang off a 2.5 mm stub.
+- The relief on facade parts and signs lands on the build plate. On a textured sheet
+  that reads well for brick and timber; if you want a glossy sign face, run plate 11
+  on a smooth sheet.
 
 Settings: 0.4 mm nozzle, 0.2 mm layer, PLA, 3 walls, 15 % infill (structure) / 0 %
 (diffusers, printed in natural or white). No supports anywhere — every part has a flat

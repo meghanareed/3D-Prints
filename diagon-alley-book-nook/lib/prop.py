@@ -1,4 +1,11 @@
-"""Street props and lanterns -- the small parts that make the alley feel inhabited."""
+"""Street props and lanterns -- the small parts that make the alley feel inhabited.
+
+Free-standing floor props (barrel, crate, cauldrons, post box, kerb, hatch) have FLAT
+BOTTOMS and no mounting peg. They locate in shallow recesses moulded into the
+cobblestone floor. A peg underneath would be worse than useless: printed peg-down the
+whole body has to start as an overhang off a 2.5 mm stub, and printed peg-up most of
+them are upside down. Wall-hung props keep their pegs and print face-down.
+"""
 import math
 import cadquery as cq
 import params as P
@@ -25,7 +32,7 @@ def barrel(d=13.0, h=17.0, staves=14, hoops=3):
                 .cut(cq.Workplane("XY").circle(d * 0.38).extrude(1.6))
                 .translate((0, 0, z)))
         body = body.union(ring)
-    return body.union(peg_p1((0.0, 0.0, 0.0), axis="-Z"))
+    return body
 
 
 def crate(w=12.0, d=10.0, h=9.0, t=1.2):
@@ -42,7 +49,7 @@ def crate(w=12.0, d=10.0, h=9.0, t=1.2):
             body = body.cut(cq.Workplane("XY")
                             .box(t * 3, d * 0.7, 1.0, centered=(True, True, False))
                             .translate((s * w / 2, 0, h * (0.28 + 0.34 * k))))
-    return body.union(peg_p1((0.0, 0.0, 0.0), axis="-Z"))
+    return body
 
 
 def crate_stack():
@@ -88,7 +95,7 @@ def cauldron_stack():
            .union(cauldron(11.0, 8.0, peg=False).translate((-4.0, 0.0, 0.8)))
            .union(cauldron(8.0, 6.0, peg=False).translate((5.0, -1.5, 0.8)))
            .union(cauldron(6.0, 4.6, peg=False).translate((7.5, 3.5, 0.8))))
-    return grp.union(peg_p1((0.0, 0.0, 0.0), axis="-Z"))
+    return grp
 
 
 def broom_rack(brooms=3, h=26.0, w=14.0):
@@ -114,9 +121,8 @@ def post_box(w=9.0, d=8.0, h=16.0):
     body = body.union(cq.Workplane("XY").box(w + 1.4, d + 1.4, 1.4,
                                              centered=(True, True, False))
                       .translate((0, 0, h)))
-    body = body.cut(cq.Workplane("XY").box(w * 0.62, d, 1.2, centered=(True, True, False))
+    return body.cut(cq.Workplane("XY").box(w * 0.62, d, 1.2, centered=(True, True, False))
                     .translate((0, d / 2 - 0.4, h * 0.72)))
-    return body.union(peg_p1((0.0, 0.0, 0.0), axis="-Z"))
 
 
 def notice_board(w=22.0, h=17.0, t=2.0):
@@ -204,7 +210,7 @@ def cellar_hatch(w=14.0, d=11.0, t=2.0):
     for i in range(1, 3):
         body = body.cut(cq.Workplane("XY").box(0.8, d, 0.6, centered=(True, True, False))
                         .translate((-w / 2 + i * w / 3, 0, t - 0.6)))
-    return body.union(peg_p1((0.0, 0.0, 0.0), axis="-Z"))
+    return body
 
 
 def boot_scraper(w=7.0, h=6.0):
@@ -219,5 +225,4 @@ def boot_scraper(w=7.0, h=6.0):
 
 def kerb_step(w=18.0, d=6.0, h=3.0):
     body = cq.Workplane("XY").box(w, d, h, centered=(True, True, False))
-    body = try_chamfer(body, ">Z", 0.6)
-    return body.union(peg_p1((0.0, 0.0, 0.0), axis="-Z"))
+    return try_chamfer(body, ">Z", 0.6)

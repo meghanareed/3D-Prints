@@ -1,0 +1,21 @@
+building parts ...
+  01_jigs_first            8 parts      48 g   footprint 212.0 x 112.3 mm
+  02_wall_faces            1 parts     107 g   footprint 203.1 x 196.5 mm
+  02_wall_faces_2          1 parts     110 g   footprint 203.1 x 196.5 mm
+  03_wall_ribs             1 parts      60 g   footprint 203.1 x 197.1 mm
+  03_wall_ribs_2           1 parts      62 g   footprint 203.1 x 197.1 mm
+  04_chassis               2 parts     349 g   footprint 200.9 x 200.0 mm
+  05_floor                 4 parts      87 g   footprint 179.8 x 151.2 mm
+  06_rear                  5 parts     150 g   footprint 230.6 x 237.1 mm
+  06_rear_2                2 parts      23 g   footprint 146.8 x  80.1 mm
+  07_front                 3 parts      47 g   footprint 125.7 x 203.1 mm
+  08_case                  6 parts     136 g   footprint 220.0 x 242.8 mm
+  08_case_2                1 parts     121 g   footprint 200.0 x 213.8 mm
+  08_case_3                2 parts     115 g   footprint 202.9 x 213.3 mm
+  08_case_4                3 parts     273 g   footprint 229.2 x 200.0 mm
+  09_facade_left          64 parts      44 g   footprint 238.5 x 225.1 mm
+  10_facade_right         55 parts      33 g   footprint 240.2 x 176.8 mm
+  11_signs_props          38 parts      19 g   footprint 240.9 x  89.0 mm
+  12_hardware             24 parts      54 g   footprint 234.0 x 187.3 mm
+
+18 plates -> /home/user/3D-Prints/diagon-alley-book-nook/out/plates

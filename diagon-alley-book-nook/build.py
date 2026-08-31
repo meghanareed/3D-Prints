@@ -74,14 +74,17 @@ def manifest():
             place=(lambda s, sd=side: wall_xf(sd, s)),
             print_rot=("Y", 90), colour="grey", note="hidden; print flat")
     add("03A", "Rear_Perspective_Block", ST.rear_block, "structure",
-        place=lambda s: s.translate((P.CHASSIS_W / 2, ST.Y_BLOCK_0, BP)), colour="brick")
+        place=lambda s: s.translate((P.CHASSIS_W / 2, ST.Y_BLOCK_0, BP)), colour="brick",
+        print_rot=("X", -90), note="lies on its back; 170 mm tall is too tippy upright")
     add("03B", "Rear_Archway", ST.rear_archway, "structure",
-        place=lambda s: s.translate((P.CHASSIS_W / 2, ST.Y_BLOCK_1 - 9.0, BP)), colour="stone")
+        place=lambda s: s.translate((P.CHASSIS_W / 2, ST.Y_BLOCK_1 - 9.0, BP)), colour="stone",
+        print_rot=("X", -90))
     add("03C", "Rear_Silhouette", ST.rear_silhouette, "structure",
         place=lambda s: s.rotate((0, 0, 0), (1, 0, 0), 90)
         .translate((P.CHASSIS_W / 2, ST.Y_SCREEN, BP + 30.0)), colour="black")
     add("03D", "Rear_Glow_Frame", ST.rear_glow_frame, "structure",
-        place=lambda s: s.translate((P.CHASSIS_W / 2, ST.Y_SKYDIFF, BP + 26.0)), colour="black")
+        place=lambda s: s.translate((P.CHASSIS_W / 2, ST.Y_SKYDIFF, BP + 26.0)), colour="black",
+        print_rot=("X", -90))
     add("03E", "Sky_Puck_Cradle", ST.sky_puck_cradle, "lighting",
         place=lambda s: s.rotate((0, 0, 0), (1, 0, 0), -90)
         .translate((P.CHASSIS_W / 2, ST.Y_PUCK, BP + 68.0)), colour="black",
@@ -102,14 +105,16 @@ def manifest():
         place=lambda s: s.translate((P.CHASSIS_W / 2, 0, BP + P.SCENE_H - 4.0)), colour="black")
     for side, pid in (("L", "06"), ("R", "07")):
         add(pid, f"Front_Bezel_{side}", (lambda sd=side: WL.front_bezel(sd)), "structure",
+            print_rot=("X", -90),
             place=(lambda s, sd=side: (s if sd == "L"
                                        else s.mirror("YZ").translate((P.CHASSIS_W, 0, 0)))
                    .translate((0, 0, BP))), colour="brick",
-            note="the torn brick edge -- the signature part")
+            note="torn brick edge, the signature part -- prints flat, relief up")
     add("08", "Front_Arch_Header", ST.front_arch_header, "structure",
         place=lambda s: s.translate((P.CHASSIS_W / 2, 0, BP + P.SCENE_H - 24.0)), colour="brick")
     add("09", "Chassis_Rear_Wall", ST.chassis_rear_wall, "structure",
-        place=lambda s: s.translate((P.CHASSIS_W / 2, ST.Y_REARWALL, BP)), colour="black")
+        place=lambda s: s.translate((P.CHASSIS_W / 2, ST.Y_REARWALL, BP)), colour="black",
+        print_rot=("X", -90))
 
     # ---- 10-29 facade decoration -------------------------------------------
     for side in ("L", "R"):
@@ -117,7 +122,8 @@ def manifest():
         for p in parts:
             add(p["id"], p["name"], (lambda pp=p: pp["solid"]), f"facade_{side}",
                 place=(lambda s, pp=p, sd=side: wall_xf(sd, pp["placed"])),
-                colour="wood")
+                colour="wood", print_rot=("X", 180),
+                note="face down, pegs up")
 
     # ---- 30-39 signs, brackets, lanterns, props -----------------------------
     for it in KT.signs() + KT.brackets() + KT.lanterns():
@@ -125,14 +131,19 @@ def manifest():
         if sd in ("L", "R"):
             add(it["id"], it["name"], (lambda i=it: i["solid"]), "signs",
                 place=(lambda s, i=it, q=sd: wall_xf(q, to_wall(i["solid"], i["u"], i["z"]))),
-                colour="iron")
+                colour="iron", print_rot=("X", 180), note="face down, pegs up")
         else:
             add(it["id"], it["name"], (lambda i=it: i["solid"]), "signs",
-                place=None, colour="iron", note="loose part / spare")
+                place=None, colour="iron", print_rot=("X", 180),
+                note="blank spare -- face down, pegs up")
+    PROP_ROT = {"37B": ("X", -90),        # broom rack lies flat
+                "38A": ("X", 180), "38B": ("X", 180),   # wall-hung, pegs up
+                "39C": ("X", 180)}
     for it in KT.props():
         sd = it.get("side")
         sx = -1 if sd == "L" else 1
         add(it["id"], it["name"], (lambda i=it: i["solid"]), "props",
+            print_rot=PROP_ROT.get(it["id"]),
             place=(lambda s, i=it, q=sx: s.translate(
                 (P.CHASSIS_W / 2 + q * (P.alley_half_width(i["u"]) - 7.0),
                  i["u"], BP + 4.0 + P.CAMBER))), colour="wood")
@@ -146,34 +157,40 @@ def manifest():
     HO, WO, DO = P.BOOKNOOK_HEIGHT, P.BOOKNOOK_WIDTH, P.BOOKNOOK_DEPTH
     T, PH = P.SHELL_THICKNESS, P.PLINTH_HEIGHT
     add("50", "Outer_Left", lambda: CA.outer_side("L"), "case",
-        place=lambda s: s.translate((-WO / 2, 0, PH)), colour="black")
+        place=lambda s: s.translate((-WO / 2, 0, PH)), colour="black",
+        print_rot=("X", -90), note="lies flat, 200 x 214 -- never print this on edge")
     add("51", "Outer_Right", lambda: CA.outer_side("R"), "case",
-        place=lambda s: s.mirror("XZ").translate((WO / 2, 0, PH)), colour="black")
+        place=lambda s: s.mirror("XZ").translate((WO / 2, 0, PH)), colour="black",
+        print_rot=("X", -90), note="lies flat")
     add("52", "Outer_Top", CA.outer_top, "case",
         place=lambda s: s.translate((0, 0, HO - T)), colour="black")
     add("53", "Outer_Back", CA.outer_back, "case",
         place=lambda s: s.translate((0, DO - T, PH)), colour="black",
-        note="service hatch -- pops off for LED access")
+        print_rot=("X", -90), note="service hatch -- pops off for LED access")
     add("54", "Plinth_Body", CA.plinth_body, "case", place=lambda s: s, colour="black")
     add("55", "Power_Drawer", CA.power_drawer, "case",
         place=lambda s: s.translate((0, DO - P.DRAWER_INNER_L - 6.0, 3.0)), colour="black")
     add("56", "Drawer_Face", CA.drawer_face, "case",
-        place=lambda s: s.translate((0, DO - 3.0, 3.0)), colour="black")
+        place=lambda s: s.translate((0, DO - 3.0, 3.0)), colour="black",
+        print_rot=("X", -90))
     add("57", "Batt_Cradle_x2", CA.batt_cradle, "case", place=None, colour="black")
     for side, pid in (("L", "58A"), ("R", "58B")):
         add(pid, f"Case_Spine_Trim_{side}", (lambda sd=side: CA.spine_trim(sd)), "case",
-            place=None, colour="black")
+            place=None, colour="black", print_rot=("X", -90),
+            note="214 mm long -- lies down")
     add("59", "Case_Clip_x6", CA.case_clip, "case", place=None, colour="black")
     add("59G", "Foot_Pad_x4", CA.foot_pad, "case", place=None, colour="black")
 
     # ---- 60-69 switch module ------------------------------------------------
     add("60", "Switch_Housing", CA.switch_housing, "switch", place=None, colour="black")
-    add("61", "Switch_Cover", CA.switch_cover, "switch", place=None, colour="black")
+    add("61", "Switch_Cover", CA.switch_cover, "switch", place=None, colour="black",
+        print_rot=("X", -90))
     for kind, pid in (("rocker", "62A"), ("slide", "62B"), ("button", "62C"),
                       ("blank", "62D")):
         add(pid, f"Switch_Bezel_{kind.title()}", (lambda k=kind: CA.switch_bezel(k)),
-            "switch", place=None, colour="black")
-    add("63", "Jack_Plate_DC", CA.jack_plate, "switch", place=None, colour="black")
+            "switch", place=None, colour="black", print_rot=("X", -90))
+    add("63", "Jack_Plate_DC", CA.jack_plate, "switch", place=None, colour="black",
+        print_rot=("X", -90))
     add("64", "Strain_Relief", CA.strain_relief, "switch", place=None, colour="black")
     add("65", "Remote_Clip", CA.remote_clip, "switch", place=None, colour="black")
 

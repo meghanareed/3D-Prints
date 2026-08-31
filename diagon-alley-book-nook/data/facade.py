@@ -205,17 +205,24 @@ LANTERNS = [
     dict(id="34C", side="R", u=132, z=40, h=15, w=6.5, lit=1, name="Lantern_Rear_Tiny"),
 ]
 
+# `foot` is the footprint (w, d) of a free-standing prop, used to cut its locating
+# recess in the cobbles. Wall-hung props have no foot.
 PROPS = [
-    dict(id="35A", kind="barrel", side="L", u=52,  d=13, h=17, name="Barrel_Large"),
-    dict(id="35B", kind="barrel", side="R", u=100, d=10, h=13, name="Barrel_Small"),
-    dict(id="36A", kind="crate_stack", side="R", u=36, name="Crate_Stack"),
-    dict(id="36B", kind="crate", side="L", u=112, w=9, d=8, h=7, name="Crate_Single"),
-    dict(id="37A", kind="cauldrons", side="L", u=92,  name="Cauldron_Stack"),
+    dict(id="35A", kind="barrel", side="L", u=52,  d=13, h=17, name="Barrel_Large",
+         foot=(14.0, 14.0)),
+    dict(id="35B", kind="barrel", side="R", u=100, d=10, h=13, name="Barrel_Small",
+         foot=(11.0, 11.0)),
+    dict(id="36A", kind="crate_stack", side="R", u=36, name="Crate_Stack",
+         foot=(13.0, 11.0)),
+    dict(id="36B", kind="crate", side="L", u=112, w=9, d=8, h=7, name="Crate_Single",
+         foot=(9.0, 8.0)),
+    dict(id="37A", kind="cauldrons", side="L", u=92,  name="Cauldron_Stack",
+         foot=(21.0, 13.0)),
     dict(id="37B", kind="brooms", side="R", u=64,  name="Broom_Rack"),
-    dict(id="37C", kind="postbox", side="R", u=26, name="Post_Box"),
+    dict(id="37C", kind="postbox", side="R", u=26, name="Post_Box", foot=(10.0, 9.0)),
     dict(id="38A", kind="notice", side="L", u=68,  z=30, name="Notice_Board"),
     dict(id="38B", kind="posters", side="L", u=68, z=30, name="Poster_Layer"),
-    dict(id="39A", kind="kerb", side="L", u=80,  name="Kerb_Step"),
-    dict(id="39B", kind="hatch", side="R", u=48,  name="Cellar_Hatch"),
+    dict(id="39A", kind="kerb", side="L", u=80,  name="Kerb_Step", foot=(18.0, 6.0)),
+    dict(id="39B", kind="hatch", side="R", u=48,  name="Cellar_Hatch", foot=(14.0, 11.0)),
     dict(id="39C", kind="scraper", side="L", u=46, z=2, name="Boot_Scraper"),
 ]
