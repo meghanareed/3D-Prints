@@ -108,10 +108,13 @@ def main():
                               w=bb.xlen, d=bb.ylen)
 
     n_plates = 0
+    already = set()          # a part belongs to exactly one plate
     for label, groups, ids in PLATE_GROUPS:
         chosen = [b for b in built.values()
-                  if (ids is not None and b["id"] in ids)
-                  or (groups is not None and b["group"] in groups)]
+                  if b["id"] not in already
+                  and ((ids is not None and b["id"] in ids)
+                       or (groups is not None and b["group"] in groups))]
+        already.update(b["id"] for b in chosen)
         if not chosen:
             continue
         items = sorted(chosen, key=lambda b: b["id"])
@@ -132,8 +135,11 @@ def main():
             print(f"  {label + suffix:<22} {len(placed):3d} parts  {g:6.0f} g   "
                   f"footprint {bb.xlen:5.1f} x {bb.ylen:5.1f} mm")
             n_plates += 1
-    print(f"\n{n_plates} plates -> {PLATES}")
-    return 0
+    missed = [b["id"] for b in built.values() if b["id"] not in already]
+    if missed:
+        print(f"\n  !! {len(missed)} parts are on no plate: {', '.join(sorted(missed))}")
+    print(f"\n{n_plates} plates, {len(already)} of {len(built)} parts -> {PLATES}")
+    return 1 if missed else 0
 
 
 if __name__ == "__main__":
