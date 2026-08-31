@@ -47,10 +47,17 @@ not drop out when you turn the coupon over. Then:
 ```python
 # params.py
 FIT_CLEARANCE        = 0.25   # -> the value under the station that felt right
-DECORATIVE_CLEARANCE = 0.20   # -> usually 0.05 tighter
+DECORATIVE_CLEARANCE = 0.25   # -> the SAME value
 ```
 
 and re-run `python3 build.py`.
+
+**Set both to the same number.** The coupon applies one value to both, so the station
+that felt right is the only clearance you have actually tried by hand. Leaving the
+decorative clearance tighter than that makes all 157 decorative mounts tighter than
+anything you tested.
+
+*Already set to 0.25 in this repo, from a printed coupon on a Bambu P2S in PLA.*
 
 > **Seen from directly above — which is how the slicer shows a flat plate — a 2 mm peg
 > and a 2.4 mm hole look identical.** If you want to confirm the coupon is right before

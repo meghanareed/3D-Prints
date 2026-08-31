@@ -1,10 +1,10 @@
 # Parts List
 
-Generated from `out/manifest.json`. **218 printable parts, 1596 g of PLA.**
+Generated from `out/manifest.json`. **218 printable parts, 1605 g of PLA.** Built at `FIT_CLEARANCE = DECORATIVE_CLEARANCE = 0.25`, set from a printed coupon.
 
 Every part is a single watertight solid, fits the 256 mm build volume, and is exported already lying in its print orientation — no part stands on end and none needs supports.
 
-Default filament is light grey (see the assembly guide); exceptions are noted per group below.
+Default filament is light grey; exceptions noted per group.
 
 ## Chassis structure — 17 parts, 747 g
 
@@ -13,7 +13,7 @@ Default filament is light grey (see the assembly guide); exceptions are noted pe
 | ID | Part | Print size (mm) | g | Notes |
 |---|---|---|---|---|
 | `00` | Chassis_Base_Pan | 95 × 197 × 15 | 124.9 |  |
-| `01` | L_Wall_Face | 203 × 196 × 3 | 107.4 | print brick-up, no supports |
+| `01` | L_Wall_Face | 203 × 196 × 3 | 107.3 | print brick-up, no supports |
 | `01R` | L_Wall_Rib | 203 × 197 × 10 | 59.7 | hidden; print flat |
 | `02` | R_Wall_Face | 203 × 196 × 3 | 109.6 | print brick-up, no supports |
 | `02R` | R_Wall_Rib | 203 × 197 × 10 | 61.8 | hidden; print flat |
@@ -272,14 +272,14 @@ Default filament is light grey (see the assembly guide); exceptions are noted pe
 | `64` | Strain_Relief | 26 × 14 × 13 | 1.6 |  |
 | `65` | Remote_Clip | 44 × 16 × 14 | 3.9 |  |
 
-## Jigs and aids — 8 parts, 55 g
+## Jigs and aids — 8 parts, 63 g
 
 *Filament: anything — these are tools*
 
 | ID | Part | Print size (mm) | g | Notes |
 |---|---|---|---|---|
-| `70A` | Tolerance_Test_Coupon | 96 × 34 × 6 | 23.8 |  |
-| `70B` | Tolerance_Test_Pegs | 46 × 16 × 7 | 2.8 |  |
+| `70A` | Tolerance_Test_Coupon | 104 × 34 × 6 | 25.5 |  |
+| `70B` | Tolerance_Test_Pegs | 98 × 24 × 8 | 9.7 |  |
 | `71A` | Glazing_Cut_Template_A | 34 × 42 × 2 | 0.9 |  |
 | `71B` | Glazing_Cut_Template_B | 42 × 40 × 2 | 1.0 |  |
 | `71C` | Glazing_Cut_Template_C | 32 × 34 × 2 | 0.8 |  |

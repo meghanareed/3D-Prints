@@ -18,8 +18,13 @@ MATERIAL            = "PLA"
 PANEL_SPLIT = (BOOKNOOK_HEIGHT + 6.0) > min(BED_X, BED_Y)   # False at 256
 
 # -------------------------------------------------------------- tolerances --
+# Set from the printed tolerance coupon on a Bambu P2S in PLA: the 0.25 station was
+# the loosest that still held when the coupon was turned over. The coupon applies one
+# value to BOTH clearances, so both are 0.25 -- 0.20 was the value that test rejected,
+# and leaving the decorative mounts there would make every one of them tighter than
+# anything actually tried by hand.
 FIT_CLEARANCE        = 0.25   # structural mating faces, per side
-DECORATIVE_CLEARANCE = 0.20   # decorative snap-ins, per side
+DECORATIVE_CLEARANCE = 0.25   # decorative snap-ins, per side
 SLIP_CLEARANCE       = 0.35   # chassis sliding into the case, per side
 CRUSH_INTERFERENCE   = 0.15  # how far each sacrificial rib bites INTO the peg. This
                              # is an interference, NOT a rib height: the rib is sized

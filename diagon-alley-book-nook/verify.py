@@ -215,63 +215,41 @@ def check_grip_across_clearances():
 
 
 def check_coupon_tab_flips():
-    """The coupon tab must seat AFTER being physically turned over.
+    """The REAL tab, turned over, seated in the REAL coupon.
 
-    This is the check that was missing. The tab and the station were generated in the
-    same frame, which looks right in CAD and in a render, but you have to turn the tab
-    over to use it -- and that mirrors the rows. As shipped it fouled by 39.9 mm^3 one
-    way round and 2.6 mm^3 the other, so it could not seat at all.
+    Two things have to hold: nothing proud of the coupon surface may hold the tab off,
+    and the crush ribs must still bite. This check used to rebuild a bare plate from
+    the same numbers instead of using the generated coupon, and so never saw the raised
+    station labels -- which sat squarely under the middle of the tab and held it 0.5 mm
+    off the surface. Reconstructing the part you are testing is not testing the part.
     """
-    print("\n[jigs] tolerance tab seats after being turned over")
+    print("\n[jigs] real tab, turned over, seated in the real coupon")
     if abs(MT.TAB_PITCH - MT.COUPON_STATION_W) > 1e-6:
         fail(f"tab pitch {MT.TAB_PITCH} does not match station pitch "
              f"{MT.COUPON_STATION_W} -- the tabs will drift out of their holes")
     else:
         ok(f"tab pitch matches the station pitch ({MT.TAB_PITCH} mm)")
-    depth_p1, depth_p2 = MT.P1_L + 0.6, MT.P2_L + 0.6
-    if depth_p1 <= MT.P1_L or depth_p2 <= MT.P2_L:
-        fail("sockets are not deeper than the pegs -- the pegs will bottom out")
-    else:
-        ok(f"sockets clear the pegs by 0.6 mm (P1 {MT.P1_L}->{depth_p1}, "
-           f"P2 {MT.P2_L}->{depth_p2})")
-    dy = MT.COUPON_P1_Y - MT.COUPON_P2_Y
-    lo = (MT.TAB_H - dy) / 2
-    real = (P.DECORATIVE_CLEARANCE, P.FIT_CLEARANCE)
-    try:
-        for i, v in enumerate(MT.COUPON_VALUES):
-            P.DECORATIVE_CLEARANCE = P.FIT_CLEARANCE = v
-            cx = MT.COUPON_STATION_W * (i + 0.5)
-            plate = cq.Workplane("XY").box(MT.COUPON_STATION_W * len(MT.COUPON_VALUES),
-                                           MT.COUPON_H, MT.COUPON_T,
-                                           centered=(False, False, False))
-            c1, r1 = MT.socket_p1_solids((cx, MT.COUPON_P1_Y, MT.COUPON_T), axis="-Z")
-            c2, r2 = MT.socket_p2_solids((cx, MT.COUPON_P2_Y, MT.COUPON_T), axis="-Z")
-            bored = plate.cut(c1).cut(c2)
-            ribbed = bored.union(r1).union(r2)
 
-            t = cq.Workplane("XY").box(MT.TAB_W, MT.TAB_H, MT.TAB_T,
-                                       centered=(False, False, False))
-            t = t.union(MT.peg_p1((MT.TAB_W / 2, lo, MT.TAB_T), axis="+Z"))
-            t = t.union(MT.peg_p2((MT.TAB_W / 2, lo + dy, MT.TAB_T), axis="+Z"))
-            # turn it over about its long axis, the way a hand would
-            t = t.rotate((MT.TAB_W / 2, MT.TAB_H / 2, MT.TAB_T / 2),
-                         (MT.TAB_W / 2 + 1, MT.TAB_H / 2, MT.TAB_T / 2), 180)
-            bb = t.val().BoundingBox()
-            t = t.translate((cx - MT.TAB_W / 2,
-                             MT.COUPON_P2_Y + dy / 2 - MT.TAB_H / 2,
-                             MT.COUPON_T - bb.zmin - MT.TAB_T))
-            f = bored.intersect(t)
-            g = ribbed.intersect(t)
-            fv = f.val().Volume() if f.val().Solids() else 0.0
-            gv = (g.val().Volume() if g.val().Solids() else 0.0) - fv
-            if fv > 0.05:
-                fail(f"station {v:.2f}: a turned-over tab fouls by {fv:.2f} mm^3")
-            elif gv < 0.3:
-                fail(f"station {v:.2f}: turned-over tab has no grip ({gv:.2f} mm^3)")
-            else:
-                ok(f"station {v:.2f}: turned-over tab seats, grip {gv:.2f} mm^3")
-    finally:
-        P.DECORATIVE_CLEARANCE, P.FIT_CLEARANCE = real
+    coupon, _ = MT.tolerance_coupon()
+    proud = (cq.Workplane("XY").box(400, 80, 10, centered=(False, False, False))
+             .translate((0, -20, MT.COUPON_T)))
+    above = coupon.intersect(proud)
+    has_proud = bool(above.val().Solids())
+
+    for i, v in enumerate(MT.COUPON_VALUES):
+        seated = MT.seat_tab(i)
+        blocked = above.intersect(seated) if has_proud else None
+        bv = blocked.val().Volume() if blocked and blocked.val().Solids() else 0.0
+        whole = coupon.intersect(seated)
+        wv = whole.val().Volume() if whole.val().Solids() else 0.0
+        grip = wv - bv
+        if bv > 0.02:
+            fail(f"station {v:.2f}: {bv:.2f} mm^3 of raised material holds the tab off "
+                 "the surface -- it cannot seat flush")
+        elif grip < 0.3:
+            fail(f"station {v:.2f}: no crush-rib grip ({grip:.2f} mm^3)")
+        else:
+            ok(f"station {v:.2f}: seats flush, crush-rib grip {grip:.2f} mm^3")
 
 
 def check_paint_handles():
