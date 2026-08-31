@@ -3608,12 +3608,12 @@
   "name": "Paint_Handle_Sprue",
   "group": "jigs",
   "status": "ok",
-  "grams": 7.9,
+  "grams": 14.4,
   "solids": 1,
   "bbox": [
-   96.0,
-   11.3,
-   22.5
+   120.0,
+   12.3,
+   21.5
   ],
   "fits_bed": true,
   "colour": "white",

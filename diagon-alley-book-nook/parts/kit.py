@@ -11,8 +11,8 @@ import data.facade as F
 from lib import sign as S
 from lib import prop as PR
 from lib.light import baffle_cap, coil_bay_cover, diffuser_plate, puck_cradle
-from lib.mount import (peg_p1, socket_p1_solids, tolerance_coupon, c4_clip,
-                       P1_L, P2_L)
+from lib.mount import (peg_p1, socket_p1_solids, socket_p2_solids, tolerance_coupon,
+                       c4_clip, P1_L, P2_L)
 from lib.util import keep_largest, compound
 from parts.decor import to_wall, FACE
 
@@ -231,15 +231,40 @@ def jigs():
     return out
 
 
-def _paint_handles(n):
-    """A handle that plugs into a decorative part's own peg socket, so small parts can
-    be primed and painted without being held by the paintable surface."""
-    h = (cq.Workplane("XY").box(9.0, 9.0, 3.0, centered=(True, True, False))
-         .union(cq.Workplane("XY").cylinder(16.0, 3.2, centered=(True, True, False))
-                .translate((0, 0, 3.0))))
-    # a P1 peg on top, matching every decorative socket
-    h = h.union(peg_p1((0.0, 0.0, 19.0), axis="+Z"))
-    return _sprue([h] * n, pitch=12.0)
+def _paint_handles(n=8):
+    """Handles that RECEIVE a decorative part's peg, so small parts can be primed and
+    painted without being held by the surface you are painting.
+
+    The socket is deliberately loose -- DECORATIVE_CLEARANCE + 0.12, and no crush ribs
+    -- so a painted part lifts off without stressing the finish. Half the sprue takes
+    P1 parts (signs, props, brackets, pipes, ornaments) and half takes the keyed P2
+    pairs used by window frames, doors, stallrisers and fascias.
+
+    The first version had a PEG on top, which is useless: the parts have pegs too, and
+    two pegs do not mate.
+    """
+    real = P.DECORATIVE_CLEARANCE
+    items = []
+    try:
+        P.DECORATIVE_CLEARANCE = real + 0.12
+        for kind in ("p1", "p2"):
+            body = (cq.Workplane("XY").box(13.0, 11.0, 3.0, centered=(True, True, False))
+                    .union(cq.Workplane("XY")
+                           .cylinder(15.0, 3.4, centered=(True, True, False))
+                           .translate((0, 0, 3.0))))
+            body = body.union(cq.Workplane("XY")
+                              .box(13.0, 11.0, 3.5, centered=(True, True, False))
+                              .translate((0, 0, 18.0)))
+            top = 21.5
+            if kind == "p1":
+                cut, _ = socket_p1_solids((0.0, 0.0, top), axis="-Z", depth=P1_L + 0.4)
+            else:
+                cut, _ = socket_p2_solids((0.0, 0.0, top), axis="-Z", depth=P2_L + 0.4)
+            body = body.cut(cut)
+            items += [body] * (n // 2)
+    finally:
+        P.DECORATIVE_CLEARANCE = real
+    return _sprue(items, pitch=15.0)
 
 
 def _glazing_template(w, h):

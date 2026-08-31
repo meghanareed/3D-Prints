@@ -53,6 +53,46 @@ lying in its print orientation. Drop one straight into the slicer.
 the mass is in the case and the plinth, and the plinth is deliberately heavy — it is
 the ballast under a 240 mm tall narrow object.
 
+### Filament — three, not eight
+
+| What | Filament | Painted? |
+|---|---|---|
+| Everything that gets painted — structure, facade, signs, props | **light grey PLA** | yes, over primer |
+| All `*_Glazing` parts, `42x` diffusers, `03F` sky diffuser | **natural / white / translucent PLA**, 3 walls, **0 % infill** | **never** |
+| Outer case, plinth, drawer, switch module (`50`–`65`) | **matte black PLA** | no — leave as printed |
+
+**Grey, not white, for the painted parts.** Brick relief is 0.6 mm and mortar lines are
+1.2 mm. On white PLA under room light you genuinely cannot see that detail, so you
+cannot tell whether the print came out until you have primed it. Grey reads. It is also
+what grey primer exists for.
+
+**Do not colour-match filament per part.** 218 parts across eight paint colours means a
+lot of filament changes for no benefit — you are priming anyway, and primer hides the
+substrate completely. The one place colour-matching genuinely pays is the case: matte
+black PLA off a textured plate *is* the finish. That is 750 g of large flat panels you
+never have to paint.
+
+The one real argument for matching is chip resistance — a snap-fit kit gets handled, and
+a chip on a painted part shows bare plastic. If that bothers you, the cheap version is
+to prime everything mid-grey and keep your paints in a similar value range, so a chip
+reads as wear rather than as a hole in the paint. On a Dickensian alley that is arguably
+an improvement.
+
+Avoid silk or high-gloss filament everywhere: paint adheres badly to it and the sheen
+hides exactly the surface detail this model depends on.
+
+### The jigs are tools — none of them go into the nook
+
+| ID | What it is | Keep or bin |
+|---|---|---|
+| `70A` / `70B` | tolerance coupon and test pegs | **single use.** Bin them once you have set `FIT_CLEARANCE` |
+| `72` | paint handles | reusable tool — a part's peg drops into the handle so you never hold a painted surface. Keep |
+| `73` | ID card | records the clearance and random seed this kit was generated with. Keep it with the kit; if you ever reprint a lost part you need those numbers |
+| `71A`–`71D` | glazing cut templates | **only needed for sheet glazing.** You are printing PLA glazing, so you can delete these four from plate 01 |
+
+Plate `01_jigs_first` is the whole set. Print it, use the coupon, and everything else on
+that plate is bench equipment rather than model.
+
 ### Orientation policy
 
 Nothing prints standing on end and nothing needs supports. Specifically:

@@ -1,10 +1,14 @@
 # Parts List
 
-Generated from `out/manifest.json`. **218 printable parts, 1590 g of PLA.**
+Generated from `out/manifest.json`. **218 printable parts, 1596 g of PLA.**
 
-Every part is a single watertight solid, fits the 256 mm build volume, and is exported already lying in its print orientation — no part stands on end and none needs supports. All checked by `verify.py` on every build.
+Every part is a single watertight solid, fits the 256 mm build volume, and is exported already lying in its print orientation — no part stands on end and none needs supports.
+
+Default filament is light grey (see the assembly guide); exceptions are noted per group below.
 
 ## Chassis structure — 17 parts, 747 g
+
+*Filament: light grey, painted*
 
 | ID | Part | Print size (mm) | g | Notes |
 |---|---|---|---|---|
@@ -28,6 +32,8 @@ Every part is a single watertight solid, fits the 256 mm build volume, and is ex
 
 ## Lighting hardware — 15 parts, 37 g
 
+*Filament: natural / white, 0 % infill (diffusers)*
+
 | ID | Part | Print size (mm) | g | Notes |
 |---|---|---|---|---|
 | `03E` | Sky_Puck_Cradle | 69 × 69 × 12 | 17.7 | holds the 59.5 x 8.3 RGB/CCT puck |
@@ -47,6 +53,8 @@ Every part is a single watertight solid, fits the 256 mm build volume, and is ex
 | `47` | String_Entry_Grommet_x4 | 40 × 11 × 3 | 0.5 |  |
 
 ## Left facade — 64 parts, 44 g
+
+*Filament: light grey, painted*
 
 | ID | Part | Print size (mm) | g | Notes |
 |---|---|---|---|---|
@@ -117,6 +125,8 @@ Every part is a single watertight solid, fits the 256 mm build volume, and is ex
 
 ## Right facade — 55 parts, 33 g
 
+*Filament: light grey, painted*
+
 | ID | Part | Print size (mm) | g | Notes |
 |---|---|---|---|---|
 | `20B` | R_R1_Arched_Door | 21 × 44 × 7 | 2.1 | face down, pegs up |
@@ -177,6 +187,8 @@ Every part is a single watertight solid, fits the 256 mm build volume, and is ex
 
 ## Signs, brackets, lanterns — 26 parts, 9 g
 
+*Filament: light grey, painted*
+
 | ID | Part | Print size (mm) | g | Notes |
 |---|---|---|---|---|
 | `30A` | Sign_Vertical_Banner | 13 × 47 × 6 | 1.2 | face down, pegs up |
@@ -208,6 +220,8 @@ Every part is a single watertight solid, fits the 256 mm build volume, and is ex
 
 ## Street props — 12 parts, 10 g
 
+*Filament: light grey, painted*
+
 | ID | Part | Print size (mm) | g | Notes |
 |---|---|---|---|---|
 | `35A` | Barrel_Large | 14 × 14 × 17 | 2.7 |  |
@@ -224,6 +238,8 @@ Every part is a single watertight solid, fits the 256 mm build volume, and is ex
 | `39C` | Boot_Scraper | 10 × 2 × 6 | 0.1 |  |
 
 ## Outer case — 12 parts, 645 g
+
+*Filament: matte black, unpainted*
 
 | ID | Part | Print size (mm) | g | Notes |
 |---|---|---|---|---|
@@ -242,6 +258,8 @@ Every part is a single watertight solid, fits the 256 mm build volume, and is ex
 
 ## Switch module — 9 parts, 16 g
 
+*Filament: matte black, unpainted*
+
 | ID | Part | Print size (mm) | g | Notes |
 |---|---|---|---|---|
 | `60` | Switch_Housing | 34 × 17 × 24 | 3.9 |  |
@@ -254,7 +272,9 @@ Every part is a single watertight solid, fits the 256 mm build volume, and is ex
 | `64` | Strain_Relief | 26 × 14 × 13 | 1.6 |  |
 | `65` | Remote_Clip | 44 × 16 × 14 | 3.9 |  |
 
-## Jigs and aids — 8 parts, 48 g
+## Jigs and aids — 8 parts, 55 g
+
+*Filament: anything — these are tools*
 
 | ID | Part | Print size (mm) | g | Notes |
 |---|---|---|---|---|
@@ -264,5 +284,5 @@ Every part is a single watertight solid, fits the 256 mm build volume, and is ex
 | `71B` | Glazing_Cut_Template_B | 42 × 40 × 2 | 1.0 |  |
 | `71C` | Glazing_Cut_Template_C | 32 × 34 × 2 | 0.8 |  |
 | `71D` | Glazing_Cut_Template_D | 28 × 48 × 2 | 0.9 |  |
-| `72` | Paint_Handle_Sprue | 96 × 11 × 22 | 7.9 |  |
+| `72` | Paint_Handle_Sprue | 120 × 12 × 22 | 14.4 |  |
 | `73` | Assembly_ID_Card | 90 × 55 × 2 | 10.0 |  |

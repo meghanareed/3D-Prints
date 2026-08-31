@@ -178,6 +178,28 @@ def check_envelope():
         ok(f"chassis {P.CHASSIS_W:.1f} slides into cavity {P.CASE_CAVITY_W:.1f}")
 
 
+def check_paint_handles():
+    """The paint handles must RECEIVE a part's peg. The first version had a peg on top,
+    which cannot mate with a part that also has a peg -- an easy thing to ship without
+    noticing, because it looks right."""
+    print("\n[jigs] paint handles accept a real part's peg")
+    real = P.DECORATIVE_CLEARANCE
+    P.DECORATIVE_CLEARANCE = real + 0.12
+    try:
+        for name, sock, peg, L in (("P1", MT.socket_p1_solids, MT.peg_p1, MT.P1_L),
+                                   ("P2", MT.socket_p2_solids, MT.peg_p2, MT.P2_L)):
+            blk = cq.Workplane("XY").box(20, 20, 8, centered=(True, True, False))
+            bored = blk.cut(sock((0, 0, 8), axis="-Z", depth=L + 0.4)[0])
+            i = bored.intersect(peg((0, 0, 8), axis="-Z"))
+            v = i.val().Volume() if i.val().Solids() else 0.0
+            if v > 0.05:
+                fail(f"paint handle rejects a {name} part (interference {v:.2f} mm^3)")
+            else:
+                ok(f"{name} parts drop into the paint handle and lift back out")
+    finally:
+        P.DECORATIVE_CLEARANCE = real
+
+
 def check_manifest():
     print("\n[build] manifest")
     path = os.path.join(OUT, "manifest.json")
@@ -214,6 +236,7 @@ if __name__ == "__main__":
     check_keying()
     check_fits()
     check_all_mates()
+    check_paint_handles()
     check_manifest()
     print(f"\n{len(FAILS)} failures, {len(WARNS)} warnings")
     sys.exit(1 if FAILS else 0)

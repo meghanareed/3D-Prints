@@ -25,8 +25,12 @@ Crooked Lane Book Nook -- verification
 [fit] all 119 facade parts against their walls
   ok    all facade parts clear their walls (no interference anywhere)
 
+[jigs] paint handles accept a real part's peg
+  ok    P1 parts drop into the paint handle and lift back out
+  ok    P2 parts drop into the paint handle and lift back out
+
 [build] manifest
   ok    218 parts, all single-solid and all inside the build volume
-        1590 g PLA total across 218 parts
+        1596 g PLA total across 218 parts
 
 0 failures, 0 warnings
