@@ -311,12 +311,6 @@ def ceiling_baffle():
     body = (cq.Workplane("XY")
             .polyline([(-_hw(0) - 2, 0), (_hw(0) + 2, 0), (_hw(L) + 2, L), (-_hw(L) - 2, L)])
             .close().extrude(t))
-    # Slope the plate DOWN toward the rear. The sign here used to be positive, which
-    # tilts the rear UP by CORNICE_DROP instead: it fought the forced perspective and
-    # pushed the top of the chassis 10.8 mm above the case cavity, so the case could
-    # not have closed. Nothing caught it because the old envelope check compared
-    # CASE_CAVITY_H with its own definition rather than with the built parts.
-    body = body.rotate((0, 0, 0), (1, 0, 0), -math.degrees(math.atan2(drop, L)))
     cuts, adds = [], []
     # top wire race
     cuts.append(cq.Workplane("XY").box(P.WIRE_CHANNEL_WIDTH, L, P.WIRE_CHANNEL_DEPTH,
@@ -334,6 +328,20 @@ def ceiling_baffle():
     for sx in (-1, 1):
         for y in (L * 0.15, L * 0.85):
             body = body.union(peg_p1((sx * (_hw(y) - 3.0), y, t), axis="+Z"))
+
+    # Slope the plate DOWN toward the rear, LAST.
+    #
+    # The shear used to be applied to the bare plate before any of the above, while
+    # every cut and peg above is positioned in the unsheared frame -- so once the plate
+    # tilted, the wire race, the sign-hook sockets and all four pegs missed it
+    # entirely. keep_largest() then quietly dropped the pegs as detached solids and the
+    # part exported as a bare trapezoid: 12 triangles, no features at all. Nothing
+    # noticed, because a plain plate is perfectly valid geometry and the only clue was
+    # a suspiciously small STL.
+    #
+    # The sign was wrong as well: it tilted the rear UP by CORNICE_DROP, fighting the
+    # forced perspective and pushing the chassis 10.8 mm above the case cavity.
+    body = body.rotate((0, 0, 0), (1, 0, 0), -math.degrees(math.atan2(drop, L)))
     return keep_largest(body, "05_Ceiling_Baffle")
 
 

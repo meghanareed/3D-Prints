@@ -26,6 +26,22 @@ CANDIDATES = [None,
               ("Y", 90), ("Y", -90),
               ("Z", 90)]
 
+# Facade parts mount with their pegs along the part's -Z (the PART FRAME CONVENTION at
+# the top of lib/window.py), so only a 180 degree flip leaves those pegs pointing UP.
+#
+# That constraint is not negotiable for a mount feature. Laid on its side a P1 peg is a
+# 2.5 x 3.5 mm horizontal cantilever, and it is the one surface on the part that has to
+# slide into a 0.25 mm clearance: it will droop, or it will need support, and support
+# scarring on a peg is worse than the adhesion problem re-orienting was solving. An
+# earlier pass of this sweep traded exactly that away on some forty sills, lintels,
+# keystones and corbels, because it was scoring bed area and overhang and knew nothing
+# about which face was fit-critical.
+#
+# Small facade parts that then have too little bed get a brim, which is mandatory for
+# them anyway -- see check_bed_contact() and docs/02_ASSEMBLY.md section 0e.
+PEGS_UP_GROUPS = {"facade_L", "facade_R"}
+PEGS_UP_CANDIDATES = [("X", 180), ("Y", 180)]
+
 
 def score(bed, overhang, bbox):
     """Lower is better.
@@ -52,7 +68,11 @@ def score(bed, overhang, bbox):
             + 2.0 * max(0.0, (25.0 - bed) / 25.0))
 
 
-def measure_all(solid, current):
+def candidates_for(group):
+    return PEGS_UP_CANDIDATES if group in PEGS_UP_GROUPS else CANDIDATES
+
+
+def measure_all(solid, current, group=None):
     """Every orientation, best first.
 
     Ties break toward the orientation the manifest already has, then toward no rotation
@@ -62,7 +82,7 @@ def measure_all(solid, current):
     is worse than none: it invites a pointless edit and hides the real ones.
     """
     out = []
-    for rot in CANDIDATES:
+    for rot in candidates_for(group):
         try:
             pr = B.drop_to_bed(B.print_orient(solid, rot))
             if not B.fits_bed(pr):
@@ -115,7 +135,7 @@ def main():
         except Exception as e:
             print(f"{pid}: will not build -- {e}")
             continue
-        results = measure_all(solid, m["print_rot"])
+        results = measure_all(solid, m["print_rot"], m["group"])
         if not results:
             print(f"{pid}: no orientation fits the bed")
             continue

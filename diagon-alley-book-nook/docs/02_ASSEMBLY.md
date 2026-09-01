@@ -235,6 +235,21 @@ put every part on a plate at the origin once already.
 footprint under 7.3 mm of height) and decided neither needed one. Both came off the
 plate as spaghetti. 5 mm width is plenty.
 
+**Or skip the settings entirely and use the 3MF plates.** `out/3mf/` carries the same
+twenty plates with every part as a **separate object**, already positioned, and the
+parts that need a brim carrying that setting per object:
+
+```
+python3 mf3.py            # after build.py and plates.py
+```
+
+The STL plates are one fused mesh per plate, so the slicer sees a single blob: you
+cannot select a part, arrange, or set anything per part. The 3MF arrives as 64 objects
+on the left facade plate instead of one. The geometry is plain 3MF core spec and opens
+anywhere; the per-object brim lives in `Metadata/model_settings.config`, which is Bambu
+Studio's and Orca's own extension, so if a slicer ignores it you still get the layout
+and can set the brim by hand.
+
 `docs/04_PRINT_CHECKLIST.md` marks every part that wants one — currently 34 of 220 —
 so you can see before you slice which plates matter. The facade plates are mostly
 sub-gram parts; put a brim on the lot.

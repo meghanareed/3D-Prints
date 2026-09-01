@@ -67,7 +67,7 @@ off the plate warped or with a bit missing is not printed.
 - [ ] `04` Cobblestone_Floor (61.2 g)
 - [ ] `04B` Gutter_L (1.9 g)
 - [ ] `04C` Gutter_R (1.9 g)
-- [ ] `05` Ceiling_Baffle (22.2 g) -- its P1 pegs stand 5.1 mm proud -- that is what sets the top of the stack
+- [ ] `05` Ceiling_Baffle (22.3 g) -- its P1 pegs stand 5.1 mm proud -- that is what sets the top of the stack
 
 ## `06_rear.stl`  ---  6 parts, 156 g  (0/6 done)
 
@@ -113,7 +113,7 @@ off the plate warped or with a bit missing is not printed.
 
 ## `09_facade_left.stl`  ---  64 parts, 44 g  (0/64 done)
 
-- [ ] `10B` L_L1_Bow_Window (4.1 g) -- face down, pegs up
+- [ ] `10B` L_L1_Bow_Window (4.1 g) -- face down, pegs up; **print with a brim**
 - [ ] `10Bc` L_L1_Bow_Window_Cornice (0.6 g) -- face down, pegs up
 - [ ] `10Bd` L_L1_Bow_Window_Diffuser (0.7 g) -- face down, pegs up
 - [ ] `10Bg` L_L1_Bow_Window_Glazing (0.7 g) -- face down, pegs up
@@ -173,7 +173,7 @@ off the plate warped or with a bit missing is not printed.
 - [ ] `15C` L_L_Hopper (0.1 g) -- face down, pegs up
 - [ ] `17A` L_L_Cornice_Front (2.2 g) -- face down, pegs up
 - [ ] `17B` L_L_Cornice_Rear (1.2 g) -- face down, pegs up
-- [ ] `18A` L_L_Chimney (2.7 g) -- face down, pegs up
+- [ ] `18A` L_L_Chimney (2.7 g) -- face down, pegs up; **print with a brim**
 - [ ] `19A` L_L_Quoin_Front (1.4 g) -- face down, pegs up
 - [ ] `19B` L_L_Keystone (0.1 g) -- face down, pegs up
 - [ ] `19C` L_L_Wall_Plaque (0.2 g) -- face down, pegs up
@@ -189,7 +189,7 @@ off the plate warped or with a bit missing is not printed.
 - [ ] `21B` R_R2_Shop_Window_Frame (1.2 g) -- face down, pegs up
 - [ ] `21Bg` R_R2_Shop_Window_Glazing (0.8 g) -- face down, pegs up
 - [ ] `21Bl` R_R2_Shop_Window_Lintel (0.2 g) -- face down, pegs up
-- [ ] `21D` R_R2_Pilaster_Left (0.8 g) -- face down, pegs up
+- [ ] `21D` R_R2_Pilaster_Left (0.8 g) -- face down, pegs up; **print with a brim**
 - [ ] `21E` R_R2_Pilaster_Right (0.6 g) -- face down, pegs up; **print with a brim**
 - [ ] `21F` R_R2_Fascia (0.9 g) -- face down, pegs up
 - [ ] `21G` R_R2_Stallriser (0.5 g) -- face down, pegs up
@@ -231,7 +231,7 @@ off the plate warped or with a bit missing is not printed.
 - [ ] `25C` R_R_Hopper (0.1 g) -- face down, pegs up
 - [ ] `27A` R_R_Cornice_Front (2.2 g) -- face down, pegs up
 - [ ] `27B` R_R_Cornice_Rear (1.3 g) -- face down, pegs up
-- [ ] `28A` R_R_Chimney (1.0 g) -- face down, pegs up
+- [ ] `28A` R_R_Chimney (1.0 g) -- face down, pegs up; **print with a brim**
 - [ ] `29A` R_R_Quoin_Front (1.4 g) -- face down, pegs up
 - [ ] `29B` R_R_Keystone (0.1 g) -- face down, pegs up
 - [ ] `29C` R_R_Guild_Badge (0.1 g) -- face down, pegs up
