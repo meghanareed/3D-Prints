@@ -199,8 +199,10 @@ lying in its print orientation. Drop one straight into the slicer.
 |---|---|---|---|
 | `00_CALIBRATE_FIRST` | 2 | 33 g | **print this one first and stop.** The coupon and its four tabs, nothing else |
 | `01_CALIBRATE_JOINTS` | 2 | 67 g | **print this before the case.** T3 and C4 test block and its four pieces |
-| `02_wall_faces` ×2 | 1 each | 107 / 110 g | brick side UP |
-| `03_wall_ribs` ×2 | 1 each | 60 / 62 g | hidden; flat |
+| `02_wall_face_LEFT` | 1 | 107 g | brick side UP |
+| `02_wall_face_RIGHT` | 1 | 108 g | brick side UP |
+| `03_wall_rib_LEFT` | 1 | 60 g | hidden; flat |
+| `03_wall_rib_RIGHT` | 1 | 62 g | hidden; flat |
 | `04_chassis` | 2 | 349 g | base pan and plinth |
 | `05_floor` | 4 | 87 g | cobbles UP |
 | `06_rear` ×2 | 5 + 2 | 150 / 23 g | rear perspective assembly |
@@ -315,8 +317,8 @@ plus the outer side panel.
 
 | Plate | Footprint | Brim |
 |---|---|---|
-| `02_wall_faces`, `02_wall_faces_2` | 203 × 193 | **5 mm** |
-| `03_wall_ribs`, `03_wall_ribs_2` | 203 × 197 | **5 mm** |
+| `02_wall_face_LEFT`, `02_wall_face_RIGHT` | 203 × 193 | **5 mm** |
+| `03_wall_rib_LEFT`, `03_wall_rib_RIGHT` | 203 × 197 | **5 mm** |
 | `08_case_2` (outer side panel) | 200 × 214 | **5 mm** |
 | `04_chassis`, `05_floor`, `06_rear`, `07_front`, `08_case*` | multi-part | 3 mm — parts sit 6 mm apart, so a 5 mm brim merges them into one sheet |
 | `09`–`13` (small parts) | multi-part | none — they are small enough not to warp, and brims would fuse dozens of tiny parts together |

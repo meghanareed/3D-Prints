@@ -38,8 +38,13 @@ PLATE_GROUPS = [
     ("00_CALIBRATE_FIRST", None, ["70A", "70B"]),
     # T3 and C4 -- the two joints that carry the model. Print this before the case.
     ("01_CALIBRATE_JOINTS", None, ["74A", "74B"]),
-    ("02_wall_faces", None, ["01", "02"]),
-    ("03_wall_ribs", None, ["01R", "02R"]),
+    # One plate per side, named for the side. These used to be one group each, which
+    # the packer spilled onto "..._2" -- so which file was the left wall and which the
+    # right depended on the packing order rather than on anything you could read.
+    ("02_wall_face_LEFT", None, ["01"]),
+    ("02_wall_face_RIGHT", None, ["02"]),
+    ("03_wall_rib_LEFT", None, ["01R"]),
+    ("03_wall_rib_RIGHT", None, ["02R"]),
     ("04_chassis", None, ["00", "54"]),
     ("05_floor", None, ["04", "04B", "04C", "05"]),
     ("06_rear", None, ["03A", "03B", "03C", "03D", "03E", "03F", "09"]),
