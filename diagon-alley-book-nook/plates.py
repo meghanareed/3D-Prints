@@ -91,6 +91,12 @@ def _assert_no_overlap(placed, label):
 
 def main():
     os.makedirs(PLATES, exist_ok=True)
+    # Clear the directory first. Renaming a plate used to leave the old file sitting
+    # there -- "01_jigs_first.stl" survived three renames and would have been opened
+    # as plate 01 by anyone reading the folder rather than the docs.
+    for f in os.listdir(PLATES):
+        if f.endswith(".stl"):
+            os.remove(os.path.join(PLATES, f))
     grams = {}
     mpath = os.path.join(OUT, "manifest.json")
     if os.path.exists(mpath):
