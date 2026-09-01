@@ -199,6 +199,35 @@ unaffected and is checked part by part.
 
 ---
 
+## 0d. "Do I need to reprint this?"
+
+The kit is printed piecemeal over days, so after every change the question is never
+what changed but whether the thing already on your shelf is still good. A source diff
+cannot answer that, and neither can the file size — the wall face changed by 82.7 mm³
+out of 85,025, a tenth of a percent, and whether that was worth another four hours came
+down entirely to *where* those 82.7 mm³ were.
+
+```
+python3 reprint.py <git-ref> [part-id ...]
+python3 reprint.py 7726174 01 02
+```
+
+It builds the parts as they were at that commit, compares them against what the current
+source produces, and for a wall face also measures every part that mounts to it against
+**both** walls. Three answers:
+
+| | |
+|---|---|
+| **identical** | keep what you printed |
+| **cosmetic** | the part changed, but nothing that mates with it fits differently |
+| **functional** | something that plugs into it now fits differently — reprint before final assembly; testing on the old one is still fine |
+
+The comparison runs on real solids via BREP, not STL. CadQuery's STL import gives a
+triangulation-only face that does not behave like a solid in a boolean — that is what
+put every part on a plate at the origin once already.
+
+---
+
 ## 1. Print plan
 
 `python3 plates.py` writes these ready-arranged to `out/plates/`, every part already
