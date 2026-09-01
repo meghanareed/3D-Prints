@@ -287,8 +287,17 @@ def _pipe(row, side):
     s = _sc(row)
     h, dia = row["h"] * s, row["dia"] * s
     u, z = row["u"], F.storey_z(row["z"], row["u"])
-    # half-round section, flat back on the bed: no supports, and the layer lines run
-    # along the pipe
+    # Half-round section against the wall, with the crown planed off so the pipe has a
+    # strip to lie on.
+    #
+    # The comment here used to say "flat back on the bed", which it cannot be: the
+    # mounting pegs are ON that back. Flat-back-down rests on two peg tips and
+    # back-up rests on the crown of a 4 mm round, so every orientation gave this part
+    # 4-9 mm^2 of first layer under 100-250 mm^2 of overhang, and all three drainpipes
+    # failed check_bed_contact() whichever way up they went. Planing the crown gives it
+    # a contact strip the length of the pipe; at 4 mm diameter, under paint, from
+    # across a room, nobody is going to see that a downpipe is slightly D-shaped.
+    crown = dia * 0.52
     body = (cq.Workplane("XZ")
             .moveTo(-dia / 2, 0).threePointArc((0, dia * 0.62), (dia / 2, 0))
             .close().extrude(-h))
@@ -297,6 +306,9 @@ def _pipe(row, side):
                 .moveTo(-dia * 0.60, 0).threePointArc((0, dia * 0.74), (dia * 0.60, 0))
                 .close().extrude(-2.2).translate((0, h * k / 4, 0)))
         body = body.union(band)
+    body = body.cut(cq.Workplane("XY")
+                    .box(dia * 3, h + 8, dia, centered=(True, False, False))
+                    .translate((0, -4.0, crown)))
     cuts, adds = [], []
     for zc in (h * 0.2, h * 0.8):
         body = body.union(peg_p1((0.0, zc, 0.0), axis="-Z"))

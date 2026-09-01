@@ -549,8 +549,19 @@ def check_bed_contact():
     tiny = [r for r in rows if r["bed"] < STAND_ON_POINT]
     risky = [r for r in rows if r not in tiny and r["overhang"] > 50.0
              and ratio(r) > 4.0 and r["bed"] < TOO_LITTLE_BASE]
+    # Two more ways to lose a small part, both learned the hard way when 19C and 13As
+    # came off the plate as spaghetti with the slicer's Auto brim enabled:
+    #   * not much base in absolute terms, whatever the ratio says. 19C had 15.4 mm^2.
+    #   * a footprint far narrower than the part is tall, so the nozzle levers it off
+    #     sideways. 13As was 27 x 2.6 mm and 7.3 mm tall.
+    SMALL_BASE = 25.0
+    TIPPY = 2.0
+    def narrow(r):
+        w, d, h = r.get("bbox", [99, 99, 0])
+        return h > TIPPY * max(min(w, d), 0.01)
     brim = [r for r in rows if r not in tiny and r not in risky
-            and r["overhang"] > 50.0 and ratio(r) > 4.0]
+            and ((r["overhang"] > 50.0 and ratio(r) > 4.0)
+                 or r["bed"] < SMALL_BASE or narrow(r))]
     for r in sorted(tiny, key=lambda r: r["bed"]):
         fail(f"{r['id']} {r['name']}: only {r['bed']:.2f} mm^2 on the bed "
              f"({r['overhang']:.0f} mm^2 hanging) -- it stands on a point")
@@ -558,9 +569,12 @@ def check_bed_contact():
         fail(f"{r['id']} {r['name']}: {r['overhang']:.0f} mm^2 of overhang on only "
              f"{r['bed']:.1f} mm^2 of first layer (x{ratio(r):.0f}) -- it will come off "
              "the plate")
-    for r in sorted(brim, key=lambda r: -ratio(r)):
-        warn(f"{r['id']} {r['name']}: {r['overhang']:.0f} mm^2 bridged over "
-             f"{r['bed']:.0f} mm^2 of base (x{ratio(r):.0f}) -- print it with a brim")
+    for r in sorted(brim, key=lambda r: r["bed"]):
+        why = ("only %.0f mm^2 of base" % r["bed"]) if r["bed"] < SMALL_BASE else \
+              ("%.0fx%.0f mm footprint under a %.0f mm height"
+               % (r["bbox"][0], r["bbox"][1], r["bbox"][2])) if narrow(r) else \
+              ("%.0f mm^2 bridged over %.0f" % (r["overhang"], r["bed"]))
+        warn(f"{r['id']} {r['name']}: {why} -- print it with a brim")
     if not tiny and not risky:
         ok(f"all {len(rows)} parts have a first layer that carries what is above it"
            + (f" ({len(brim)} want a brim)" if brim else ""))

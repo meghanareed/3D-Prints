@@ -2,6 +2,7 @@
 """Find a better print orientation for the parts that stand on a point.
 
     python3 orient.py              # every part check_bed_contact() fails
+    python3 orient.py --all        # every part in the kit
     python3 orient.py 04B 45A      # just these
 
 Builds each part once, tries it in every axis-aligned orientation, and measures the
@@ -26,12 +27,29 @@ CANDIDATES = [None,
               ("Z", 90)]
 
 
-def score(bed, overhang):
-    """Lower is better. A part that stands on nothing is hopeless whatever else it
-    scores, so the first term dominates; after that it is overhang per mm^2 of grip."""
+def score(bed, overhang, bbox):
+    """Lower is better.
+
+    Three ways a part fails on the plate, and the first version of this function only
+    knew about one of them:
+
+      1. nothing holding it down. Dominates everything else.
+      2. more hanging in the air than standing on the bed.
+      3. tall and narrow, so the nozzle levers it off sideways -- which scoring on
+         overhang alone actively caused: it stood the chassis base pan on edge, a
+         15 mm wide footprint under 95 mm of height, and the ceiling baffle likewise.
+         Both were fine lying flat.
+
+    Small parts also need enough base in absolute terms; 19C came off the plate as
+    spaghetti with 15.4 mm^2 and the slicer's Auto brim enabled.
+    """
     if bed < 3.0:
         return 1e6 - bed
-    return overhang / bed
+    w, d, h = bbox
+    tippy = h / max(min(w, d), 0.01)
+    return (overhang / bed
+            + 2.0 * max(0.0, tippy - 1.5)
+            + 2.0 * max(0.0, (25.0 - bed) / 25.0))
 
 
 def measure_all(solid, current):
@@ -50,12 +68,17 @@ def measure_all(solid, current):
             if not B.fits_bed(pr):
                 continue
             bed, over = B.bed_and_overhang(pr)
+            bb = pr.val().BoundingBox()
         except Exception:
             continue
         rank = 0 if rot == current else (1 if rot is None else 2)
-        out.append((score(bed, over), rank, rot, bed, over))
+        out.append((score(bed, over, (bb.xlen, bb.ylen, bb.zlen)), rank, rot, bed, over))
     out.sort(key=lambda r: (round(r[0], 6), r[1]))
     return [(a, c, d, e) for a, _, c, d, e in out]
+
+
+def all_ids():
+    return [m["id"] for m in B.manifest()]
 
 
 def failing_ids():
@@ -70,7 +93,11 @@ def failing_ids():
 
 
 def main():
-    want = sys.argv[1:] or failing_ids()
+    want = sys.argv[1:]
+    if want == ["--all"]:
+        want = all_ids()
+    elif not want:
+        want = failing_ids()
     if not want:
         print("nothing to do -- no part is standing on a point")
         return 0

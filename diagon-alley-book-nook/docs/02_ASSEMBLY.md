@@ -228,6 +228,37 @@ put every part on a plate at the origin once already.
 
 ---
 
+## 0e. Brims and stringing
+
+**Set brim type to "Outer brim on all", not Auto.** Auto looked at
+`19C_L_L_Wall_Plaque` (15.4 mm² on the bed) and `13As_L_L_Window_A_Sill` (a 27 × 2.6 mm
+footprint under 7.3 mm of height) and decided neither needed one. Both came off the
+plate as spaghetti. 5 mm width is plenty.
+
+`docs/04_PRINT_CHECKLIST.md` marks every part that wants one — currently 34 of 220 —
+so you can see before you slice which plates matter. The facade plates are mostly
+sub-gram parts; put a brim on the lot.
+
+### Stringing across the window openings
+
+Fine hairs across the open panes are a travel problem, not a geometry one: a window
+frame is a border and a grid of bars, so the nozzle crosses open air on nearly every
+layer. In order of what actually helps:
+
+1. **Dry the filament.** Damp PLA strings no matter what else you change, and fine
+   wispy strings across an opening are its signature.
+2. **Avoid crossing walls** — in Bambu Studio under Quality. It reroutes travel
+   around the openings instead of over them.
+3. **Nozzle 5–10 °C cooler.** 220 is a common default and is hot for most PLA; try
+   210.
+4. **Retraction** 0.8 mm at 30 mm/s for the P2S's direct drive.
+
+Whatever is left pulls off with tweezers or a quick pass of a heat gun on low. It does
+not affect fit — the strings are in the glazing opening, which the glazing insert
+covers.
+
+---
+
 ## 1. Print plan
 
 `python3 plates.py` writes these ready-arranged to `out/plates/`, every part already

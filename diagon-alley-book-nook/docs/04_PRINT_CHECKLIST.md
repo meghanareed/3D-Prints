@@ -59,7 +59,7 @@ off the plate warped or with a bit missing is not printed.
 
 ## `04_chassis.stl`  ---  2 parts, 349 g  (0/2 done)
 
-- [ ] `00` Chassis_Base_Pan (124.9 g)
+- [ ] `00` Chassis_Base_Pan (124.9 g) -- **print with a brim**
 - [ ] `54` Plinth_Body (224.5 g)
 
 ## `05_floor.stl`  ---  4 parts, 87 g  (0/4 done)
@@ -88,18 +88,18 @@ off the plate warped or with a bit missing is not printed.
 - [ ] `07` Front_Bezel_R (16.3 g) -- torn brick edge, the signature part -- prints flat, relief up
 - [ ] `08` Front_Arch_Header (14.5 g)
 
-## `08_case.stl`  ---  6 parts, 136 g  (0/6 done)
+## `08_case.stl`  ---  3 parts, 129 g  (0/3 done)
 
 - [ ] `50` Outer_Left (121.1 g) -- lies flat, 200 x 214 -- never print this on edge
 - [ ] `56` Drawer_Face (7.5 g)
+- [ ] `59G` Foot_Pad_x4 (0.3 g)
+
+## `08_case_2.stl`  ---  4 parts, 128 g  (0/4 done)
+
+- [ ] `51` Outer_Right (121.1 g) -- lies flat
 - [ ] `58A` Case_Spine_Trim_L (3.5 g) -- 214 mm long -- lies down
 - [ ] `58B` Case_Spine_Trim_R (3.5 g) -- 214 mm long -- lies down
 - [ ] `59` Case_Clip_x6 (0.2 g)
-- [ ] `59G` Foot_Pad_x4 (0.3 g)
-
-## `08_case_2.stl`  ---  1 parts, 121 g  (0/1 done)
-
-- [ ] `51` Outer_Right (121.1 g) -- lies flat
 
 ## `08_case_3.stl`  ---  2 parts, 115 g  (0/2 done)
 
@@ -168,7 +168,7 @@ off the plate warped or with a bit missing is not printed.
 - [ ] `14B` L_L_Attic_B_Frame (0.5 g) -- face down, pegs up
 - [ ] `14Bg` L_L_Attic_B_Glazing (0.1 g) -- face down, pegs up
 - [ ] `14Bs` L_L_Attic_B_Sill (0.2 g) -- face down, pegs up
-- [ ] `15A` L_L_Drainpipe_Lower (0.8 g) -- face down, pegs up
+- [ ] `15A` L_L_Drainpipe_Lower (0.7 g) -- face down, pegs up
 - [ ] `15B` L_L_Drainpipe_Upper (0.4 g) -- face down, pegs up
 - [ ] `15C` L_L_Hopper (0.1 g) -- face down, pegs up
 - [ ] `17A` L_L_Cornice_Front (2.2 g) -- face down, pegs up
@@ -190,7 +190,7 @@ off the plate warped or with a bit missing is not printed.
 - [ ] `21Bg` R_R2_Shop_Window_Glazing (0.8 g) -- face down, pegs up
 - [ ] `21Bl` R_R2_Shop_Window_Lintel (0.2 g) -- face down, pegs up
 - [ ] `21D` R_R2_Pilaster_Left (0.8 g) -- face down, pegs up
-- [ ] `21E` R_R2_Pilaster_Right (0.6 g) -- face down, pegs up
+- [ ] `21E` R_R2_Pilaster_Right (0.6 g) -- face down, pegs up; **print with a brim**
 - [ ] `21F` R_R2_Fascia (0.9 g) -- face down, pegs up
 - [ ] `21G` R_R2_Stallriser (0.5 g) -- face down, pegs up
 - [ ] `22A` R_R3_Shop_Window_Frame (0.7 g) -- face down, pegs up
