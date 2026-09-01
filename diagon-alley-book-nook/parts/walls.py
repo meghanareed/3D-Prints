@@ -27,6 +27,11 @@ BEZEL_W  = 16.0          # front torn-brick bezel width
 RIB_W    = 5.0           # lattice rib width
 JOIN_PITCH = 46.0        # face <-> rib T3 joints
 
+# The narrowest strip of plate worth leaving between an aperture and the torn edge.
+# Below about four extrusions the strip is joined by less than one bead and prints as
+# a loose island; the torn edge swallows anything thinner than this.
+MIN_WEB = 1.6
+
 
 def break_profile(z, tag="break", amp=9.0, base=4.0):
     """Jagged front edge: the break steps along whole brick courses, the way a real
@@ -91,12 +96,36 @@ def wall_face(side):
     tag = f"brick_{side}"
     plate = cq.Workplane("XY").box(FACE, WALL_LEN, WALL_H, centered=(False, False, False))
 
-    # torn front edge, as one staircase profile rather than 30 unioned boxes
+    # every element's apertures, recesses and mount sockets -- two booleans total
+    _, cuts, adds, _ = collect(side)
+    cuts = list(cuts)
+    adds = list(adds)
+
+    # Apertures that go right through the plate. The torn edge has to know about these
+    # before it is drawn (see below), so they are collected first.
+    through = []
+    for c in cuts:
+        bb = c.val().BoundingBox()
+        if bb.xmin < FACE - 0.4:
+            through.append((bb.ymin, bb.zmin, bb.zmax))
+
+    # Torn front edge, as one staircase profile rather than 30 unioned boxes.
+    #
+    # A course whose break lands just short of an aperture leaves a web of plate
+    # between the two. If that web is narrower than a couple of extrusions it is joined
+    # to the wall by less than one bead, and the slicer prints it as an island that
+    # falls off the plate -- which is what happened on the first wall face: a 1.0 x 6.7
+    # mm tab beside the window at z 79-86, connected by a neck under 0.4 mm wide. So
+    # when a course would leave a web thinner than MIN_WEB, the break is taken out to
+    # the aperture instead and the window simply opens onto the torn edge.
     course = P.BRICK_HEIGHT_FRONT + P.MORTAR_GAP
     pts, z = [(0.0, 0.0)], 0.0
     while z < WALL_H:
         u = break_profile(z, tag)
         zt = min(z + course, WALL_H)
+        for ay, az0, az1 in through:
+            if az0 < zt and az1 > z and 0.0 < ay - u < MIN_WEB:
+                u = ay
         pts += [(u, z), (u, zt)]
         z = zt
     pts += [(0.0, WALL_H)]
@@ -104,11 +133,6 @@ def wall_face(side):
     step = (cq.Workplane("XY").polyline(pts).close().extrude(FACE * 3)
             .rotate((0, 0, 0), (1, 1, 1), 120).translate((-FACE, 0, 0)))
     plate = plate.cut(step)
-
-    # every element's apertures, recesses and mount sockets -- two booleans total
-    _, cuts, adds, _ = collect(side)
-    cuts = list(cuts)
-    adds = list(adds)
 
     # T3 joints to the service rib, and P2 sockets for the front bezel
     for u in _join_positions():

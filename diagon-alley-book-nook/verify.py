@@ -429,6 +429,81 @@ def check_unsupported_relief():
             ok(f"{side} wall: {a:.2f} mm^2 of relief over a void (nothing to support)")
 
 
+def check_first_layer_islands():
+    """Is the first layer one piece, and is it joined by more than a hair?
+
+    The wall face came off the plate with a 1.0 x 6.7 mm tab beside a window lying
+    loose. The part is a single solid and its first layer is a single connected region,
+    so every check passed -- but the tab was attached by a neck under 0.4 mm wide, and
+    a neck thinner than one extrusion is not a join. The slicer prints it as an island.
+
+    So this rasterizes the first layer and erodes it by half a nozzle. Anything that
+    falls off under that erosion is held on by less than one bead.
+    """
+    print("\n[print] first layer is one piece, joined by more than one extrusion")
+    import numpy as np
+    from scipy import ndimage
+    import build as B
+    from parts import walls as WL
+
+    PIX, NOZZLE, LAYER = 0.1, 0.4, 0.2
+
+    def raster(solid):
+        bb = solid.val().BoundingBox()
+        slab = (cq.Workplane("XY")
+                .box(bb.xlen + 10, bb.ylen + 10, LAYER, centered=(False, False, False))
+                .translate((bb.xmin - 5, bb.ymin - 5, 0.0)))
+        verts, tris = solid.intersect(slab).val().tessellate(0.02)
+        v = np.array([[p.x, p.y, p.z] for p in verts])
+        t = np.array(tris)
+        tri = v[t[np.all(np.abs(v[t][:, :, 2]) < 1e-6, axis=1)]][:, :, :2]
+        w = int(np.ceil(bb.xlen / PIX)) + 2
+        h = int(np.ceil(bb.ylen / PIX)) + 2
+        img = np.zeros((h, w), bool)
+        yy, xx = np.mgrid[0:h, 0:w]
+        px = bb.xmin + (xx + 0.5) * PIX
+        py = bb.ymin + (yy + 0.5) * PIX
+        for a, b, c in tri:
+            lo_x = max(int((min(a[0], b[0], c[0]) - bb.xmin) / PIX) - 1, 0)
+            hi_x = min(int((max(a[0], b[0], c[0]) - bb.xmin) / PIX) + 2, w)
+            lo_y = max(int((min(a[1], b[1], c[1]) - bb.ymin) / PIX) - 1, 0)
+            hi_y = min(int((max(a[1], b[1], c[1]) - bb.ymin) / PIX) + 2, h)
+            if lo_x >= hi_x or lo_y >= hi_y:
+                continue
+            X, Y = px[lo_y:hi_y, lo_x:hi_x], py[lo_y:hi_y, lo_x:hi_x]
+            d = (b[1]-c[1])*(a[0]-c[0]) + (c[0]-b[0])*(a[1]-c[1])
+            if abs(d) < 1e-12:
+                continue
+            l1 = ((b[1]-c[1])*(X-c[0]) + (c[0]-b[0])*(Y-c[1])) / d
+            l2 = ((c[1]-a[1])*(X-c[0]) + (a[0]-c[0])*(Y-c[1])) / d
+            img[lo_y:hi_y, lo_x:hi_x] |= (l1 >= 0) & (l2 >= 0) & (l1 + l2 <= 1)
+        return img, bb
+
+    r = int(round((NOZZLE / 2) / PIX))
+    k = np.ones((2 * r + 1, 2 * r + 1), bool)
+    for side in ("L", "R"):
+        solid = B.drop_to_bed(B.print_orient(WL.wall_face(side), ("Y", -90)))
+        img, bb = raster(solid)
+        _, n = ndimage.label(img)
+        er = ndimage.binary_erosion(img, k)
+        lab, n2 = ndimage.label(er)
+        if n > 1:
+            fail(f"{side} wall face: first layer is {n} separate islands")
+            continue
+        if n2 <= 1:
+            ok(f"{side} wall face: one island, {img.sum()*PIX*PIX:.0f} mm^2, "
+               "nothing hanging by a thread")
+            continue
+        sizes = ndimage.sum(er, lab, range(1, n2 + 1)) * PIX * PIX
+        for i in np.argsort(-sizes)[1:]:
+            ys, xs = np.where(lab == i + 1)
+            fail(f"{side} wall face: {sizes[i]:.1f} mm^2 held on by a neck under "
+                 f"{NOZZLE} mm, at wall height "
+                 f"{-(bb.xmin + xs.max()*PIX):.0f}-{-(bb.xmin + xs.min()*PIX):.0f} mm, "
+                 f"depth {bb.ymin + ys.min()*PIX:.0f}-{bb.ymin + ys.max()*PIX:.0f} mm "
+                 "-- it will print loose")
+
+
 def check_manifest():
     print("\n[build] manifest")
     path = os.path.join(OUT, "manifest.json")
@@ -472,6 +547,7 @@ if __name__ == "__main__":
     check_t3_grip()
     check_paint_handles()
     check_unsupported_relief()
+    check_first_layer_islands()
     check_manifest()
     print(f"\n{len(FAILS)} failures, {len(WARNS)} warnings")
     sys.exit(1 if FAILS else 0)
