@@ -511,6 +511,50 @@ def check_first_layer_islands():
                  "-- it will print loose")
 
 
+def check_bed_contact():
+    """Every part must stand on more than it hangs off.
+
+    Read from the manifest, which build.py fills in by measuring each part in its PRINT
+    orientation. Two ways to fail:
+
+      * almost nothing on the bed -- the part balances on a point and the nozzle knocks
+        it off. Five doors stood on their 1.1 mm doorknob: 0.80 mm^2 of first layer.
+      * far more downward-facing area than first layer -- the slicer calls this a
+        floating cantilever and it is right. The window frame stood on its glazing bars,
+        129.5 mm^2 under 376.8 mm^2 of overhang, and the first anyone knew was a dialog
+        box in Bambu Studio.
+
+    Neither is visible in CAD. Both are perfectly valid geometry.
+    """
+    print("\n[print] parts stand on more than they hang off")
+    path = os.path.join(OUT, "manifest.json")
+    if not os.path.exists(path):
+        warn("no manifest.json -- run build.py first")
+        return
+    rows = [r for r in json.load(open(path))
+            if r.get("status") == "ok" and "bed" in r]
+    if not rows:
+        warn("manifest has no bed/overhang figures -- rebuild with the current build.py")
+        return
+    tiny = [r for r in rows if r["bed"] < 3.0]
+    cantilever = [r for r in rows
+                  if r["overhang"] > 50.0 and r["overhang"] > 4.0 * max(r["bed"], 0.1)]
+    for r in sorted(tiny, key=lambda r: r["bed"]):
+        fail(f"{r['id']} {r['name']}: only {r['bed']:.2f} mm^2 on the bed "
+             f"({r['overhang']:.0f} mm^2 hanging) -- it stands on a point")
+    for r in sorted(cantilever, key=lambda r: -r["overhang"] / max(r["bed"], 0.1)):
+        if r in tiny:
+            continue
+        fail(f"{r['id']} {r['name']}: {r['overhang']:.0f} mm^2 of overhang on "
+             f"{r['bed']:.0f} mm^2 of first layer "
+             f"(x{r['overhang']/max(r['bed'],0.1):.0f}) -- floating cantilever")
+    if not tiny and not cantilever:
+        ok(f"all {len(rows)} parts have a first layer that carries what is above it")
+    else:
+        print(f"        {len(rows) - len(tiny) - len(cantilever)} of {len(rows)} "
+              "parts are fine")
+
+
 def check_manifest():
     print("\n[build] manifest")
     path = os.path.join(OUT, "manifest.json")
@@ -555,6 +599,7 @@ if __name__ == "__main__":
     check_paint_handles()
     check_unsupported_relief()
     check_first_layer_islands()
+    check_bed_contact()
     check_manifest()
     print(f"\n{len(FAILS)} failures, {len(WARNS)} warnings")
     sys.exit(1 if FAILS else 0)

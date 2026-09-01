@@ -30,6 +30,15 @@ FRAME_T   = 2.0      # frame plate thickness
 FRAME_LIP = 3.0      # how far the frame overlaps the aperture on each side
 BAR_W     = 1.2      # glazing bar width
 BAR_PROUD = 0.8
+BEAD_W    = 1.4      # outer moulding, proud by the same amount as the glazing bars.
+                     # Not decoration: the frame prints front-face-DOWN, so whatever
+                     # stands proudest is what touches the bed. With only the bars
+                     # proud, they were the entire first layer -- 129.5 mm^2 -- and the
+                     # frame band landed 0.8 mm up in mid-air, held on where the bar
+                     # ends met it. 376.8 mm^2 of unsupported overhang on 129.5 mm^2 of
+                     # bed, which is what Bambu Studio calls a floating cantilever. A
+                     # proud bead round the outside puts a continuous ring on the bed
+                     # and turns the rest into ordinary short-span bridging.
 
 
 # --------------------------------------------------------------- mounting ----
@@ -86,36 +95,47 @@ def aperture(w, h, thickness, arch=False):
 
 
 # ------------------------------------------------------------------ frames ----
-def window_frame(w, h, cols=2, rows=3, arch=False, style="sash"):
-    """A snap-in frame. Prints front-face-down, pegs up: no supports."""
-    ow, oh = w + 2 * FRAME_LIP, h + 2 * FRAME_LIP
+def _frame_outline(ow, oh, t, arch):
+    """The frame's outer profile, extruded `t` from z=0. Used at full size for the
+    body and inset by BEAD_W for the recessed glazing field."""
     if arch:
-        outer = (cq.Workplane("XY")
-                 .moveTo(-ow / 2, -oh / 2).lineTo(ow / 2, -oh / 2)
-                 .lineTo(ow / 2, oh / 2 - ow / 2)
-                 .threePointArc((0, oh / 2), (-ow / 2, oh / 2 - ow / 2)).close()
-                 .extrude(FRAME_T))
-        inner = aperture(w - 1.0, h - 1.0, FRAME_T, arch=True)
-    else:
-        outer = cq.Workplane("XY").box(ow, oh, FRAME_T, centered=(True, True, False))
-        inner = aperture(w - 1.0, h - 1.0, FRAME_T)
+        return (cq.Workplane("XY")
+                .moveTo(-ow / 2, -oh / 2).lineTo(ow / 2, -oh / 2)
+                .lineTo(ow / 2, oh / 2 - ow / 2)
+                .threePointArc((0, oh / 2), (-ow / 2, oh / 2 - ow / 2)).close()
+                .extrude(t))
+    return cq.Workplane("XY").box(ow, oh, t, centered=(True, True, False))
+
+
+def window_frame(w, h, cols=2, rows=3, arch=False, style="sash"):
+    """A snap-in frame. Prints front-face-down, pegs up: no supports.
+
+    The front face is BAR_PROUD proud at the outer bead and at the glazing bars, and
+    recessed between them -- which is how a real window reads, and is also the only
+    arrangement that prints this part face-down without a floating cantilever.
+    """
+    ow, oh = w + 2 * FRAME_LIP, h + 2 * FRAME_LIP
+    front = FRAME_T + BAR_PROUD
+    outer = _frame_outline(ow, oh, front, arch)
+    inner = aperture(w - 1.0, h - 1.0, front, arch=arch)
     body = outer.cut(inner)
 
-    # glazing rebate on the back
-    reb = (cq.Workplane("XY").box(w + 1.6, h + 1.6, P.DIFFUSER_SLOT_T,
-                                  centered=(True, True, False))
-           .translate((0, 0, FRAME_T - P.DIFFUSER_SLOT_T)))
-    body = body.cut(reb)
+    # recess the glazing field, leaving the outer bead standing proud with the bars
+    bead = min(BEAD_W, (FRAME_LIP + 0.5) * 0.5)
+    if ow - 2 * bead > 2 and oh - 2 * bead > 2:
+        body = body.cut(_frame_outline(ow - 2 * bead, oh - 2 * bead,
+                                       BAR_PROUD + 0.02, arch)
+                        .translate((0, 0, FRAME_T - 0.01)))
 
     # glazing bars, standing proud on the front face
     bars = None
     for i in range(1, cols):
-        b = cq.Workplane("XY").box(BAR_W, h, FRAME_T + BAR_PROUD,
+        b = cq.Workplane("XY").box(BAR_W, h, front,
                                    centered=(True, True, False))
         b = b.translate((-w / 2 + i * w / cols, 0, 0))
         bars = b if bars is None else bars.union(b)
     for j in range(1, rows):
-        b = cq.Workplane("XY").box(w, BAR_W, FRAME_T + BAR_PROUD,
+        b = cq.Workplane("XY").box(w, BAR_W, front,
                                    centered=(True, True, False))
         b = b.translate((0, -h / 2 + j * h / rows, 0))
         bars = b if bars is None else bars.union(b)
@@ -124,10 +144,18 @@ def window_frame(w, h, cols=2, rows=3, arch=False, style="sash"):
 
     if style == "sash":                      # heavier meeting rail
         body = body.union(cq.Workplane("XY")
-                          .box(w, BAR_W * 2.0, FRAME_T + BAR_PROUD,
+                          .box(w, BAR_W * 2.0, front,
                                centered=(True, True, False)))
     if style == "ornate":                    # moulded outer bead
         body = try_fillet(body, ">Z and (not %CIRCLE)", 0.4)
+
+    # Glazing rebate, on the BACK -- cut last, so it also takes the back off the bars
+    # and the glazing sits flush behind them. This used to be cut at FRAME_T - slot,
+    # which is the FRONT face: the docstring said "on the back" and the code put the
+    # rebate, and therefore the glazing, on the side you look at.
+    body = body.cut(cq.Workplane("XY").box(w + 1.6, h + 1.6, P.DIFFUSER_SLOT_T,
+                                           centered=(True, True, False))
+                    .translate((0, 0, -0.01)))
 
     return _mount_pegs(body, w, h)
 
@@ -255,7 +283,8 @@ def bow_window(w, h, proj, facets=5):
 
 # ------------------------------------------------------------------- doors ----
 def door(w, h, panels=4, arch=False, t=2.2):
-    """Panelled door. Prints face-up; panel recesses are shallow, no supports."""
+    """Panelled door. Prints face-DOWN with the rest of the facade; the panel recesses
+    become shallow bridged pockets and nothing needs support."""
     if arch:
         body = (cq.Workplane("XY")
                 .moveTo(-w / 2, -h / 2).lineTo(w / 2, -h / 2).lineTo(w / 2, h / 2 - w / 2)
@@ -270,8 +299,17 @@ def door(w, h, panels=4, arch=False, t=2.2):
             rec = (cq.Workplane("XY").box(pw, ph, 0.7, centered=(True, True, False))
                    .translate((s * w * 0.21, zc, t - 0.7)))
             body = body.cut(rec)
-    body = body.union(cq.Workplane("XY").sphere(1.1)
-                      .translate((w / 2 - 3.0, -h * 0.06, t)))
+    # Door knob, INCISED rather than proud. It used to be a 1.1 mm sphere standing off
+    # the face, and the door prints face-down: the knob was the only thing touching the
+    # bed. 0.80 mm^2 of first layer under 874 mm^2 of overhang -- the whole door landed
+    # in mid-air 1.1 mm up, balanced on one dot. An engraved ring leaves the face dead
+    # flat, prints with no support at all, and takes a wash of paint better than a
+    # sphere does.
+    kx, ky = w / 2 - 3.0, -h * 0.06
+    ring = (cq.Workplane("XY").cylinder(0.5, 2.2, centered=(True, True, False))
+            .cut(cq.Workplane("XY").cylinder(0.5, 1.3, centered=(True, True, False)))
+            .translate((kx, ky, t - 0.5)))
+    body = body.cut(ring)
     return _mount_pegs(body, w - 2 * FRAME_LIP, h - 2 * FRAME_LIP)
 
 

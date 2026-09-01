@@ -32,6 +32,48 @@ PREVIEW = os.path.join(OUT, "preview")
 PLATES = os.path.join(OUT, "plates")
 
 
+def bed_and_overhang(solid, layer=0.25, steep=0.707):
+    """(area of the first layer, area facing down above it) in mm^2.
+
+    Both measured on the part in its PRINT orientation, which is what the slicer sees.
+    A part whose downward-facing area dwarfs its first layer is the one the slicer
+    calls a floating cantilever: the window frame stood on its glazing bars alone,
+    129.5 mm^2 of bed under 376.8 mm^2 of overhang, and the first anyone knew about it
+    was a warning dialog.
+
+    The first layer is measured as a real cross-section, not as "downward-facing faces
+    near z=0". Those are not the same thing, and the difference is not academic: a
+    plate sheared by 5 degrees has a bottom face that is still flat and still
+    downward-facing, but its centroid sits well above the first layer, so counting
+    faces said the ceiling baffle had 0.0 mm^2 on the bed and 11,189 mm^2 of overhang.
+    It rests on one edge, which is a real problem, but not that one.
+    """
+    import numpy as np
+    bb = solid.val().BoundingBox()
+    slab = (cq.Workplane("XY")
+            .box(bb.xlen + 8, bb.ylen + 8, layer, centered=(False, False, False))
+            .translate((bb.xmin - 4, bb.ymin - 4, bb.zmin)))
+    try:
+        first = solid.intersect(slab)
+        bed = (first.val().Volume() / layer) if first.val().Solids() else 0.0
+    except Exception:
+        bed = 0.0
+    verts, tris = solid.val().tessellate(0.02)
+    v = np.array([[p.x, p.y, p.z] for p in verts])
+    t = np.array(tris)
+    if not len(t):
+        return float(bed), 0.0
+    tri = v[t]
+    cr = np.cross(tri[:, 1] - tri[:, 0], tri[:, 2] - tri[:, 0])
+    area = np.linalg.norm(cr, axis=1) / 2.0
+    good = area > 1e-9
+    nz = np.zeros(len(area))
+    nz[good] = cr[good, 2] / (2 * area[good])
+    zc = tri[:, :, 2].mean(axis=1)
+    over = good & (nz < -steep) & (zc > bb.zmin + layer)
+    return float(bed), float(area[over].sum())
+
+
 # =============================================================== the manifest ==
 def manifest():
     """Every printable part: id, name, builder, group, print orientation, colour.
@@ -250,6 +292,7 @@ def main():
 
         pr = drop_to_bed(print_orient(solid, m["print_rot"]))
         bb = pr.val().BoundingBox()
+        bed_a, over_a = bed_and_overhang(pr)
         vol = pr.val().Volume()
         grams = vol * 1.24 / 1000.0
         total_g += grams
@@ -262,6 +305,7 @@ def main():
         report.append(dict(id=m["id"], name=m["name"], group=m["group"],
                            status="ok", grams=round(grams, 1), solids=nsolids,
                            bbox=[round(bb.xlen, 1), round(bb.ylen, 1), round(bb.zlen, 1)],
+                           bed=round(bed_a, 1), overhang=round(over_a, 1),
                            fits_bed=ok_bed, colour=m["colour"], note=m["note"],
                            file=os.path.basename(fn)))
         flag = "" if ok_bed else "  << TOO BIG FOR BED"

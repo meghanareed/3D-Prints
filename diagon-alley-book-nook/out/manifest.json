@@ -11,6 +11,8 @@
    197.1,
    15.0
   ],
+  "bed": 1810.3,
+  "overhang": 17287.9,
   "fits_bed": true,
   "colour": "grey",
   "note": "",
@@ -36,6 +38,8 @@
    193.1,
    3.1
   ],
+  "bed": 31428.1,
+  "overhang": 276.5,
   "fits_bed": true,
   "colour": "brick",
   "note": "print brick-up, no supports",
@@ -61,6 +65,8 @@
    197.1,
    10.0
   ],
+  "bed": 396.9,
+  "overhang": 14984.9,
   "fits_bed": true,
   "colour": "grey",
   "note": "hidden; print flat",
@@ -86,6 +92,8 @@
    193.1,
    3.1
   ],
+  "bed": 32165.7,
+  "overhang": 279.8,
   "fits_bed": true,
   "colour": "brick",
   "note": "print brick-up, no supports",
@@ -111,6 +119,8 @@
    197.1,
    10.0
   ],
+  "bed": 388.1,
+  "overhang": 15695.7,
   "fits_bed": true,
   "colour": "grey",
   "note": "hidden; print flat",
@@ -136,6 +146,8 @@
    170.0,
    22.2
   ],
+  "bed": 9.1,
+  "overhang": 2720.1,
   "fits_bed": true,
   "colour": "brick",
   "note": "lies on its back; 170 mm tall is too tippy upright",
@@ -161,6 +173,8 @@
    42.0,
    9.0
   ],
+  "bed": 189.0,
+  "overhang": 709.5,
   "fits_bed": true,
   "colour": "stone",
   "note": "",
@@ -186,6 +200,8 @@
    48.3,
    5.1
   ],
+  "bed": 6.1,
+  "overhang": 2419.4,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -211,6 +227,8 @@
    87.5,
    20.1
   ],
+  "bed": 1540.0,
+  "overhang": 115.9,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -236,6 +254,8 @@
    68.7,
    11.7
   ],
+  "bed": 3706.8,
+  "overhang": 128.6,
   "fits_bed": true,
   "colour": "black",
   "note": "holds the 59.5 x 8.3 RGB/CCT puck",
@@ -261,6 +281,8 @@
    80.0,
    0.8
   ],
+  "bed": 5760.0,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "white",
   "note": "natural/white PLA, 3 walls, 0 % infill",
@@ -286,6 +308,8 @@
    151.2,
    6.0
   ],
+  "bed": 9114.7,
+  "overhang": 2166.0,
   "fits_bed": true,
   "colour": "stone",
   "note": "",
@@ -311,6 +335,8 @@
    150.6,
    6.1
   ],
+  "bed": 6.1,
+  "overhang": 593.6,
   "fits_bed": true,
   "colour": "stone",
   "note": "",
@@ -336,6 +362,8 @@
    150.6,
    6.1
   ],
+  "bed": 6.1,
+  "overhang": 593.6,
   "fits_bed": true,
   "colour": "stone",
   "note": "",
@@ -361,6 +389,8 @@
    150.1,
    15.5
   ],
+  "bed": 94.6,
+  "overhang": 11189.4,
   "fits_bed": true,
   "colour": "black",
   "note": "its P1 pegs stand 5.1 mm proud -- that is what sets the top of the stack",
@@ -386,6 +416,8 @@
    203.1,
    9.7
   ],
+  "bed": 21.4,
+  "overhang": 2720.4,
   "fits_bed": true,
   "colour": "brick",
   "note": "torn brick edge, the signature part -- prints flat, relief up",
@@ -411,6 +443,8 @@
    203.1,
    9.7
   ],
+  "bed": 21.4,
+  "overhang": 2787.4,
   "fits_bed": true,
   "colour": "brick",
   "note": "torn brick edge, the signature part -- prints flat, relief up",
@@ -436,6 +470,8 @@
    10.7,
    22.0
   ],
+  "bed": 497.4,
+  "overhang": 158.3,
   "fits_bed": true,
   "colour": "brick",
   "note": "",
@@ -461,6 +497,8 @@
    182.8,
    6.0
   ],
+  "bed": 13658.8,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -486,6 +524,8 @@
    43.4,
    16.0
   ],
+  "bed": 315.4,
+  "overhang": 1544.9,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -511,6 +551,8 @@
    23.8,
    0.8
   ],
+  "bed": 657.4,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -536,6 +578,8 @@
    25.5,
    0.8
   ],
+  "bed": 744.0,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -561,6 +605,8 @@
    3.2,
    6.5
   ],
+  "bed": 146.9,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -586,6 +632,8 @@
    9.4,
    6.0
   ],
+  "bed": 334.0,
+  "overhang": 22.7,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -611,6 +659,8 @@
    3.0,
    5.5
   ],
+  "bed": 138.3,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -634,8 +684,10 @@
   "bbox": [
    19.3,
    38.6,
-   6.8
+   5.7
   ],
+  "bed": 440.4,
+  "overhang": 304.6,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -644,7 +696,7 @@
    0.32,
    34.19,
    30.52,
-   7.34,
+   6.34,
    53.55,
    69.12
   ]
@@ -661,6 +713,8 @@
    42.4,
    6.4
   ],
+  "bed": 329.3,
+  "overhang": 4.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -686,6 +740,8 @@
    5.3,
    5.9
   ],
+  "bed": 24.7,
+  "overhang": 43.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -711,6 +767,8 @@
    69.6,
    6.1
   ],
+  "bed": 373.8,
+  "overhang": 101.9,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -736,6 +794,8 @@
    31.7,
    12.8
   ],
+  "bed": 307.0,
+  "overhang": 361.7,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -761,6 +821,8 @@
    18.7,
    0.8
   ],
+  "bed": 297.8,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -786,6 +848,8 @@
    4.6,
    15.3
   ],
+  "bed": 42.8,
+  "overhang": 5.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -811,6 +875,8 @@
    7.0,
    7.2
   ],
+  "bed": 17.6,
+  "overhang": 19.3,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -836,6 +902,8 @@
    9.0,
    9.8
   ],
+  "bed": 71.4,
+  "overhang": 2.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -859,8 +927,10 @@
   "bbox": [
    13.1,
    26.2,
-   6.8
+   5.7
   ],
+  "bed": 203.0,
+  "overhang": 139.2,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -869,7 +939,7 @@
    1.96,
    91.27,
    48.34,
-   8.9,
+   7.89,
    104.42,
    74.5
   ]
@@ -886,6 +956,8 @@
    30.0,
    5.9
   ],
+  "bed": 229.8,
+  "overhang": 2.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -911,6 +983,8 @@
    4.4,
    5.9
   ],
+  "bed": 18.8,
+  "overhang": 20.3,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -936,6 +1010,8 @@
    8.6,
    7.3
   ],
+  "bed": 55.7,
+  "overhang": 129.6,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -961,15 +1037,17 @@
    23.0,
    6.3
   ],
+  "bed": 139.4,
+  "overhang": 147.5,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "12A_L_L3_Shop_Window_Frame.stl",
   "place_bbox": [
    2.76,
-   112.96,
+   112.95,
    55.09,
-   9.31,
+   9.4,
    134.71,
    78.1
   ]
@@ -986,6 +1064,8 @@
    18.2,
    0.8
   ],
+  "bed": 307.7,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1011,6 +1091,8 @@
    2.0,
    5.5
   ],
+  "bed": 46.5,
+  "overhang": 0.1,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1036,6 +1118,8 @@
    4.6,
    5.5
   ],
+  "bed": 60.9,
+  "overhang": 11.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1059,8 +1143,10 @@
   "bbox": [
    8.5,
    15.7,
-   6.8
+   5.7
   ],
+  "bed": 77.3,
+  "overhang": 55.5,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1069,7 +1155,7 @@
    3.31,
    137.56,
    62.33,
-   10.17,
+   9.16,
    146.08,
    78.04
   ]
@@ -1086,6 +1172,8 @@
    19.5,
    5.9
   ],
+  "bed": 148.0,
+  "overhang": 2.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1111,15 +1199,17 @@
    34.7,
    6.8
   ],
+  "bed": 294.4,
+  "overhang": 220.9,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "13A_L_L_Window_A_Frame.stl",
   "place_bbox": [
    -1.2,
-   2.35,
+   2.33,
    86.44,
-   6.11,
+   6.2,
    29.42,
    121.1
   ]
@@ -1136,6 +1226,8 @@
    29.9,
    0.8
   ],
+  "bed": 663.5,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1161,6 +1253,8 @@
    2.6,
    7.3
   ],
+  "bed": 48.6,
+  "overhang": 21.6,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1186,15 +1280,17 @@
    30.4,
    6.8
   ],
+  "bed": 250.1,
+  "overhang": 188.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "13B_L_L_Window_B_Frame.stl",
   "place_bbox": [
    -0.28,
-   34.13,
+   34.11,
    89.14,
-   6.97,
+   7.06,
    57.61,
    119.55
   ]
@@ -1211,6 +1307,8 @@
    25.6,
    0.8
   ],
+  "bed": 477.2,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1236,6 +1334,8 @@
    2.6,
    7.0
   ],
+  "bed": 42.2,
+  "overhang": 18.7,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1261,6 +1361,8 @@
    23.6,
    10.4
   ],
+  "bed": 223.6,
+  "overhang": 209.5,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1286,6 +1388,8 @@
    14.2,
    0.8
   ],
+  "bed": 183.6,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1311,6 +1415,8 @@
    4.6,
    12.9
   ],
+  "bed": 35.8,
+  "overhang": 5.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1336,6 +1442,8 @@
    5.2,
    7.1
   ],
+  "bed": 17.5,
+  "overhang": 10.2,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1361,15 +1469,17 @@
    22.8,
    6.3
   ],
+  "bed": 155.4,
+  "overhang": 133.4,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "13C_L_L_Window_C_Frame.stl",
   "place_bbox": [
    2.27,
-   98.53,
+   98.5,
    93.44,
-   8.79,
+   8.88,
    117.16,
    116.21
   ]
@@ -1386,6 +1496,8 @@
    18.0,
    0.8
   ],
+  "bed": 247.6,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1411,6 +1523,8 @@
    2.6,
    6.3
   ],
+  "bed": 33.4,
+  "overhang": 14.9,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1429,22 +1543,24 @@
   "name": "L_L_Window_D_Frame",
   "group": "facade_L",
   "status": "ok",
-  "grams": 0.5,
+  "grams": 0.6,
   "solids": 1,
   "bbox": [
    15.4,
    18.5,
    6.3
   ],
+  "bed": 112.0,
+  "overhang": 103.4,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "13D_L_L_Window_D_Frame.stl",
   "place_bbox": [
    3.06,
-   126.11,
+   126.08,
    94.85,
-   9.53,
+   9.62,
    141.55,
    113.37
   ]
@@ -1461,6 +1577,8 @@
    13.7,
    0.8
   ],
+  "bed": 145.4,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1486,6 +1604,8 @@
    2.6,
    6.0
   ],
+  "bed": 27.7,
+  "overhang": 12.3,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1511,15 +1631,17 @@
    30.3,
    6.8
   ],
+  "bed": 258.9,
+  "overhang": 192.5,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "13E_L_L_Window_E_Frame.stl",
   "place_bbox": [
    -0.96,
-   11.53,
+   11.5,
    133.16,
-   6.32,
+   6.41,
    36.24,
    163.42
   ]
@@ -1536,6 +1658,8 @@
    25.5,
    0.8
   ],
+  "bed": 505.7,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1561,6 +1685,8 @@
    2.6,
    7.2
   ],
+  "bed": 44.4,
+  "overhang": 19.7,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1586,15 +1712,17 @@
    25.9,
    6.3
   ],
+  "bed": 179.7,
+  "overhang": 156.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "13F_L_L_Window_F_Frame.stl",
   "place_bbox": [
    0.86,
-   51.39,
+   51.37,
    128.66,
-   7.42,
+   7.51,
    72.33,
    154.51
   ]
@@ -1611,6 +1739,8 @@
    21.1,
    0.8
   ],
+  "bed": 338.6,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1636,6 +1766,8 @@
    2.6,
    6.8
   ],
+  "bed": 37.6,
+  "overhang": 16.7,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1661,15 +1793,17 @@
    20.4,
    6.3
   ],
+  "bed": 125.3,
+  "overhang": 117.3,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "13G_L_L_Window_G_Frame.stl",
   "place_bbox": [
    2.03,
-   91.41,
+   91.39,
    124.67,
-   8.52,
+   8.61,
    108.28,
    145.09
   ]
@@ -1686,6 +1820,8 @@
    15.6,
    0.8
   ],
+  "bed": 187.7,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1711,6 +1847,8 @@
    2.6,
    6.4
   ],
+  "bed": 30.3,
+  "overhang": 13.5,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1729,22 +1867,24 @@
   "name": "L_L_Attic_Dormer_Frame",
   "group": "facade_L",
   "status": "ok",
-  "grams": 0.6,
+  "grams": 0.7,
   "solids": 1,
   "bbox": [
    20.4,
    24.0,
    6.3
   ],
+  "bed": 142.4,
+  "overhang": 133.4,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "14A_L_L_Attic_Dormer_Frame.stl",
   "place_bbox": [
    0.07,
-   25.65,
+   25.63,
    169.2,
-   6.62,
+   6.71,
    46.1,
    193.19
   ]
@@ -1761,6 +1901,8 @@
    19.2,
    0.8
   ],
+  "bed": 273.2,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1786,6 +1928,8 @@
    2.6,
    7.1
   ],
+  "bed": 36.7,
+  "overhang": 16.3,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1804,22 +1948,24 @@
   "name": "L_L_Attic_B_Frame",
   "group": "facade_L",
   "status": "ok",
-  "grams": 0.4,
+  "grams": 0.5,
   "solids": 1,
   "bbox": [
    15.8,
    18.1,
    6.3
   ],
+  "bed": 90.1,
+  "overhang": 94.6,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "14B_L_L_Attic_B_Frame.stl",
   "place_bbox": [
    1.66,
-   79.92,
+   79.9,
    155.11,
-   8.13,
+   8.23,
    95.78,
    173.18
   ]
@@ -1836,6 +1982,8 @@
    13.3,
    0.8
   ],
+  "bed": 133.1,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1861,6 +2009,8 @@
    2.6,
    6.5
   ],
+  "bed": 28.5,
+  "overhang": 12.6,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1886,6 +2036,8 @@
    91.6,
    6.1
   ],
+  "bed": 9.0,
+  "overhang": 249.6,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1911,6 +2063,8 @@
    63.3,
    5.7
   ],
+  "bed": 8.3,
+  "overhang": 143.9,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1936,6 +2090,8 @@
    6.3,
    7.6
   ],
+  "bed": 13.4,
+  "overhang": 18.4,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1961,6 +2117,8 @@
    6.0,
    8.5
   ],
+  "bed": 162.0,
+  "overhang": 187.2,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1986,6 +2144,8 @@
    4.7,
    7.4
   ],
+  "bed": 114.1,
+  "overhang": 130.5,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2011,6 +2171,8 @@
    23.5,
    14.3
   ],
+  "bed": 33.0,
+  "overhang": 241.1,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2036,6 +2198,8 @@
    5.5,
    5.7
   ],
+  "bed": 6.5,
+  "overhang": 23.5,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2061,6 +2225,8 @@
    8.2,
    6.4
   ],
+  "bed": 15.4,
+  "overhang": 57.9,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2084,14 +2250,16 @@
   "bbox": [
    21.0,
    43.9,
-   6.8
+   5.7
   ],
+  "bed": 501.4,
+  "overhang": 374.9,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "20B_R_R1_Arched_Door.stl",
   "place_bbox": [
-   88.38,
+   89.39,
    5.34,
    21.28,
    95.44,
@@ -2111,6 +2279,8 @@
    47.7,
    6.4
   ],
+  "bed": 335.7,
+  "overhang": 8.4,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2136,13 +2306,15 @@
    41.3,
    6.8
   ],
+  "bed": 295.5,
+  "overhang": 234.7,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "20E_R_R1_Tall_Window_Frame.stl",
   "place_bbox": [
-   88.05,
-   30.02,
+   87.96,
+   30.0,
    32.02,
    95.31,
    53.73,
@@ -2161,6 +2333,8 @@
    36.5,
    0.8
   ],
+  "bed": 688.6,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2186,6 +2360,8 @@
    2.6,
    7.0
   ],
+  "bed": 42.6,
+  "overhang": 18.9,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2211,6 +2387,8 @@
    7.6,
    6.6
   ],
+  "bed": 14.9,
+  "overhang": 55.7,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2236,6 +2414,8 @@
    69.6,
    6.1
   ],
+  "bed": 373.8,
+  "overhang": 101.9,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2261,13 +2441,15 @@
    31.6,
    6.8
   ],
+  "bed": 211.8,
+  "overhang": 236.2,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "21B_R_R2_Shop_Window_Frame.stl",
   "place_bbox": [
-   87.0,
-   55.25,
+   86.91,
+   55.24,
    39.8,
    94.39,
    88.47,
@@ -2286,6 +2468,8 @@
    26.8,
    0.8
   ],
+  "bed": 759.7,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2311,6 +2495,8 @@
    2.4,
    5.5
   ],
+  "bed": 84.3,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2336,6 +2522,8 @@
    37.4,
    8.0
   ],
+  "bed": 25.3,
+  "overhang": 183.8,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2361,6 +2549,8 @@
    33.0,
    7.6
   ],
+  "bed": 23.3,
+  "overhang": 143.3,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2386,6 +2576,8 @@
    9.0,
    7.8
   ],
+  "bed": 67.9,
+  "overhang": 175.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2411,6 +2603,8 @@
    6.4,
    6.0
   ],
+  "bed": 158.4,
+  "overhang": 15.3,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2436,13 +2630,15 @@
    22.0,
    6.3
   ],
+  "bed": 117.8,
+  "overhang": 139.9,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "22A_R_R3_Shop_Window_Frame.stl",
   "place_bbox": [
-   85.73,
-   109.49,
+   85.63,
+   109.48,
    53.8,
    92.26,
    130.18,
@@ -2461,6 +2657,8 @@
    17.2,
    0.8
   ],
+  "bed": 271.9,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2486,6 +2684,8 @@
    2.0,
    5.5
   ],
+  "bed": 45.2,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2509,14 +2709,16 @@
   "bbox": [
    8.0,
    14.8,
-   6.8
+   5.7
   ],
+  "bed": 69.0,
+  "overhang": 49.1,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "22D_R_R3_Door.stl",
   "place_bbox": [
-   84.86,
+   85.87,
    133.8,
    61.0,
    91.71,
@@ -2536,6 +2738,8 @@
    18.6,
    5.9
   ],
+  "bed": 140.6,
+  "overhang": 2.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2561,6 +2765,8 @@
    31.2,
    13.5
   ],
+  "bed": 304.0,
+  "overhang": 353.6,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2586,6 +2792,8 @@
    18.3,
    0.8
   ],
+  "bed": 292.8,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2611,6 +2819,8 @@
    4.6,
    16.0
   ],
+  "bed": 42.8,
+  "overhang": 5.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2636,6 +2846,8 @@
    6.9,
    7.5
   ],
+  "bed": 18.9,
+  "overhang": 20.2,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2661,13 +2873,15 @@
    29.2,
    6.8
   ],
+  "bed": 238.4,
+  "overhang": 179.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "23A_R_R_Window_A_Frame.stl",
   "place_bbox": [
-   87.46,
-   50.57,
+   87.36,
+   50.54,
    90.58,
    94.7,
    73.16,
@@ -2686,6 +2900,8 @@
    24.4,
    0.8
   ],
+  "bed": 432.2,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2711,6 +2927,8 @@
    2.6,
    6.8
   ],
+  "bed": 40.6,
+  "overhang": 18.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2736,13 +2954,15 @@
    23.0,
    6.3
   ],
+  "bed": 156.0,
+  "overhang": 134.1,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "23B_R_R_Window_B_Frame.stl",
   "place_bbox": [
-   86.54,
-   84.55,
+   86.45,
+   84.53,
    92.09,
    93.06,
    103.15,
@@ -2761,6 +2981,8 @@
    18.2,
    0.8
   ],
+  "bed": 249.7,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2786,6 +3008,8 @@
    2.6,
    6.5
   ],
+  "bed": 33.4,
+  "overhang": 14.8,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2804,20 +3028,22 @@
   "name": "R_R_Window_C_Frame",
   "group": "facade_R",
   "status": "ok",
-  "grams": 0.5,
+  "grams": 0.6,
   "solids": 1,
   "bbox": [
    15.2,
    18.4,
    6.3
   ],
+  "bed": 110.7,
+  "overhang": 102.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "23C_R_R_Window_C_Frame.stl",
   "place_bbox": [
-   85.68,
-   116.23,
+   85.58,
+   116.2,
    93.81,
    92.14,
    131.44,
@@ -2836,6 +3062,8 @@
    13.6,
    0.8
   ],
+  "bed": 141.2,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2861,6 +3089,8 @@
    2.6,
    6.1
   ],
+  "bed": 27.3,
+  "overhang": 12.1,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2879,20 +3109,22 @@
   "name": "R_R_Window_D_Frame",
   "group": "facade_R",
   "status": "ok",
-  "grams": 1.2,
+  "grams": 1.1,
   "solids": 1,
   "bbox": [
    24.9,
    30.5,
    6.8
   ],
+  "bed": 261.7,
+  "overhang": 194.7,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "23D_R_R_Window_D_Frame.stl",
   "place_bbox": [
-   88.7,
-   7.42,
+   88.61,
+   7.39,
    133.47,
    95.98,
    32.35,
@@ -2911,6 +3143,8 @@
    25.7,
    0.8
   ],
+  "bed": 517.2,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2936,6 +3170,8 @@
    2.6,
    7.3
   ],
+  "bed": 44.8,
+  "overhang": 19.9,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2961,13 +3197,15 @@
    25.3,
    6.3
   ],
+  "bed": 174.1,
+  "overhang": 151.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "23E_R_R_Window_E_Frame.stl",
   "place_bbox": [
-   87.61,
-   47.72,
+   87.52,
+   47.69,
    128.94,
    94.16,
    68.02,
@@ -2986,6 +3224,8 @@
    20.5,
    0.8
   ],
+  "bed": 316.4,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -3011,6 +3251,8 @@
    2.6,
    6.9
   ],
+  "bed": 36.5,
+  "overhang": 16.2,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -3029,20 +3271,22 @@
   "name": "R_R_Window_F_Frame",
   "group": "facade_R",
   "status": "ok",
-  "grams": 0.5,
+  "grams": 0.6,
   "solids": 1,
   "bbox": [
    16.3,
    19.9,
    6.3
   ],
+  "bed": 121.0,
+  "overhang": 112.8,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "23F_R_R_Window_F_Frame.stl",
   "place_bbox": [
-   86.51,
-   87.7,
+   86.42,
+   87.67,
    124.92,
    93.0,
    104.0,
@@ -3061,6 +3305,8 @@
    15.1,
    0.8
   ],
+  "bed": 173.1,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -3086,6 +3332,8 @@
    2.6,
    6.4
   ],
+  "bed": 29.3,
+  "overhang": 13.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -3111,13 +3359,15 @@
    22.7,
    6.3
   ],
+  "bed": 133.0,
+  "overhang": 123.7,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "23G_R_R_Attic_A_Frame.stl",
   "place_bbox": [
-   88.06,
-   34.27,
+   87.97,
+   34.24,
    167.47,
    94.58,
    53.48,
@@ -3136,6 +3386,8 @@
    17.9,
    0.8
   ],
+  "bed": 234.5,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -3161,6 +3413,8 @@
    2.6,
    7.0
   ],
+  "bed": 34.5,
+  "overhang": 15.3,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -3186,13 +3440,15 @@
    17.0,
    6.3
   ],
+  "bed": 83.6,
+  "overhang": 86.7,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "23H_R_R_Attic_B_Frame.stl",
   "place_bbox": [
-   86.54,
-   88.43,
+   86.44,
+   88.4,
    153.48,
    93.0,
    103.27,
@@ -3211,6 +3467,8 @@
    12.2,
    0.8
   ],
+  "bed": 111.0,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -3236,6 +3494,8 @@
    2.6,
    6.4
   ],
+  "bed": 26.6,
+  "overhang": 11.8,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -3261,6 +3521,8 @@
    74.9,
    5.6
   ],
+  "bed": 7.9,
+  "overhang": 159.3,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -3286,6 +3548,8 @@
    52.7,
    5.2
   ],
+  "bed": 7.3,
+  "overhang": 94.2,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -3311,6 +3575,8 @@
    4.6,
    6.5
   ],
+  "bed": 9.1,
+  "overhang": 8.8,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -3336,6 +3602,8 @@
    6.0,
    8.5
   ],
+  "bed": 157.8,
+  "overhang": 182.4,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -3361,6 +3629,8 @@
    4.7,
    7.4
   ],
+  "bed": 118.2,
+  "overhang": 135.2,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -3386,6 +3656,8 @@
    15.6,
    11.7
   ],
+  "bed": 24.8,
+  "overhang": 107.8,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -3411,6 +3683,8 @@
    4.7,
    5.6
   ],
+  "bed": 4.8,
+  "overhang": 17.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -3436,6 +3710,8 @@
    6.3,
    6.0
   ],
+  "bed": 9.3,
+  "overhang": 34.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -3461,6 +3737,8 @@
    47.3,
    6.5
   ],
+  "bed": 76.7,
+  "overhang": 404.6,
   "fits_bed": true,
   "colour": "iron",
   "note": "face down, pegs up",
@@ -3486,6 +3764,8 @@
    14.9,
    2.3
   ],
+  "bed": 50.7,
+  "overhang": 247.6,
   "fits_bed": true,
   "colour": "iron",
   "note": "face down, pegs up",
@@ -3511,6 +3791,8 @@
    13.3,
    2.3
   ],
+  "bed": 30.2,
+  "overhang": 191.7,
   "fits_bed": true,
   "colour": "iron",
   "note": "face down, pegs up",
@@ -3536,6 +3818,8 @@
    14.3,
    6.3
   ],
+  "bed": 35.6,
+  "overhang": 136.0,
   "fits_bed": true,
   "colour": "iron",
   "note": "face down, pegs up",
@@ -3561,6 +3845,8 @@
    6.4,
    5.8
   ],
+  "bed": 22.8,
+  "overhang": 172.5,
   "fits_bed": true,
   "colour": "iron",
   "note": "face down, pegs up",
@@ -3586,6 +3872,8 @@
    4.7,
    5.8
   ],
+  "bed": 5.6,
+  "overhang": 57.2,
   "fits_bed": true,
   "colour": "iron",
   "note": "face down, pegs up",
@@ -3611,6 +3899,8 @@
    4.3,
    5.8
   ],
+  "bed": 6.8,
+  "overhang": 33.5,
   "fits_bed": true,
   "colour": "iron",
   "note": "face down, pegs up",
@@ -3636,6 +3926,8 @@
    4.3,
    5.8
   ],
+  "bed": 6.8,
+  "overhang": 33.5,
   "fits_bed": true,
   "colour": "iron",
   "note": "face down, pegs up",
@@ -3661,6 +3953,8 @@
    4.3,
    5.8
   ],
+  "bed": 6.5,
+  "overhang": 30.8,
   "fits_bed": true,
   "colour": "iron",
   "note": "face down, pegs up",
@@ -3686,6 +3980,8 @@
    4.3,
    5.8
   ],
+  "bed": 4.3,
+  "overhang": 32.9,
   "fits_bed": true,
   "colour": "iron",
   "note": "face down, pegs up",
@@ -3711,6 +4007,8 @@
    7.9,
    2.3
   ],
+  "bed": 6.7,
+  "overhang": 52.1,
   "fits_bed": true,
   "colour": "iron",
   "note": "face down, pegs up",
@@ -3736,6 +4034,8 @@
    5.3,
    5.8
   ],
+  "bed": 14.5,
+  "overhang": 115.7,
   "fits_bed": true,
   "colour": "iron",
   "note": "face down, pegs up",
@@ -3761,6 +4061,8 @@
    16.0,
    1.8
   ],
+  "bed": 348.4,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "iron",
   "note": "blank spare -- face down, pegs up",
@@ -3778,6 +4080,8 @@
    19.0,
    6.3
   ],
+  "bed": 45.6,
+  "overhang": 252.1,
   "fits_bed": true,
   "colour": "iron",
   "note": "blank spare -- face down, pegs up",
@@ -3795,6 +4099,8 @@
    6.0,
    5.3
   ],
+  "bed": 79.9,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "iron",
   "note": "blank spare -- face down, pegs up",
@@ -3812,6 +4118,8 @@
    8.0,
    5.3
   ],
+  "bed": 304.0,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "iron",
   "note": "blank spare -- face down, pegs up",
@@ -3829,6 +4137,8 @@
    2.6,
    17.6
   ],
+  "bed": 6.2,
+  "overhang": 60.9,
   "fits_bed": true,
   "colour": "iron",
   "note": "face down, pegs up",
@@ -3854,6 +4164,8 @@
    2.6,
    15.7
   ],
+  "bed": 6.2,
+  "overhang": 54.3,
   "fits_bed": true,
   "colour": "iron",
   "note": "face down, pegs up",
@@ -3879,6 +4191,8 @@
    2.6,
    12.6
   ],
+  "bed": 6.2,
+  "overhang": 40.8,
   "fits_bed": true,
   "colour": "iron",
   "note": "face down, pegs up",
@@ -3904,6 +4218,8 @@
    2.6,
    8.2
   ],
+  "bed": 6.2,
+  "overhang": 17.1,
   "fits_bed": true,
   "colour": "iron",
   "note": "face down, pegs up",
@@ -3929,6 +4245,8 @@
    13.6,
    1.7
   ],
+  "bed": 17.5,
+  "overhang": 14.2,
   "fits_bed": true,
   "colour": "iron",
   "note": "blank spare -- face down, pegs up",
@@ -3946,6 +4264,8 @@
    9.4,
    1.7
   ],
+  "bed": 8.8,
+  "overhang": 15.3,
   "fits_bed": true,
   "colour": "iron",
   "note": "blank spare -- face down, pegs up",
@@ -3963,6 +4283,8 @@
    4.0,
    11.5
   ],
+  "bed": 3.1,
+  "overhang": 14.9,
   "fits_bed": true,
   "colour": "iron",
   "note": "blank spare -- face down, pegs up",
@@ -3980,6 +4302,8 @@
    11.2,
    18.3
   ],
+  "bed": 2.5,
+  "overhang": 211.3,
   "fits_bed": true,
   "colour": "iron",
   "note": "face down, pegs up",
@@ -4005,6 +4329,8 @@
    8.1,
    13.2
   ],
+  "bed": 2.5,
+  "overhang": 139.7,
   "fits_bed": true,
   "colour": "iron",
   "note": "face down, pegs up",
@@ -4030,6 +4356,8 @@
    7.4,
    8.7
   ],
+  "bed": 2.5,
+  "overhang": 63.7,
   "fits_bed": true,
   "colour": "iron",
   "note": "face down, pegs up",
@@ -4055,6 +4383,8 @@
    14.0,
    17.0
   ],
+  "bed": 86.0,
+  "overhang": 104.2,
   "fits_bed": true,
   "colour": "wood",
   "note": "",
@@ -4080,6 +4410,8 @@
    10.8,
    13.0
   ],
+  "bed": 51.1,
+  "overhang": 63.7,
   "fits_bed": true,
   "colour": "wood",
   "note": "",
@@ -4105,6 +4437,8 @@
    11.1,
    16.0
   ],
+  "bed": 120.0,
+  "overhang": 195.1,
   "fits_bed": true,
   "colour": "wood",
   "note": "",
@@ -4130,6 +4464,8 @@
    8.0,
    7.0
   ],
+  "bed": 72.0,
+  "overhang": 57.1,
   "fits_bed": true,
   "colour": "wood",
   "note": "",
@@ -4155,6 +4491,8 @@
    13.1,
    10.3
   ],
+  "bed": 71.8,
+  "overhang": 117.3,
   "fits_bed": true,
   "colour": "wood",
   "note": "",
@@ -4180,6 +4518,8 @@
    26.0,
    4.7
   ],
+  "bed": 88.3,
+  "overhang": 77.5,
   "fits_bed": true,
   "colour": "wood",
   "note": "",
@@ -4205,6 +4545,8 @@
    9.4,
    17.4
   ],
+  "bed": 69.8,
+  "overhang": 52.5,
   "fits_bed": true,
   "colour": "wood",
   "note": "",
@@ -4230,6 +4572,8 @@
    17.0,
    5.5
   ],
+  "bed": 114.6,
+  "overhang": 259.4,
   "fits_bed": true,
   "colour": "wood",
   "note": "",
@@ -4255,6 +4599,8 @@
    9.7,
    0.8
   ],
+  "bed": 129.7,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "",
@@ -4280,6 +4626,8 @@
    6.0,
    3.0
   ],
+  "bed": 108.0,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "",
@@ -4305,6 +4653,8 @@
    11.0,
    2.0
   ],
+  "bed": 154.0,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "",
@@ -4330,6 +4680,8 @@
    2.0,
    6.0
   ],
+  "bed": 12.6,
+  "overhang": 8.3,
   "fits_bed": true,
   "colour": "wood",
   "note": "",
@@ -4355,6 +4707,8 @@
    14.0,
    6.0
   ],
+  "bed": 168.0,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4372,6 +4726,8 @@
    16.0,
    6.0
   ],
+  "bed": 224.0,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4389,6 +4745,8 @@
    12.0,
    5.0
   ],
+  "bed": 120.0,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4406,6 +4764,8 @@
    18.0,
    7.0
   ],
+  "bed": 288.0,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4423,6 +4783,8 @@
    10.0,
    5.0
   ],
+  "bed": 90.0,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4440,6 +4802,8 @@
    20.0,
    7.0
   ],
+  "bed": 360.0,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4457,6 +4821,8 @@
    45.4,
    4.7
   ],
+  "bed": 6.1,
+  "overhang": 1507.6,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4474,6 +4840,8 @@
    45.4,
    4.7
   ],
+  "bed": 6.1,
+  "overhang": 1507.6,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4491,6 +4859,8 @@
    45.4,
    4.7
   ],
+  "bed": 6.1,
+  "overhang": 1507.6,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4508,6 +4878,8 @@
    9.5,
    4.9
   ],
+  "bed": 6.1,
+  "overhang": 759.8,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4525,6 +4897,8 @@
    8.8,
    3.8
   ],
+  "bed": 115.2,
+  "overhang": 343.7,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4542,6 +4916,8 @@
    9.1,
    1.0
   ],
+  "bed": 220.5,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4559,6 +4935,8 @@
    11.0,
    3.0
   ],
+  "bed": 290.5,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4576,6 +4954,8 @@
    213.8,
    5.2
   ],
+  "bed": 1482.6,
+  "overhang": 40883.2,
   "fits_bed": true,
   "colour": "black",
   "note": "lies flat, 200 x 214 -- never print this on edge",
@@ -4601,6 +4981,8 @@
    213.8,
    5.2
   ],
+  "bed": 1482.6,
+  "overhang": 40883.2,
   "fits_bed": true,
   "colour": "black",
   "note": "lies flat",
@@ -4626,6 +5008,8 @@
    200.0,
    6.2
   ],
+  "bed": 1200.0,
+  "overhang": 18800.0,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4651,6 +5035,8 @@
    213.3,
    6.2
   ],
+  "bed": 188.6,
+  "overhang": 19466.8,
   "fits_bed": true,
   "colour": "black",
   "note": "service hatch -- pops off for LED access",
@@ -4676,6 +5062,8 @@
    200.0,
    28.0
   ],
+  "bed": 19649.5,
+  "overhang": 29974.0,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4701,6 +5089,8 @@
    150.0,
    18.0
   ],
+  "bed": 12863.7,
+  "overhang": 486.2,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4726,6 +5116,8 @@
    23.0,
    6.5
   ],
+  "bed": 6.1,
+  "overhang": 2006.7,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4751,6 +5143,8 @@
    67.2,
    9.4
   ],
+  "bed": 2096.6,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4768,6 +5162,8 @@
    213.8,
    7.5
   ],
+  "bed": 6.1,
+  "overhang": 1058.1,
   "fits_bed": true,
   "colour": "black",
   "note": "214 mm long -- lies down",
@@ -4785,6 +5181,8 @@
    213.8,
    7.5
   ],
+  "bed": 6.1,
+  "overhang": 1058.1,
   "fits_bed": true,
   "colour": "black",
   "note": "214 mm long -- lies down",
@@ -4802,6 +5200,8 @@
    4.0,
    2.9
   ],
+  "bed": 80.0,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4819,6 +5219,8 @@
    9.1,
    3.6
   ],
+  "bed": 65.0,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4836,6 +5238,8 @@
    17.0,
    24.0
   ],
+  "bed": 476.0,
+  "overhang": 438.3,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4853,6 +5257,8 @@
    23.4,
    5.0
   ],
+  "bed": 781.6,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4870,6 +5276,8 @@
    18.0,
    5.5
   ],
+  "bed": 6.1,
+  "overhang": 183.7,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4887,6 +5295,8 @@
    18.0,
    5.5
   ],
+  "bed": 6.1,
+  "overhang": 373.0,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4904,6 +5314,8 @@
    18.0,
    5.5
   ],
+  "bed": 6.1,
+  "overhang": 336.5,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4921,6 +5333,8 @@
    18.0,
    5.5
   ],
+  "bed": 6.1,
+  "overhang": 459.2,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4938,6 +5352,8 @@
    18.0,
    5.5
   ],
+  "bed": 6.1,
+  "overhang": 402.5,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4955,6 +5371,8 @@
    14.0,
    12.9
   ],
+  "bed": 6.1,
+  "overhang": 355.2,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4972,6 +5390,8 @@
    15.5,
    14.0
   ],
+  "bed": 224.0,
+  "overhang": 17.9,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4989,6 +5409,8 @@
    34.0,
    6.5
   ],
+  "bed": 3504.0,
+  "overhang": 30.0,
   "fits_bed": true,
   "colour": "white",
   "note": "",
@@ -5006,6 +5428,8 @@
    24.0,
    8.0
   ],
+  "bed": 1942.0,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "white",
   "note": "",
@@ -5023,6 +5447,8 @@
    62.0,
    23.0
   ],
+  "bed": 7440.0,
+  "overhang": 25.8,
   "fits_bed": true,
   "colour": "white",
   "note": "",
@@ -5040,6 +5466,8 @@
    17.5,
    17.5
   ],
+  "bed": 1788.0,
+  "overhang": 9.0,
   "fits_bed": true,
   "colour": "white",
   "note": "",
@@ -5057,6 +5485,8 @@
    12.3,
    21.5
   ],
+  "bed": 1304.8,
+  "overhang": 823.6,
   "fits_bed": true,
   "colour": "white",
   "note": "",
@@ -5074,6 +5504,8 @@
    55.0,
    2.1
   ],
+  "bed": 4950.0,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "white",
   "note": "",
@@ -5091,6 +5523,8 @@
    42.0,
    1.6
   ],
+  "bed": 470.6,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "white",
   "note": "",
@@ -5108,6 +5542,8 @@
    40.0,
    1.6
   ],
+  "bed": 511.4,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "white",
   "note": "",
@@ -5125,6 +5561,8 @@
    34.0,
    1.6
   ],
+  "bed": 402.6,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "white",
   "note": "",
@@ -5142,6 +5580,8 @@
    48.0,
    1.6
   ],
+  "bed": 470.6,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "white",
   "note": "",
