@@ -69,13 +69,16 @@ def check_fits():
         b = ribbed.intersect(placed)
         foul = a.val().Volume() if a.val().Solids() else 0.0
         grip = (b.val().Volume() if b.val().Solids() else 0.0) - foul
+        # 11A used to be exempt from the grip test, because T3 had no grip to test --
+        # it relied on a detent that measured 0.008 mm^3. Now that T3 carries the same
+        # crush ribs as P1 and P2, it is held to the same standard. An exemption that
+        # outlives its reason is how a regression hides.
         if foul > 0.05:
             fail(f"{rid} {what}: part fouls the wall by {foul:.2f} mm^3 -- will not seat")
-        elif grip < 0.05 and rid != "11A":
+        elif grip < 0.05:
             fail(f"{rid} {what}: no crush-rib grip, the part will fall out")
         else:
-            note = "detent retained" if rid == "11A" else f"grip {grip:.2f} mm^3"
-            ok(f"{rid} {what}: clears the bore, {note}")
+            ok(f"{rid} {what}: clears the bore, grip {grip:.2f} mm^3")
 
 
 def check_all_mates():
@@ -144,9 +147,13 @@ def check_clearance_sanity():
         fail("LEAD_IN_CHAMFER is 0: sockets will be undersize after elephant's foot "
              "and the kit will not assemble")
     else:
-        ok(f"lead-in {P.LEAD_IN_CHAMFER}, clearances "
-           f"{P.FIT_CLEARANCE}/{P.DECORATIVE_CLEARANCE}, "
+        ok(f"lead-in {P.LEAD_IN_CHAMFER}, press/decorative/slide clearances "
+           f"{P.FIT_CLEARANCE}/{P.DECORATIVE_CLEARANCE}/{P.T3_CLEARANCE}, "
            f"rib bite {P.CRUSH_INTERFERENCE}")
+    if P.T3_CLEARANCE < P.FIT_CLEARANCE:
+        warn(f"T3_CLEARANCE {P.T3_CLEARANCE} is tighter than FIT_CLEARANCE "
+             f"{P.FIT_CLEARANCE} -- a joint you slide should not be tighter than one "
+             "you press")
 
 
 def check_light_block():
@@ -353,10 +360,10 @@ def check_joint_coupon():
 def check_t3_grip():
     """T3 is what holds every wall face to its rib. It must grip like P1 and P2 do."""
     print("\n[fit] T3 crush-rib grip across the usable clearance range")
-    real = (P.DECORATIVE_CLEARANCE, P.FIT_CLEARANCE)
+    real = P.T3_CLEARANCE
     try:
         for v in (0.15, 0.20, 0.25, 0.30, 0.35, 0.40):
-            P.DECORATIVE_CLEARANCE = P.FIT_CLEARANCE = v
+            P.T3_CLEARANCE = v
             plate = cq.Workplane("XY").box(40, 20, 8, centered=(True, True, False))
             cut, ribs = MT.groove_t3_solids((0, 0, 8), 24.0, axis="-Z")
             plate = plate.cut(cut).union(ribs)
@@ -369,7 +376,7 @@ def check_t3_grip():
             else:
                 ok(f"T3 at clearance {v:.2f}: grip {g:.2f} mm^3")
     finally:
-        P.DECORATIVE_CLEARANCE, P.FIT_CLEARANCE = real
+        P.T3_CLEARANCE = real
 
 
 def check_paint_handles():

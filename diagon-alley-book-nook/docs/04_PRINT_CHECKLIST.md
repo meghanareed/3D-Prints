@@ -41,9 +41,9 @@ off the plate warped or with a bit missing is not printed.
 - [ ] `74A` Joint_Test_Block (56.7 g)
 - [ ] `74B` Joint_Test_Pieces (9.9 g)
 
-## `02_wall_face_LEFT.stl`  ---  1 parts, 106 g  (0/1 done)
+## `02_wall_face_LEFT.stl`  ---  1 parts, 105 g  (0/1 done)
 
-- [ ] `01` L_Wall_Face (105.5 g) -- print brick-up, no supports
+- [ ] `01` L_Wall_Face (105.4 g) -- print brick-up, no supports
 
 ## `02_wall_face_RIGHT.stl`  ---  1 parts, 108 g  (0/1 done)
 
@@ -57,9 +57,9 @@ off the plate warped or with a bit missing is not printed.
 
 - [ ] `02R` R_Wall_Rib (61.8 g) -- hidden; print flat
 
-## `04_chassis.stl`  ---  2 parts, 350 g  (0/2 done)
+## `04_chassis.stl`  ---  2 parts, 349 g  (0/2 done)
 
-- [ ] `00` Chassis_Base_Pan (125.0 g)
+- [ ] `00` Chassis_Base_Pan (124.9 g)
 - [ ] `54` Plinth_Body (224.5 g)
 
 ## `05_floor.stl`  ---  4 parts, 87 g  (0/4 done)

@@ -144,10 +144,19 @@ rotation, not a mirror, so the printed piece is exactly the one the checks measu
 * **C4** — a click you can hear. Then, pulling straight back, the cap should not come off
   under finger pressure. If it lifts off cleanly, the barb never engaged.
 
-If `T3 0.30` and `C4 0.30` feel right rather than `0.25`, set `FIT_CLEARANCE = 0.30` in
-`params.py` and rebuild. Grip is sized *from* the clearance for both joints, so the
-retention numbers do not change when you do — `verify.py` checks that across 0.15–0.40 on
-every build.
+The two joints are set independently, because they did not come out the same:
+
+```python
+FIT_CLEARANCE = 0.25   # P1, P2 and C4 -- the press and snap mounts
+T3_CLEARANCE  = 0.30   # T3 -- the sliding tongues
+```
+
+*Both already set in this repo, from a printed coupon on a Bambu P2S in PLA: the C4
+snap was right at 0.25 and the T3 tongue at 0.30.* A joint you **slide** wants more room
+than one you **press** — that is the whole reason this coupon has four stations instead
+of two. Grip is sized *from* the clearance for both joints, so moving either number does
+not change how hard the joint holds; `verify.py` checks that across 0.15–0.40 on every
+build.
 
 ---
 

@@ -4,7 +4,7 @@
   "name": "Chassis_Base_Pan",
   "group": "structure",
   "status": "ok",
-  "grams": 125.0,
+  "grams": 124.9,
   "solids": 1,
   "bbox": [
    94.9,
@@ -29,7 +29,7 @@
   "name": "L_Wall_Face",
   "group": "structure",
   "status": "ok",
-  "grams": 105.5,
+  "grams": 105.4,
   "solids": 1,
   "bbox": [
    203.1,

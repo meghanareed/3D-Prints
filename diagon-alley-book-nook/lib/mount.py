@@ -232,7 +232,10 @@ def groove_t3_solids(point, length, axis="+Z", rot=0.0, decorative=False, extra=
     to the base pan. The ribs below are the same ones P1 and P2 use; the detent is now
     just the click that tells you the tongue is home.
     """
-    c = _clear(decorative)
+    # T3 runs on its own clearance: it is a sliding joint, and the printed coupon put
+    # it a step looser than the press and snap mounts. `decorative` still overrides,
+    # for the few decorative parts that carry a tongue.
+    c = P.DECORATIVE_CLEARANCE if decorative else P.T3_CLEARANCE
     depth = T3_D + extra + c
     g = cq.Workplane("XY").box(length + 2 * c, T3_W + 2 * c, depth,
                                centered=(True, True, False))
@@ -515,6 +518,28 @@ def _jc_x(i):
     return JC_STATION_W * (i + 0.5)
 
 
+def _jc_save():
+    return (P.DECORATIVE_CLEARANCE, P.FIT_CLEARANCE, P.T3_CLEARANCE)
+
+
+def _jc_restore(saved):
+    P.DECORATIVE_CLEARANCE, P.FIT_CLEARANCE, P.T3_CLEARANCE = saved
+
+
+def _jc_set(kind, v):
+    """Each station drives the parameter its own joint actually reads.
+
+    These used to be set together, which was fine while every joint shared one
+    clearance and wrong the moment the printed coupon said C4 wanted 0.25 and T3
+    wanted 0.30. A station that does not move the number its joint reads is testing
+    nothing.
+    """
+    if kind == "T3":
+        P.T3_CLEARANCE = v
+    else:
+        P.FIT_CLEARANCE = v
+
+
 def _jc_clip_geometry(i):
     """Where station `i`'s clip lives: (x, y of the beam centre, z of its root).
 
@@ -534,10 +559,10 @@ def joint_coupon():
     """
     block = cq.Workplane("XY").box(JC_W, JC_H, JC_T, centered=(False, False, False))
     adds, cuts = [], []
-    real = (P.DECORATIVE_CLEARANCE, P.FIT_CLEARANCE)
+    real = _jc_save()
     try:
         for i, (kind, v) in enumerate(JC_STATIONS):
-            P.DECORATIVE_CLEARANCE = P.FIT_CLEARANCE = v
+            _jc_set(kind, v)
             cx = _jc_x(i)
             if kind == "T3":
                 cut, ribs = groove_t3_solids((cx, JC_T3_Y, JC_T), JC_T3_LEN, axis="-Z")
@@ -562,7 +587,7 @@ def joint_coupon():
             # that is exactly what went wrong on the first coupon
             block = _label(block, f"{kind} {v:.2f}", cx, 6.0, JC_T, size=4.2)
     finally:
-        P.DECORATIVE_CLEARANCE, P.FIT_CLEARANCE = real
+        _jc_restore(real)
     for c in cuts:
         block = block.cut(c)
     for a in adds:
@@ -578,9 +603,9 @@ def jc_piece(i):
     """
     kind, v = JC_STATIONS[i]
     cx = _jc_x(i)
-    real = (P.DECORATIVE_CLEARANCE, P.FIT_CLEARANCE)
+    real = _jc_save()
     try:
-        P.DECORATIVE_CLEARANCE = P.FIT_CLEARANCE = v
+        _jc_set(kind, v)
         if kind == "T3":
             tab = cq.Workplane("XY").box(JC_TAB_W, JC_TAB_H, JC_TAB_T,
                                          centered=(True, True, False)) \
@@ -601,7 +626,7 @@ def jc_piece(i):
                         .translate((cx, far, z - C4_L)))
         return cap
     finally:
-        P.DECORATIVE_CLEARANCE, P.FIT_CLEARANCE = real
+        _jc_restore(real)
 
 
 def joint_coupon_pieces():
