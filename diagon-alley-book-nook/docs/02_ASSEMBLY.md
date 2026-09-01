@@ -101,6 +101,95 @@ The crush ribs give you some margin, but not that much.
 
 ---
 
+## 0b. Second calibration print — the two joints that carry the model
+
+**Print `74A_Joint_Test_Block` and `74B_Joint_Test_Pieces` (plate `01_CALIBRATE_JOINTS`)
+before you print the outer case.**
+
+The first coupon tests P1 and P2 — the decorative mounts, which hold windows, signs and
+ornaments on. It does not touch the two joints that hold the *model* together:
+
+* **T3**, the sliding tongue that fixes every wall face to its service rib, the floor to
+  the base pan, and every projecting bay to its wall.
+* **C4**, the cantilever snap that is the only thing holding the outer case together —
+  about 750 g of parts.
+
+Both of these were wrong, and both looked perfect in CAD:
+
+| | What was there | What it measured |
+|---|---|---|
+| C4 | the clip lay in a rectangular pocket 0.5 mm larger than itself in every direction, and its barb's ramp was on the tip instead of behind it | seated, and pulled back 0.4, 1.0 and 2.0 mm, clip and catch intersected in **0.000 mm³** every time |
+| T3 | the detent pocket was cut at ball radius **plus** the full clearance, so a 0.5 mm ball dropped in with 0.25 mm of slop | peak withdrawal interference **0.008 mm³**, against ~1.8 mm³ for a working P1 crush fit |
+
+Neither is a fit problem — both *fitted*, beautifully. They simply did not hold. So the
+check in `verify.py` no longer asks "does it go in"; it seats each piece against the real
+block and measures **what touches what on the way back out**.
+
+### The four stations
+
+| Station | What it is | How to test it |
+|---|---|---|
+| `T3 0.25` / `T3 0.30` | a groove in the top face, with crush ribs down both flanks | drop the matching tab in. **Line the clipped corners up** — a tongue has no key, and turned the wrong way it still drops in, with its detent against a solid wall instead of its pocket |
+| `C4 0.25` / `C4 0.30` | an upright fin, 2.2 mm thick — the case wall at full size — with a window through it | push the cap down over the fin. You should feel the barb ride up, then a distinct click as it springs into the window. Then pull: it should fight you |
+
+The pieces on plate `01` are printed **turned over** — tongue up, clip up — because that
+is the only way they print without supports. Turn them back over to use them. That is a
+rotation, not a mirror, so the printed piece is exactly the one the checks measured.
+
+### What "right" feels like
+
+* **T3** — noticeably stiff for the first 2 mm as the ribs shear, then it seats with a
+  faint click from the detent. If it slides in freely, the ribs printed short; go down
+  one clearance step.
+* **C4** — a click you can hear. Then, pulling straight back, the cap should not come off
+  under finger pressure. If it lifts off cleanly, the barb never engaged.
+
+If `T3 0.30` and `C4 0.30` feel right rather than `0.25`, set `FIT_CLEARANCE = 0.30` in
+`params.py` and rebuild. Grip is sized *from* the clearance for both joints, so the
+retention numbers do not change when you do — `verify.py` checks that across 0.15–0.40 on
+every build.
+
+---
+
+## 0c. Do not print the outer case yet
+
+`verify.py` fails three checks against the case, and they are not close calls:
+
+```
+[envelope] the assembled chassis against the case cavity
+  FAIL  chassis height 216.7 exceeds the 213.8 cavity by  2.9 mm  (L_L_Chimney)
+  FAIL  chassis width  116.6 exceeds the  95.6 cavity by 21.0 mm  (Bracket_Scroll_B)
+  FAIL  chassis depth  200.7 exceeds the 197.8 cavity by  2.8 mm  (Chassis_Rear_Wall)
+```
+
+The interior does not fit inside the shell. The width is the serious one: the wall
+*ribs* and the scroll brackets hang about 7.5 mm and 12 mm outboard of the base pan on
+each side, so the finished scene is roughly 117 mm across where the case gives it 95.6.
+
+Two separate things let this through:
+
+1. **The old envelope check compared `CASE_CAVITY_H` with its own definition.**
+   `CASE_CAVITY_H` is *defined* as `BOOKNOOK_HEIGHT - PLINTH_HEIGHT - SHELL_THICKNESS`,
+   so the assertion could never fail no matter what the parts did. It now reads the
+   placed bounding boxes `build.py` records and measures the real stack.
+2. **The chassis and the case are authored in two different coordinate frames.** The
+   chassis runs `x = 0 … 94.9`; the case is centred on `x = 0`, `±50`. Nothing ever
+   put them in the same space, so the assembled preview has never shown the two
+   sub-assemblies in their real relationship — and the left and right case panels'
+   assembly transform lays them flat across the front of the model instead of standing
+   them at the sides.
+
+The case's own snap joints need rebuilding too: its clip pockets are hand-rolled boxes
+that do not match the clip in size or orientation, and there is no room for a clip
+anywhere inside the cavity (95.6 mm of case against a 94.9 mm chassis leaves 0.35 mm a
+side). Everything from `50_Outer_Left` to `59G_Foot_Pad` is on hold until that is
+resolved.
+
+Everything inboard of the case — chassis, walls, floor, facade, lighting, signs — is
+unaffected and is checked part by part.
+
+---
+
 ## 1. Print plan
 
 `python3 plates.py` writes these ready-arranged to `out/plates/`, every part already
@@ -109,6 +198,7 @@ lying in its print orientation. Drop one straight into the slicer.
 | Plate | Parts | PLA | Notes |
 |---|---|---|---|
 | `00_CALIBRATE_FIRST` | 2 | 33 g | **print this one first and stop.** The coupon and its four tabs, nothing else |
+| `01_CALIBRATE_JOINTS` | 2 | 67 g | **print this before the case.** T3 and C4 test block and its four pieces |
 | `02_wall_faces` ×2 | 1 each | 107 / 110 g | brick side UP |
 | `03_wall_ribs` ×2 | 1 each | 60 / 62 g | hidden; flat |
 | `04_chassis` | 2 | 349 g | base pan and plinth |
@@ -159,6 +249,7 @@ hides exactly the surface detail this model depends on.
 | ID | What it is | Keep or bin |
 |---|---|---|
 | `70A` / `70B` | tolerance coupon and test pegs | **single use.** Bin them once you have set `FIT_CLEARANCE` |
+| `74A` / `74B` | T3 and C4 joint test block and pieces | **single use.** Print before the case; bin them once both joints feel right |
 | `72` | paint handles | reusable tool — a part's peg drops into the handle so you never hold a painted surface. Keep |
 | `73` | ID card | records the clearance and random seed this kit was generated with. Keep it with the kit; if you ever reprint a lost part you need those numbers |
 | `71A`–`71D` | glazing cut templates | **only needed for sheet glazing.** You are printing PLA glazing, so you can delete these four from plate 01 |

@@ -58,8 +58,9 @@ def base_pan():
         for k in range(4):
             y = D_CH * (k + 0.5) / 4
             xw = x0 + sx * (WA / 2 + (min(y, P.ALLEY_D) * math.tan(math.radians(P.WALL_CANT_DEG)) * sx * 0))
-            c, _ = groove_t3_solids((xw, y, t), 26.0, axis="-Z", rot=90)
+            c, a = groove_t3_solids((xw, y, t), 26.0, axis="-Z", rot=90)
             cuts.append(c)
+            adds.append(a)
 
     # floor rails
     for sx in (-1, 1):
@@ -310,8 +311,12 @@ def ceiling_baffle():
     body = (cq.Workplane("XY")
             .polyline([(-_hw(0) - 2, 0), (_hw(0) + 2, 0), (_hw(L) + 2, L), (-_hw(L) - 2, L)])
             .close().extrude(t))
-    # slope: shear the plate downward toward the rear
-    body = body.rotate((0, 0, 0), (1, 0, 0), math.degrees(math.atan2(drop, L)))
+    # Slope the plate DOWN toward the rear. The sign here used to be positive, which
+    # tilts the rear UP by CORNICE_DROP instead: it fought the forced perspective and
+    # pushed the top of the chassis 10.8 mm above the case cavity, so the case could
+    # not have closed. Nothing caught it because the old envelope check compared
+    # CASE_CAVITY_H with its own definition rather than with the built parts.
+    body = body.rotate((0, 0, 0), (1, 0, 0), -math.degrees(math.atan2(drop, L)))
     cuts, adds = [], []
     # top wire race
     cuts.append(cq.Workplane("XY").box(P.WIRE_CHANNEL_WIDTH, L, P.WIRE_CHANNEL_DEPTH,

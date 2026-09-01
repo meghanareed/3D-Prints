@@ -33,6 +33,10 @@ def ok(msg):
     print("  ok    " + msg)
 
 
+def _vol(wp):
+    return wp.val().Volume() if wp.val() and wp.val().Solids() else 0.0
+
+
 # ------------------------------------------------------------- fit geometry --
 def check_fits():
     """The meaningful test: take a REAL part, place it on a REAL wall built from the
@@ -181,6 +185,49 @@ def check_envelope():
         ok(f"chassis {P.CHASSIS_W:.1f} slides into cavity {P.CASE_CAVITY_W:.1f}")
 
 
+def check_assembled_envelope():
+    """Does the built chassis actually fit inside the built case?
+
+    Not the same question as "do the numbers add up". CASE_CAVITY_H is DEFINED as
+    BOOKNOOK_HEIGHT - PLINTH_HEIGHT - SHELL_THICKNESS, so comparing the two was
+    comparing a value with its own definition -- it could never fail. This reads the
+    placed bounding boxes build.py records and measures the real stack.
+    """
+    print("\n[envelope] the assembled chassis against the case cavity")
+    try:
+        rows = json.load(open(os.path.join(OUT, "manifest.json")))
+    except Exception:
+        warn("no out/manifest.json -- run build.py first")
+        return
+    boxes = [(r, r["place_bbox"]) for r in rows
+             if r.get("group") != "case" and r.get("place_bbox")]
+    if not boxes:
+        warn("manifest has no placed bounding boxes -- rebuild with the current build.py")
+        return
+    # the extent of the WHOLE assembly, not of the largest single part -- measuring
+    # each part on its own says nothing about whether they collectively fit
+    def span(lo_i, hi_i, room):
+        lo = min(b[lo_i] for _, b in boxes)
+        hi = max(b[hi_i] for _, b in boxes)
+        who = max(((r["name"], b[hi_i]) for r, b in boxes), key=lambda t: t[1])[0] \
+            if hi - room > lo else \
+            min(((r["name"], b[lo_i]) for r, b in boxes), key=lambda t: t[1])[0]
+        return hi - lo, who
+
+    height, tallest = span(2, 5, P.CASE_CAVITY_H)
+    width, widest = span(0, 3, P.CASE_CAVITY_W)
+    depth, deepest = span(1, 4, P.CASE_CAVITY_D)
+    for what, got, room, who in (("height", height, P.CASE_CAVITY_H, tallest),
+                                 ("width", width, P.CASE_CAVITY_W, widest),
+                                 ("depth", depth, P.CASE_CAVITY_D, deepest)):
+        if got > room + 0.01:
+            fail(f"chassis {what} {got:.1f} exceeds the {room:.1f} cavity by "
+                 f"{got - room:.1f} mm -- the case will not close ({who})")
+        else:
+            ok(f"chassis {what} {got:.1f} fits the {room:.1f} cavity "
+               f"({room - got:.1f} mm spare)")
+
+
 def check_grip_across_clearances():
     """Retention must survive the user actually changing the clearance.
 
@@ -250,6 +297,79 @@ def check_coupon_tab_flips():
             fail(f"station {v:.2f}: no crush-rib grip ({grip:.2f} mm^3)")
         else:
             ok(f"station {v:.2f}: seats flush, crush-rib grip {grip:.2f} mm^3")
+
+
+def check_joint_coupon():
+    """Parts 74A/74B: seat every loose piece against the REAL block and measure.
+
+    This check exists because both joints it covers were broken and looked fine:
+
+      * C4 was a clip lying in a rectangular pocket 0.5 mm bigger than itself in every
+        direction. Seated, and pulled back 0.4, 1.0 and 2.0 mm, it intersected the
+        catch in 0.000 mm^3 every time. Its barb's ramp was on the tip as well, so it
+        could not have been pushed in even if there had been something to catch on.
+      * T3 relied on a detent whose pocket was cut at ball radius PLUS the full
+        clearance, so the ball dropped in with 0.25 mm of slop. Peak withdrawal
+        interference: 0.008 mm^3, against the ~1.8 mm^3 a P1 crush rib gives.
+
+    So the test is not "does it fit" -- both of them fitted beautifully. It is "does
+    anything touch anything when you pull it back out".
+    """
+    print("\n[jigs] joint coupon: T3 and C4 seated in the real block")
+    block = MT.joint_coupon()
+    proud = (cq.Workplane("XY").box(400, 200, 60, centered=(False, False, False))
+             .translate((-50, -20, MT.JC_T)))
+    above = block.intersect(proud)
+
+    for i, (kind, v) in enumerate(MT.JC_STATIONS):
+        piece = MT.jc_piece(i)
+        seated = _vol(block.intersect(piece))
+        if kind == "T3":
+            # everything proud of the block face, minus the groove ribs the tongue is
+            # meant to bite: a label under the tab would hold it off, as one did before
+            fins = _vol(above.intersect(piece))
+            if fins > 0.02:
+                fail(f"T3 {v:.2f}: {fins:.2f} mm^3 of raised material under the tab")
+            elif seated < 0.30:
+                fail(f"T3 {v:.2f}: no crush-rib grip ({seated:.3f} mm^3)")
+            else:
+                ok(f"T3 {v:.2f}: seats flush, crush-rib grip {seated:.2f} mm^3")
+        else:
+            back = _vol(block.intersect(piece.translate((0, 0, 1.0))))
+            snap = _vol(block.intersect(piece.translate((0, 0, 3.0))))
+            if seated > 0.05:
+                fail(f"C4 {v:.2f}: will not seat (interference {seated:.2f} mm^3)")
+            elif snap < 0.20:
+                fail(f"C4 {v:.2f}: the barb never deflects on the way in "
+                     f"({snap:.3f} mm^3) -- it is sliding into a hole, not snapping")
+            elif back < 0.50:
+                fail(f"C4 {v:.2f}: nothing holds it in -- pulling back 1 mm gives "
+                     f"{back:.3f} mm^3 of interference")
+            else:
+                ok(f"C4 {v:.2f}: snaps in (deflection {snap:.2f} mm^3), holds "
+                   f"{back:.2f} mm^3 against a 1 mm pull")
+
+
+def check_t3_grip():
+    """T3 is what holds every wall face to its rib. It must grip like P1 and P2 do."""
+    print("\n[fit] T3 crush-rib grip across the usable clearance range")
+    real = (P.DECORATIVE_CLEARANCE, P.FIT_CLEARANCE)
+    try:
+        for v in (0.15, 0.20, 0.25, 0.30, 0.35, 0.40):
+            P.DECORATIVE_CLEARANCE = P.FIT_CLEARANCE = v
+            plate = cq.Workplane("XY").box(40, 20, 8, centered=(True, True, False))
+            cut, ribs = MT.groove_t3_solids((0, 0, 8), 24.0, axis="-Z")
+            plate = plate.cut(cut).union(ribs)
+            tongue = MT.tongue_t3((0, 0, 0), 24.0, axis="-Z")
+            child = (cq.Workplane("XY").box(30, 14, 3, centered=(True, True, False))
+                     .union(tongue).translate((0, 0, 8)))
+            g = _vol(plate.intersect(child))
+            if g < 0.30:
+                fail(f"T3 at clearance {v:.2f}: grip {g:.3f} mm^3 -- nothing holds it")
+            else:
+                ok(f"T3 at clearance {v:.2f}: grip {g:.2f} mm^3")
+    finally:
+        P.DECORATIVE_CLEARANCE, P.FIT_CLEARANCE = real
 
 
 def check_paint_handles():
@@ -341,12 +461,15 @@ if __name__ == "__main__":
     print("Crooked Lane Book Nook -- verification")
     check_clearance_sanity()
     check_envelope()
+    check_assembled_envelope()
     check_light_block()
     check_keying()
     check_fits()
     check_all_mates()
     check_grip_across_clearances()
     check_coupon_tab_flips()
+    check_joint_coupon()
+    check_t3_grip()
     check_paint_handles()
     check_unsupported_relief()
     check_manifest()

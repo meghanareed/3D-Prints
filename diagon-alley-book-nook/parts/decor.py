@@ -151,10 +151,10 @@ def _bay(row, side):
 
     # the groove sits at the same part-frame point as the tongue: (x, y, z) with the
     # offset in Y, the part's height -- not in Z, which is the projection axis
-    gc, _ = groove_t3_solids((0.0, h * W.BAY_TONGUE_Y, 0.0), min(w - 6.0, 24.0),
-                             axis="-Z")
+    gc, ga = groove_t3_solids((0.0, h * W.BAY_TONGUE_Y, 0.0), min(w - 6.0, 24.0),
+                              axis="-Z")
     cuts = [_ap(w - 6.0, h - 10.0, u, z + h / 2), to_wall(gc, u, z)]
-    adds = []
+    adds = [to_wall(ga, u, z)]
     ph = h * 0.22
     for zz in (z + h - 2.0 / 2, z - h * 0.20 + ph * 0.25, z - h * 0.20 + ph * 0.75):
         c, a = _p1_mount(u, zz)                    # roof, then the two corbel pegs
@@ -183,10 +183,10 @@ def _bow(row, side):
     diff = W.glazing(w * 0.74, h * 0.56, t=P.DIFFUSER_PRINT_T)
     cornice = W.lintel(w, t=3.4 * s, proj=3.0)
 
-    gc, _ = groove_t3_solids((0.0, h * W.BAY_TONGUE_Y, 0.0), min(w - 8.0, 28.0),
-                             axis="-Z")
+    gc, ga = groove_t3_solids((0.0, h * W.BAY_TONGUE_Y, 0.0), min(w - 8.0, 28.0),
+                              axis="-Z")
     cuts = [_ap(w - 8.0, h - 12.0, u, z + h / 2), to_wall(gc, u, z)]
-    adds = []
+    adds = [to_wall(ga, u, z)]
     c, a = _p1_mount(u, z + h + 2.0)               # cornice
     cuts += c
     adds += a

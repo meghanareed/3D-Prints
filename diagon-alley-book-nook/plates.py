@@ -36,6 +36,8 @@ PLATE_GROUPS = [
     # "print this first and stop" costs ten minutes rather than an hour of tools you
     # do not need until much later.
     ("00_CALIBRATE_FIRST", None, ["70A", "70B"]),
+    # T3 and C4 -- the two joints that carry the model. Print this before the case.
+    ("01_CALIBRATE_JOINTS", None, ["74A", "74B"]),
     ("02_wall_faces", None, ["01", "02"]),
     ("03_wall_ribs", None, ["01R", "02R"]),
     ("04_chassis", None, ["00", "54"]),

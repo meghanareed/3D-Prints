@@ -112,9 +112,10 @@ def wall_face(side):
 
     # T3 joints to the service rib, and P2 sockets for the front bezel
     for u in _join_positions():
-        c, _ = groove_t3_solids((0.0, u, WALL_H * 0.5), 30.0, axis="+X", rot=90,
+        c, a = groove_t3_solids((0.0, u, WALL_H * 0.5), 30.0, axis="+X", rot=90,
                                 extra=P.RIB_GAP)
         cuts.append(c)
+        adds.append(a)
     for z in (WALL_H * 0.18, WALL_H * 0.5, WALL_H * 0.82):
         c, a = socket_p2_solids((FACE * 0.5, 0.0, z), axis="+Y", rot=90, depth=4.6)
         cuts.append(c)

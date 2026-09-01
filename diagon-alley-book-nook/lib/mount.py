@@ -222,36 +222,125 @@ def tongue_t3(point, length, axis="+Z", rot=0.0, extra=0.0):
 
 
 def groove_t3_solids(point, length, axis="+Z", rot=0.0, decorative=False, extra=0.0):
+    """Returns (cut_solid, rib_solid) -- the second one has to be UNIONED BACK IN.
+
+    T3 used to return no ribs and rely on the detent alone, and the detent does
+    essentially nothing: its pocket was cut at T3_DETENT_R + clearance, so a 0.5 mm
+    ball dropped into it with a quarter-millimetre of slop all round. Withdrawing the
+    tongue measured 0.008 mm^3 of interference at its worst, against the ~1.8 mm^3 a
+    P1 crush rib gives -- and T3 is what holds every wall face to its rib and the floor
+    to the base pan. The ribs below are the same ones P1 and P2 use; the detent is now
+    just the click that tells you the tongue is home.
+    """
     c = _clear(decorative)
-    g = cq.Workplane("XY").box(length + 2 * c, T3_W + 2 * c, T3_D + extra + c,
+    depth = T3_D + extra + c
+    g = cq.Workplane("XY").box(length + 2 * c, T3_W + 2 * c, depth,
                                centered=(True, True, False))
     g = g.union(_leadin(length + 2 * c, T3_W + 2 * c))
-    g = g.union(cq.Workplane("XY").sphere(T3_DETENT_R + c)
+    g = g.union(cq.Workplane("XY").sphere(T3_DETENT_R + c - P.CRUSH_INTERFERENCE)
                 .translate((0, T3_W / 2 - 0.1, extra + T3_D / 2)))
-    return _place(g, point, axis, rot), None
+    # ribs live on the FLANKS (+/-Y), so the rib solid is turned a quarter turn before
+    # it is placed; _place then applies `rot` and the axis on top of that
+    ribs = _rib_solid(T3_W + 2 * c, T3_D + 2 * c, depth, c, n=2) \
+        .rotate((0, 0, 0), (0, 0, 1), 90)
+    return _place(g, point, axis, rot), _place(ribs, point, axis, rot)
 
 
 def groove_t3(wp, point, length, axis="+Z", rot=0.0, decorative=False, extra=0.0):
-    cut, _ = groove_t3_solids(point, length, axis, rot, decorative, extra)
-    return wp.cut(cut)
+    cut, add = groove_t3_solids(point, length, axis, rot, decorative, extra)
+    return wp.cut(cut).union(add)
 
 
 # ================================================================ C4: snap clip ==
-def c4_clip(length=C4_L, width=C4_W, thick=C4_T, barb=C4_BARB):
-    """Cantilever snap, drawn in the XZ plane and extruded along Y so that when it is
-    printed lying on its side the layer lines run ALONG the beam, not across it."""
+#
+# A cantilever snap holds only if three things are true. The first version of this
+# joint had none of them, and nothing caught it because a clip lying loose in an
+# oversized hole is perfectly valid geometry.
+#
+#   1. The hook's shallow ramp must face the TIP, so the clip can be pushed in, and its
+#      steep retention face must look back toward the root, so it cannot be pulled out.
+#      The original profile was exactly reversed: a blunt full-height wall at the tip,
+#      which cannot enter anything, and the ramp behind it, which nothing catches on.
+#   2. The catch must be a WINDOW the barb springs into, not a pocket the whole clip
+#      drops into. The original catch cut box(C4_L + 2c, C4_W + 2c, C4_T + barb + 2c) --
+#      a rectangular hole 0.5 mm larger than the clip in every direction.
+#   3. Withdrawal must be measurable. Seated, and then pulled back by 0.4, 1.0 and
+#      2.0 mm, the original clip and catch intersected in 0.000 mm^3 every time. This
+#      was the only thing holding 750 g of outer case together.
+#
+# STANDARD C4 FRAME, the same convention the rest of this file uses: the clip travels
+# along `axis`, its barb springs toward local +Y, its width runs along local X, and the
+# window is cut in the plate that lies on the +Y side. Build a clip and a window with
+# the SAME (point, axis, rot) and they mate.
+#
+C4_L, C4_W, C4_T, C4_BARB = 14.0, 4.0, 2.0, 0.9
+C4_RAMP, C4_RETAIN = 2.6, 0.6        # insertion-ramp run / retention-face run
+C4_ENGAGE = C4_RAMP + C4_RETAIN      # tip -> retention face
+
+
+def _c4_profile(length, thick, barb):
+    """The clip seen edge-on, drawn in XZ: beam along +X, thickness along +Z.
+
+    Going around: the underside from the buried root to the tip, up the (thin) tip
+    face, back along the shallow insertion ramp to the crest, down the steep retention
+    face, and home along the top.
+    """
+    crest = length - C4_RAMP
+    heel = crest - C4_RETAIN
     return (cq.Workplane("XZ")
-            .polyline([(0, 0), (length, 0), (length, thick + barb),
-                       (length - barb * 1.6, thick), (0, thick)])
-            .close().extrude(width))
+            .polyline([(-PEG_ROOT, 0), (length, 0), (length, thick),
+                       (crest, thick + barb), (heel, thick), (-PEG_ROOT, thick)])
+            .close())
 
 
-def c4_catch(wp, point, axis="+Z", rot=0.0, width=C4_W, barb=C4_BARB):
-    """The matching ledge the clip snaps behind."""
+def c4_clip(length=C4_L, width=C4_W, thick=C4_T, barb=C4_BARB):
+    """The clip in its own build frame: beam along +X, barb toward +Z, width along +Y.
+
+    Extruded along Y so that when it is printed lying on its side the layer lines run
+    ALONG the beam and not across it -- a cantilever with the layers across it snaps
+    off at the root the first time it is flexed.
+    """
+    c = _c4_profile(length, thick, barb).extrude(width)
+    return c.translate((0, width, 0))          # XZ extrudes toward -Y; bring it back
+
+
+def _c4_standard(length, width, thick, barb):
+    """The clip re-cut into the standard frame: travels +Z, barb springs +Y, width X."""
+    c = c4_clip(length, width, thick, barb)          # beam +X, barb +Z, width +Y
+    c = c.translate((0, -width / 2.0, -thick / 2.0))  # centre width and thickness
+    return c.rotate((0, 0, 0), (1, 1, 1), -120)       # x->z, z->y, y->x
+
+
+def c4_clip_at(point, axis="+Z", rot=0.0, length=C4_L, width=C4_W):
+    """A clip placed like any other mount in this library."""
+    return _place(_c4_standard(length, width, C4_T, C4_BARB), point, axis, rot)
+
+
+def c4_window_solids(point, axis="+Z", rot=0.0, width=C4_W, length=C4_L, plate_t=None):
+    """The window the barb springs into, in the same frame as `c4_clip_at`.
+
+    Cut through the plate lying on the +Y side of the clip. The window's near edge sits
+    at the clip's retention face, so pulling the joint back drives that face straight
+    into the plate: retention is interference, and `verify.py` measures it.
+    """
     c = P.FIT_CLEARANCE
-    pocket = cq.Workplane("XY").box(C4_L + 2 * c, width + 2 * c, C4_T + barb + 2 * c,
-                                    centered=(True, True, False))
-    return wp.cut(_place(pocket, point, axis, rot))
+    plate_t = P.SHELL_THICKNESS if plate_t is None else plate_t
+    heel = length - C4_RAMP - C4_RETAIN
+    win = (cq.Workplane("XY")
+           .box(width + 2 * c, plate_t + 4.0, C4_ENGAGE + 2 * c,
+                centered=(True, False, False))
+           .translate((0, C4_T / 2.0, heel)))
+    return _place(win, point, axis, rot), None
+
+
+def c4_window(wp, point, axis="+Z", rot=0.0, width=C4_W, length=C4_L, plate_t=None):
+    cut, _ = c4_window_solids(point, axis, rot, width, length, plate_t)
+    return wp.cut(cut)
+
+
+def c4_catch(wp, point, axis="+Z", rot=0.0, width=C4_W, barb=C4_BARB, plate_t=None):
+    """Kept for callers that still say `catch`. It is a window now, not a pocket."""
+    return c4_window(wp, point, axis, rot, width=width, plate_t=plate_t)
 
 
 # =========================================================== self-test coupon ===
@@ -391,3 +480,148 @@ def seat_tab(i):
     t = coupon_tab(i).rotate((cx, TAB_H / 2, TAB_T / 2), (cx + 1, TAB_H / 2, TAB_T / 2), 180)
     bb = t.val().BoundingBox()
     return t.translate((0, COUPON_P2_Y + dy / 2 - TAB_H / 2, COUPON_T - bb.zmin - TAB_T))
+
+
+# ================================================ joint coupon: T3 and C4 =====
+# The first coupon tests P1 and P2 -- the decorative mounts. It never touched the two
+# joints that carry the model: T3, which holds every wall face to its rib and the floor
+# to the base pan, and C4, which is all that holds the outer case together. Both were
+# taken on trust, and both were broken (see the notes on `groove_t3_solids` and on the
+# C4 section above).
+#
+# Every station here is built from the SAME (point, axis, rot) as the piece that mates
+# with it, which is the library's one rule for a pair that fits. `verify.py` then seats
+# each loose piece against the real block and measures the interference on the way in
+# and the grip on the way out.
+
+JC_T = 6.0                      # block thickness -- a calibration print should be cheap
+JC_STATION_W = 30.0             # one station
+JC_H = 62.0
+JC_T3_LEN = 24.0
+JC_FIN_T = 2.2                  # = SHELL_THICKNESS: the case wall a case clip snaps in
+JC_FIN_H = 18.0
+JC_FIN_W = 24.0
+JC_VALUES = (0.25, 0.30)        # a sliding joint wants a looser fit than a press joint
+JC_STATIONS = [("T3", v) for v in JC_VALUES] + [("C4", v) for v in JC_VALUES]
+JC_W = JC_STATION_W * len(JC_STATIONS)
+
+JC_T3_Y = 40.0                  # where the tongue lands, in block coordinates
+JC_FIN_Y = 34.0                 # the fin's near face
+JC_TAB_W, JC_TAB_H, JC_TAB_T = 26.0, 15.0, 3.5
+JC_CAP_W, JC_CAP_H, JC_CAP_T = 26.0, 16.0, 3.5
+
+
+def _jc_x(i):
+    return JC_STATION_W * (i + 0.5)
+
+
+def _jc_clip_geometry(i):
+    """Where station `i`'s clip lives: (x, y of the beam centre, z of its root).
+
+    The cap lands on the fin's top edge, so the clip's root is at that height and it
+    travels straight down the fin's near face.
+    """
+    y = JC_FIN_Y - P.FIT_CLEARANCE - C4_T / 2.0
+    return _jc_x(i), y, JC_T + JC_FIN_H
+
+
+def joint_coupon():
+    """Parts 74A/74B. Print after the P1/P2 coupon and BEFORE committing to the case.
+
+    Four stations: T3 at 0.25 and 0.30, then C4 at 0.25 and 0.30. The T3 stations are
+    grooves in the top face; the C4 stations are upright fins with a window through
+    them, which is the outer case's joint at full size.
+    """
+    block = cq.Workplane("XY").box(JC_W, JC_H, JC_T, centered=(False, False, False))
+    adds, cuts = [], []
+    real = (P.DECORATIVE_CLEARANCE, P.FIT_CLEARANCE)
+    try:
+        for i, (kind, v) in enumerate(JC_STATIONS):
+            P.DECORATIVE_CLEARANCE = P.FIT_CLEARANCE = v
+            cx = _jc_x(i)
+            if kind == "T3":
+                cut, ribs = groove_t3_solids((cx, JC_T3_Y, JC_T), JC_T3_LEN, axis="-Z")
+                cuts.append(cut)
+                adds.append(ribs)
+                # a clipped corner in the block matching the one on the tab. A T3
+                # tongue has no key, so turning the tab over the wrong way still drops
+                # it in -- with the detent against a solid wall instead of its pocket.
+                # Line the two marks up and it cannot be wrong.
+                cuts.append(_corner_mark(cx - JC_TAB_W / 2, JC_T3_Y - JC_TAB_H / 2,
+                                         +1, +1, 1.2).translate((0, 0, JC_T - 0.6)))
+            else:
+                fin = cq.Workplane("XY").box(JC_FIN_W, JC_FIN_T, JC_FIN_H,
+                                             centered=(True, False, False)) \
+                    .translate((cx, JC_FIN_Y, JC_T - PEG_ROOT))
+                x, y, z = _jc_clip_geometry(i)
+                win, _ = c4_window_solids((x, y, z), axis="-Z", rot=180,
+                                          plate_t=JC_FIN_T)
+                adds.append(fin.cut(win))
+            # the label goes clear of everything the mating piece touches -- a raised
+            # label under a seated part holds it half a millimetre off the surface, and
+            # that is exactly what went wrong on the first coupon
+            block = _label(block, f"{kind} {v:.2f}", cx, 6.0, JC_T, size=4.2)
+    finally:
+        P.DECORATIVE_CLEARANCE, P.FIT_CLEARANCE = real
+    for c in cuts:
+        block = block.cut(c)
+    for a in adds:
+        block = block.union(a)
+    return block
+
+
+def jc_piece(i):
+    """The loose piece for station `i`, IN ITS SEATED POSITION on the block.
+
+    Built from the same (point, axis, rot) as the station it mates with, which is the
+    only thing that guarantees a pair fits. `build.py` turns it over for printing.
+    """
+    kind, v = JC_STATIONS[i]
+    cx = _jc_x(i)
+    real = (P.DECORATIVE_CLEARANCE, P.FIT_CLEARANCE)
+    try:
+        P.DECORATIVE_CLEARANCE = P.FIT_CLEARANCE = v
+        if kind == "T3":
+            tab = cq.Workplane("XY").box(JC_TAB_W, JC_TAB_H, JC_TAB_T,
+                                         centered=(True, True, False)) \
+                .translate((cx, JC_T3_Y, JC_T))
+            tab = tab.union(tongue_t3((cx, JC_T3_Y, JC_T), JC_T3_LEN, axis="-Z"))
+            tab = tab.cut(_corner_mark(cx - JC_TAB_W / 2, JC_T3_Y - JC_TAB_H / 2,
+                                       +1, +1, JC_TAB_T * 4).translate((0, 0, JC_T)))
+            return tab
+        x, y, z = _jc_clip_geometry(i)
+        cap = cq.Workplane("XY").box(JC_CAP_W, JC_CAP_H, JC_CAP_T,
+                                     centered=(True, True, False)) \
+            .translate((cx, JC_FIN_Y + JC_FIN_T / 2.0, z))
+        cap = cap.union(c4_clip_at((x, y, z), axis="-Z", rot=180))
+        # a plain guide skirt down the fin's far face, so the cap cannot skew off
+        far = JC_FIN_Y + JC_FIN_T + P.FIT_CLEARANCE
+        cap = cap.union(cq.Workplane("XY").box(JC_CAP_W, 2.0, C4_L,
+                                               centered=(True, False, False))
+                        .translate((cx, far, z - C4_L)))
+        return cap
+    finally:
+        P.DECORATIVE_CLEARANCE, P.FIT_CLEARANCE = real
+
+
+def joint_coupon_pieces():
+    """Part 74B: the four loose pieces, turned over and laid out for printing.
+
+    Each piece is authored in the position it occupies when it is seated -- tongue
+    down, clip down -- so the flip here is what makes it printable. It is a rotation,
+    not a mirror: turn the printed piece back over about the same axis and it is
+    exactly the part that was checked against the block.
+    """
+    out = None
+    for i in range(len(JC_STATIONS)):
+        p = jc_piece(i).rotate((0, JC_T3_Y, 0), (1, JC_T3_Y, 0), 180)
+        b = p.val().BoundingBox()
+        p = p.translate((0, -b.ymin + 4.0, -b.zmin))
+        out = p if out is None else out.union(p)
+    # A runner along the front edge, so this exports as one solid rather than four
+    # loose pieces the slicer will happily arrange somewhere else. Overlaps each piece
+    # by 1.5 mm -- a sprue merely tangent to a part does not fuse. Snap them off.
+    b = out.val().BoundingBox()
+    runner = cq.Workplane("XY").box(b.xlen, 3.0, 1.2, centered=(False, False, False)) \
+        .translate((b.xmin, 2.5, 0))
+    return out.union(runner)

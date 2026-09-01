@@ -102,7 +102,8 @@ def manifest():
             place=(lambda s, q=sx: s.translate((P.CHASSIS_W / 2 + q * (P.ALLEY_W_FRONT / 2 - 3.0),
                                                 0, BP + 4.0))), colour="stone")
     add("05", "Ceiling_Baffle", ST.ceiling_baffle, "structure",
-        place=lambda s: s.translate((P.CHASSIS_W / 2, 0, BP + P.SCENE_H - 4.0)), colour="black")
+        place=lambda s: s.translate((P.CHASSIS_W / 2, 0, BP + P.SCENE_H - 6.0)), colour="black",
+        note="its P1 pegs stand 5.1 mm proud -- that is what sets the top of the stack")
     for side, pid in (("L", "06"), ("R", "07")):
         add(pid, f"Front_Bezel_{side}", (lambda sd=side: WL.front_bezel(sd)), "structure",
             print_rot=("X", -90),
@@ -270,12 +271,27 @@ def main():
 
         if m["place"] is not None and not args.no_preview:
             try:
-                assembly.append((m["id"], m["colour"], m["place"](solid)))
+                placed = m["place"](solid)
+                assembly.append((m["id"], m["colour"], placed))
+                # Record where the part actually lands in the assembly. verify.py needs
+                # this to answer "does the chassis fit inside the case", which cannot be
+                # answered from part sizes alone and was never being asked: the old
+                # envelope check compared CASE_CAVITY_H against its own definition.
+                pb = placed.val().BoundingBox()
+                report[-1]["place_bbox"] = [round(v, 2) for v in
+                                            (pb.xmin, pb.ymin, pb.zmin,
+                                             pb.xmax, pb.ymax, pb.zmax)]
             except Exception as e:
                 print(f"        (preview placement skipped: {e})")
 
-    with open(os.path.join(OUT, "manifest.json"), "w") as f:
-        json.dump(report, f, indent=1)
+    # A partial build must NOT replace the manifest. `--only 74A` used to leave a
+    # two-entry manifest.json behind, and verify.py would then read it, check those two
+    # parts and report that everything was fine.
+    if only:
+        print(f"  partial build ({len(report)} parts) -- manifest.json left alone")
+    else:
+        with open(os.path.join(OUT, "manifest.json"), "w") as f:
+            json.dump(report, f, indent=1)
 
     if assembly and not args.no_preview:
         _write_previews(assembly)

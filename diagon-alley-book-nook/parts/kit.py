@@ -12,7 +12,7 @@ from lib import sign as S
 from lib import prop as PR
 from lib.light import baffle_cap, coil_bay_cover, diffuser_plate, puck_cradle
 from lib.mount import (peg_p1, socket_p1_solids, socket_p2_solids, tolerance_coupon,
-                       c4_clip, P1_L, P2_L)
+                       joint_coupon, joint_coupon_pieces, c4_clip, P1_L, P2_L)
 from lib.util import keep_largest, compound
 from parts.decor import to_wall, FACE
 
@@ -223,6 +223,8 @@ def jigs():
     coupon, pegs = tolerance_coupon()
     out = [dict(id="70A", name="Tolerance_Test_Coupon", solid=coupon),
            dict(id="70B", name="Tolerance_Test_Pegs", solid=pegs),
+           dict(id="74A", name="Joint_Test_Block", solid=joint_coupon()),
+           dict(id="74B", name="Joint_Test_Pieces", solid=joint_coupon_pieces()),
            dict(id="72", name="Paint_Handle_Sprue", solid=_paint_handles(8)),
            dict(id="73", name="Assembly_ID_Card", solid=_id_card())]
     for i, (w, h) in enumerate([(26, 34), (34, 32), (24, 26), (20, 40)]):
