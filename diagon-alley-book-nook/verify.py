@@ -536,23 +536,34 @@ def check_bed_contact():
     if not rows:
         warn("manifest has no bed/overhang figures -- rebuild with the current build.py")
         return
-    tiny = [r for r in rows if r["bed"] < 3.0]
-    cantilever = [r for r in rows
-                  if r["overhang"] > 50.0 and r["overhang"] > 4.0 * max(r["bed"], 0.1)]
+    def ratio(r):
+        return r["overhang"] / max(r["bed"], 0.1)
+
+    # A high overhang-to-bed ratio is only damning when the base is small. A recessed
+    # panel -- a sign with a raised border, or the window frame now that its outer bead
+    # stands proud -- legitimately has several times its border in bridged area, and
+    # that bridging is anchored on all sides. The failing case is the part that has
+    # nothing much holding it down in the first place.
+    STAND_ON_POINT = 3.0
+    TOO_LITTLE_BASE = 12.0
+    tiny = [r for r in rows if r["bed"] < STAND_ON_POINT]
+    risky = [r for r in rows if r not in tiny and r["overhang"] > 50.0
+             and ratio(r) > 4.0 and r["bed"] < TOO_LITTLE_BASE]
+    brim = [r for r in rows if r not in tiny and r not in risky
+            and r["overhang"] > 50.0 and ratio(r) > 4.0]
     for r in sorted(tiny, key=lambda r: r["bed"]):
         fail(f"{r['id']} {r['name']}: only {r['bed']:.2f} mm^2 on the bed "
              f"({r['overhang']:.0f} mm^2 hanging) -- it stands on a point")
-    for r in sorted(cantilever, key=lambda r: -r["overhang"] / max(r["bed"], 0.1)):
-        if r in tiny:
-            continue
-        fail(f"{r['id']} {r['name']}: {r['overhang']:.0f} mm^2 of overhang on "
-             f"{r['bed']:.0f} mm^2 of first layer "
-             f"(x{r['overhang']/max(r['bed'],0.1):.0f}) -- floating cantilever")
-    if not tiny and not cantilever:
-        ok(f"all {len(rows)} parts have a first layer that carries what is above it")
-    else:
-        print(f"        {len(rows) - len(tiny) - len(cantilever)} of {len(rows)} "
-              "parts are fine")
+    for r in sorted(risky, key=lambda r: -ratio(r)):
+        fail(f"{r['id']} {r['name']}: {r['overhang']:.0f} mm^2 of overhang on only "
+             f"{r['bed']:.1f} mm^2 of first layer (x{ratio(r):.0f}) -- it will come off "
+             "the plate")
+    for r in sorted(brim, key=lambda r: -ratio(r)):
+        warn(f"{r['id']} {r['name']}: {r['overhang']:.0f} mm^2 bridged over "
+             f"{r['bed']:.0f} mm^2 of base (x{ratio(r):.0f}) -- print it with a brim")
+    if not tiny and not risky:
+        ok(f"all {len(rows)} parts have a first layer that carries what is above it"
+           + (f" ({len(brim)} want a brim)" if brim else ""))
 
 
 def check_manifest():

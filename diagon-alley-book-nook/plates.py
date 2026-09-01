@@ -183,6 +183,14 @@ def _existing_ticks():
 
 def write_checklist(sheet, names, notes, grams):
     done = _existing_ticks()
+    # parts whose bridged area dwarfs their base want a brim -- see check_bed_contact()
+    brim = set()
+    mpath = os.path.join(OUT, "manifest.json")
+    if os.path.exists(mpath):
+        for r in json.load(open(mpath)):
+            if r.get("overhang", 0) > 50.0 and \
+                    r["overhang"] > 4.0 * max(r.get("bed", 0.1), 0.1):
+                brim.add(r["id"])
     os.makedirs(os.path.dirname(CHECKLIST), exist_ok=True)
     total = sum(g for _, g, _ in sheet)
     n_parts = sum(len(ids) for _, _, ids in sheet)
@@ -208,6 +216,8 @@ def write_checklist(sheet, names, notes, grams):
             for i in sorted(ids):
                 box = "x" if i in done else " "
                 note = notes.get(i, "")
+                if i in brim:
+                    note = (note + "; " if note else "") + "**print with a brim**"
                 tail = f" -- {note}" if note else ""
                 w(f"- [{box}] `{i}` {names.get(i, '?')} "
                   f"({grams.get(i, 0.0):.1f} g){tail}\n")

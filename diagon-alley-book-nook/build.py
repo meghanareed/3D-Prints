@@ -74,6 +74,37 @@ def bed_and_overhang(solid, layer=0.25, steep=0.707):
     return float(bed), float(area[over].sum())
 
 
+# Print orientations chosen by measurement rather than by eye. Each of these was
+# standing on a point or hanging more than four times what it stood on, and the value
+# here is whichever axis-aligned orientation measured best -- run `orient.py` to see the
+# working. Twenty of them were resting on exactly two P1 pegs, 6.14 mm^2 of first layer,
+# because their pegs point down and nothing turned them over; that is the same bug that
+# was fixed once for the floor props and came back everywhere else.
+#
+# Note how many go from ("X", -90) to ("X", 90). That is a sign error, and it ran right
+# through the case: 50_Outer_Left was resting on its stiffening ribs with the whole
+# 200 x 214 panel in the air above them -- 40,883 mm^2 of overhang. The right way up it
+# is 42,366 mm^2 flat on the bed and nothing overhanging at all.
+#
+# 30A_Sign_Vertical_Banner is deliberately NOT here. The sweep prefers it on edge, but
+# it already has 76.7 mm^2 on the bed, which is enough, and a sign printed on edge has
+# layer lines across the face you are going to paint.
+PRINT_ROT_MEASURED = {
+    "00": ("Y", 90),    "01R": ("Y", -90), "02R": ("Y", -90), "03A": ("X", 180),
+    "03C": ("X", 180),  "04B": ("X", 180), "04C": ("X", 180), "05": ("X", 90),
+    "06": ("Y", -90),   "07": ("Y", -90),  "10B": ("X", 90),  "15A": ("X", -90),
+    "15B": ("X", -90),  "18A": ("X", 90),  "21D": ("X", -90), "21E": ("X", -90),
+    "25A": ("X", -90),  "25B": ("Y", -90), "28A": ("X", 90),  "30B": None,
+    "30C": None,        "30E": ("X", -90), "30F": ("X", -90), "30H": None,
+    "30J": ("X", -90),  "30L": ("X", -90), "31A": ("X", 90),  "31B": ("X", 90),
+    "33A": None,        "34A": ("X", -90), "34C": ("X", -90), "43": ("X", 180),
+    "45A": ("X", 180),  "45B": ("X", 180), "45C": ("X", 180), "50": ("X", 90),
+    "51": ("X", 90),    "52": ("X", 180),  "53": ("X", 90),   "56": ("X", 90),
+    "58A": ("X", 180),  "58B": ("X", 180), "62A": ("X", 90),  "62B": ("X", 90),
+    "62C": ("X", 90),   "62D": ("X", 90),  "63": ("X", 90),   "64": ("X", -90),
+}
+
+
 # =============================================================== the manifest ==
 def manifest():
     """Every printable part: id, name, builder, group, print orientation, colour.
@@ -84,6 +115,8 @@ def manifest():
     M = []
 
     def add(pid, name, fn, group, place=None, print_rot=None, colour="tan", note=""):
+        if pid in PRINT_ROT_MEASURED:
+            print_rot = PRINT_ROT_MEASURED[pid]
         M.append(dict(id=pid, name=name, fn=fn, group=group, place=place,
                       print_rot=print_rot, colour=colour, note=note))
 

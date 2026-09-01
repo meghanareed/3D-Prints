@@ -69,18 +69,18 @@ off the plate warped or with a bit missing is not printed.
 - [ ] `04C` Gutter_R (1.9 g)
 - [ ] `05` Ceiling_Baffle (22.2 g) -- its P1 pegs stand 5.1 mm proud -- that is what sets the top of the stack
 
-## `06_rear.stl`  ---  5 parts, 150 g  (0/5 done)
+## `06_rear.stl`  ---  6 parts, 156 g  (0/6 done)
 
 - [ ] `03A` Rear_Perspective_Block (60.5 g) -- lies on its back; 170 mm tall is too tippy upright
 - [ ] `03B` Rear_Archway (5.8 g)
 - [ ] `03C` Rear_Silhouette (4.9 g)
 - [ ] `03D` Rear_Glow_Frame (36.4 g)
+- [ ] `03F` Sky_Diffuser (5.7 g) -- natural/white PLA, 3 walls, 0 % infill
 - [ ] `09` Chassis_Rear_Wall (42.4 g)
 
-## `06_rear_2.stl`  ---  2 parts, 23 g  (0/2 done)
+## `06_rear_2.stl`  ---  1 parts, 18 g  (0/1 done)
 
 - [ ] `03E` Sky_Puck_Cradle (17.7 g) -- holds the 59.5 x 8.3 RGB/CCT puck
-- [ ] `03F` Sky_Diffuser (5.7 g) -- natural/white PLA, 3 walls, 0 % infill
 
 ## `07_front.stl`  ---  3 parts, 47 g  (0/3 done)
 
@@ -238,7 +238,7 @@ off the plate warped or with a bit missing is not printed.
 
 ## `11_signs_props.stl`  ---  38 parts, 19 g  (0/38 done)
 
-- [ ] `30A` Sign_Vertical_Banner (1.2 g) -- face down, pegs up
+- [ ] `30A` Sign_Vertical_Banner (1.2 g) -- face down, pegs up; **print with a brim**
 - [ ] `30B` Sign_Swing_A (0.7 g) -- face down, pegs up
 - [ ] `30C` Sign_Swing_B (0.5 g) -- face down, pegs up
 - [ ] `30D` Sign_Shield_A (0.5 g) -- face down, pegs up
@@ -261,8 +261,8 @@ off the plate warped or with a bit missing is not printed.
 - [ ] `32A` Sign_Hanging_Chain_A (0.0 g) -- blank spare -- face down, pegs up
 - [ ] `32B` Sign_Hanging_Chain_B (0.0 g) -- blank spare -- face down, pegs up
 - [ ] `32C` Sign_Rail_Hook (0.1 g) -- blank spare -- face down, pegs up
-- [ ] `33A` Lantern_Large (0.7 g) -- face down, pegs up
-- [ ] `34A` Lantern_Small (0.4 g) -- face down, pegs up
+- [ ] `33A` Lantern_Large (0.7 g) -- face down, pegs up; **print with a brim**
+- [ ] `34A` Lantern_Small (0.4 g) -- face down, pegs up; **print with a brim**
 - [ ] `34C` Lantern_Rear_Tiny (0.2 g) -- face down, pegs up
 - [ ] `35A` Barrel_Large (2.7 g)
 - [ ] `35B` Barrel_Small (1.2 g)

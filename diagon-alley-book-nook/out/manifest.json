@@ -7,12 +7,12 @@
   "grams": 124.9,
   "solids": 1,
   "bbox": [
-   94.9,
+   15.0,
    197.1,
-   15.0
+   94.9
   ],
-  "bed": 1810.3,
-  "overhang": 17287.9,
+  "bed": 1971.0,
+  "overhang": 6305.6,
   "fits_bed": true,
   "colour": "grey",
   "note": "",
@@ -65,8 +65,8 @@
    197.1,
    10.0
   ],
-  "bed": 396.9,
-  "overhang": 14984.9,
+  "bed": 5863.9,
+  "overhang": 9514.7,
   "fits_bed": true,
   "colour": "grey",
   "note": "hidden; print flat",
@@ -119,8 +119,8 @@
    197.1,
    10.0
   ],
-  "bed": 388.1,
-  "overhang": 15695.7,
+  "bed": 5999.0,
+  "overhang": 10081.6,
   "fits_bed": true,
   "colour": "grey",
   "note": "hidden; print flat",
@@ -143,11 +143,11 @@
   "solids": 1,
   "bbox": [
    65.7,
-   170.0,
-   22.2
+   22.2,
+   170.0
   ],
-  "bed": 9.1,
-  "overhang": 2720.1,
+  "bed": 1024.0,
+  "overhang": 1060.7,
   "fits_bed": true,
   "colour": "brick",
   "note": "lies on its back; 170 mm tall is too tippy upright",
@@ -200,8 +200,8 @@
    48.3,
    5.1
   ],
-  "bed": 6.1,
-  "overhang": 2419.4,
+  "bed": 2428.2,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -335,8 +335,8 @@
    150.6,
    6.1
   ],
-  "bed": 6.1,
-  "overhang": 593.6,
+  "bed": 580.6,
+  "overhang": 21.8,
   "fits_bed": true,
   "colour": "stone",
   "note": "",
@@ -362,8 +362,8 @@
    150.6,
    6.1
   ],
-  "bed": 6.1,
-  "overhang": 593.6,
+  "bed": 580.6,
+  "overhang": 21.8,
   "fits_bed": true,
   "colour": "stone",
   "note": "",
@@ -386,11 +386,11 @@
   "solids": 1,
   "bbox": [
    78.9,
-   150.1,
-   15.5
+   15.5,
+   150.1
   ],
-  "bed": 94.6,
-  "overhang": 11189.4,
+  "bed": 89.2,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "black",
   "note": "its P1 pegs stand 5.1 mm proud -- that is what sets the top of the stack",
@@ -412,12 +412,12 @@
   "grams": 15.9,
   "solids": 1,
   "bbox": [
-   15.4,
    203.1,
-   9.7
+   9.7,
+   15.4
   ],
-  "bed": 21.4,
-  "overhang": 2720.4,
+  "bed": 1015.5,
+  "overhang": 172.3,
   "fits_bed": true,
   "colour": "brick",
   "note": "torn brick edge, the signature part -- prints flat, relief up",
@@ -439,12 +439,12 @@
   "grams": 16.3,
   "solids": 1,
   "bbox": [
-   15.4,
    203.1,
-   9.7
+   9.7,
+   15.4
   ],
-  "bed": 21.4,
-  "overhang": 2787.4,
+  "bed": 1015.5,
+  "overhang": 179.2,
   "fits_bed": true,
   "colour": "brick",
   "note": "torn brick edge, the signature part -- prints flat, relief up",
@@ -521,11 +521,11 @@
   "solids": 1,
   "bbox": [
    37.8,
-   43.4,
-   16.0
+   16.0,
+   43.4
   ],
-  "bed": 315.4,
-  "overhang": 1544.9,
+  "bed": 393.0,
+  "overhang": 433.1,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2033,11 +2033,11 @@
   "solids": 1,
   "bbox": [
    4.3,
-   91.6,
-   6.1
+   6.1,
+   91.6
   ],
-  "bed": 9.0,
-  "overhang": 249.6,
+  "bed": 6.4,
+  "overhang": 26.1,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2060,11 +2060,11 @@
   "solids": 1,
   "bbox": [
    3.7,
-   63.3,
-   5.7
+   5.7,
+   63.3
   ],
-  "bed": 8.3,
-  "overhang": 143.9,
+  "bed": 4.7,
+  "overhang": 23.9,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2168,11 +2168,11 @@
   "solids": 1,
   "bbox": [
    13.8,
-   23.5,
-   14.3
+   14.3,
+   23.5
   ],
-  "bed": 33.0,
-  "overhang": 241.1,
+  "bed": 107.5,
+  "overhang": 50.9,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2519,11 +2519,11 @@
   "solids": 1,
   "bbox": [
    7.9,
-   37.4,
-   8.0
+   8.0,
+   37.4
   ],
-  "bed": 25.3,
-  "overhang": 183.8,
+  "bed": 35.4,
+  "overhang": 35.1,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -2546,11 +2546,11 @@
   "solids": 1,
   "bbox": [
    7.3,
-   33.0,
-   7.6
+   7.6,
+   33.0
   ],
-  "bed": 23.3,
-  "overhang": 143.3,
+  "bed": 30.2,
+  "overhang": 33.6,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -3518,11 +3518,11 @@
   "solids": 1,
   "bbox": [
    3.4,
-   74.9,
-   5.6
+   5.6,
+   74.9
   ],
-  "bed": 7.9,
-  "overhang": 159.3,
+  "bed": 4.0,
+  "overhang": 23.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -3544,12 +3544,12 @@
   "grams": 0.2,
   "solids": 1,
   "bbox": [
-   2.9,
+   5.2,
    52.7,
-   5.2
+   2.9
   ],
-  "bed": 7.3,
-  "overhang": 94.2,
+  "bed": 9.5,
+  "overhang": 42.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -3653,11 +3653,11 @@
   "solids": 1,
   "bbox": [
    10.3,
-   15.6,
-   11.7
+   11.7,
+   15.6
   ],
-  "bed": 24.8,
-  "overhang": 107.8,
+  "bed": 54.4,
+  "overhang": 40.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -3764,8 +3764,8 @@
    14.9,
    2.3
   ],
-  "bed": 50.7,
-  "overhang": 247.6,
+  "bed": 294.2,
+  "overhang": 4.1,
   "fits_bed": true,
   "colour": "iron",
   "note": "face down, pegs up",
@@ -3791,8 +3791,8 @@
    13.3,
    2.3
   ],
-  "bed": 30.2,
-  "overhang": 191.7,
+  "bed": 220.9,
+  "overhang": 1.0,
   "fits_bed": true,
   "colour": "iron",
   "note": "face down, pegs up",
@@ -3842,11 +3842,11 @@
   "solids": 1,
   "bbox": [
    31.5,
-   6.4,
-   5.8
+   5.8,
+   6.4
   ],
-  "bed": 22.8,
-  "overhang": 172.5,
+  "bed": 54.7,
+  "overhang": 35.2,
   "fits_bed": true,
   "colour": "iron",
   "note": "face down, pegs up",
@@ -3869,11 +3869,11 @@
   "solids": 1,
   "bbox": [
    14.6,
-   4.7,
-   5.8
+   5.8,
+   4.7
   ],
-  "bed": 5.6,
-  "overhang": 57.2,
+  "bed": 22.4,
+  "overhang": 22.1,
   "fits_bed": true,
   "colour": "iron",
   "note": "face down, pegs up",
@@ -4007,8 +4007,8 @@
    7.9,
    2.3
   ],
-  "bed": 6.7,
-  "overhang": 52.1,
+  "bed": 58.8,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "iron",
   "note": "face down, pegs up",
@@ -4031,11 +4031,11 @@
   "solids": 1,
   "bbox": [
    25.6,
-   5.3,
-   5.8
+   5.8,
+   5.3
   ],
-  "bed": 14.5,
-  "overhang": 115.7,
+  "bed": 43.8,
+  "overhang": 34.2,
   "fits_bed": true,
   "colour": "iron",
   "note": "face down, pegs up",
@@ -4077,11 +4077,11 @@
   "solids": 1,
   "bbox": [
    19.0,
-   19.0,
-   6.3
+   6.3,
+   19.0
   ],
-  "bed": 45.6,
-  "overhang": 252.1,
+  "bed": 53.2,
+  "overhang": 8.9,
   "fits_bed": true,
   "colour": "iron",
   "note": "blank spare -- face down, pegs up",
@@ -4134,11 +4134,11 @@
   "solids": 1,
   "bbox": [
    17.4,
-   2.6,
-   17.6
+   17.6,
+   2.6
   ],
-  "bed": 6.2,
-  "overhang": 60.9,
+  "bed": 106.3,
+  "overhang": 8.9,
   "fits_bed": true,
   "colour": "iron",
   "note": "face down, pegs up",
@@ -4161,11 +4161,11 @@
   "solids": 1,
   "bbox": [
    15.7,
-   2.6,
-   15.7
+   15.7,
+   2.6
   ],
-  "bed": 6.2,
-  "overhang": 54.3,
+  "bed": 91.8,
+  "overhang": 8.9,
   "fits_bed": true,
   "colour": "iron",
   "note": "face down, pegs up",
@@ -4302,8 +4302,8 @@
    11.2,
    18.3
   ],
-  "bed": 2.5,
-  "overhang": 211.3,
+  "bed": 31.8,
+  "overhang": 162.2,
   "fits_bed": true,
   "colour": "iron",
   "note": "face down, pegs up",
@@ -4326,11 +4326,11 @@
   "solids": 1,
   "bbox": [
    15.1,
-   8.1,
-   13.2
+   13.2,
+   8.1
   ],
-  "bed": 2.5,
-  "overhang": 139.7,
+  "bed": 13.5,
+  "overhang": 73.7,
   "fits_bed": true,
   "colour": "iron",
   "note": "face down, pegs up",
@@ -4353,11 +4353,11 @@
   "solids": 1,
   "bbox": [
    13.6,
-   7.4,
-   8.7
+   8.7,
+   7.4
   ],
-  "bed": 2.5,
-  "overhang": 63.7,
+  "bed": 28.3,
+  "overhang": 35.2,
   "fits_bed": true,
   "colour": "iron",
   "note": "face down, pegs up",
@@ -4821,8 +4821,8 @@
    45.4,
    4.7
   ],
-  "bed": 6.1,
-  "overhang": 1507.6,
+  "bed": 1516.4,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4840,8 +4840,8 @@
    45.4,
    4.7
   ],
-  "bed": 6.1,
-  "overhang": 1507.6,
+  "bed": 1516.4,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4859,8 +4859,8 @@
    45.4,
    4.7
   ],
-  "bed": 6.1,
-  "overhang": 1507.6,
+  "bed": 1516.4,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4878,8 +4878,8 @@
    9.5,
    4.9
   ],
-  "bed": 6.1,
-  "overhang": 759.8,
+  "bed": 768.5,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -4954,8 +4954,8 @@
    213.8,
    5.2
   ],
-  "bed": 1482.6,
-  "overhang": 40883.2,
+  "bed": 42365.8,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "black",
   "note": "lies flat, 200 x 214 -- never print this on edge",
@@ -4981,8 +4981,8 @@
    213.8,
    5.2
   ],
-  "bed": 1482.6,
-  "overhang": 40883.2,
+  "bed": 42365.8,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "black",
   "note": "lies flat",
@@ -5008,8 +5008,8 @@
    200.0,
    6.2
   ],
-  "bed": 1200.0,
-  "overhang": 18800.0,
+  "bed": 20000.0,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -5035,8 +5035,8 @@
    213.3,
    6.2
   ],
-  "bed": 188.6,
-  "overhang": 19466.8,
+  "bed": 19646.7,
+  "overhang": 8.6,
   "fits_bed": true,
   "colour": "black",
   "note": "service hatch -- pops off for LED access",
@@ -5116,8 +5116,8 @@
    23.0,
    6.5
   ],
-  "bed": 6.1,
-  "overhang": 2006.7,
+  "bed": 2015.5,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -5159,11 +5159,11 @@
   "solids": 1,
   "bbox": [
    4.0,
-   213.8,
-   7.5
+   7.5,
+   213.8
   ],
-  "bed": 6.1,
-  "overhang": 1058.1,
+  "bed": 13.1,
+  "overhang": 14.3,
   "fits_bed": true,
   "colour": "black",
   "note": "214 mm long -- lies down",
@@ -5178,11 +5178,11 @@
   "solids": 1,
   "bbox": [
    4.0,
-   213.8,
-   7.5
+   7.5,
+   213.8
   ],
-  "bed": 6.1,
-  "overhang": 1058.1,
+  "bed": 13.1,
+  "overhang": 14.3,
   "fits_bed": true,
   "colour": "black",
   "note": "214 mm long -- lies down",
@@ -5276,8 +5276,8 @@
    18.0,
    5.5
   ],
-  "bed": 6.1,
-  "overhang": 183.7,
+  "bed": 191.2,
+  "overhang": 1.2,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -5295,8 +5295,8 @@
    18.0,
    5.5
   ],
-  "bed": 6.1,
-  "overhang": 373.0,
+  "bed": 381.7,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -5314,8 +5314,8 @@
    18.0,
    5.5
   ],
-  "bed": 6.1,
-  "overhang": 336.5,
+  "bed": 345.3,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -5333,8 +5333,8 @@
    18.0,
    5.5
   ],
-  "bed": 6.1,
-  "overhang": 459.2,
+  "bed": 468.0,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -5352,8 +5352,8 @@
    18.0,
    5.5
   ],
-  "bed": 6.1,
-  "overhang": 402.5,
+  "bed": 411.3,
+  "overhang": 0.0,
   "fits_bed": true,
   "colour": "black",
   "note": "",
@@ -5368,11 +5368,11 @@
   "solids": 1,
   "bbox": [
    26.0,
-   14.0,
-   12.9
+   12.9,
+   14.0
   ],
-  "bed": 6.1,
-  "overhang": 355.2,
+  "bed": 62.4,
+  "overhang": 96.4,
   "fits_bed": true,
   "colour": "black",
   "note": "",
