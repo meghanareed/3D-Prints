@@ -59,6 +59,22 @@ PLATE_GROUPS = [
 ]
 
 
+# A trial plate: one of every joint in the kit, plus the two parts whose geometry was
+# most recently reworked, in about 8 g and half an hour. Print this, try it against a
+# wall face, and you have exercised every mount type before committing to 64 parts.
+#
+# It is emitted IN ADDITION to the twenty plates and deliberately sits outside their
+# bookkeeping -- these parts still belong to the facade plates for the real build, so
+# this is the one place the "a part belongs to exactly one plate" rule is suspended.
+TRIAL_PLATE = [
+    "13A", "13Ag", "13As",     # P2 keyed pair: frame, glazing, sill
+    "19C",                     # P1 micro peg on its own
+    "11A", "11Ag", "11Ar", "11Ac",   # T3 tongue: bay body, glazing, roof, corbel
+    "12G",                     # door -- the knob is incised now, not proud
+    "15A",                     # drainpipe -- the crown is planed flat now
+    "30H",                     # a sign, printed face up
+]
+
 def shelf_pack(items):
     """Shelf packing, tallest row first. Returns (placed, leftover)."""
     placed, leftover = [], []
@@ -154,6 +170,21 @@ def main():
     missed = [b["id"] for b in built.values() if b["id"] not in already]
     if missed:
         print(f"\n  !! {len(missed)} parts are on no plate: {', '.join(sorted(missed))}")
+    trial = [built[i] for i in TRIAL_PLATE if i in built]
+    if trial:
+        placed, left = shelf_pack(sorted(trial, key=lambda b: b["id"]))
+        if placed and not left:
+            _assert_no_overlap(placed, "TRIAL_first_fit")
+            out = compound([it["solid"].translate((x, y, 0)) for it, x, y in placed])
+            fn = os.path.join(PLATES, "TRIAL_first_fit.stl")
+            cq.exporters.export(out, fn, tolerance=0.04, angularTolerance=0.25)
+            g = sum(grams.get(it["id"], 0.0) for it, _, _ in placed)
+            bb = out.val().BoundingBox()
+            print(f"  {'TRIAL_first_fit':<22} {len(placed):3d} parts  {g:6.0f} g   "
+                  f"footprint {bb.xlen:5.1f} x {bb.ylen:5.1f} mm   (extra, not counted)")
+        else:
+            print("  !! the trial plate does not fit on one bed")
+
     names = {m["id"]: m["name"] for m in B.manifest()}
     notes = {m["id"]: m["note"] for m in B.manifest()}
     write_checklist(sheet, names, notes, grams)

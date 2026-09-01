@@ -274,6 +274,35 @@ covers.
 
 ---
 
+## 0f. The trial plate
+
+```
+out/3mf/TRIAL_first_fit.3mf          11 parts, 8 g, about half an hour
+out/plates/TRIAL_first_fit.stl       the same, fused, if you prefer STL
+```
+
+One of every joint in the kit on a single plate, so every mount type is exercised
+before you commit to a facade plate of 64 parts:
+
+| Part | What it proves |
+|---|---|
+| `13A` frame, `13Ag` glazing, `13As` sill | the **P2 keyed pair**, and that the glazing rebate is on the back where it belongs |
+| `19C` wall plaque | a **P1 micro peg** on its own |
+| `11A` bay body, `11Ag`, `11Ar`, `11Ac` | the **T3 tongue**, and the corbel and roof that hang off it |
+| `12G` door | the incised knob — this is the part that used to balance on a 1.1 mm sphere |
+| `15A` drainpipe | the planed crown — 228 mm² on the bed now instead of 7 |
+| `30H` small sign | a part printed face **up** rather than face down |
+
+Try each against a wall face. Remember the wall you have already printed has the old
+T3 grooves with no crush ribs, so `11A` will locate but not grip; everything with a P1
+or P2 mount should feel exactly like the finished kit.
+
+This plate is emitted **in addition** to the twenty, and it is the one place the "a
+part belongs to exactly one plate" rule is suspended — these same parts still appear on
+the facade plates for the real build.
+
+---
+
 ## 1. Print plan
 
 `python3 plates.py` writes these ready-arranged to `out/plates/`, every part already

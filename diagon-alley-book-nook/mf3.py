@@ -178,6 +178,29 @@ def main():
             print(f"  {label + suffix:<22} {len(objs):3d} objects  {g:6.0f} g   "
                   f"{len(brim)} with a brim   {os.path.getsize(path)/1024:6.0f} kB")
             n += 1
+    trial = [built[i] for i in PL.TRIAL_PLATE if i in built]
+    if trial:
+        placed, left = PL.shelf_pack(sorted(trial, key=lambda b: b["id"]))
+        if placed and not left:
+            objs, brim = [], set()
+            for it, x, y in placed:
+                verts, tris = mesh_of_stl(it["path"])
+                objs.append((it["name"], verts, tris, (x, y, 0.0)))
+                if it["id"] in brim_ids:
+                    brim.add(it["name"])
+            path = os.path.join(MF3, "TRIAL_first_fit.3mf")
+            with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as z:
+                z.writestr("[Content_Types].xml", CONTENT_TYPES)
+                z.writestr("_rels/.rels", RELS)
+                z.writestr("3D/3dmodel.model", model_xml(objs))
+                z.writestr("Metadata/model_settings.config", settings_xml(objs, brim))
+            g = sum(grams.get(it["id"], 0.0) for it, _, _ in placed)
+            print(f"  {'TRIAL_first_fit':<22} {len(objs):3d} objects  {g:6.0f} g   "
+                  f"{len(brim)} with a brim   {os.path.getsize(path)/1024:6.0f} kB")
+            n += 1
+        else:
+            print("  !! the trial plate does not fit on one bed")
+
     print(f"\n{n} plates -> {MF3}")
     return 0
 
