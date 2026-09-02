@@ -67,11 +67,11 @@ off the plate warped or with a bit missing is not printed.
 - [ ] `04` Cobblestone_Floor (61.2 g)
 - [ ] `04B` Gutter_L (1.9 g)
 - [ ] `04C` Gutter_R (1.9 g)
-- [ ] `05` Ceiling_Baffle (22.3 g) -- its P1 pegs stand 5.1 mm proud -- that is what sets the top of the stack
+- [ ] `05` Ceiling_Baffle (22.3 g) -- its P1 pegs stand 5.1 mm proud -- that is what sets the top of the stack; **print with a brim**
 
 ## `06_rear.stl`  ---  6 parts, 156 g  (0/6 done)
 
-- [ ] `03A` Rear_Perspective_Block (60.5 g) -- lies on its back; 170 mm tall is too tippy upright
+- [ ] `03A` Rear_Perspective_Block (60.5 g) -- lies on its back; 170 mm tall is too tippy upright; **print with a brim**
 - [ ] `03B` Rear_Archway (5.8 g)
 - [ ] `03C` Rear_Silhouette (4.9 g)
 - [ ] `03D` Rear_Glow_Frame (36.4 g)
@@ -114,69 +114,69 @@ off the plate warped or with a bit missing is not printed.
 ## `09_facade_left.stl`  ---  64 parts, 44 g  (0/64 done)
 
 - [ ] `10B` L_L1_Bow_Window (4.1 g) -- face down, pegs up; **print with a brim**
-- [ ] `10Bc` L_L1_Bow_Window_Cornice (0.6 g) -- face down, pegs up
+- [ ] `10Bc` L_L1_Bow_Window_Cornice (0.6 g) -- face down, pegs up; **print with a brim**
 - [ ] `10Bd` L_L1_Bow_Window_Diffuser (0.7 g) -- face down, pegs up
 - [ ] `10Bg` L_L1_Bow_Window_Glazing (0.7 g) -- face down, pegs up
 - [ ] `10D` L_L1_Cornice (0.4 g) -- face down, pegs up
 - [ ] `10E` L_L1_Stallriser (1.0 g) -- face down, pegs up
 - [ ] `10G` L_L1_Door (1.8 g) -- face down, pegs up
 - [ ] `10Gf` L_L1_Door_Frame (1.1 g) -- face down, pegs up
-- [ ] `10Gl` L_L1_Door_Fanlight (0.2 g) -- face down, pegs up
+- [ ] `10Gl` L_L1_Door_Fanlight (0.2 g) -- face down, pegs up; **print with a brim**
 - [ ] `11A` L_L2_Bay_Window_Body (2.9 g) -- face down, pegs up
-- [ ] `11Ac` L_L2_Bay_Window_Corbel (0.2 g) -- face down, pegs up
+- [ ] `11Ac` L_L2_Bay_Window_Corbel (0.2 g) -- face down, pegs up; **print with a brim**
 - [ ] `11Ag` L_L2_Bay_Window_Glazing (0.3 g) -- face down, pegs up
-- [ ] `11Ar` L_L2_Bay_Window_Roof (0.7 g) -- face down, pegs up
+- [ ] `11Ar` L_L2_Bay_Window_Roof (0.7 g) -- face down, pegs up; **print with a brim**
 - [ ] `11F` L_L2_Door (0.9 g) -- face down, pegs up
 - [ ] `11Ff` L_L2_Door_Frame (0.7 g) -- face down, pegs up
-- [ ] `11Fl` L_L2_Door_Fanlight (0.1 g) -- face down, pegs up
+- [ ] `11Fl` L_L2_Door_Fanlight (0.1 g) -- face down, pegs up; **print with a brim**
 - [ ] `11J` L_L2_Awning (0.4 g) -- face down, pegs up
 - [ ] `11K` L_L2_Fascia (0.7 g) -- face down, pegs up
 - [ ] `12A` L_L3_Shop_Window_Frame (0.8 g) -- face down, pegs up
 - [ ] `12Ag` L_L3_Shop_Window_Glazing (0.3 g) -- face down, pegs up
-- [ ] `12Al` L_L3_Shop_Window_Lintel (0.1 g) -- face down, pegs up
+- [ ] `12Al` L_L3_Shop_Window_Lintel (0.1 g) -- face down, pegs up; **print with a brim**
 - [ ] `12B` L_L_Oriel_Body (1.8 g) -- face down, pegs up
-- [ ] `12Bc` L_L_Oriel_Corbel (0.2 g) -- face down, pegs up
+- [ ] `12Bc` L_L_Oriel_Corbel (0.2 g) -- face down, pegs up; **print with a brim**
 - [ ] `12Bg` L_L_Oriel_Glazing (0.2 g) -- face down, pegs up
-- [ ] `12Br` L_L_Oriel_Roof (0.5 g) -- face down, pegs up
+- [ ] `12Br` L_L_Oriel_Roof (0.5 g) -- face down, pegs up; **print with a brim**
 - [ ] `12D` L_L3_Stallriser (0.2 g) -- face down, pegs up
 - [ ] `12G` L_L3_Door (0.4 g) -- face down, pegs up
 - [ ] `12Gf` L_L3_Door_Frame (0.5 g) -- face down, pegs up
 - [ ] `13A` L_L_Window_A_Frame (1.3 g) -- face down, pegs up
 - [ ] `13Ag` L_L_Window_A_Glazing (0.7 g) -- face down, pegs up
-- [ ] `13As` L_L_Window_A_Sill (0.3 g) -- face down, pegs up
+- [ ] `13As` L_L_Window_A_Sill (0.3 g) -- face down, pegs up; **print with a brim**
 - [ ] `13B` L_L_Window_B_Frame (1.1 g) -- face down, pegs up
 - [ ] `13Bg` L_L_Window_B_Glazing (0.5 g) -- face down, pegs up
-- [ ] `13Bs` L_L_Window_B_Sill (0.2 g) -- face down, pegs up
+- [ ] `13Bs` L_L_Window_B_Sill (0.2 g) -- face down, pegs up; **print with a brim**
 - [ ] `13C` L_L_Window_C_Frame (0.7 g) -- face down, pegs up
 - [ ] `13Cg` L_L_Window_C_Glazing (0.2 g) -- face down, pegs up
-- [ ] `13Cs` L_L_Window_C_Sill (0.2 g) -- face down, pegs up
+- [ ] `13Cs` L_L_Window_C_Sill (0.2 g) -- face down, pegs up; **print with a brim**
 - [ ] `13D` L_L_Window_D_Frame (0.6 g) -- face down, pegs up
 - [ ] `13Dg` L_L_Window_D_Glazing (0.1 g) -- face down, pegs up
-- [ ] `13Ds` L_L_Window_D_Sill (0.1 g) -- face down, pegs up
+- [ ] `13Ds` L_L_Window_D_Sill (0.1 g) -- face down, pegs up; **print with a brim**
 - [ ] `13E` L_L_Window_E_Frame (1.1 g) -- face down, pegs up
 - [ ] `13Eg` L_L_Window_E_Glazing (0.5 g) -- face down, pegs up
-- [ ] `13Es` L_L_Window_E_Sill (0.3 g) -- face down, pegs up
+- [ ] `13Es` L_L_Window_E_Sill (0.3 g) -- face down, pegs up; **print with a brim**
 - [ ] `13F` L_L_Window_F_Frame (0.8 g) -- face down, pegs up
 - [ ] `13Fg` L_L_Window_F_Glazing (0.3 g) -- face down, pegs up
-- [ ] `13Fs` L_L_Window_F_Sill (0.2 g) -- face down, pegs up
+- [ ] `13Fs` L_L_Window_F_Sill (0.2 g) -- face down, pegs up; **print with a brim**
 - [ ] `13G` L_L_Window_G_Frame (0.6 g) -- face down, pegs up
 - [ ] `13Gg` L_L_Window_G_Glazing (0.2 g) -- face down, pegs up
-- [ ] `13Gs` L_L_Window_G_Sill (0.2 g) -- face down, pegs up
+- [ ] `13Gs` L_L_Window_G_Sill (0.2 g) -- face down, pegs up; **print with a brim**
 - [ ] `14A` L_L_Attic_Dormer_Frame (0.7 g) -- face down, pegs up
 - [ ] `14Ag` L_L_Attic_Dormer_Glazing (0.3 g) -- face down, pegs up
-- [ ] `14As` L_L_Attic_Dormer_Sill (0.2 g) -- face down, pegs up
+- [ ] `14As` L_L_Attic_Dormer_Sill (0.2 g) -- face down, pegs up; **print with a brim**
 - [ ] `14B` L_L_Attic_B_Frame (0.5 g) -- face down, pegs up
 - [ ] `14Bg` L_L_Attic_B_Glazing (0.1 g) -- face down, pegs up
-- [ ] `14Bs` L_L_Attic_B_Sill (0.2 g) -- face down, pegs up
+- [ ] `14Bs` L_L_Attic_B_Sill (0.2 g) -- face down, pegs up; **print with a brim**
 - [ ] `15A` L_L_Drainpipe_Lower (0.7 g) -- face down, pegs up
 - [ ] `15B` L_L_Drainpipe_Upper (0.4 g) -- face down, pegs up
-- [ ] `15C` L_L_Hopper (0.1 g) -- face down, pegs up
+- [ ] `15C` L_L_Hopper (0.1 g) -- face down, pegs up; **print with a brim**
 - [ ] `17A` L_L_Cornice_Front (2.2 g) -- face down, pegs up
 - [ ] `17B` L_L_Cornice_Rear (1.2 g) -- face down, pegs up
 - [ ] `18A` L_L_Chimney (2.7 g) -- face down, pegs up; **print with a brim**
 - [ ] `19A` L_L_Quoin_Front (1.4 g) -- face down, pegs up
-- [ ] `19B` L_L_Keystone (0.1 g) -- face down, pegs up
-- [ ] `19C` L_L_Wall_Plaque (0.2 g) -- face down, pegs up
+- [ ] `19B` L_L_Keystone (0.1 g) -- face down, pegs up; **print with a brim**
+- [ ] `19C` L_L_Wall_Plaque (0.2 g) -- face down, pegs up; **print with a brim**
 
 ## `10_facade_right.stl`  ---  55 parts, 33 g  (0/55 done)
 
@@ -184,83 +184,83 @@ off the plate warped or with a bit missing is not printed.
 - [ ] `20Bf` R_R1_Arched_Door_Frame (1.1 g) -- face down, pegs up
 - [ ] `20E` R_R1_Tall_Window_Frame (1.3 g) -- face down, pegs up
 - [ ] `20Eg` R_R1_Tall_Window_Glazing (0.7 g) -- face down, pegs up
-- [ ] `20Es` R_R1_Tall_Window_Sill (0.3 g) -- face down, pegs up
-- [ ] `20G` R_R1_Door_Keystone (0.2 g) -- face down, pegs up
+- [ ] `20Es` R_R1_Tall_Window_Sill (0.3 g) -- face down, pegs up; **print with a brim**
+- [ ] `20G` R_R1_Door_Keystone (0.2 g) -- face down, pegs up; **print with a brim**
 - [ ] `21B` R_R2_Shop_Window_Frame (1.2 g) -- face down, pegs up
 - [ ] `21Bg` R_R2_Shop_Window_Glazing (0.8 g) -- face down, pegs up
-- [ ] `21Bl` R_R2_Shop_Window_Lintel (0.2 g) -- face down, pegs up
+- [ ] `21Bl` R_R2_Shop_Window_Lintel (0.2 g) -- face down, pegs up; **print with a brim**
 - [ ] `21D` R_R2_Pilaster_Left (0.8 g) -- face down, pegs up; **print with a brim**
 - [ ] `21E` R_R2_Pilaster_Right (0.6 g) -- face down, pegs up; **print with a brim**
 - [ ] `21F` R_R2_Fascia (0.9 g) -- face down, pegs up
 - [ ] `21G` R_R2_Stallriser (0.5 g) -- face down, pegs up
 - [ ] `22A` R_R3_Shop_Window_Frame (0.7 g) -- face down, pegs up
 - [ ] `22Ag` R_R3_Shop_Window_Glazing (0.3 g) -- face down, pegs up
-- [ ] `22Al` R_R3_Shop_Window_Lintel (0.1 g) -- face down, pegs up
+- [ ] `22Al` R_R3_Shop_Window_Lintel (0.1 g) -- face down, pegs up; **print with a brim**
 - [ ] `22D` R_R3_Door (0.3 g) -- face down, pegs up
 - [ ] `22Df` R_R3_Door_Frame (0.5 g) -- face down, pegs up
 - [ ] `23A` R_R_Window_A_Frame (1.1 g) -- face down, pegs up
 - [ ] `23Ag` R_R_Window_A_Glazing (0.4 g) -- face down, pegs up
-- [ ] `23As` R_R_Window_A_Sill (0.2 g) -- face down, pegs up
+- [ ] `23As` R_R_Window_A_Sill (0.2 g) -- face down, pegs up; **print with a brim**
 - [ ] `23B` R_R_Window_B_Frame (0.7 g) -- face down, pegs up
 - [ ] `23Bg` R_R_Window_B_Glazing (0.2 g) -- face down, pegs up
-- [ ] `23Bs` R_R_Window_B_Sill (0.2 g) -- face down, pegs up
+- [ ] `23Bs` R_R_Window_B_Sill (0.2 g) -- face down, pegs up; **print with a brim**
 - [ ] `23C` R_R_Window_C_Frame (0.6 g) -- face down, pegs up
 - [ ] `23Cg` R_R_Window_C_Glazing (0.1 g) -- face down, pegs up
-- [ ] `23Cs` R_R_Window_C_Sill (0.1 g) -- face down, pegs up
+- [ ] `23Cs` R_R_Window_C_Sill (0.1 g) -- face down, pegs up; **print with a brim**
 - [ ] `23D` R_R_Window_D_Frame (1.1 g) -- face down, pegs up
 - [ ] `23Dg` R_R_Window_D_Glazing (0.5 g) -- face down, pegs up
-- [ ] `23Ds` R_R_Window_D_Sill (0.3 g) -- face down, pegs up
+- [ ] `23Ds` R_R_Window_D_Sill (0.3 g) -- face down, pegs up; **print with a brim**
 - [ ] `23E` R_R_Window_E_Frame (0.8 g) -- face down, pegs up
 - [ ] `23Eg` R_R_Window_E_Glazing (0.3 g) -- face down, pegs up
-- [ ] `23Es` R_R_Window_E_Sill (0.2 g) -- face down, pegs up
+- [ ] `23Es` R_R_Window_E_Sill (0.2 g) -- face down, pegs up; **print with a brim**
 - [ ] `23F` R_R_Window_F_Frame (0.6 g) -- face down, pegs up
 - [ ] `23Fg` R_R_Window_F_Glazing (0.2 g) -- face down, pegs up
-- [ ] `23Fs` R_R_Window_F_Sill (0.2 g) -- face down, pegs up
+- [ ] `23Fs` R_R_Window_F_Sill (0.2 g) -- face down, pegs up; **print with a brim**
 - [ ] `23G` R_R_Attic_A_Frame (0.6 g) -- face down, pegs up
 - [ ] `23Gg` R_R_Attic_A_Glazing (0.2 g) -- face down, pegs up
-- [ ] `23Gs` R_R_Attic_A_Sill (0.2 g) -- face down, pegs up
+- [ ] `23Gs` R_R_Attic_A_Sill (0.2 g) -- face down, pegs up; **print with a brim**
 - [ ] `23H` R_R_Attic_B_Frame (0.4 g) -- face down, pegs up
 - [ ] `23Hg` R_R_Attic_B_Glazing (0.1 g) -- face down, pegs up
-- [ ] `23Hs` R_R_Attic_B_Sill (0.1 g) -- face down, pegs up
+- [ ] `23Hs` R_R_Attic_B_Sill (0.1 g) -- face down, pegs up; **print with a brim**
 - [ ] `24A` R_R_Bay_Window_Body (2.9 g) -- face down, pegs up
-- [ ] `24Ac` R_R_Bay_Window_Corbel (0.2 g) -- face down, pegs up
+- [ ] `24Ac` R_R_Bay_Window_Corbel (0.2 g) -- face down, pegs up; **print with a brim**
 - [ ] `24Ag` R_R_Bay_Window_Glazing (0.3 g) -- face down, pegs up
-- [ ] `24Ar` R_R_Bay_Window_Roof (0.8 g) -- face down, pegs up
+- [ ] `24Ar` R_R_Bay_Window_Roof (0.8 g) -- face down, pegs up; **print with a brim**
 - [ ] `25A` R_R_Drainpipe_Lower (0.4 g) -- face down, pegs up
 - [ ] `25B` R_R_Drainpipe_Upper (0.2 g) -- face down, pegs up
-- [ ] `25C` R_R_Hopper (0.1 g) -- face down, pegs up
+- [ ] `25C` R_R_Hopper (0.1 g) -- face down, pegs up; **print with a brim**
 - [ ] `27A` R_R_Cornice_Front (2.2 g) -- face down, pegs up
 - [ ] `27B` R_R_Cornice_Rear (1.3 g) -- face down, pegs up
 - [ ] `28A` R_R_Chimney (1.0 g) -- face down, pegs up; **print with a brim**
 - [ ] `29A` R_R_Quoin_Front (1.4 g) -- face down, pegs up
-- [ ] `29B` R_R_Keystone (0.1 g) -- face down, pegs up
-- [ ] `29C` R_R_Guild_Badge (0.1 g) -- face down, pegs up
+- [ ] `29B` R_R_Keystone (0.1 g) -- face down, pegs up; **print with a brim**
+- [ ] `29C` R_R_Guild_Badge (0.1 g) -- face down, pegs up; **print with a brim**
 
 ## `11_signs_props.stl`  ---  38 parts, 19 g  (0/38 done)
 
 - [ ] `30A` Sign_Vertical_Banner (1.2 g) -- face down, pegs up; **print with a brim**
 - [ ] `30B` Sign_Swing_A (0.7 g) -- face down, pegs up
 - [ ] `30C` Sign_Swing_B (0.5 g) -- face down, pegs up
-- [ ] `30D` Sign_Shield_A (0.5 g) -- face down, pegs up
+- [ ] `30D` Sign_Shield_A (0.5 g) -- face down, pegs up; **print with a brim**
 - [ ] `30E` Sign_Fascia_Long (0.5 g) -- face down, pegs up
-- [ ] `30F` Sign_Directional (0.2 g) -- face down, pegs up
-- [ ] `30G1` Sign_Lozenge_1 (0.1 g) -- face down, pegs up
-- [ ] `30G2` Sign_Lozenge_2 (0.1 g) -- face down, pegs up
-- [ ] `30G3` Sign_Lozenge_3 (0.1 g) -- face down, pegs up
-- [ ] `30G4` Sign_Lozenge_4 (0.1 g) -- face down, pegs up
+- [ ] `30F` Sign_Directional (0.2 g) -- face down, pegs up; **print with a brim**
+- [ ] `30G1` Sign_Lozenge_1 (0.1 g) -- face down, pegs up; **print with a brim**
+- [ ] `30G2` Sign_Lozenge_2 (0.1 g) -- face down, pegs up; **print with a brim**
+- [ ] `30G3` Sign_Lozenge_3 (0.1 g) -- face down, pegs up; **print with a brim**
+- [ ] `30G4` Sign_Lozenge_4 (0.1 g) -- face down, pegs up; **print with a brim**
 - [ ] `30H` Sign_Small_Rear_A (0.1 g) -- face down, pegs up
 - [ ] `30J` Sign_Fascia_L2 (0.3 g) -- face down, pegs up
 - [ ] `30K` Sign_Blank_Swing (0.8 g) -- blank spare -- face down, pegs up
-- [ ] `30L` Sign_Blank_Shield (0.7 g) -- blank spare -- face down, pegs up
+- [ ] `30L` Sign_Blank_Shield (0.7 g) -- blank spare -- face down, pegs up; **print with a brim**
 - [ ] `30M` Sign_Blank_Lozenge (0.2 g) -- blank spare -- face down, pegs up
 - [ ] `30N` Sign_Blank_Fascia (0.7 g) -- blank spare -- face down, pegs up
 - [ ] `31A` Bracket_Scroll_A (0.4 g) -- face down, pegs up
 - [ ] `31B` Bracket_Scroll_B (0.3 g) -- face down, pegs up
 - [ ] `31C` Bracket_Scroll_C (0.2 g) -- face down, pegs up
 - [ ] `31D` Bracket_Scroll_D (0.1 g) -- face down, pegs up
-- [ ] `32A` Sign_Hanging_Chain_A (0.0 g) -- blank spare -- face down, pegs up
-- [ ] `32B` Sign_Hanging_Chain_B (0.0 g) -- blank spare -- face down, pegs up
-- [ ] `32C` Sign_Rail_Hook (0.1 g) -- blank spare -- face down, pegs up
+- [ ] `32A` Sign_Hanging_Chain_A (0.0 g) -- blank spare -- face down, pegs up; **print with a brim**
+- [ ] `32B` Sign_Hanging_Chain_B (0.0 g) -- blank spare -- face down, pegs up; **print with a brim**
+- [ ] `32C` Sign_Rail_Hook (0.1 g) -- blank spare -- face down, pegs up; **print with a brim**
 - [ ] `33A` Lantern_Large (0.7 g) -- face down, pegs up; **print with a brim**
 - [ ] `34A` Lantern_Small (0.4 g) -- face down, pegs up; **print with a brim**
 - [ ] `34C` Lantern_Rear_Tiny (0.2 g) -- face down, pegs up
@@ -275,7 +275,7 @@ off the plate warped or with a bit missing is not printed.
 - [ ] `38B` Poster_Layer (0.1 g)
 - [ ] `39A` Kerb_Step (0.4 g)
 - [ ] `39B` Cellar_Hatch (0.4 g)
-- [ ] `39C` Boot_Scraper (0.1 g)
+- [ ] `39C` Boot_Scraper (0.1 g) -- **print with a brim**
 
 ## `12_hardware.stl`  ---  22 parts, 31 g  (0/22 done)
 

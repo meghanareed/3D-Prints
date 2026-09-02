@@ -32,6 +32,32 @@ PREVIEW = os.path.join(OUT, "preview")
 PLATES = os.path.join(OUT, "plates")
 
 
+# How thin a base, and how tippy a footprint, before a part wants a brim.
+#
+# ONE definition, because there were three. verify.py had all the rules, mf3.py had two
+# of them and plates.py's checklist had one, so 13As_L_L_Window_A_Sill -- a part that
+# had already come off the plate as spaghetti -- was warned about by verify.py, listed
+# without a brim in the checklist, and shipped in the 3MF with no brim setting at all.
+# Three copies of a rule is three chances to disagree, and they took all three.
+SMALL_BASE = 25.0        # mm^2 of first layer, in absolute terms
+TIPPY = 2.0              # height as a multiple of the narrower footprint dimension
+BRIM_OVERHANG = 50.0     # mm^2, below which a big ratio does not matter
+
+
+def needs_brim(row):
+    """Does this manifest row want a brim? `row` is an entry from out/manifest.json."""
+    bed = row.get("bed")
+    if bed is None:
+        return False
+    if bed < SMALL_BASE:
+        return True
+    w, d, h = row.get("bbox", [99, 99, 0])
+    if h > TIPPY * max(min(w, d), 0.01):
+        return True
+    over = row.get("overhang", 0.0)
+    return over > BRIM_OVERHANG and over > 4.0 * max(bed, 0.1)
+
+
 def bed_and_overhang(solid, layer=0.25, steep=0.707):
     """(area of the first layer, area facing down above it) in mm^2.
 

@@ -219,8 +219,7 @@ def write_checklist(sheet, names, notes, grams):
     mpath = os.path.join(OUT, "manifest.json")
     if os.path.exists(mpath):
         for r in json.load(open(mpath)):
-            if r.get("overhang", 0) > 50.0 and \
-                    r["overhang"] > 4.0 * max(r.get("bed", 0.1), 0.1):
+            if B.needs_brim(r):
                 brim.add(r["id"])
     os.makedirs(os.path.dirname(CHECKLIST), exist_ok=True)
     total = sum(g for _, g, _ in sheet)

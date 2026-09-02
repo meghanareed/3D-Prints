@@ -123,9 +123,7 @@ def main():
     if os.path.exists(mpath):
         for r in json.load(open(mpath)):
             grams[r["id"]] = r.get("grams", 0.0)
-            if r.get("bed", 99) < 25.0 or (
-                    r.get("overhang", 0) > 50.0
-                    and r["overhang"] > 4.0 * max(r.get("bed", 0.1), 0.1)):
+            if B.needs_brim(r):
                 brim_ids.add(r["id"])
 
     rows = {r["id"]: r for r in json.load(open(mpath))} if os.path.exists(mpath) else {}

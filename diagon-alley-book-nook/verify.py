@@ -577,14 +577,12 @@ def check_bed_contact():
     #   * not much base in absolute terms, whatever the ratio says. 19C had 15.4 mm^2.
     #   * a footprint far narrower than the part is tall, so the nozzle levers it off
     #     sideways. 13As was 27 x 2.6 mm and 7.3 mm tall.
-    SMALL_BASE = 25.0
-    TIPPY = 2.0
+    import build as _B
+    SMALL_BASE = _B.SMALL_BASE
     def narrow(r):
         w, d, h = r.get("bbox", [99, 99, 0])
-        return h > TIPPY * max(min(w, d), 0.01)
-    brim = [r for r in rows if r not in tiny and r not in risky
-            and ((r["overhang"] > 50.0 and ratio(r) > 4.0)
-                 or r["bed"] < SMALL_BASE or narrow(r))]
+        return h > _B.TIPPY * max(min(w, d), 0.01)
+    brim = [r for r in rows if r not in tiny and r not in risky and _B.needs_brim(r)]
     for r in sorted(tiny, key=lambda r: r["bed"]):
         fail(f"{r['id']} {r['name']}: only {r['bed']:.2f} mm^2 on the bed "
              f"({r['overhang']:.0f} mm^2 hanging) -- it stands on a point")
