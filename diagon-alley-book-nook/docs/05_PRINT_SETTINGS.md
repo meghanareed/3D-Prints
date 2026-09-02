@@ -21,11 +21,12 @@ are ever dropped.
 
 | | Setting | Why |
 |---|---|---|
-| 1 | **An outer brim, 5 mm, on the 65 parts listed below** | Auto brim looks at a 6 mm^2 keystone, decides it is fine, and it comes off as spaghetti |
+| 1 | **An outer brim, 5 mm, on the 78 parts listed below** | Auto brim looks at a 6 mm^2 keystone, decides it is fine, and it comes off as spaghetti |
 | 2 | **Avoid crossing walls** | The window interiors came out webbed with strings; every one was a travel move across the opening |
 | 3 | **Bed 65 C first layer, 60 C after** | The wall faces and the base pan are big flat parts and they lift at 55 |
 | 4 | **Do not re-orient anything** | Every part is exported already lying the way it should print. `orient.py` chose these; see the note at the bottom |
 | 5 | **No supports** | Nothing in the kit needs them in its print orientation. If your slicer wants to add some, the part is the wrong way up |
+| 6 | **Nozzle 210 C, minimum layer time 8 s** | Five of eleven parts on the first trial plate were abandoned mid-print for stringing. 220 C and a 4 s minimum layer time is a profile tuned for large flat parts, applied to 5 mm ones |
 
 ## Process
 
@@ -51,10 +52,12 @@ defaults and you will be fine.
 | Setting | Value |
 |---|---|
 | Material | PLA |
-| Nozzle | 220 C first layer, 220 C after |
+| Nozzle | 220 C first layer, 210 C after |
 | Bed (textured PEI) | 65 C first layer, 60 C after |
 | Plate type | Textured PEI Plate |
 | Flow ratio | 0.98 |
+| Minimum layer time | 8 s (floor speed 20 mm/s) |
+| Part cooling fan | 100-100%, off for the first 1 layer(s) |
 
 **The bed temperature is the one deliberate departure from stock PLA.** Bambu's
 `Generic PLA @BBL P2S` runs the bed at 55 C throughout. The parts here that fail
@@ -105,7 +108,7 @@ orientation, measured off the mesh by `build.needs_brim`:
 
 ### Parts that need a brim
 
-65 of 220 parts. If picking them out one by one is more trouble than
+78 of 220 parts. If picking them out one by one is more trouble than
 it is worth, set an outer brim on the whole plate instead: a 5 mm brim does the
 other parts no harm beyond a little cleanup.
 
@@ -133,30 +136,37 @@ brims that merge into one raft peel as one raft, and take every part on it.
 
 * `00_Chassis_Base_Pan` -- 1810 mm^2 on the bed, 95 x 197 x 15 mm
 
-**05_floor** -- 1 of 4
+**05_floor** -- 3 of 4
 
+* `04B_Gutter_L` -- 392 mm^2 on the bed, 6 x 151 x 4 mm
+* `04C_Gutter_R` -- 392 mm^2 on the bed, 6 x 151 x 4 mm
 * `05_Ceiling_Baffle` -- 89 mm^2 on the bed, 79 x 17 x 150 mm
 
 **06_rear** -- 1 of 5
 
 * `03A_Rear_Perspective_Block` -- 1024 mm^2 on the bed, 66 x 22 x 170 mm
 
-**08_case** -- 1 of 3
+**08_case** -- 2 of 3
 
 * `50_Outer_Left` -- 42366 mm^2 on the bed, 200 x 214 x 5 mm
+* `58A_Case_Spine_Trim_L` -- 396 mm^2 on the bed, 214 x 8 x 4 mm
 
-**08_case_2** -- 1 of 2
+**08_case_2** -- 2 of 2
 
 * `51_Outer_Right` -- 42366 mm^2 on the bed, 200 x 214 x 5 mm
+* `58B_Case_Spine_Trim_R` -- 396 mm^2 on the bed, 214 x 8 x 4 mm
 
-**09_facade_left** -- 2 of 39
+**09_facade_left** -- 4 of 39
 
 * `10B_L_L1_Bow_Window` -- 315 mm^2 on the bed, 38 x 43 x 16 mm
+* `15A_L_L_Drainpipe_Lower` -- 228 mm^2 on the bed, 4 x 92 x 5 mm
+* `15B_L_L_Drainpipe_Upper` -- 139 mm^2 on the bed, 4 x 63 x 5 mm
 * `18A_L_L_Chimney` -- 33 mm^2 on the bed, 14 x 24 x 14 mm
 
-**09_facade_left_2** -- 20 of 25
+**09_facade_left_2** -- 23 of 25
 
 * `10Bc_L_L1_Bow_Window_Cornice` -- 147 mm^2 on the bed, 46 x 3 x 6 mm
+* `10D_L_L1_Cornice` -- 138 mm^2 on the bed, 46 x 3 x 6 mm
 * `10Gl_L_L1_Door_Fanlight` -- 25 mm^2 on the bed, 18 x 5 x 6 mm
 * `11Ac_L_L2_Bay_Window_Corbel` -- 18 mm^2 on the bed, 6 x 7 x 7 mm
 * `11Ar_L_L2_Bay_Window_Roof` -- 43 mm^2 on the bed, 27 x 5 x 15 mm
@@ -174,10 +184,12 @@ brims that merge into one raft peel as one raft, and take every part on it.
 * `14As_L_L_Attic_Dormer_Sill` -- 37 mm^2 on the bed, 20 x 3 x 7 mm
 * `14Bs_L_L_Attic_B_Sill` -- 28 mm^2 on the bed, 16 x 3 x 6 mm
 * `15C_L_L_Hopper` -- 13 mm^2 on the bed, 7 x 6 x 8 mm
+* `17A_L_L_Cornice_Front` -- 162 mm^2 on the bed, 78 x 6 x 8 mm
+* `17B_L_L_Cornice_Rear` -- 114 mm^2 on the bed, 70 x 5 x 7 mm
 * `19B_L_L_Keystone` -- 6 mm^2 on the bed, 7 x 6 x 6 mm
 * `19C_L_L_Wall_Plaque` -- 15 mm^2 on the bed, 11 x 8 x 6 mm
 
-**10_facade_right** -- 20 of 55
+**10_facade_right** -- 24 of 55
 
 * `20Es_R_R1_Tall_Window_Sill` -- 43 mm^2 on the bed, 24 x 3 x 7 mm
 * `20G_R_R1_Door_Keystone` -- 14 mm^2 on the bed, 11 x 8 x 6 mm
@@ -195,7 +207,11 @@ brims that merge into one raft peel as one raft, and take every part on it.
 * `23Hs_R_R_Attic_B_Sill` -- 27 mm^2 on the bed, 15 x 3 x 6 mm
 * `24Ac_R_R_Bay_Window_Corbel` -- 19 mm^2 on the bed, 6 x 7 x 8 mm
 * `24Ar_R_R_Bay_Window_Roof` -- 43 mm^2 on the bed, 27 x 5 x 16 mm
+* `25A_R_R_Drainpipe_Lower` -- 153 mm^2 on the bed, 3 x 75 x 5 mm
+* `25B_R_R_Drainpipe_Upper` -- 95 mm^2 on the bed, 3 x 53 x 5 mm
 * `25C_R_R_Hopper` -- 9 mm^2 on the bed, 5 x 5 x 6 mm
+* `27A_R_R_Cornice_Front` -- 158 mm^2 on the bed, 76 x 6 x 8 mm
+* `27B_R_R_Cornice_Rear` -- 118 mm^2 on the bed, 72 x 5 x 7 mm
 * `28A_R_R_Chimney` -- 25 mm^2 on the bed, 10 x 16 x 12 mm
 * `29B_R_R_Keystone` -- 5 mm^2 on the bed, 6 x 5 x 6 mm
 * `29C_R_R_Guild_Badge` -- 9 mm^2 on the bed, 9 x 6 x 6 mm
@@ -217,12 +233,36 @@ brims that merge into one raft peel as one raft, and take every part on it.
 * `34A_Lantern_Small` -- 20 mm^2 on the bed, 15 x 8 x 13 mm
 * `39C_Boot_Scraper` -- 24 mm^2 on the bed, 10 x 6 x 2 mm
 
-**TRIAL_first_fit** -- 4 of 11
+**TRIAL_first_fit** -- 5 of 11
 
 * `11Ac_L_L2_Bay_Window_Corbel` -- 18 mm^2 on the bed, 6 x 7 x 7 mm
 * `11Ar_L_L2_Bay_Window_Roof` -- 43 mm^2 on the bed, 27 x 5 x 15 mm
 * `13As_L_L_Window_A_Sill` -- 49 mm^2 on the bed, 27 x 3 x 7 mm
+* `15A_L_L_Drainpipe_Lower` -- 228 mm^2 on the bed, 4 x 92 x 5 mm
 * `19C_L_L_Wall_Plaque` -- 15 mm^2 on the bed, 11 x 8 x 6 mm
+
+## Stringing
+
+A window frame is a border and a grid of bars, so the nozzle crosses open air on
+nearly every layer, and a plate of small parts adds a hop per part on top of that.
+Three settings here are about that, and all three are departures from the stock
+profile rather than defaults you would land on by accident:
+
+| Setting | Value | Stock |
+|---|---|---|
+| Avoid crossing walls | on | off |
+| Nozzle temperature | 210 C (220 C first layer) | 220 C throughout |
+| Minimum layer time | 8 s | 4 s on the Large Flats slot every part is assigned to |
+
+The minimum layer time is the one that is easy to get wrong. Assigning every part
+to the warm-bed filament slot also gives every part that slot's cooling settings,
+and a profile named for large flat parts lets layers come round again after 4
+seconds. A wall face takes far longer than that anyway; a 5 mm corbel does not,
+and goes back under the nozzle still soft.
+
+If strings persist: dry the filament first -- nothing in a settings file can fix
+damp PLA -- then drop the nozzle another 5 C, then try 1.0 mm of retraction, then
+split the plate. In that order.
 
 ## Supports
 
@@ -274,4 +314,7 @@ thing to *avoid crossing walls*. Set brim per-object with a Per Model Setting.
 | `reduce_crossing_wall` | `1` | **changed**. Avoid crossing walls -- the window interiors came out webbed with strings, and every one of them was a travel move straight across the opening |
 | `brim_type` | `outer_only` | **changed**. The PLATE default, belt to the per-object braces below. Auto is what gave 19C and 13As no brim and let them come off the plate. Set here as well as on the objects because the object setting is invisible until you select the object, and because a plate that reads Auto in the Global tab is indistinguishable from a plate whose settings did not load at all |
 | `brim_width` | `5` | pinned. 5 mm holds the 15 mm^2 plaques down and still peels off |
+| `slow_down_layer_time` | `8` | **changed**. Every object on every plate is assigned to filament slot 6, and slot 6 inherits Bambu PLA Basic, whose minimum layer time is 4 s where Generic PLA's is 8. That is the right number for the large flat parts the slot is named after and the wrong one for a plate of 5 mm parts, which then never cool between layers |
+| `nozzle_temperature` | `210` | **changed**. 220 is Bambu's Generic PLA default and is hot for most PLA. Five of the eleven parts on the trial plate had to be abandoned mid-print for stringing; temperature is the biggest lever left after avoid-crossing-walls, and PLA's range here is 190-240 |
+| `nozzle_temperature_initial_layer` | `220` | pinned. pinned at 220 while the rest drops to 210 -- the first layer wants the heat for adhesion, and there is nothing above it yet to string to |
 

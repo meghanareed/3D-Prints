@@ -45,6 +45,8 @@ BRIM_OVERHANG = 50.0     # mm^2, below which a big ratio does not matter
 WIDE = 150.0             # mm across, at which a sheet is wide enough to curl
 THIN = 6.0               # mm tall, below which it has no height to resist curling
 SPARSE = 0.25            # fraction of its own footprint a wide part puts on the bed
+SLENDER = 8.0            # length as a multiple of width, at which a footprint is a strip
+NARROW = 8.0             # mm, the width below which that strip has nothing to hold it
 BRIM_WIDTH = 5.0         # mm. plates.py spaces parts so two of these cannot touch
 
 
@@ -67,6 +69,13 @@ def needs_brim(row):
     # a skeleton -- 5,864 mm^2 of first layer spread over a 203 x 197 mm footprint, in
     # strips two nozzles wide and 200 mm long. Strips like that curl exactly like a sheet.
     if min(w, d) > WIDE and (h < THIN or bed < SPARSE * w * d):
+        return True
+    # A long thin strip. 15A_L_L_Drainpipe_Lower is 91.6 mm long and 4.3 mm wide with
+    # 228 mm^2 on the bed -- too much base for the small-part rule, not wide enough for
+    # the sheet rule, and it lifted at the ends far enough for the nozzle to strike it
+    # and pile filament against it. Length over width is the thing that matters here:
+    # a strip curls along its length and has no width to anchor the curl.
+    if max(w, d) > SLENDER * max(min(w, d), 0.01) and min(w, d) < NARROW:
         return True
     over = row.get("overhang", 0.0)
     return over > BRIM_OVERHANG and over > 4.0 * max(bed, 0.1)

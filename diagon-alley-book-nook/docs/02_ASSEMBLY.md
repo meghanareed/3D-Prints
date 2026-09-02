@@ -290,26 +290,57 @@ visible in the slicer's object panel without opening anything.
 > `Title` and `Designer`, which is where Bambu keeps a project's name. `mf3.py` checks
 > the tag on every file it writes.
 
-### Stringing across the window openings
+### Stringing
 
-Fine hairs across the open panes are a travel problem, not a geometry one: a window
-frame is a border and a grid of bars, so the nozzle crosses open air on nearly every
-layer. In order of what actually helps:
+Fine hairs across the open panes and between parts are a travel problem, not a geometry
+one: a window frame is a border and a grid of bars, so the nozzle crosses open air on
+nearly every layer, and a plate of 11 small parts is 10 hops per layer on top of that.
 
-1. **Dry the filament.** Damp PLA strings no matter what else you change, and fine
-   wispy strings across an opening are its signature.
-2. **Avoid crossing walls** — in Bambu Studio under Quality. It reroutes travel
-   around the openings instead of over them. *The 3MF projects set this
-   (`reduce_crossing_wall = 1`); on the STL plates, set it yourself.*
-3. **Nozzle 5–10 °C cooler.** 220 is a common default and is hot for most PLA; try
-   210. *Not set in the projects — 220 is what the P2S profile ships and what the
-   test prints ran at, so lowering it is a change to make deliberately if strings
-   persist after 1 and 2.*
-4. **Retraction** 0.8 mm at 30 mm/s for the P2S's direct drive.
+**What the projects already set**, so you do not have to:
+
+| Setting | Value | |
+|---|---|---|
+| `reduce_crossing_wall` | 1 | reroutes travel around the openings instead of over them |
+| `nozzle_temperature` | **210 °C** | down from Bambu's Generic PLA default of 220, which is hot for most PLA |
+| `nozzle_temperature_initial_layer` | 220 °C | the first layer keeps the heat — there is nothing above it to string to |
+| `slow_down_layer_time` | **8 s** | see below |
+
+**The minimum layer time was the bug in the first trial plate.** Every object is assigned
+to filament slot 6, the *Large Flats* profile, because that is the slot with the warmer
+bed. Slot 6 inherits `Bambu PLA Basic`, whose minimum layer time is **4 s**, where
+`Generic PLA`'s is 8. Four seconds is the right number for a wall face, whose layers take
+far longer than that anyway, and the wrong one for a 5 mm corbel, which then goes back
+under the nozzle while it is still soft. Five of the eleven parts on the first trial plate
+— `11Ar`, `13As`, `12G`, `19C`, `15A` — had to be abandoned mid-print. That number is now
+pinned to 8 for every slot.
+
+If strings persist after that, in the order that actually helps:
+
+1. **Dry the filament.** This is the one nothing in the file can do for you. Damp PLA
+   strings whatever else you change, and fine wispy strings across an opening are its
+   signature. 6–8 hours at 45–55 °C.
+2. **Drop the nozzle another 5 °C** — 205 is still inside PLA's range (190–240 in this
+   profile). Filament tab → Nozzle temperature.
+3. **Retraction.** 0.8 mm at 30 mm/s is Bambu's tuned value for the P2S's direct drive;
+   1.0 mm is worth one try before you go further.
+4. **Fewer parts per plate.** Every object on the plate is another hop per layer. The
+   facade plates are the extreme case at 39 and 55 objects.
 
 Whatever is left pulls off with tweezers or a quick pass of a heat gun on low. It does
-not affect fit — the strings are in the glazing opening, which the glazing insert
-covers.
+not affect fit — the strings are in the glazing opening, which the glazing insert covers.
+
+### A part that lifts is not a stringing problem
+
+`15A_L_L_Drainpipe_Lower` came off the first trial plate having piled filament against
+itself. It is 91.6 mm long and 4.3 mm wide, with 228 mm² on the bed — too much base for
+the small-part rule, not wide enough for the sheet rule, so nothing flagged it and it
+printed without a brim. A strip that long curls along its length, and there is no width
+to anchor the curl; once an end is up, the nozzle strikes it and material piles against
+the obstruction.
+
+`build.needs_brim` now catches a footprint more than 8× longer than it is wide when the
+narrow side is under 8 mm. That is the drainpipes, the gutters, the cornices and the case
+spine trims — 13 parts that had no brim and should have had one.
 
 ---
 

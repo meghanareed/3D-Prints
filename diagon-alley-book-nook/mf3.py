@@ -97,6 +97,19 @@ OVERRIDES = [
      "from a plate whose settings did not load at all"),
     ("brim_width", "5",
      "pinned. 5 mm holds the 15 mm^2 plaques down and still peels off"),
+    ("slow_down_layer_time", "8",
+     "CHANGED. Every object on every plate is assigned to filament slot 6, and slot 6 "
+     "inherits Bambu PLA Basic, whose minimum layer time is 4 s where Generic PLA's is "
+     "8. That is the right number for the large flat parts the slot is named after and "
+     "the wrong one for a plate of 5 mm parts, which then never cool between layers"),
+    ("nozzle_temperature", "210",
+     "CHANGED. 220 is Bambu's Generic PLA default and is hot for most PLA. Five of the "
+     "eleven parts on the trial plate had to be abandoned mid-print for stringing; "
+     "temperature is the biggest lever left after avoid-crossing-walls, and PLA's range "
+     "here is 190-240"),
+    ("nozzle_temperature_initial_layer", "220",
+     "pinned at 220 while the rest drops to 210 -- the first layer wants the heat for "
+     "adhesion, and there is nothing above it yet to string to"),
 ]
 
 BRIM_SUFFIX = " [brim]"
@@ -273,12 +286,25 @@ def model_settings(label, objs):
     return "\n".join(out)
 
 
+def _apply_overrides(cfg):
+    """Apply OVERRIDES in place.
+
+    Bambu keeps the per-filament and per-extruder settings as arrays, one entry per
+    slot, and the arrays are not all the same length -- nozzle_temperature has 21
+    entries where slow_down_layer_time has 7. An override on one of those means every
+    slot, so fill the array that is already there rather than replacing it with a
+    scalar and changing its shape.
+    """
+    for key, value, _why in OVERRIDES:
+        cur = cfg.get(key)
+        cfg[key] = [value] * len(cur) if isinstance(cur, list) else value
+
+
 def project_settings():
     """The vendored P2S profile with this kit's OVERRIDES applied."""
     with open(PROFILE) as f:
         cfg = json.load(f)
-    for key, value, _why in OVERRIDES:
-        cfg[key] = value
+    _apply_overrides(cfg)
     return json.dumps(cfg, indent=4, sort_keys=True)
 
 
@@ -393,8 +419,10 @@ def check_project(path):
                 break
         prof = json.loads(z.read("Metadata/project_settings.config"))
         for key, value, _why in OVERRIDES:
-            if prof.get(key) != value:
-                faults.append(f"{key} is {prof.get(key)!r}, not {value!r}")
+            got = prof.get(key)
+            ok = all(v == value for v in got) if isinstance(got, list) else got == value
+            if not ok:
+                faults.append(f"{key} is {got!r}, not {value!r}")
         if prof.get("printer_model") != "Bambu Lab P2S":
             faults.append("the profile is not a P2S profile")
     return faults
@@ -437,8 +465,7 @@ def write_settings_doc(plated, brim_ids, rows):
     """
     with open(PROFILE) as f:
         p = json.load(f)
-    for key, value, _why in OVERRIDES:
-        p[key] = value
+    _apply_overrides(p)
 
     def first(key):
         v = p.get(key)
@@ -486,6 +513,10 @@ def write_settings_doc(plated, brim_ids, rows):
       "it should print. `orient.py` chose these; see the note at the bottom |")
     w("| 5 | **No supports** | Nothing in the kit needs them in its print orientation. If "
       "your slicer wants to add some, the part is the wrong way up |")
+    w(f"| 6 | **Nozzle {s('nozzle_temperature')} C, minimum layer time {s('slow_down_layer_time')} s** | "
+      "Five of eleven parts on the first trial plate were abandoned mid-print for "
+      "stringing. 220 C and a 4 s minimum layer time is a profile tuned for large flat "
+      "parts, applied to 5 mm ones |")
     w("")
     w("## Process")
     w("")
@@ -525,6 +556,10 @@ def write_settings_doc(plated, brim_ids, rows):
       f"{s('textured_plate_temp')} C after |")
     w(f"| Plate type | {p.get('curr_bed_type')} |")
     w(f"| Flow ratio | {s('filament_flow_ratio')} |")
+    w(f"| Minimum layer time | {s('slow_down_layer_time')} s "
+      f"(floor speed {s('slow_down_min_speed')} mm/s) |")
+    w(f"| Part cooling fan | {s('fan_min_speed')}-{s('fan_max_speed')}%, "
+      f"off for the first {s('close_fan_the_first_x_layers')} layer(s) |")
     w("")
     w("**The bed temperature is the one deliberate departure from stock PLA.** Bambu's")
     w("`Generic PLA @BBL P2S` runs the bed at 55 C throughout. The parts here that fail")
@@ -603,6 +638,31 @@ def write_settings_doc(plated, brim_ids, rows):
               f"{r.get('bed', 0):.0f} mm^2 on the bed, "
               f"{bb[0]:.0f} x {bb[1]:.0f} x {bb[2]:.0f} mm")
         w("")
+    w("## Stringing")
+    w("")
+    w("A window frame is a border and a grid of bars, so the nozzle crosses open air on")
+    w("nearly every layer, and a plate of small parts adds a hop per part on top of that.")
+    w("Three settings here are about that, and all three are departures from the stock")
+    w("profile rather than defaults you would land on by accident:")
+    w("")
+    w("| Setting | Value | Stock |")
+    w("|---|---|---|")
+    w("| Avoid crossing walls | on | off |")
+    w(f"| Nozzle temperature | {s('nozzle_temperature')} C "
+      f"({s('nozzle_temperature_initial_layer')} C first layer) | 220 C throughout |")
+    w(f"| Minimum layer time | {s('slow_down_layer_time')} s | 4 s on the Large Flats "
+      "slot every part is assigned to |")
+    w("")
+    w("The minimum layer time is the one that is easy to get wrong. Assigning every part")
+    w("to the warm-bed filament slot also gives every part that slot's cooling settings,")
+    w("and a profile named for large flat parts lets layers come round again after 4")
+    w("seconds. A wall face takes far longer than that anyway; a 5 mm corbel does not,")
+    w("and goes back under the nozzle still soft.")
+    w("")
+    w("If strings persist: dry the filament first -- nothing in a settings file can fix")
+    w("damp PLA -- then drop the nozzle another 5 C, then try 1.0 mm of retraction, then")
+    w("split the plate. In that order.")
+    w("")
     w("## Supports")
     w("")
     w(f"Off. `enable_support = {p.get('enable_support')}`.")

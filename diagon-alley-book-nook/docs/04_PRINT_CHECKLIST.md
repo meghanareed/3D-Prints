@@ -65,8 +65,8 @@ off the plate warped or with a bit missing is not printed.
 ## `05_floor.stl`  ---  4 parts, 87 g  (0/4 done)
 
 - [ ] `04` Cobblestone_Floor (61.2 g)
-- [ ] `04B` Gutter_L (1.9 g)
-- [ ] `04C` Gutter_R (1.9 g)
+- [ ] `04B` Gutter_L (1.9 g) -- **print with a brim**
+- [ ] `04C` Gutter_R (1.9 g) -- **print with a brim**
 - [ ] `05` Ceiling_Baffle (22.3 g) -- its P1 pegs stand 5.1 mm proud -- that is what sets the top of the stack; **print with a brim**
 
 ## `06_rear.stl`  ---  5 parts, 150 g  (0/5 done)
@@ -91,13 +91,13 @@ off the plate warped or with a bit missing is not printed.
 ## `08_case.stl`  ---  3 parts, 125 g  (0/3 done)
 
 - [ ] `50` Outer_Left (121.1 g) -- lies flat, 200 x 214 -- never print this on edge; **print with a brim**
-- [ ] `58A` Case_Spine_Trim_L (3.5 g) -- 214 mm long -- lies down
+- [ ] `58A` Case_Spine_Trim_L (3.5 g) -- 214 mm long -- lies down; **print with a brim**
 - [ ] `59G` Foot_Pad_x4 (0.3 g)
 
 ## `08_case_2.stl`  ---  2 parts, 125 g  (0/2 done)
 
 - [ ] `51` Outer_Right (121.1 g) -- lies flat; **print with a brim**
-- [ ] `58B` Case_Spine_Trim_R (3.5 g) -- 214 mm long -- lies down
+- [ ] `58B` Case_Spine_Trim_R (3.5 g) -- 214 mm long -- lies down; **print with a brim**
 
 ## `08_case_3.stl`  ---  3 parts, 115 g  (0/3 done)
 
@@ -148,15 +148,15 @@ off the plate warped or with a bit missing is not printed.
 - [ ] `14Ag` L_L_Attic_Dormer_Glazing (0.3 g) -- face down, pegs up
 - [ ] `14B` L_L_Attic_B_Frame (0.5 g) -- face down, pegs up
 - [ ] `14Bg` L_L_Attic_B_Glazing (0.1 g) -- face down, pegs up
-- [ ] `15A` L_L_Drainpipe_Lower (0.7 g) -- face down, pegs up
-- [ ] `15B` L_L_Drainpipe_Upper (0.4 g) -- face down, pegs up
+- [ ] `15A` L_L_Drainpipe_Lower (0.7 g) -- face down, pegs up; **print with a brim**
+- [ ] `15B` L_L_Drainpipe_Upper (0.4 g) -- face down, pegs up; **print with a brim**
 - [ ] `18A` L_L_Chimney (2.7 g) -- face down, pegs up; **print with a brim**
 - [ ] `19A` L_L_Quoin_Front (1.4 g) -- face down, pegs up
 
 ## `09_facade_left_2.stl`  ---  25 parts, 10 g  (0/25 done)
 
 - [ ] `10Bc` L_L1_Bow_Window_Cornice (0.6 g) -- face down, pegs up; **print with a brim**
-- [ ] `10D` L_L1_Cornice (0.4 g) -- face down, pegs up
+- [ ] `10D` L_L1_Cornice (0.4 g) -- face down, pegs up; **print with a brim**
 - [ ] `10Gl` L_L1_Door_Fanlight (0.2 g) -- face down, pegs up; **print with a brim**
 - [ ] `11Ac` L_L2_Bay_Window_Corbel (0.2 g) -- face down, pegs up; **print with a brim**
 - [ ] `11Ar` L_L2_Bay_Window_Roof (0.7 g) -- face down, pegs up; **print with a brim**
@@ -176,8 +176,8 @@ off the plate warped or with a bit missing is not printed.
 - [ ] `14As` L_L_Attic_Dormer_Sill (0.2 g) -- face down, pegs up; **print with a brim**
 - [ ] `14Bs` L_L_Attic_B_Sill (0.2 g) -- face down, pegs up; **print with a brim**
 - [ ] `15C` L_L_Hopper (0.1 g) -- face down, pegs up; **print with a brim**
-- [ ] `17A` L_L_Cornice_Front (2.2 g) -- face down, pegs up
-- [ ] `17B` L_L_Cornice_Rear (1.2 g) -- face down, pegs up
+- [ ] `17A` L_L_Cornice_Front (2.2 g) -- face down, pegs up; **print with a brim**
+- [ ] `17B` L_L_Cornice_Rear (1.2 g) -- face down, pegs up; **print with a brim**
 - [ ] `19B` L_L_Keystone (0.1 g) -- face down, pegs up; **print with a brim**
 - [ ] `19C` L_L_Wall_Plaque (0.2 g) -- face down, pegs up; **print with a brim**
 
@@ -229,11 +229,11 @@ off the plate warped or with a bit missing is not printed.
 - [ ] `24Ac` R_R_Bay_Window_Corbel (0.2 g) -- face down, pegs up; **print with a brim**
 - [ ] `24Ag` R_R_Bay_Window_Glazing (0.3 g) -- face down, pegs up
 - [ ] `24Ar` R_R_Bay_Window_Roof (0.8 g) -- face down, pegs up; **print with a brim**
-- [ ] `25A` R_R_Drainpipe_Lower (0.4 g) -- face down, pegs up
-- [ ] `25B` R_R_Drainpipe_Upper (0.2 g) -- face down, pegs up
+- [ ] `25A` R_R_Drainpipe_Lower (0.4 g) -- face down, pegs up; **print with a brim**
+- [ ] `25B` R_R_Drainpipe_Upper (0.2 g) -- face down, pegs up; **print with a brim**
 - [ ] `25C` R_R_Hopper (0.1 g) -- face down, pegs up; **print with a brim**
-- [ ] `27A` R_R_Cornice_Front (2.2 g) -- face down, pegs up
-- [ ] `27B` R_R_Cornice_Rear (1.3 g) -- face down, pegs up
+- [ ] `27A` R_R_Cornice_Front (2.2 g) -- face down, pegs up; **print with a brim**
+- [ ] `27B` R_R_Cornice_Rear (1.3 g) -- face down, pegs up; **print with a brim**
 - [ ] `28A` R_R_Chimney (1.0 g) -- face down, pegs up; **print with a brim**
 - [ ] `29A` R_R_Quoin_Front (1.4 g) -- face down, pegs up
 - [ ] `29B` R_R_Keystone (0.1 g) -- face down, pegs up; **print with a brim**
