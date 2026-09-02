@@ -58,6 +58,7 @@ import zipfile
 from xml.sax.saxutils import escape, quoteattr
 
 import build as B
+import params as P
 import plates as PL
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -70,6 +71,7 @@ PROFILE = os.path.join(HERE, "profiles", "P2S_project_settings.config")
 # compares it against the running application. This is the version the vendored
 # profile was exported from -- keep the two together.
 BAMBU_VERSION = "02.08.02.61"
+BED_X, BED_Y = P.BED_X, P.BED_Y
 TODAY = _dt.date.today().isoformat()
 
 # The filament slot every part is assigned to. Slot 6 in the vendored profile is
@@ -348,9 +350,11 @@ def check_project(path):
             faults.append("model_settings objects do not match the wrapper objects")
         if sorted(plated) != sorted(wrappers):
             faults.append("plate instances do not match the wrapper objects")
+        comps = {}
         for o in root.findall("c:resources/c:object", NS):
             for c in o.findall("c:components/c:component", NS):
                 sub = c.get("{%s}path" % NS["p"]).lstrip("/")
+                comps[o.get("id")] = sub
                 if sub not in names:
                     faults.append(f"component points at {sub}, which is not in the package")
                     continue
@@ -364,6 +368,29 @@ def check_project(path):
                 stat = mine[0].find("part/mesh_stat") if mine else None
                 if stat is None or int(stat.get("face_count")) != tris:
                     faults.append(f"{sub}: mesh_stat disagrees with {tris} triangles")
+        # Every part must land on the bed. The transform is applied to mesh coordinates,
+        # so a part whose mesh is centred on the origin -- which all of these are --
+        # lands half a width away from where the packer meant unless its own minimum is
+        # subtracted first. That shipped once: parts over the edge of the plate.
+        for item in root.findall("c:build/c:item", NS):
+            t = [float(v) for v in item.get("transform").split()]
+            sub = comps.get(item.get("objectid"))
+            if sub is None:
+                continue
+            m = ET.fromstring(z.read(sub))
+            xs = [float(v.get("x")) + t[9] for v in m.findall(".//c:vertex", NS)]
+            ys = [float(v.get("y")) + t[10] for v in m.findall(".//c:vertex", NS)]
+            zs = [float(v.get("z")) + t[11] for v in m.findall(".//c:vertex", NS)]
+            if not xs:
+                continue
+            if min(xs) < 0 or min(ys) < 0 or max(xs) > BED_X or max(ys) > BED_Y:
+                faults.append("an object sits at x %.1f..%.1f y %.1f..%.1f, off a "
+                              "%.0f x %.0f bed" % (min(xs), max(xs), min(ys), max(ys),
+                                                   BED_X, BED_Y))
+                break
+            if min(zs) < -0.001:
+                faults.append("an object sits %.2f mm below the plate" % min(zs))
+                break
         prof = json.loads(z.read("Metadata/project_settings.config"))
         for key, value, _why in OVERRIDES:
             if prof.get(key) != value:
@@ -374,12 +401,26 @@ def check_project(path):
 
 
 def make_objs(placed, brim_ids):
+    """Turn shelf_pack's (item, x, y) into placed objects.
+
+    x and y are where the part's bounding box should START, which is what plates.py
+    means by them: it normalises each solid with translate((-bb.xmin, -bb.ymin, 0))
+    before moving it to (x, y). The exported STLs are centred on X and Y, so using
+    x and y directly as the item transform put each part's CENTRE at its corner --
+    every part half a width down and left of where it belonged, and the ones at the
+    end of a shelf hanging over the edge of the plate. Subtract the mesh's own
+    minimum, exactly as plates.py does.
+    """
     objs = []
     for it, x, y in placed:
         verts, tris = mesh_of_stl(it["path"])
+        lo_x = min(v[0] for v in verts)
+        lo_y = min(v[1] for v in verts)
+        lo_z = min(v[2] for v in verts)
         brim = it["id"] in brim_ids
         objs.append(dict(name=it["name"] + (BRIM_SUFFIX if brim else ""),
-                         verts=verts, tris=tris, pos=(x, y, 0.0), brim=brim))
+                         verts=verts, tris=tris, brim=brim,
+                         pos=(x - lo_x, y - lo_y, -lo_z)))
     return objs
 
 
