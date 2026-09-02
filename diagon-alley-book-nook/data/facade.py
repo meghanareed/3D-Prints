@@ -54,7 +54,11 @@ LEFT = [
     # --- L2  The Brass Cauldron : apothecary, projecting bay ------------------
     dict(id="11A", kind="bay",       u=74,  z=10, w=30, h=40, proj=13, lit=2,
          name="L2_Bay_Window"),
-    dict(id="11J", kind="awning",    u=74,  z=52, w=30, proj=8, name="L2_Awning"),
+    # z=68, above the bay's roof. At its original 52 the awning's single mount landed
+    # entirely inside the bay window's upper aperture -- the one element in the kit
+    # with nothing to peg into -- and at 60 it fouled the bay roof by 6.9 mm^3. 68
+    # clears both and gets 20.8 mm^3 of wall to grip.
+    dict(id="11J", kind="awning",    u=74,  z=68, w=30, proj=8, name="L2_Awning"),
     dict(id="11F", kind="door",      u=98,  z=6,  w=18, h=36, panels=2, lit=1,
          name="L2_Door", fanlight=True),
     dict(id="11K", kind="fascia",    u=86,  z=54, w=34, name="L2_Fascia"),
@@ -101,11 +105,18 @@ LEFT = [
 
 RIGHT = [
     # --- R1  Grimsby's Owlery & Post : arched door, tall window ---------------
-    dict(id="20B", kind="door",      u=16,  z=6,  w=22, h=46, panels=2, arch=True,
+    # u=21 w=19, not u=16 w=22. The door's opening reached to within 1.5 mm of the
+    # wall's front edge, so the front quoin's mounts -- which sit at depth 5.5-9.5 for
+    # the quoin's whole height -- landed INSIDE the door opening. The quoin ended up
+    # anchored by a single 2.5 mm strip of lintel above the door, and that strip is
+    # what verify.py kept reporting as a 1.8 mm^2 crumb hanging by a sub-nozzle neck.
+    # Moving the door back and narrowing it by 3 mm gives the quoin solid wall to grip
+    # and still leaves 2 mm of clearance to R1_Tall_Window behind it.
+    dict(id="20B", kind="door",      u=21,  z=6,  w=19, h=46, panels=2, arch=True,
          lit=1, name="R1_Arched_Door"),
     dict(id="20E", kind="window",    u=42,  z=12, w=20, h=40, cols=2, rows=4, lit=2,
          style="sash", name="R1_Tall_Window"),
-    dict(id="20G", kind="ornament",  u=16,  z=56, w=12, h=8,  name="R1_Door_Keystone"),
+    dict(id="20G", kind="ornament",  u=21,  z=56, w=12, h=8,  name="R1_Door_Keystone"),
     dict(id="29A", kind="quoin",     u=3,   z=0,  h=70, name="R_Quoin_Front"),
 
     # --- R2  Holloway Broom Co. : full storefront under the banner ------------

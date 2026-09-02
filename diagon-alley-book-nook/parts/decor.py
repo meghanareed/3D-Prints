@@ -266,7 +266,12 @@ def _awning(row, side):
     u, z = row["u"], F.storey_z(row["z"], row["u"])
     part = W.awning(w, proj=proj, h=proj * 0.78)
 
-    spec = _p1_mount(u, z - proj * 0.39)
+    # The peg is at the part's local (0, -1.0, 0) -- see W.awning -- so the socket goes
+    # 1.0 mm below the part origin, not proj * 0.39 (3.12 mm at proj=8). The 2.1 mm
+    # difference put the peg into solid wall: 6.93 mm^3 of interference that never
+    # showed up while the awning happened to be positioned over the bay window's
+    # aperture, where there was no wall to foul.
+    spec = _p1_mount(u, z - 1.0)
     return _pack(row, side, [("", row["name"], part, (u, z))], spec, [])
 
 

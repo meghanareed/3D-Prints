@@ -43,11 +43,11 @@ off the plate warped or with a bit missing is not printed.
 
 ## `02_wall_face_LEFT.stl`  ---  1 parts, 105 g  (0/1 done)
 
-- [ ] `01` L_Wall_Face (105.4 g) -- print brick-up, no supports
+- [ ] `01` L_Wall_Face (105.3 g) -- print brick-up, no supports
 
 ## `02_wall_face_RIGHT.stl`  ---  1 parts, 108 g  (0/1 done)
 
-- [ ] `02` R_Wall_Face (108.2 g) -- print brick-up, no supports
+- [ ] `02` R_Wall_Face (107.8 g) -- print brick-up, no supports
 
 ## `03_wall_rib_LEFT.stl`  ---  1 parts, 60 g  (0/1 done)
 
@@ -180,7 +180,7 @@ off the plate warped or with a bit missing is not printed.
 
 ## `10_facade_right.stl`  ---  55 parts, 33 g  (0/55 done)
 
-- [ ] `20B` R_R1_Arched_Door (2.1 g) -- face down, pegs up
+- [ ] `20B` R_R1_Arched_Door (1.8 g) -- face down, pegs up
 - [ ] `20Bf` R_R1_Arched_Door_Frame (1.1 g) -- face down, pegs up
 - [ ] `20E` R_R1_Tall_Window_Frame (1.3 g) -- face down, pegs up
 - [ ] `20Eg` R_R1_Tall_Window_Glazing (0.7 g) -- face down, pegs up

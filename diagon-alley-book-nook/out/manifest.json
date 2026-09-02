@@ -31,15 +31,15 @@
   "name": "L_Wall_Face",
   "group": "structure",
   "status": "ok",
-  "grams": 105.4,
+  "grams": 105.3,
   "solids": 1,
   "bbox": [
    203.1,
    193.1,
    3.1
   ],
-  "bed": 31428.1,
-  "overhang": 276.5,
+  "bed": 31421.2,
+  "overhang": 278.6,
   "fits_bed": true,
   "colour": "brick",
   "note": "print brick-up, no supports",
@@ -85,15 +85,15 @@
   "name": "R_Wall_Face",
   "group": "structure",
   "status": "ok",
-  "grams": 108.2,
+  "grams": 107.8,
   "solids": 1,
   "bbox": [
    203.1,
    193.1,
    3.1
   ],
-  "bed": 32165.7,
-  "overhang": 279.8,
+  "bed": 32035.9,
+  "overhang": 279.5,
   "fits_bed": true,
   "colour": "brick",
   "note": "print brick-up, no supports",
@@ -119,8 +119,8 @@
    197.1,
    10.0
   ],
-  "bed": 5999.0,
-  "overhang": 10081.6,
+  "bed": 6005.4,
+  "overhang": 10065.2,
   "fits_bed": true,
   "colour": "grey",
   "note": "hidden; print flat",
@@ -911,10 +911,10 @@
   "place_bbox": [
    8.73,
    61.8,
-   66.12,
+   78.17,
    18.97,
    85.79,
-   75.07
+   87.13
   ]
  },
  {
@@ -2245,26 +2245,26 @@
   "name": "R_R1_Arched_Door",
   "group": "facade_R",
   "status": "ok",
-  "grams": 2.1,
+  "grams": 1.8,
   "solids": 1,
   "bbox": [
-   21.0,
-   43.9,
+   17.9,
+   43.3,
    5.7
   ],
-  "bed": 501.4,
-  "overhang": 374.9,
+  "bed": 426.0,
+  "overhang": 314.3,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "20B_R_R1_Arched_Door.stl",
   "place_bbox": [
-   81.89,
-   5.34,
-   21.28,
-   87.94,
-   26.42,
-   65.23
+   81.79,
+   11.91,
+   22.93,
+   87.79,
+   29.85,
+   66.24
   ]
  },
  {
@@ -2275,23 +2275,23 @@
   "grams": 1.1,
   "solids": 1,
   "bbox": [
-   27.4,
-   47.7,
+   24.3,
+   47.1,
    6.4
   ],
-  "bed": 335.7,
-  "overhang": 8.4,
+  "bed": 325.9,
+  "overhang": 9.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "20Bf_R_R1_Arched_Door_Frame.stl",
   "place_bbox": [
-   81.6,
-   2.14,
-   19.38,
-   88.6,
-   29.62,
-   67.13
+   81.49,
+   8.7,
+   21.03,
+   88.45,
+   33.05,
+   68.14
   ]
  },
  {
@@ -2383,23 +2383,23 @@
   "grams": 0.2,
   "solids": 1,
   "bbox": [
-   11.5,
-   7.6,
-   6.6
+   11.3,
+   7.5,
+   6.5
   ],
-  "bed": 14.9,
-  "overhang": 55.7,
+  "bed": 14.5,
+  "overhang": 54.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "20G_R_R1_Door_Keystone.stl",
   "place_bbox": [
-   81.27,
-   10.13,
-   64.79,
-   87.94,
-   21.65,
-   72.43
+   81.16,
+   15.22,
+   65.66,
+   87.79,
+   26.56,
+   73.2
   ]
  },
  {
