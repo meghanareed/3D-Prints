@@ -329,6 +329,32 @@ If strings persist after that, in the order that actually helps:
 Whatever is left pulls off with tweezers or a quick pass of a heat gun on low. It does
 not affect fit — the strings are in the glazing opening, which the glazing insert covers.
 
+### Which wall is this, and which side does the facade go on
+
+![the two wall faces, apertures labelled](img/wall_apertures.png)
+
+```
+python3 wallmap.py        # redraws it
+```
+
+Two things the print itself does not tell you:
+
+**Every facade part is named for its wall.** `13A_L_L_Window_A_Frame` is a LEFT-wall
+part; it has no home on the right wall, whose apertures are a different size and in
+different places. The `_L_`/`_R_` in the name is the whole answer. The trial plate is
+entirely left-wall parts.
+
+**The facade mounts on the BRICK side** — the side facing up as the plate comes off the
+bed, not the flat back. `to_wall()` puts an element's seating plane at the outer face of
+the 2.5 mm plate and everything it has projects outwards from there; the brick relief is
+the 0.6 mm on top, and the brick field is cleared where an element lands.
+
+**A window frame does not drop into its aperture.** It is bigger than the hole on
+purpose. `13A` is 27.0 × 34.7 over an aperture of 21.0 × 28.7, so it laps the brick by
+3 mm all round; the 14 mm tabs on its back go into the two shallow recesses directly
+above and below the aperture, and the sill `13As` pegs into the 4 × 3.5 mm socket below
+that. If you are trying to push it through the hole it will never go.
+
 ### A part that lifts is not a stringing problem
 
 `15A_L_L_Drainpipe_Lower` came off the first trial plate having piled filament against

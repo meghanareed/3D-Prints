@@ -107,6 +107,11 @@ OVERRIDES = [
      "eleven parts on the trial plate had to be abandoned mid-print for stringing; "
      "temperature is the biggest lever left after avoid-crossing-walls, and PLA's range "
      "here is 190-240"),
+    ("filament_max_volumetric_speed", "12",
+     "CHANGED. The same mistake as the layer time: slot 6 allows 21 mm^3/s where "
+     "Generic PLA allows 12, so a 5 mm part's outer wall runs at the full 200 mm/s "
+     "instead of being held to 143, and the layer is over sooner and hotter. It costs "
+     "the big flat plates some time and buys the small parts cooling"),
     ("nozzle_temperature_initial_layer", "220",
      "pinned at 220 while the rest drops to 210 -- the first layer wants the heat for "
      "adhesion, and there is nothing above it yet to string to"),
@@ -471,10 +476,26 @@ def write_settings_doc(plated, brim_ids, rows):
         v = p.get(key)
         return v[0] if isinstance(v, list) and v else v
 
+    # Bambu stores these as arrays, and there are TWO shapes of array. One entry per
+    # filament slot (7 of them here), or one entry per slot AND extruder variant
+    # (7 x 3 = 21), laid out slot-major. Reading a 21-long array at the slot index gives
+    # you a different slot's value for a hotend you do not have: index 5 is slot 2's
+    # E3D High Flow, not slot 6's anything. This printer runs variant 0, Standard.
     slot = FILAMENT_SLOT - 1
-    def s(key, i=slot):
+    n_slots = len(p.get("filament_settings_id", [1]))
+    n_variants = len(p.get("printer_extruder_variant", [1]))
+    variant = p.get("extruder_variant_list", ["Direct Drive Standard"])[0].split(",")
+    variant = variant.index(next((v for v in variant
+                                  if v.endswith(p.get("nozzle_volume_type", ["Standard"])[0])),
+                                 variant[0]))
+
+    def s(key):
         v = p.get(key)
-        return v[i] if isinstance(v, list) and len(v) > i else v
+        if not isinstance(v, list) or not v:
+            return v
+        if len(v) == n_slots * n_variants:
+            return v[slot * n_variants + variant]
+        return v[slot] if len(v) > slot else v[0]
 
     L = []
     w = L.append

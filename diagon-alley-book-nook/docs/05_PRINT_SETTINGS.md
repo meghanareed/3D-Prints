@@ -316,5 +316,6 @@ thing to *avoid crossing walls*. Set brim per-object with a Per Model Setting.
 | `brim_width` | `5` | pinned. 5 mm holds the 15 mm^2 plaques down and still peels off |
 | `slow_down_layer_time` | `8` | **changed**. Every object on every plate is assigned to filament slot 6, and slot 6 inherits Bambu PLA Basic, whose minimum layer time is 4 s where Generic PLA's is 8. That is the right number for the large flat parts the slot is named after and the wrong one for a plate of 5 mm parts, which then never cool between layers |
 | `nozzle_temperature` | `210` | **changed**. 220 is Bambu's Generic PLA default and is hot for most PLA. Five of the eleven parts on the trial plate had to be abandoned mid-print for stringing; temperature is the biggest lever left after avoid-crossing-walls, and PLA's range here is 190-240 |
+| `filament_max_volumetric_speed` | `12` | **changed**. The same mistake as the layer time: slot 6 allows 21 mm^3/s where Generic PLA allows 12, so a 5 mm part's outer wall runs at the full 200 mm/s instead of being held to 143, and the layer is over sooner and hotter. It costs the big flat plates some time and buys the small parts cooling |
 | `nozzle_temperature_initial_layer` | `220` | pinned. pinned at 220 while the rest drops to 210 -- the first layer wants the heat for adhesion, and there is nothing above it yet to string to |
 
