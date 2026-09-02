@@ -42,6 +42,10 @@ PLATES = os.path.join(OUT, "plates")
 SMALL_BASE = 25.0        # mm^2 of first layer, in absolute terms
 TIPPY = 2.0              # height as a multiple of the narrower footprint dimension
 BRIM_OVERHANG = 50.0     # mm^2, below which a big ratio does not matter
+WIDE = 150.0             # mm across, at which a sheet is wide enough to curl
+THIN = 6.0               # mm tall, below which it has no height to resist curling
+SPARSE = 0.25            # fraction of its own footprint a wide part puts on the bed
+BRIM_WIDTH = 5.0         # mm. plates.py spaces parts so two of these cannot touch
 
 
 def needs_brim(row):
@@ -53,6 +57,16 @@ def needs_brim(row):
         return True
     w, d, h = row.get("bbox", [99, 99, 0])
     if h > TIPPY * max(min(w, d), 0.01):
+        return True
+    # A big thin sheet. Adhesion AREA is not its problem -- the wall face has 31,000 mm^2
+    # on the bed -- so none of the rules above sees it. Its problem is 2,480 mm of free
+    # perimeter with 3.1 mm of height behind it: it shrinks as it cools, the corners and
+    # the long torn front edge curl, and the nozzle drags the part around. The first wall
+    # face printed here needed a brim and got one by hand; nothing in the file said so.
+    # The wall ribs are the same problem in the other form: 10 mm tall, so not thin, but
+    # a skeleton -- 5,864 mm^2 of first layer spread over a 203 x 197 mm footprint, in
+    # strips two nozzles wide and 200 mm long. Strips like that curl exactly like a sheet.
+    if min(w, d) > WIDE and (h < THIN or bed < SPARSE * w * d):
         return True
     over = row.get("overhang", 0.0)
     return over > BRIM_OVERHANG and over > 4.0 * max(bed, 0.1)

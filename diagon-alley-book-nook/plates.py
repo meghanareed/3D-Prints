@@ -27,7 +27,12 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "out")
 PLATES = os.path.join(OUT, "plates")
 CHECKLIST = os.path.join(HERE, "docs", "04_PRINT_CHECKLIST.md")
-GAP = 6.0
+# Wide enough that the brims of two neighbours cannot touch. It was 6 mm, which was
+# fine while the brim was somebody else's problem; now that the 3MF projects put a
+# 5 mm brim on 65 of the parts, 6 mm of gap would fuse 22 of the 64 left-facade parts
+# into one raft, and a raft that peels takes all of them with it. The price is one
+# extra plate.
+GAP = 2 * B.BRIM_WIDTH + 1.0
 MARGIN = 6.0
 
 # Grouped so one plate is one painting session: brickwork together, joinery together,

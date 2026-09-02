@@ -590,10 +590,17 @@ def check_bed_contact():
         fail(f"{r['id']} {r['name']}: {r['overhang']:.0f} mm^2 of overhang on only "
              f"{r['bed']:.1f} mm^2 of first layer (x{ratio(r):.0f}) -- it will come off "
              "the plate")
+    def wide(r):
+        w, d, h = r.get("bbox", [99, 99, 0])
+        return min(w, d) > _B.WIDE and (h < _B.THIN or r["bed"] < _B.SPARSE * w * d)
     for r in sorted(brim, key=lambda r: r["bed"]):
+        w, d, h = r["bbox"]
         why = ("only %.0f mm^2 of base" % r["bed"]) if r["bed"] < SMALL_BASE else \
-              ("%.0fx%.0f mm footprint under a %.0f mm height"
-               % (r["bbox"][0], r["bbox"][1], r["bbox"][2])) if narrow(r) else \
+              ("%.0fx%.0f mm footprint under a %.0f mm height" % (w, d, h)) if narrow(r) else \
+              ("%.0f mm across and only %.1f mm tall -- it will curl" % (min(w, d), h)) \
+              if wide(r) and h < _B.THIN else \
+              ("%.0f mm across with %.0f mm^2 of first layer under it -- thin strips "
+               "200 mm long curl like a sheet" % (min(w, d), r["bed"])) if wide(r) else \
               ("%.0f mm^2 bridged over %.0f" % (r["overhang"], r["bed"]))
         warn(f"{r['id']} {r['name']}: {why} -- print it with a brim")
     if not tiny and not risky:
