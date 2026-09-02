@@ -91,7 +91,8 @@ OVERRIDES = [
      "strings, and every one of them was a travel move straight across the opening"),
     ("brim_type", "outer_only",
      "CHANGED. The PLATE default, belt to the per-object braces below. Auto is what "
-     "gave 19C and 13As no brim and let them come off the plate. Set here as well as "
+     "gave the wall plaque and the window sills no brim and let them come off the "
+     "plate. Set here as well as "
      "on the objects because the object setting is invisible until you select the "
      "object, and because a plate that reads Auto in the Global tab is indistinguishable "
      "from a plate whose settings did not load at all"),
@@ -607,12 +608,17 @@ def write_settings_doc(plated, brim_ids, rows):
     w("| Per-object brim | `outer_only`, on the parts listed below |")
     w("")
     small = min((rows[i] for i in brim_ids if i in rows), key=lambda r: r.get("bed", 0.0))
-    failed = [rows[i] for i in ("19C", "13As") if i in rows]
+    # The parts that actually came off the plate. 13As printed as its own part then; it
+    # is part of 13A now, so name only the ones still in the manifest and do not let the
+    # sentence promise a count it is no longer delivering.
+    failed = [rows[i] for i in ("19C",) if i in rows]
     w("Outer brim, not Auto, and not outer-and-inner. Auto is what failed. It gave no")
-    w("brim to " + " or ".join("`%s_%s` (%.0f mm^2 on the bed)" % (r["id"], r["name"],
-                                                                  r.get("bed", 0.0))
-                               for r in failed) + ",")
-    w("and both of those came off the plate mid-print. The smallest part on the list,")
+    w("brim to " + ", ".join("`%s_%s` (%.0f mm^2 on the bed)" % (r["id"], r["name"],
+                                                                 r.get("bed", 0.0))
+                             for r in failed) + ",")
+    w("and %s came off the plate mid-print -- along with the window sills, which are"
+      % ("it" if len(failed) == 1 else "they all"))
+    w("part of their frames now. The smallest part on the list,")
     w("`%s_%s`, has %.0f mm^2 -- about a grain of rice."
       % (small["id"], small["name"], small.get("bed", 0.0)))
     w("")

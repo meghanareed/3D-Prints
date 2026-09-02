@@ -85,7 +85,8 @@ ignore the slot entirely and just raise the bed.
 
 Outer brim, not Auto, and not outer-and-inner. Auto is what failed. It gave no
 brim to `19C_L_L_Wall_Plaque` (15 mm^2 on the bed),
-and both of those came off the plate mid-print. The smallest part on the list,
+and it came off the plate mid-print -- along with the window sills, which are
+part of their frames now. The smallest part on the list,
 `29B_R_R_Keystone`, has 5 mm^2 -- about a grain of rice.
 
 Inner brims are worse than useless here: they land inside the window openings,
@@ -294,7 +295,7 @@ thing to *avoid crossing walls*. Set brim per-object with a Per Model Setting.
 | Setting | Value | Why |
 |---|---|---|
 | `reduce_crossing_wall` | `1` | **changed**. Avoid crossing walls -- the window interiors came out webbed with strings, and every one of them was a travel move straight across the opening |
-| `brim_type` | `outer_only` | **changed**. The PLATE default, belt to the per-object braces below. Auto is what gave 19C and 13As no brim and let them come off the plate. Set here as well as on the objects because the object setting is invisible until you select the object, and because a plate that reads Auto in the Global tab is indistinguishable from a plate whose settings did not load at all |
+| `brim_type` | `outer_only` | **changed**. The PLATE default, belt to the per-object braces below. Auto is what gave the wall plaque and the window sills no brim and let them come off the plate. Set here as well as on the objects because the object setting is invisible until you select the object, and because a plate that reads Auto in the Global tab is indistinguishable from a plate whose settings did not load at all |
 | `brim_width` | `5` | pinned. 5 mm holds the 15 mm^2 plaques down and still peels off |
 | `slow_down_layer_time` | `8` | **changed**. Every object on every plate is assigned to filament slot 6, and slot 6 inherits Bambu PLA Basic, whose minimum layer time is 4 s where Generic PLA's is 8. That is the right number for the large flat parts the slot is named after and the wrong one for a plate of 5 mm parts, which then never cool between layers |
 | `nozzle_temperature` | `210` | **changed**. 220 is Bambu's Generic PLA default and is hot for most PLA. Five of the eleven parts on the trial plate had to be abandoned mid-print for stringing; temperature is the biggest lever left after avoid-crossing-walls, and PLA's range here is 190-240 |
