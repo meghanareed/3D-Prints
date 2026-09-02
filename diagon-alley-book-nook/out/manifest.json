@@ -517,26 +517,26 @@
   "name": "L_L1_Bow_Window",
   "group": "facade_L",
   "status": "ok",
-  "grams": 4.1,
+  "grams": 4.7,
   "solids": 1,
   "bbox": [
-   37.8,
-   43.4,
-   16.0
+   45.8,
+   47.0,
+   17.0
   ],
   "bed": 315.4,
-  "overhang": 1544.9,
+  "overhang": 1706.8,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "10B_L_L1_Bow_Window.stl",
   "place_bbox": [
-   7.7,
-   1.04,
+   7.08,
+   -3.05,
    24.47,
    24.25,
-   38.79,
-   67.9
+   42.79,
+   71.51
   ]
  },
  {
@@ -591,33 +591,6 @@
    11.85,
    34.48,
    55.47
-  ]
- },
- {
-  "id": "10Bc",
-  "name": "L_L1_Bow_Window_Cornice",
-  "group": "facade_L",
-  "status": "ok",
-  "grams": 0.6,
-  "solids": 1,
-  "bbox": [
-   45.8,
-   3.2,
-   6.5
-  ],
-  "bed": 146.9,
-  "overhang": 0.0,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "10Bc_L_L1_Bow_Window_Cornice.stl",
-  "place_bbox": [
-   7.08,
-   -3.05,
-   68.3,
-   14.31,
-   42.79,
-   71.51
   ]
  },
  {
@@ -679,79 +652,25 @@
   "name": "L_L1_Door",
   "group": "facade_L",
   "status": "ok",
-  "grams": 1.8,
+  "grams": 3.0,
   "solids": 1,
   "bbox": [
-   19.3,
-   38.6,
-   5.7
+   25.7,
+   46.8,
+   6.4
   ],
   "bed": 440.4,
-  "overhang": 304.6,
+  "overhang": 340.1,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "10G_L_L1_Door.stl",
-  "place_bbox": [
-   7.82,
-   34.19,
-   30.52,
-   13.84,
-   53.55,
-   69.12
-  ]
- },
- {
-  "id": "10Gf",
-  "name": "L_L1_Door_Frame",
-  "group": "facade_L",
-  "status": "ok",
-  "grams": 1.1,
-  "solids": 1,
-  "bbox": [
-   25.7,
-   42.4,
-   6.4
-  ],
-  "bed": 329.3,
-  "overhang": 4.0,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "10Gf_L_L1_Door_Frame.stl",
   "place_bbox": [
    7.16,
    30.99,
    28.62,
    14.13,
    56.75,
-   71.02
-  ]
- },
- {
-  "id": "10Gl",
-  "name": "L_L1_Door_Fanlight",
-  "group": "facade_L",
-  "status": "ok",
-  "grams": 0.2,
-  "solids": 1,
-  "bbox": [
-   18.1,
-   5.3,
-   5.9
-  ],
-  "bed": 24.7,
-  "overhang": 43.0,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "10Gl_L_L1_Door_Fanlight.stl",
-  "place_bbox": [
-   7.82,
-   34.78,
-   70.12,
-   13.92,
-   52.97,
    75.38
   ]
  },
@@ -787,26 +706,26 @@
   "name": "L_L2_Bay_Window_Body",
   "group": "facade_L",
   "status": "ok",
-  "grams": 2.9,
+  "grams": 3.8,
   "solids": 1,
   "bbox": [
-   23.8,
-   31.7,
-   12.8
+   26.8,
+   40.7,
+   15.3
   ],
-  "bed": 307.0,
-  "overhang": 361.7,
+  "bed": 42.8,
+  "overhang": 699.6,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "11A_L_L2_Bay_Window_Body.stl",
   "place_bbox": [
-   9.5,
-   61.99,
-   43.43,
-   22.83,
-   85.79,
-   75.18
+   8.73,
+   60.49,
+   37.08,
+   24.38,
+   87.29,
+   77.78
   ]
  },
  {
@@ -834,60 +753,6 @@
    13.3,
    81.87,
    67.05
-  ]
- },
- {
-  "id": "11Ar",
-  "name": "L_L2_Bay_Window_Roof",
-  "group": "facade_L",
-  "status": "ok",
-  "grams": 0.7,
-  "solids": 1,
-  "bbox": [
-   26.8,
-   4.6,
-   15.3
-  ],
-  "bed": 42.8,
-  "overhang": 5.0,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "11Ar_L_L2_Bay_Window_Roof.stl",
-  "place_bbox": [
-   8.73,
-   60.49,
-   73.18,
-   24.38,
-   87.29,
-   77.78
-  ]
- },
- {
-  "id": "11Ac",
-  "name": "L_L2_Bay_Window_Corbel",
-  "group": "facade_L",
-  "status": "ok",
-  "grams": 0.2,
-  "solids": 1,
-  "bbox": [
-   5.5,
-   7.0,
-   7.2
-  ],
-  "bed": 17.6,
-  "overhang": 19.3,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "11Ac_L_L2_Bay_Window_Corbel.stl",
-  "place_bbox": [
-   8.73,
-   71.03,
-   37.08,
-   16.0,
-   76.64,
-   44.07
   ]
  },
  {
@@ -922,79 +787,25 @@
   "name": "L_L2_Door",
   "group": "facade_L",
   "status": "ok",
-  "grams": 0.9,
+  "grams": 1.7,
   "solids": 1,
   "bbox": [
-   13.1,
-   26.2,
-   5.7
+   19.5,
+   33.4,
+   5.9
   ],
-  "bed": 203.0,
-  "overhang": 139.2,
+  "bed": 287.4,
+  "overhang": 154.7,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "11F_L_L2_Door.stl",
   "place_bbox": [
    9.46,
-   91.27,
-   48.34,
-   15.39,
-   104.42,
-   74.5
-  ]
- },
- {
-  "id": "11Ff",
-  "name": "L_L2_Door_Frame",
-  "group": "facade_L",
-  "status": "ok",
-  "grams": 0.7,
-  "solids": 1,
-  "bbox": [
-   19.5,
-   30.0,
-   5.9
-  ],
-  "bed": 229.8,
-  "overhang": 2.0,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "11Ff_L_L2_Door_Frame.stl",
-  "place_bbox": [
-   9.46,
    88.07,
    46.44,
    15.69,
    107.61,
-   76.4
-  ]
- },
- {
-  "id": "11Fl",
-  "name": "L_L2_Door_Fanlight",
-  "group": "facade_L",
-  "status": "ok",
-  "grams": 0.1,
-  "solids": 1,
-  "bbox": [
-   12.3,
-   4.4,
-   5.9
-  ],
-  "bed": 18.8,
-  "overhang": 20.3,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "11Fl_L_L2_Door_Fanlight.stl",
-  "place_bbox": [
-   9.46,
-   91.68,
-   75.5,
-   15.53,
-   104.02,
    79.86
   ]
  },
@@ -1033,22 +844,22 @@
   "grams": 0.8,
   "solids": 1,
   "bbox": [
-   21.7,
+   23.7,
    23.0,
    6.3
   ],
   "bed": 139.4,
-  "overhang": 147.5,
+  "overhang": 151.4,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "12A_L_L3_Shop_Window_Frame.stl",
   "place_bbox": [
    10.26,
-   112.95,
+   111.96,
    55.09,
    16.9,
-   134.71,
+   135.71,
    78.1
   ]
  },
@@ -1077,33 +888,6 @@
    14.84,
    132.31,
    75.7
-  ]
- },
- {
-  "id": "12Al",
-  "name": "L_L3_Shop_Window_Lintel",
-  "group": "facade_L",
-  "status": "ok",
-  "grams": 0.1,
-  "solids": 1,
-  "bbox": [
-   23.7,
-   2.0,
-   5.5
-  ],
-  "bed": 46.5,
-  "overhang": 0.1,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "12Al_L_L3_Shop_Window_Lintel.stl",
-  "place_bbox": [
-   10.26,
-   111.96,
-   76.1,
-   16.15,
-   135.71,
-   78.1
   ]
  },
  {
@@ -1138,46 +922,19 @@
   "name": "L_L3_Door",
   "group": "facade_L",
   "status": "ok",
-  "grams": 0.4,
-  "solids": 1,
-  "bbox": [
-   8.5,
-   15.7,
-   5.7
-  ],
-  "bed": 77.3,
-  "overhang": 55.5,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "12G_L_L3_Door.stl",
-  "place_bbox": [
-   10.81,
-   137.56,
-   62.33,
-   16.66,
-   146.08,
-   78.04
-  ]
- },
- {
-  "id": "12Gf",
-  "name": "L_L3_Door_Frame",
-  "group": "facade_L",
-  "status": "ok",
-  "grams": 0.5,
+  "grams": 0.8,
   "solids": 1,
   "bbox": [
    14.9,
    19.5,
    5.9
   ],
-  "bed": 148.0,
-  "overhang": 2.0,
+  "bed": 163.5,
+  "overhang": 57.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
-  "file": "12Gf_L_L3_Door_Frame.stl",
+  "file": "12G_L_L3_Door.stl",
   "place_bbox": [
    10.81,
    134.36,
@@ -1192,24 +949,24 @@
   "name": "L_L_Window_A_Frame",
   "group": "facade_L",
   "status": "ok",
-  "grams": 1.3,
+  "grams": 1.4,
   "solids": 1,
   "bbox": [
    27.0,
    34.7,
-   6.8
+   7.8
   ],
-  "bed": 294.4,
-  "overhang": 220.9,
+  "bed": 48.6,
+  "overhang": 463.6,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "13A_L_L_Window_A_Frame.stl",
   "place_bbox": [
    6.3,
-   2.33,
+   2.3,
    86.44,
-   13.7,
+   14.72,
    29.42,
    121.1
   ]
@@ -1242,55 +999,28 @@
   ]
  },
  {
-  "id": "13As",
-  "name": "L_L_Window_A_Sill",
-  "group": "facade_L",
-  "status": "ok",
-  "grams": 0.3,
-  "solids": 1,
-  "bbox": [
-   27.0,
-   2.6,
-   7.3
-  ],
-  "bed": 48.6,
-  "overhang": 21.6,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "13As_L_L_Window_A_Sill.stl",
-  "place_bbox": [
-   6.96,
-   2.3,
-   86.64,
-   14.72,
-   29.42,
-   89.24
-  ]
- },
- {
   "id": "13B",
   "name": "L_L_Window_B_Frame",
   "group": "facade_L",
   "status": "ok",
-  "grams": 1.1,
+  "grams": 1.2,
   "solids": 1,
   "bbox": [
    23.4,
    30.4,
-   6.8
+   7.5
   ],
-  "bed": 250.1,
-  "overhang": 188.0,
+  "bed": 42.2,
+  "overhang": 392.9,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "13B_L_L_Window_B_Frame.stl",
   "place_bbox": [
    7.22,
-   34.11,
+   34.08,
    89.14,
-   14.56,
+   15.25,
    57.61,
    119.55
   ]
@@ -1323,57 +1053,30 @@
   ]
  },
  {
-  "id": "13Bs",
-  "name": "L_L_Window_B_Sill",
-  "group": "facade_L",
-  "status": "ok",
-  "grams": 0.2,
-  "solids": 1,
-  "bbox": [
-   23.4,
-   2.6,
-   7.0
-  ],
-  "bed": 42.2,
-  "overhang": 18.7,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "13Bs_L_L_Window_B_Sill.stl",
-  "place_bbox": [
-   7.88,
-   34.08,
-   89.34,
-   15.25,
-   57.61,
-   91.94
-  ]
- },
- {
   "id": "12B",
   "name": "L_L_Oriel_Body",
   "group": "facade_L",
   "status": "ok",
-  "grams": 1.8,
+  "grams": 2.5,
   "solids": 1,
   "bbox": [
-   18.9,
-   23.6,
-   10.4
+   21.9,
+   31.0,
+   12.9
   ],
-  "bed": 223.6,
-  "overhang": 209.5,
+  "bed": 35.8,
+  "overhang": 456.2,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "12B_L_L_Oriel_Body.stl",
   "place_bbox": [
-   9.64,
-   66.44,
-   93.35,
-   20.4,
-   85.34,
-   116.99
+   8.79,
+   64.94,
+   88.62,
+   21.95,
+   86.84,
+   119.59
   ]
  },
  {
@@ -1404,60 +1107,6 @@
   ]
  },
  {
-  "id": "12Br",
-  "name": "L_L_Oriel_Roof",
-  "group": "facade_L",
-  "status": "ok",
-  "grams": 0.5,
-  "solids": 1,
-  "bbox": [
-   21.9,
-   4.6,
-   12.9
-  ],
-  "bed": 35.8,
-  "overhang": 5.0,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "12Br_L_L_Oriel_Roof.stl",
-  "place_bbox": [
-   8.79,
-   64.94,
-   114.99,
-   21.95,
-   86.84,
-   119.59
-  ]
- },
- {
-  "id": "12Bc",
-  "name": "L_L_Oriel_Corbel",
-  "group": "facade_L",
-  "status": "ok",
-  "grams": 0.2,
-  "solids": 1,
-  "bbox": [
-   5.5,
-   5.2,
-   7.1
-  ],
-  "bed": 17.5,
-  "overhang": 10.2,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "12Bc_L_L_Oriel_Corbel.stl",
-  "place_bbox": [
-   8.79,
-   73.04,
-   88.62,
-   16.05,
-   78.63,
-   93.82
-  ]
- },
- {
   "id": "13C",
   "name": "L_L_Window_C_Frame",
   "group": "facade_L",
@@ -1469,8 +1118,8 @@
    22.8,
    6.3
   ],
-  "bed": 155.4,
-  "overhang": 133.4,
+  "bed": 164.7,
+  "overhang": 122.4,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1512,33 +1161,6 @@
   ]
  },
  {
-  "id": "13Cs",
-  "name": "L_L_Window_C_Sill",
-  "group": "facade_L",
-  "status": "ok",
-  "grams": 0.2,
-  "solids": 1,
-  "bbox": [
-   18.6,
-   2.6,
-   6.3
-  ],
-  "bed": 33.4,
-  "overhang": 14.9,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "13Cs_L_L_Window_C_Sill.stl",
-  "place_bbox": [
-   9.77,
-   98.5,
-   93.64,
-   16.37,
-   117.16,
-   96.24
-  ]
- },
- {
   "id": "13D",
   "name": "L_L_Window_D_Frame",
   "group": "facade_L",
@@ -1551,7 +1173,7 @@
    6.3
   ],
   "bed": 112.0,
-  "overhang": 103.4,
+  "overhang": 101.9,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1593,55 +1215,28 @@
   ]
  },
  {
-  "id": "13Ds",
-  "name": "L_L_Window_D_Sill",
-  "group": "facade_L",
-  "status": "ok",
-  "grams": 0.1,
-  "solids": 1,
-  "bbox": [
-   15.4,
-   2.6,
-   6.0
-  ],
-  "bed": 27.7,
-  "overhang": 12.3,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "13Ds_L_L_Window_D_Sill.stl",
-  "place_bbox": [
-   10.56,
-   126.09,
-   95.05,
-   16.83,
-   141.55,
-   97.65
-  ]
- },
- {
   "id": "13E",
   "name": "L_L_Window_E_Frame",
   "group": "facade_L",
   "status": "ok",
-  "grams": 1.1,
+  "grams": 1.2,
   "solids": 1,
   "bbox": [
    24.7,
    30.3,
-   6.8
+   7.7
   ],
-  "bed": 258.9,
-  "overhang": 192.5,
+  "bed": 44.4,
+  "overhang": 404.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "13E_L_L_Window_E_Frame.stl",
   "place_bbox": [
    6.54,
-   11.5,
+   11.47,
    133.16,
-   13.91,
+   14.84,
    36.24,
    163.42
   ]
@@ -1674,55 +1269,28 @@
   ]
  },
  {
-  "id": "13Es",
-  "name": "L_L_Window_E_Sill",
-  "group": "facade_L",
-  "status": "ok",
-  "grams": 0.3,
-  "solids": 1,
-  "bbox": [
-   24.7,
-   2.6,
-   7.2
-  ],
-  "bed": 44.4,
-  "overhang": 19.7,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "13Es_L_L_Window_E_Sill.stl",
-  "place_bbox": [
-   7.2,
-   11.47,
-   133.36,
-   14.84,
-   36.24,
-   135.96
-  ]
- },
- {
   "id": "13F",
   "name": "L_L_Window_F_Frame",
   "group": "facade_L",
   "status": "ok",
-  "grams": 0.8,
+  "grams": 0.9,
   "solids": 1,
   "bbox": [
    20.9,
    25.9,
-   6.3
+   6.8
   ],
-  "bed": 179.7,
-  "overhang": 156.0,
+  "bed": 37.6,
+  "overhang": 296.6,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "13F_L_L_Window_F_Frame.stl",
   "place_bbox": [
    8.36,
-   51.37,
+   51.35,
    128.66,
-   15.01,
+   15.52,
    72.33,
    154.51
   ]
@@ -1755,33 +1323,6 @@
   ]
  },
  {
-  "id": "13Fs",
-  "name": "L_L_Window_F_Sill",
-  "group": "facade_L",
-  "status": "ok",
-  "grams": 0.2,
-  "solids": 1,
-  "bbox": [
-   20.9,
-   2.6,
-   6.8
-  ],
-  "bed": 37.6,
-  "overhang": 16.7,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "13Fs_L_L_Window_F_Sill.stl",
-  "place_bbox": [
-   8.36,
-   51.35,
-   128.86,
-   15.52,
-   72.33,
-   131.46
-  ]
- },
- {
   "id": "13G",
   "name": "L_L_Window_G_Frame",
   "group": "facade_L",
@@ -1791,19 +1332,19 @@
   "bbox": [
    16.8,
    20.4,
-   6.3
+   6.4
   ],
-  "bed": 125.3,
-  "overhang": 117.3,
+  "bed": 98.7,
+  "overhang": 107.4,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "13G_L_L_Window_G_Frame.stl",
   "place_bbox": [
    9.53,
-   91.39,
+   91.38,
    124.67,
-   16.11,
+   16.19,
    108.28,
    145.09
   ]
@@ -1836,33 +1377,6 @@
   ]
  },
  {
-  "id": "13Gs",
-  "name": "L_L_Window_G_Sill",
-  "group": "facade_L",
-  "status": "ok",
-  "grams": 0.2,
-  "solids": 1,
-  "bbox": [
-   16.8,
-   2.6,
-   6.4
-  ],
-  "bed": 30.3,
-  "overhang": 13.5,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "13Gs_L_L_Window_G_Sill.stl",
-  "place_bbox": [
-   9.53,
-   91.38,
-   124.87,
-   16.19,
-   108.28,
-   127.47
-  ]
- },
- {
   "id": "14A",
   "name": "L_L_Attic_Dormer_Frame",
   "group": "facade_L",
@@ -1872,19 +1386,19 @@
   "bbox": [
    20.4,
    24.0,
-   6.3
+   7.1
   ],
-  "bed": 142.4,
-  "overhang": 133.4,
+  "bed": 36.7,
+  "overhang": 237.6,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "14A_L_L_Attic_Dormer_Frame.stl",
   "place_bbox": [
    7.57,
-   25.63,
+   25.6,
    169.2,
-   14.21,
+   15.01,
    46.1,
    193.19
   ]
@@ -1917,33 +1431,6 @@
   ]
  },
  {
-  "id": "14As",
-  "name": "L_L_Attic_Dormer_Sill",
-  "group": "facade_L",
-  "status": "ok",
-  "grams": 0.2,
-  "solids": 1,
-  "bbox": [
-   20.4,
-   2.6,
-   7.1
-  ],
-  "bed": 36.7,
-  "overhang": 16.3,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "14As_L_L_Attic_Dormer_Sill.stl",
-  "place_bbox": [
-   7.57,
-   25.6,
-   169.4,
-   15.01,
-   46.1,
-   172.0
-  ]
- },
- {
   "id": "14B",
   "name": "L_L_Attic_B_Frame",
   "group": "facade_L",
@@ -1953,19 +1440,19 @@
   "bbox": [
    15.8,
    18.1,
-   6.3
+   6.5
   ],
-  "bed": 90.1,
-  "overhang": 94.6,
+  "bed": 37.3,
+  "overhang": 85.3,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "14B_L_L_Attic_B_Frame.stl",
   "place_bbox": [
    9.16,
-   79.9,
+   79.89,
    155.11,
-   15.73,
+   15.94,
    95.78,
    173.18
   ]
@@ -1995,33 +1482,6 @@
    13.65,
    93.38,
    170.78
-  ]
- },
- {
-  "id": "14Bs",
-  "name": "L_L_Attic_B_Sill",
-  "group": "facade_L",
-  "status": "ok",
-  "grams": 0.2,
-  "solids": 1,
-  "bbox": [
-   15.8,
-   2.6,
-   6.5
-  ],
-  "bed": 28.5,
-  "overhang": 12.6,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "14Bs_L_L_Attic_B_Sill.stl",
-  "place_bbox": [
-   9.16,
-   79.89,
-   155.31,
-   15.94,
-   95.78,
-   157.91
   ]
  },
  {
@@ -2245,46 +1705,19 @@
   "name": "R_R1_Arched_Door",
   "group": "facade_R",
   "status": "ok",
-  "grams": 1.8,
-  "solids": 1,
-  "bbox": [
-   17.9,
-   43.3,
-   5.7
-  ],
-  "bed": 426.0,
-  "overhang": 314.3,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "20B_R_R1_Arched_Door.stl",
-  "place_bbox": [
-   81.79,
-   11.91,
-   22.93,
-   87.79,
-   29.85,
-   66.24
-  ]
- },
- {
-  "id": "20Bf",
-  "name": "R_R1_Arched_Door_Frame",
-  "group": "facade_R",
-  "status": "ok",
-  "grams": 1.1,
+  "grams": 2.9,
   "solids": 1,
   "bbox": [
    24.3,
    47.1,
    6.4
   ],
-  "bed": 325.9,
-  "overhang": 9.0,
+  "bed": 411.1,
+  "overhang": 322.9,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
-  "file": "20Bf_R_R1_Arched_Door_Frame.stl",
+  "file": "20B_R_R1_Arched_Door.stl",
   "place_bbox": [
    81.49,
    8.7,
@@ -2299,22 +1732,22 @@
   "name": "R_R1_Tall_Window_Frame",
   "group": "facade_R",
   "status": "ok",
-  "grams": 1.3,
+  "grams": 1.4,
   "solids": 1,
   "bbox": [
    23.7,
    41.3,
-   6.8
+   7.5
   ],
-  "bed": 295.5,
-  "overhang": 234.7,
+  "bed": 42.6,
+  "overhang": 484.6,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "20E_R_R1_Tall_Window_Frame.stl",
   "place_bbox": [
-   80.46,
-   30.0,
+   79.73,
+   29.97,
    32.02,
    87.81,
    53.73,
@@ -2346,33 +1779,6 @@
    83.91,
    51.33,
    70.93
-  ]
- },
- {
-  "id": "20Es",
-  "name": "R_R1_Tall_Window_Sill",
-  "group": "facade_R",
-  "status": "ok",
-  "grams": 0.3,
-  "solids": 1,
-  "bbox": [
-   23.7,
-   2.6,
-   7.0
-  ],
-  "bed": 42.6,
-  "overhang": 18.9,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "20Es_R_R1_Tall_Window_Sill.stl",
-  "place_bbox": [
-   79.73,
-   29.97,
-   32.22,
-   87.15,
-   53.73,
-   34.82
   ]
  },
  {
@@ -2434,26 +1840,26 @@
   "name": "R_R2_Shop_Window_Frame",
   "group": "facade_R",
   "status": "ok",
-  "grams": 1.2,
+  "grams": 1.3,
   "solids": 1,
   "bbox": [
-   33.2,
-   31.6,
+   35.2,
+   31.8,
    6.8
   ],
   "bed": 211.8,
-  "overhang": 236.2,
+  "overhang": 247.6,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "21B_R_R2_Shop_Window_Frame.stl",
   "place_bbox": [
    79.41,
-   55.24,
+   54.25,
    39.8,
    86.89,
-   88.47,
-   71.37
+   89.47,
+   71.57
   ]
  },
  {
@@ -2481,33 +1887,6 @@
    83.14,
    86.07,
    68.97
-  ]
- },
- {
-  "id": "21Bl",
-  "name": "R_R2_Shop_Window_Lintel",
-  "group": "facade_R",
-  "status": "ok",
-  "grams": 0.2,
-  "solids": 1,
-  "bbox": [
-   35.2,
-   2.4,
-   5.5
-  ],
-  "bed": 84.3,
-  "overhang": 0.0,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "21Bl_R_R2_Shop_Window_Lintel.stl",
-  "place_bbox": [
-   80.17,
-   54.25,
-   69.18,
-   86.23,
-   89.47,
-   71.57
   ]
  },
  {
@@ -2626,22 +2005,22 @@
   "grams": 0.7,
   "solids": 1,
   "bbox": [
-   20.6,
+   22.6,
    22.0,
    6.3
   ],
   "bed": 117.8,
-  "overhang": 139.9,
+  "overhang": 143.9,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "22A_R_R3_Shop_Window_Frame.stl",
   "place_bbox": [
    78.13,
-   109.48,
+   108.49,
    53.8,
    84.76,
-   130.18,
+   131.18,
    75.77
   ]
  },
@@ -2673,77 +2052,23 @@
   ]
  },
  {
-  "id": "22Al",
-  "name": "R_R3_Shop_Window_Lintel",
-  "group": "facade_R",
-  "status": "ok",
-  "grams": 0.1,
-  "solids": 1,
-  "bbox": [
-   22.6,
-   2.0,
-   5.5
-  ],
-  "bed": 45.2,
-  "overhang": 0.0,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "22Al_R_R3_Shop_Window_Lintel.stl",
-  "place_bbox": [
-   78.89,
-   108.49,
-   73.77,
-   84.76,
-   131.18,
-   75.77
-  ]
- },
- {
   "id": "22D",
   "name": "R_R3_Door",
   "group": "facade_R",
   "status": "ok",
-  "grams": 0.3,
-  "solids": 1,
-  "bbox": [
-   8.0,
-   14.8,
-   5.7
-  ],
-  "bed": 69.0,
-  "overhang": 49.1,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "22D_R_R3_Door.stl",
-  "place_bbox": [
-   78.37,
-   133.8,
-   61.0,
-   84.21,
-   141.86,
-   75.76
-  ]
- },
- {
-  "id": "22Df",
-  "name": "R_R3_Door_Frame",
-  "group": "facade_R",
-  "status": "ok",
-  "grams": 0.5,
+  "grams": 0.8,
   "solids": 1,
   "bbox": [
    14.4,
    18.6,
    5.9
   ],
-  "bed": 140.6,
-  "overhang": 2.0,
+  "bed": 154.3,
+  "overhang": 50.6,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
-  "file": "22Df_R_R3_Door_Frame.stl",
+  "file": "22D_R_R3_Door.stl",
   "place_bbox": [
    78.07,
    130.59,
@@ -2758,26 +2083,26 @@
   "name": "R_R_Bay_Window_Body",
   "group": "facade_R",
   "status": "ok",
-  "grams": 2.9,
+  "grams": 3.9,
   "solids": 1,
   "bbox": [
-   23.8,
-   31.2,
-   13.5
+   26.8,
+   40.0,
+   16.0
   ],
-  "bed": 304.0,
-  "overhang": 353.6,
+  "bed": 42.8,
+  "overhang": 690.7,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "24A_R_R_Bay_Window_Body.stl",
   "place_bbox": [
-   72.73,
-   18.0,
-   88.9,
-   86.74,
-   41.82,
-   120.06
+   71.19,
+   16.5,
+   82.67,
+   87.51,
+   43.32,
+   122.66
   ]
  },
  {
@@ -2808,60 +2133,6 @@
   ]
  },
  {
-  "id": "24Ar",
-  "name": "R_R_Bay_Window_Roof",
-  "group": "facade_R",
-  "status": "ok",
-  "grams": 0.8,
-  "solids": 1,
-  "bbox": [
-   26.8,
-   4.6,
-   16.0
-  ],
-  "bed": 42.8,
-  "overhang": 5.0,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "24Ar_R_R_Bay_Window_Roof.stl",
-  "place_bbox": [
-   71.19,
-   16.5,
-   118.06,
-   87.51,
-   43.32,
-   122.66
-  ]
- },
- {
-  "id": "24Ac",
-  "name": "R_R_Bay_Window_Corbel",
-  "group": "facade_R",
-  "status": "ok",
-  "grams": 0.2,
-  "solids": 1,
-  "bbox": [
-   5.9,
-   6.9,
-   7.5
-  ],
-  "bed": 18.9,
-  "overhang": 20.2,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "24Ac_R_R_Bay_Window_Corbel.stl",
-  "place_bbox": [
-   79.91,
-   26.83,
-   82.67,
-   87.51,
-   32.87,
-   89.52
-  ]
- },
- {
   "id": "23A",
   "name": "R_R_Window_A_Frame",
   "group": "facade_R",
@@ -2871,17 +2142,17 @@
   "bbox": [
    22.5,
    29.2,
-   6.8
+   7.3
   ],
-  "bed": 238.4,
-  "overhang": 179.0,
+  "bed": 40.6,
+  "overhang": 373.8,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "23A_R_R_Window_A_Frame.stl",
   "place_bbox": [
-   79.86,
-   50.54,
+   79.36,
+   50.53,
    90.58,
    87.2,
    73.16,
@@ -2916,53 +2187,26 @@
   ]
  },
  {
-  "id": "23As",
-  "name": "R_R_Window_A_Sill",
-  "group": "facade_R",
-  "status": "ok",
-  "grams": 0.2,
-  "solids": 1,
-  "bbox": [
-   22.5,
-   2.6,
-   6.8
-  ],
-  "bed": 40.6,
-  "overhang": 18.0,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "23As_R_R_Window_A_Sill.stl",
-  "place_bbox": [
-   79.36,
-   50.53,
-   90.78,
-   86.54,
-   73.16,
-   93.38
-  ]
- },
- {
   "id": "23B",
   "name": "R_R_Window_B_Frame",
   "group": "facade_R",
   "status": "ok",
-  "grams": 0.7,
+  "grams": 0.8,
   "solids": 1,
   "bbox": [
    18.5,
    23.0,
-   6.3
+   6.5
   ],
-  "bed": 156.0,
-  "overhang": 134.1,
+  "bed": 85.5,
+  "overhang": 123.2,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "23B_R_R_Window_B_Frame.stl",
   "place_bbox": [
-   78.95,
-   84.53,
+   78.8,
+   84.52,
    92.09,
    85.56,
    103.15,
@@ -2997,33 +2241,6 @@
   ]
  },
  {
-  "id": "23Bs",
-  "name": "R_R_Window_B_Sill",
-  "group": "facade_R",
-  "status": "ok",
-  "grams": 0.2,
-  "solids": 1,
-  "bbox": [
-   18.5,
-   2.6,
-   6.5
-  ],
-  "bed": 33.4,
-  "overhang": 14.8,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "23Bs_R_R_Window_B_Sill.stl",
-  "place_bbox": [
-   78.8,
-   84.52,
-   92.29,
-   85.56,
-   103.15,
-   94.89
-  ]
- },
- {
   "id": "23C",
   "name": "R_R_Window_C_Frame",
   "group": "facade_R",
@@ -3035,8 +2252,8 @@
    18.4,
    6.3
   ],
-  "bed": 110.7,
-  "overhang": 102.0,
+  "bed": 112.7,
+  "overhang": 93.1,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -3078,53 +2295,26 @@
   ]
  },
  {
-  "id": "23Cs",
-  "name": "R_R_Window_C_Sill",
-  "group": "facade_R",
-  "status": "ok",
-  "grams": 0.1,
-  "solids": 1,
-  "bbox": [
-   15.2,
-   2.6,
-   6.1
-  ],
-  "bed": 27.3,
-  "overhang": 12.1,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "23Cs_R_R_Window_C_Sill.stl",
-  "place_bbox": [
-   78.27,
-   116.21,
-   94.01,
-   84.64,
-   131.44,
-   96.61
-  ]
- },
- {
   "id": "23D",
   "name": "R_R_Window_D_Frame",
   "group": "facade_R",
   "status": "ok",
-  "grams": 1.1,
+  "grams": 1.2,
   "solids": 1,
   "bbox": [
    24.9,
    30.5,
-   6.8
+   7.8
   ],
-  "bed": 261.7,
-  "overhang": 194.7,
+  "bed": 44.8,
+  "overhang": 408.6,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "23D_R_R_Window_D_Frame.stl",
   "place_bbox": [
-   81.11,
-   7.39,
+   80.14,
+   7.36,
    133.47,
    88.48,
    32.35,
@@ -3159,53 +2349,26 @@
   ]
  },
  {
-  "id": "23Ds",
-  "name": "R_R_Window_D_Sill",
-  "group": "facade_R",
-  "status": "ok",
-  "grams": 0.3,
-  "solids": 1,
-  "bbox": [
-   24.9,
-   2.6,
-   7.3
-  ],
-  "bed": 44.8,
-  "overhang": 19.9,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "23Ds_R_R_Window_D_Sill.stl",
-  "place_bbox": [
-   80.14,
-   7.36,
-   133.67,
-   87.82,
-   32.35,
-   136.27
-  ]
- },
- {
   "id": "23E",
   "name": "R_R_Window_E_Frame",
   "group": "facade_R",
   "status": "ok",
-  "grams": 0.8,
+  "grams": 0.9,
   "solids": 1,
   "bbox": [
    20.3,
    25.3,
-   6.3
+   6.9
   ],
-  "bed": 174.1,
-  "overhang": 151.0,
+  "bed": 36.5,
+  "overhang": 287.1,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "23E_R_R_Window_E_Frame.stl",
   "place_bbox": [
-   80.02,
-   47.69,
+   79.47,
+   47.67,
    128.94,
    86.66,
    68.02,
@@ -3240,33 +2403,6 @@
   ]
  },
  {
-  "id": "23Es",
-  "name": "R_R_Window_E_Sill",
-  "group": "facade_R",
-  "status": "ok",
-  "grams": 0.2,
-  "solids": 1,
-  "bbox": [
-   20.3,
-   2.6,
-   6.9
-  ],
-  "bed": 36.5,
-  "overhang": 16.2,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "23Es_R_R_Window_E_Sill.stl",
-  "place_bbox": [
-   79.47,
-   47.67,
-   129.14,
-   86.66,
-   68.02,
-   131.74
-  ]
- },
- {
   "id": "23F",
   "name": "R_R_Window_F_Frame",
   "group": "facade_R",
@@ -3276,16 +2412,16 @@
   "bbox": [
    16.3,
    19.9,
-   6.3
+   6.4
   ],
-  "bed": 121.0,
-  "overhang": 112.8,
+  "bed": 77.5,
+  "overhang": 103.3,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "23F_R_R_Window_F_Frame.stl",
   "place_bbox": [
-   78.92,
+   78.79,
    87.67,
    124.92,
    85.5,
@@ -3321,53 +2457,26 @@
   ]
  },
  {
-  "id": "23Fs",
-  "name": "R_R_Window_F_Sill",
-  "group": "facade_R",
-  "status": "ok",
-  "grams": 0.2,
-  "solids": 1,
-  "bbox": [
-   16.3,
-   2.6,
-   6.4
-  ],
-  "bed": 29.3,
-  "overhang": 13.0,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "23Fs_R_R_Window_F_Sill.stl",
-  "place_bbox": [
-   78.79,
-   87.67,
-   125.12,
-   85.5,
-   104.0,
-   127.72
-  ]
- },
- {
   "id": "23G",
   "name": "R_R_Attic_A_Frame",
   "group": "facade_R",
   "status": "ok",
-  "grams": 0.6,
+  "grams": 0.7,
   "solids": 1,
   "bbox": [
    19.2,
    22.7,
-   6.3
+   7.0
   ],
-  "bed": 133.0,
-  "overhang": 123.7,
+  "bed": 34.5,
+  "overhang": 220.7,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "23G_R_R_Attic_A_Frame.stl",
   "place_bbox": [
-   80.47,
-   34.24,
+   79.76,
+   34.22,
    167.47,
    87.08,
    53.48,
@@ -3402,52 +2511,25 @@
   ]
  },
  {
-  "id": "23Gs",
-  "name": "R_R_Attic_A_Sill",
-  "group": "facade_R",
-  "status": "ok",
-  "grams": 0.2,
-  "solids": 1,
-  "bbox": [
-   19.2,
-   2.6,
-   7.0
-  ],
-  "bed": 34.5,
-  "overhang": 15.3,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "23Gs_R_R_Attic_A_Sill.stl",
-  "place_bbox": [
-   79.76,
-   34.22,
-   167.67,
-   87.08,
-   53.48,
-   170.27
-  ]
- },
- {
   "id": "23H",
   "name": "R_R_Attic_B_Frame",
   "group": "facade_R",
   "status": "ok",
-  "grams": 0.4,
+  "grams": 0.5,
   "solids": 1,
   "bbox": [
    14.8,
    17.0,
-   6.3
+   6.4
   ],
-  "bed": 83.6,
-  "overhang": 86.7,
+  "bed": 57.7,
+  "overhang": 78.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "23H_R_R_Attic_B_Frame.stl",
   "place_bbox": [
-   78.94,
+   78.82,
    88.4,
    153.48,
    85.5,
@@ -3480,33 +2562,6 @@
    82.12,
    100.87,
    168.06
-  ]
- },
- {
-  "id": "23Hs",
-  "name": "R_R_Attic_B_Sill",
-  "group": "facade_R",
-  "status": "ok",
-  "grams": 0.1,
-  "solids": 1,
-  "bbox": [
-   14.8,
-   2.6,
-   6.4
-  ],
-  "bed": 26.6,
-  "overhang": 11.8,
-  "fits_bed": true,
-  "colour": "wood",
-  "note": "face down, pegs up",
-  "file": "23Hs_R_R_Attic_B_Sill.stl",
-  "place_bbox": [
-   78.82,
-   88.4,
-   153.68,
-   85.5,
-   103.27,
-   156.28
   ]
  },
  {

@@ -47,7 +47,89 @@ def build_element(row, side):
     return fn(row, side)
 
 
+# Which of an element's own pieces print AS ONE PART with it, by element kind.
+#
+# The sills, lintels, corbels and fanlights are 29 of the 119 facade parts and 5.4 g of
+# the 76 -- and every single one of them needs a brim, because their footprints run from
+# 5 to 60 mm^2. They are the entire small-part problem: 13As, 11Ac, 12Al and the
+# keystones are the parts that came off the plate. Printed as part of the frame they
+# stand up rather than sit on it, and they cannot be lost, dropped or fitted crooked.
+#
+# The GLAZING is deliberately not in here. It wants clear filament, so it has to be a
+# separate part whatever else happens.
+FUSE_INTO_BASE = {
+    "window":  ("s",),          # sill
+    "door":    ("f", "l"),      # frame and fanlight -- the leaf is decorative, not hung
+    "shopwin": ("l",),          # lintel
+    "bow":     ("c",),          # cornice; the diffuser stays separate, it is translucent
+    "bay":     ("c", "r"),      # corbel and roof
+    "oriel":   ("c", "r"),
+}
+
+# The widest gap between a fused piece and its parent that will be closed with a web.
+# Two solids that do not touch are two objects on the plate wearing one name -- and
+# keep_largest() would silently throw the smaller one away. The bow window's cornice
+# stands 0.40 mm off the frame it sits on, which is a modelling gap, not a design.
+FUSE_BRIDGE = 1.5
+
+
+def _weld(base, piece):
+    """A slab that closes the gap between two solids that ought to touch, or None.
+
+    Only along the ONE axis they are separated on, and only over the extent they share
+    on the other two, so it can never grow beyond the joint it is closing.
+    """
+    a, b = base.val().BoundingBox(), piece.val().BoundingBox()
+    lo = [(a.xmin, a.xmax, b.xmin, b.xmax), (a.ymin, a.ymax, b.ymin, b.ymax),
+          (a.zmin, a.zmax, b.zmin, b.zmax)]
+    gaps = [(max(p0, q0) - min(p1, q1), i) for i, (p0, p1, q0, q1) in enumerate(lo)]
+    gap, axis = max(gaps)
+    if gap <= 0.0 or gap > FUSE_BRIDGE:
+        return None
+    span = []
+    for i, (p0, p1, q0, q1) in enumerate(lo):
+        if i == axis:
+            span.append((min(p1, q1) - 0.05, max(p0, q0) + 0.05))
+        else:
+            s0, s1 = max(p0, q0), min(p1, q1)
+            # +Z is out of the wall, so anything below zero is inside the plate. A weld
+            # is a fillet on the outside of the joint; carried through the mounting
+            # plane it becomes a lump buried in solid wall, and the bow window's
+            # cornice weld fouled its wall by 38.8 mm^3 exactly that way.
+            if i == 2:
+                s0 = max(s0, 0.0)
+            if s1 - s0 <= 0.1:
+                return None
+            span.append((s0, s1))
+    size = [hi - lo_ for lo_, hi in span]
+    return (cq.Workplane("XY").box(*size, centered=(False, False, False))
+            .translate((span[0][0], span[1][0], span[2][0])))
+
+
 def _pack(row, side, items, spec, beads):
+    """Turn (suffix, name, solid, (u, z)) tuples into parts, fusing per FUSE_INTO_BASE.
+
+    Every item is authored in its own part frame and placed by to_wall(solid, u, z), so
+    moving one into another's frame is the difference of their (u, z) -- +X is wall
+    depth and +Y is up the wall, which is what to_wall's rotation makes them.
+    """
+    fuse = FUSE_INTO_BASE.get(row["kind"], ())
+    base = next((it for it in items if it[0] == ""), None)
+    if fuse and base is not None:
+        _, bname, bsolid, (bu, bz) = base
+        merged, kept = bsolid, []
+        for it in items:
+            suffix, _name, solid, (u, z) = it
+            if suffix in fuse:
+                moved = solid.translate((u - bu, z - bz, 0.0))
+                web = _weld(merged, moved)
+                merged = merged.union(moved)
+                if web is not None:
+                    merged = merged.union(web)
+            elif suffix != "":
+                kept.append(it)
+        items = [("", bname, merged, (bu, bz))] + kept
+
     out = []
     for suffix, name, solid, (u, z) in items:
         pid = row["id"] + suffix

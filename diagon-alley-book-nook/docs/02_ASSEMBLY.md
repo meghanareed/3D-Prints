@@ -290,6 +290,50 @@ visible in the slicer's object panel without opening anything.
 > `Title` and `Designer`, which is where Bambu keeps a project's name. `mf3.py` checks
 > the tag on every file it writes.
 
+### Windows and doors print as one piece
+
+A window used to be a frame, a sill and a pane of glazing; a door was a leaf, a frame
+and a fanlight. The sills, lintels, corbels, fanlights and door frames were 29 of the
+119 facade parts and 5.4 g of the 76 — and **every single one of them needed a brim**,
+because their footprints ran from 5 to 60 mm². They were the whole small-part problem:
+`13As`, `11Ac`, `12Al` and the keystones are the parts that came off the plate.
+
+`FUSE_INTO_BASE` in `parts/decor.py` now prints each of them as part of the frame it
+belongs to:
+
+| kind | printed as one piece with the frame |
+|---|---|
+| window | sill |
+| door | door frame, fanlight |
+| shop window | lintel |
+| bow window | cornice |
+| bay window, oriel | corbel, roof |
+
+The glazing is deliberately not on that list — it wants clear filament, so it has to be
+a separate part whatever else happens.
+
+**220 parts → 185. 78 needing a brim → 61. Same 1664 g.** Nothing under 40 mm² is left
+on a facade plate; the smallest parts in the kit are now the five free-standing
+ornaments (`19B`, `29B`, `15C`, `25C`, `29C`), which are 5–13 mm² and carry brims.
+
+Each fused piece is authored in its own frame and moved into the parent's by the
+difference of their (u, z), which is exactly what `to_wall()` would have done to both.
+Where the two do not quite touch — the bow window's cornice stands 0.40 mm off the
+frame it sits on — `_weld()` closes the gap with a slab spanning only the axis they are
+separated on and only the extent they share, clamped to stay outside the wall. Two
+solids that do not touch are two objects on the plate wearing one name, and
+`keep_largest()` would silently throw the smaller one away.
+
+**Signs are NOT fused to their brackets, and that was measured rather than assumed.** A
+hanging sign's plate lies parallel to the wall; its bracket is a fin standing
+perpendicular to it. Fused, the pair is a T in three dimensions with no flat lie
+anywhere: the best of the 24 axis-aligned orientations puts `30B` on 40.4 mm² of bed
+under 88.4 mm² of overhang, and `30D` on 6.7 mm². Separately, both lie flat. Fusing them
+properly would mean hanging the sign in the bracket's plane — perpendicular to the wall,
+which is how a real hanging shop sign works and how they read down an alley — and that
+puts 26 mm of sign out into a 74.9 mm alley. That is a design decision and an envelope
+question, not a print setting.
+
 ### Stringing
 
 Fine hairs across the open panes and between parts are a travel problem, not a geometry
@@ -412,8 +456,8 @@ lying in its print orientation. Drop one straight into the slicer.
 
 | Plate | Parts | PLA | Notes |
 |---|---|---|---|
-| `00_CALIBRATE_FIRST` | 2 | 35 g | **print this one first and stop.** The coupon and its four tabs, nothing else |
-| `01_CALIBRATE_JOINTS` | 2 | 67 g | **print this before the case.** T3 and C4 test block and its four pieces |
+| `00_CALIBRATE_FIRST` | 2 | 35 g | **print this one first and stop.** The coupon and its four tabs |
+| `01_CALIBRATE_JOINTS` | 2 | 67 g | **print this before the case.** T3 and C4 test block |
 | `02_wall_face_LEFT` | 1 | 105 g | brick side UP — **brim** |
 | `02_wall_face_RIGHT` | 1 | 108 g | brick side UP — **brim** |
 | `03_wall_rib_LEFT` | 1 | 60 g | hidden; flat — **brim** |
@@ -423,19 +467,21 @@ lying in its print orientation. Drop one straight into the slicer.
 | `06_rear` ×2 | 5 + 2 | 150 / 23 g | rear perspective assembly |
 | `07_front` | 3 | 47 g | bezels and header, broken edge UP |
 | `08_case` ×4 | 3 / 2 / 3 / 3 | 125 / 125 / 115 / 56 g | panels lie flat, outer face DOWN |
-| `09_facade_left` ×2 | 39 + 25 | 34 / 10 g | face DOWN, pegs UP |
-| `10_facade_right` | 55 | 33 g | face DOWN, pegs UP |
+| `09_facade_left` ×2 | 43 + 1 | 42 / 0 g | face DOWN, pegs UP |
+| `10_facade_right` | 40 | 31 g | face DOWN, pegs UP |
 | `11_signs_props` | 38 | 19 g | |
 | `12_hardware` | 22 | 31 g | lighting and switch parts |
-| `13_bench_tools` | 6 | 28 g | paint handles, ID card, glazing templates — **none of these go into the nook**, and you do not need them until you start painting |
+| `13_bench_tools` | 6 | 28 g | paint handles, ID card, glazing templates — **none of these go into the nook** |
 
-**21 plates, 220 parts, 1669 g.** All the decorative parts together are under 100 g;
-the mass is in the case and the plinth, and the plinth is deliberately heavy — it is
-the ballast under a 240 mm tall narrow object.
+**21 plates, 185 parts, 1664 g.**  The mass is in the case and the plinth, and the
+plinth is deliberately heavy — it is the ballast under a 240 mm tall narrow object.
+
+> `09_facade_left_2` holds one 45.8 × 3.0 mm cornice that the shelf packer could not
+> fit on the first plate. Move it onto any other facade plate by hand rather than
+> running a plate for it.
 
 > This table is written by hand and drifts whenever the packing changes.
-> `docs/04_PRINT_CHECKLIST.md` is generated by `plates.py` and is the one to trust —
-> it has every part, its plate, whether it wants a brim, and a box to tick.
+> `docs/04_PRINT_CHECKLIST.md` is generated by `plates.py` and is the one to trust.
 
 ### Filament — three, not eight
 

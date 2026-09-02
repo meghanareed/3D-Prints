@@ -41,6 +41,23 @@ def _sign_part(row):
     raise KeyError(k)
 
 
+def _bracket_solid(row):
+    s = F.wpersp(row["u"])
+    return S.bracket_scroll(row["reach"] * s, row["drop"] * s)
+
+
+# Signs and their brackets are NOT fused, and the reason is measured rather than
+# assumed. A hanging sign's plate lies parallel to the wall; its bracket is a fin
+# standing perpendicular to it. Fused, the pair is a T in three dimensions with no flat
+# lie anywhere: the best of the 24 axis-aligned orientations puts 30B on 40.4 mm^2 of
+# bed under 88.4 mm^2 of overhang, and 30D on 6.7 mm^2. Separately, both parts lie flat.
+#
+# Fusing them would need the sign hung in the bracket's PLANE -- perpendicular to the
+# wall, which is how a real hanging shop sign works and how they read down an alley --
+# and that moves the sign 26 mm out into the alley, which is a design decision and an
+# envelope question, not a print setting.
+
+
 def signs():
     out = []
     for row in F.SIGNS:
@@ -53,9 +70,8 @@ def signs():
 def brackets():
     out = []
     for row in F.BRACKETS:
-        s = F.wpersp(row["u"])
         out.append(dict(id=row["id"], name=row["name"],
-                        solid=S.bracket_scroll(row["reach"] * s, row["drop"] * s),
+                        solid=_bracket_solid(row),
                         side=row["side"], u=row["u"], z=row["z"]))
     out.append(dict(id="32A", name="Sign_Hanging_Chain_A", solid=S.chain(4),
                     side=None, u=0, z=0))
