@@ -329,31 +329,37 @@ If strings persist after that, in the order that actually helps:
 Whatever is left pulls off with tweezers or a quick pass of a heat gun on low. It does
 not affect fit — the strings are in the glazing opening, which the glazing insert covers.
 
-### Which wall is this, and which side does the facade go on
+### Which wall is this, and where does each part go
 
-![the two wall faces, apertures labelled](img/wall_apertures.png)
+`docs/06_WHERE_IT_GOES.md` is the answer, generated:
 
 ```
-python3 wallmap.py        # redraws it
+python3 wallmap.py     # -> docs/06_WHERE_IT_GOES.md
+                       #    docs/img/wall_placement_L.png
+                       #    docs/img/wall_placement_R.png
 ```
 
-Two things the print itself does not tell you:
+Every part drawn in its place over its own wall's silhouette, plus a table of depth,
+height and how far it stands proud. Drawn from the BRICK side with the front opening on
+the right, so a drawing can be held against the plate.
+
+Three things the print itself does not tell you:
 
 **Every facade part is named for its wall.** `13A_L_L_Window_A_Frame` is a LEFT-wall
-part; it has no home on the right wall, whose apertures are a different size and in
-different places. The `_L_`/`_R_` in the name is the whole answer. The trial plate is
-entirely left-wall parts.
+part and has no home on the right wall, whose apertures are different sizes in different
+places. The `_L_`/`_R_` in the name is the whole answer.
 
 **The facade mounts on the BRICK side** — the side facing up as the plate comes off the
 bed, not the flat back. `to_wall()` puts an element's seating plane at the outer face of
-the 2.5 mm plate and everything it has projects outwards from there; the brick relief is
-the 0.6 mm on top, and the brick field is cleared where an element lands.
+the 2.5 mm plate and everything it has projects outward from there.
 
-**A window frame does not drop into its aperture.** It is bigger than the hole on
-purpose. `13A` is 27.0 × 34.7 over an aperture of 21.0 × 28.7, so it laps the brick by
-3 mm all round; the 14 mm tabs on its back go into the two shallow recesses directly
-above and below the aperture, and the sill `13As` pegs into the 4 × 3.5 mm socket below
-that. If you are trying to push it through the hole it will never go.
+**A window frame does not drop into its aperture, and it is not a slide fit.** It is
+bigger than the hole on purpose: `13A` is 27.0 × 34.7 over a 21.0 × 28.7 aperture, so it
+laps the brick by 3 mm all round. Behind it is a 13.0 × 32.5 mm boss, and the wall
+opening is a **plus shape** — the aperture, plus a 14.0 × 3.5 mm slot directly above and
+below it. The boss goes into that plus, lugs into slots, against fourteen crush ribs
+biting 0.15 mm each. Line the lugs up and press; do not try to push the frame through
+the rectangle.
 
 ### A part that lifts is not a stringing problem
 

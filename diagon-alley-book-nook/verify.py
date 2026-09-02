@@ -459,6 +459,47 @@ def check_unsupported_relief():
             ok(f"{side} wall: {a:.2f} mm^2 of relief over a void (nothing to support)")
 
 
+def check_facade_seating():
+    """Nothing that mounts on a wall may land on the brick relief.
+
+    A facade part seats on the 2.5 mm plate; the brick is 0.6 mm of relief on top of
+    that. A part whose footprint oversails its aperture -- which is all of them, on
+    purpose, because a window frame has to lap the hole it covers -- comes down on that
+    relief unless the relief is cut away underneath it, and then it rocks on a brick
+    instead of sitting on the plate. Nothing in the geometry is invalid, and the part
+    simply will not go on.
+
+    That was 20 of the 49 parts touching the left wall, from 0.4 mm^3 under a window
+    frame to 48.8 under the rear cornice, and it was found by hand after 13A would not
+    seat. Interference with the PLATE is a different matter and is deliberate: it is
+    the crush ribs, 0.15 mm of bite each, and this check leaves them alone.
+    """
+    print("\n[fit] facade parts seat on the plate, not on the brick")
+    import cadquery as cq
+    from parts import walls as WL
+    from parts.decor import FACE
+
+    relief = (cq.Workplane("XY").box(2.0, 400.0, 400.0, centered=(False, True, True))
+              .translate((FACE, 100.0, 100.0)))
+    for side in ("L", "R"):
+        wall = WL.wall_face(side)
+        parts, _, _, _ = WL.collect(side)
+        bad, n = [], 0
+        for pt in parts:
+            hit = wall.intersect(pt["placed"])
+            if not hit.val().Solids():
+                continue
+            n += 1
+            v = _vol(hit.intersect(relief))
+            if v > 0.05:
+                bad.append((v, pt["id"], pt["name"]))
+        for v, pid, nm in sorted(bad, reverse=True):
+            fail(f"{pid} {nm}: {v:.2f} mm^3 of it lands on brick relief -- it will rock "
+                 "on the brick instead of seating on the plate")
+        if not bad:
+            ok(f"{side} wall: all {n} parts that touch it seat on the plate")
+
+
 def check_first_layer_islands():
     """Is the first layer one piece, and is it joined by more than a hair?
 
@@ -657,6 +698,7 @@ if __name__ == "__main__":
     check_t3_grip()
     check_paint_handles()
     check_unsupported_relief()
+    check_facade_seating()
     check_first_layer_islands()
     check_bed_contact()
     check_manifest()

@@ -97,7 +97,7 @@ def wall_face(side):
     plate = cq.Workplane("XY").box(FACE, WALL_LEN, WALL_H, centered=(False, False, False))
 
     # every element's apertures, recesses and mount sockets -- two booleans total
-    _, cuts, adds, _ = collect(side)
+    placed_parts, cuts, adds, _ = collect(side)
     cuts = list(cuts)
     adds = list(adds)
 
@@ -154,6 +154,7 @@ def wall_face(side):
         if bb.xmin < FACE - 0.4:            # this cut reaches through the plate
             openings.append((bb.ymin - 1.5, bb.zmin - 1.5, bb.ymax + 1.5, bb.zmax + 1.5))
 
+
     bricks = brick_field(WALL_LEN, WALL_H, tag,
                          scale_fn=lambda u: F.wpersp(u),
                          openings=openings,
@@ -169,6 +170,28 @@ def wall_face(side):
         # break_profile() disagreed by 3-4 mm at some heights -- and every attempt to
         # reconcile them analytically left slivers behind.
         bricks = bricks.intersect(plate.translate((P.BRICK_RELIEF, 0, 0)))
+
+        # Relief must also stay out from UNDER whatever lands on the plate. A window
+        # frame is bigger than its aperture on purpose -- 13A is 27.0 x 34.7 over a
+        # 21.0 x 28.7 hole -- so its flange oversails by 3 mm all round, and it came
+        # down on 0.6 mm of brick instead of on the plate. 20 of the 49 parts that touch
+        # the left wall were doing this, from 0.4 mm^3 under a window frame to 48.8
+        # under the rear cornice: enough to hold a part off its seat and let it rock.
+        #
+        # Cut the footprints out of the relief rather than adding them to `openings`.
+        # The keep-out list drops whole bricks by their centres, so a brick straddling
+        # the edge of a keep-out survives and still fouls the part -- widening the
+        # keep-out just moves which brick straddles it. A boolean is exact.
+        foot = []
+        for pt in placed_parts:
+            bb = pt["placed"].val().BoundingBox()
+            if bb.xmin < FACE + 0.01 < bb.xmax:          # it seats on the wall face
+                foot.append(cq.Workplane("XY")
+                            .box(P.BRICK_RELIEF + 1.0, bb.ylen + 0.4, bb.zlen + 0.4,
+                                 centered=(False, False, False))
+                            .translate((FACE - 0.5, bb.ymin - 0.2, bb.zmin - 0.2)))
+        if foot:
+            bricks = batch_cut(bricks, foot)
         plate = plate.union(bricks)
 
     plate = batch_cut(plate, cuts)
