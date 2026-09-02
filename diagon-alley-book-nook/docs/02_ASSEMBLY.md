@@ -233,8 +233,8 @@ put every part on a plate at the origin once already.
 
 The 3MF plates in `out/3mf/` are **Bambu Studio projects for a Bambu Lab P2S**, not bare
 geometry. They carry the print profile — 0.4 nozzle, 0.20 mm layers, PLA, textured
-plate, avoid-crossing-walls — and a **5 mm outer brim on each of the 65 parts that needs
-one**, set on the object rather than on the plate. Open one and slice it. There is
+plate, avoid-crossing-walls — and a **5 mm outer brim**, set both as the plate default
+and again on each of the 65 parts that needs one. Open one and slice it. There is
 nothing here to set by hand.
 
 ```
@@ -272,14 +272,23 @@ visible in the slicer's object panel without opening anything.
 > globally, so the other three parts named `[brim]` on that plate were still on Auto —
 > which is the setting that let 19C and 13As come off the plate in the first place.
 
-> **If Bambu Studio still says "The 3mf file has invalid config, load geometry data
-> only"**, then it did not accept the project and none of the settings above loaded —
-> fall back to the global brim setting and `docs/05_PRINT_SETTINGS.md`. That dialog does
-> not mean the settings are wrong; it means Bambu did not recognise the package as one
-> of its own projects. These files are written to match a project saved by Bambu Studio
-> 2.8 member for member, and `mf3.py` re-opens each one and checks it before it ships,
-> but no Bambu Studio was available here to load them, so this is the one thing in the
-> pipeline that has not been tested against the real thing.
+> **Why the first attempt at this loaded as geometry only.** Bambu Studio decides
+> whether a 3MF is one of its own projects in exactly one place —
+> `_handle_end_metadata` in `src/libslic3r/Format/bbs_3mf.cpp`:
+>
+> ```cpp
+> } else if (m_curr_metadata_name == BBL_APPLICATION_TAG) {
+>     if (boost::starts_with(m_curr_characters, "BambuStudio-")) {
+>         m_is_bbl_3mf = true;
+> ```
+>
+> Nothing else sets that flag. The first version of these projects put
+> `<metadata name="Application">Crooked Lane Book Nook</metadata>` in
+> `3D/3dmodel.model`, so the flag stayed false, the file was handled as an "other
+> vendor" 3MF, and the settings did not take — everything else in the package was
+> right. The tag now reads `BambuStudio-02.08.02.61`; the kit's own name moved to
+> `Title` and `Designer`, which is where Bambu keeps a project's name. `mf3.py` checks
+> the tag on every file it writes.
 
 ### Stringing across the window openings
 

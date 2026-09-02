@@ -48,13 +48,14 @@ If you do not have a P2S, do not fight the profile -- load the STL plates from o
 instead and set your own. docs/05_PRINT_SETTINGS.md is the list of what these files bake
 in, so you can reproduce it by hand on any printer.
 """
+import datetime as _dt
 import hashlib
 import json
 import os
 import struct
 import sys
 import zipfile
-from xml.sax.saxutils import quoteattr
+from xml.sax.saxutils import escape, quoteattr
 
 import build as B
 import plates as PL
@@ -63,6 +64,13 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "out")
 MF3 = os.path.join(OUT, "3mf")
 PROFILE = os.path.join(HERE, "profiles", "P2S_project_settings.config")
+
+# The Bambu Studio these files claim to have been written by. It has to be a real
+# version string: the importer parses the part after "BambuStudio-" as a semver and
+# compares it against the running application. This is the version the vendored
+# profile was exported from -- keep the two together.
+BAMBU_VERSION = "02.08.02.61"
+TODAY = _dt.date.today().isoformat()
 
 # The filament slot every part is assigned to. Slot 6 in the vendored profile is
 # "Bambu PLA Basic @BBL P2S - Large Flats", which differs from stock PLA in exactly one
@@ -79,9 +87,12 @@ OVERRIDES = [
     ("reduce_crossing_wall", "1",
      "CHANGED. Avoid crossing walls -- the window interiors came out webbed with "
      "strings, and every one of them was a travel move straight across the opening"),
-    ("brim_type", "auto_brim",
-     "pinned. The PLATE default; the parts that need a brim carry outer_only on the "
-     "object itself, below, which is what Auto got wrong on its own"),
+    ("brim_type", "outer_only",
+     "CHANGED. The PLATE default, belt to the per-object braces below. Auto is what "
+     "gave 19C and 13As no brim and let them come off the plate. Set here as well as "
+     "on the objects because the object setting is invisible until you select the "
+     "object, and because a plate that reads Auto in the Global tab is indistinguishable "
+     "from a plate whose settings did not load at all"),
     ("brim_width", "5",
      "pinned. 5 mm holds the 15 mm^2 plaques down and still peels off"),
 ]
@@ -108,10 +119,10 @@ SLICE_INFO = """<?xml version="1.0" encoding="UTF-8"?>
 <config>
   <header>
     <header_item key="X-BBL-Client-Type" value="slicer"/>
-    <header_item key="X-BBL-Client-Version" value="02.08.02.61"/>
+    <header_item key="X-BBL-Client-Version" value="%s"/>
   </header>
 </config>
-"""
+""" % BAMBU_VERSION
 
 MODEL_NS = ('xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02" '
             'xmlns:BambuStudio="http://schemas.bambulab.com/package/2021" '
@@ -172,12 +183,29 @@ def object_model(idx, name, verts, tris):
     return "\n".join(out)
 
 
-def root_model(objs):
+def root_model(label, objs):
     """3D/3dmodel.model -- wrapper objects only, plus the build items that place them."""
     out = ['<?xml version="1.0" encoding="UTF-8"?>',
            f'<model unit="millimeter" xml:lang="en-US" {MODEL_NS}>',
-           ' <metadata name="Application">Crooked Lane Book Nook</metadata>',
+           # THE Application TAG IS LOAD-BEARING. Bambu's importer sets its
+           # m_is_bbl_3mf flag in exactly one place -- _handle_end_metadata in
+           # src/libslic3r/Format/bbs_3mf.cpp -- and the test is
+           # boost::starts_with(value, "BambuStudio-"). Nothing else sets it. With that
+           # flag false the file is an "other vendor" 3MF: the model config is not
+           # required to parse, objects get split by instance, and a single object is
+           # renamed after the file. This said "Crooked Lane Book Nook" and the settings
+           # did not take. The name of this kit lives in Title and Designer, below,
+           # which is where Bambu puts a project's own name.
+           f' <metadata name="Application">BambuStudio-{BAMBU_VERSION}</metadata>',
            ' <metadata name="BambuStudio:3mfVersion">1</metadata>',
+           ' <metadata name="Title">Crooked Lane Book Nook</metadata>',
+           ' <metadata name="Designer">Crooked Lane Book Nook</metadata>',
+           f' <metadata name="Description">{escape(label)}</metadata>',
+           ' <metadata name="Copyright"></metadata>',
+           ' <metadata name="License"></metadata>',
+           ' <metadata name="Origin"></metadata>',
+           f' <metadata name="CreationDate">{TODAY}</metadata>',
+           f' <metadata name="ModificationDate">{TODAY}</metadata>',
            ' <resources>']
     for i, o in enumerate(objs, start=1):
         out += [f'  <object id="{2 * i}" p:UUID="{uid("wrap", i, o["name"])}" type="model">',
@@ -256,7 +284,7 @@ def write_project(path, label, objs, settings):
     with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as z:
         z.writestr("[Content_Types].xml", CONTENT_TYPES)
         z.writestr("_rels/.rels", RELS)
-        z.writestr("3D/3dmodel.model", root_model(objs))
+        z.writestr("3D/3dmodel.model", root_model(label, objs))
         rels = ['<?xml version="1.0" encoding="UTF-8"?>',
                 '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">']
         for i in range(1, len(objs) + 1):
@@ -303,6 +331,11 @@ def check_project(path):
         if faults:
             return faults
         root = ET.fromstring(z.read("3D/3dmodel.model"))
+        app = root.find('c:metadata[@name="Application"]', NS)
+        if app is None or not (app.text or "").startswith("BambuStudio-"):
+            # The single flag that decides whether Bambu treats this as a project at all.
+            faults.append("the Application metadata does not start with BambuStudio- , "
+                          "so the settings will not load")
         wrappers = [o.get("id") for o in root.findall("c:resources/c:object", NS)]
         items = [i.get("objectid") for i in root.findall("c:build/c:item", NS)]
         cfg = ET.fromstring(z.read("Metadata/model_settings.config"))
@@ -390,6 +423,11 @@ def write_settings_doc(plated, brim_ids, rows):
     w("")
     w("It is generated by `mf3.py` from the same profile the projects carry, so it")
     w("cannot drift from them. Do not edit it by hand.")
+    w("")
+    w("The brim is set in two places on purpose: `brim_type = outer_only` as the plate")
+    w("default, and again on each of the parts below. Either one alone would do it if")
+    w("everything loads; both, and the plate still has brims if the per-object settings")
+    w("are ever dropped.")
     w("")
     w("## The five that matter")
     w("")
