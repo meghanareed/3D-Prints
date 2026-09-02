@@ -235,9 +235,16 @@ put every part on a plate at the origin once already.
 footprint under 7.3 mm of height) and decided neither needed one. Both came off the
 plate as spaghetti. 5 mm width is plenty.
 
-**Set Brim type to "Outer brim on all", 5 mm, and leave it there for the whole kit.**
+**Set Brim type to "Outer brim only", 5 mm, in the GLOBAL tab, and leave it there for
+the whole kit.**
 59 of the 220 parts need a brim and a brim does the big flat parts no harm, so a global
 setting is simpler and safer than picking per part.
+
+> Setting it on the **Objects** tab applies it to the selected object only. A saved
+> project checked here had `brim_type = outer_only` on one object and `auto_brim`
+> globally, so the other three parts named `[brim]` on that plate were still on Auto --
+> which is the setting that let 19C and 13As come off the plate in the first place.
+> The Global tab is the one that covers everything.
 
 The 3MF plates in `out/3mf/` carry the same twenty plates with every part as a
 **separate object**, already positioned, and every part that needs a brim has
@@ -252,13 +259,18 @@ The STL plates are one fused mesh per plate, so the slicer sees a single blob: y
 cannot select a part, arrange, or set anything per part. The 3MF arrives as 64 objects
 on the left facade plate instead of one.
 
-> These files used to also carry `brim_type` and `brim_width` per object in
-> `Metadata/model_settings.config`. **Bambu Studio rejected it** — *"The 3mf file has
-> invalid config, load geometry data only"* — and discarded the settings, so the brims
-> were silently not applied and the only thing the file gained was an alarming dialog.
-> Bambu's project format wants a good deal more than one settings block, and guessing at
-> it is not something that can be verified from here. The files are now plain 3MF core
-> spec, which loads clean, and the brim parts are named instead.
+> **"The 3mf file has invalid config, load geometry data only" is expected here and is
+> harmless.** Bambu Studio shows it for any 3MF that is not one of its own projects —
+> these files carry no project settings at all, so there is nothing for it to load. The
+> geometry, the layout and the object names all come through.
+>
+> A full Bambu project would silence it and could carry the printer profile, filament
+> and per-object brims. That means reproducing Bambu's own layout: one
+> `3D/Objects/object_N.model` per part, a wrapper object per mesh with production-
+> extension UUIDs, `Metadata/model_settings.config` with `<part>` blocks and mesh
+> statistics, and an 82 kB `Metadata/project_settings.config`. It is all specified by
+> any project Bambu saves, so it is buildable — it just has to be built from a real
+> example rather than guessed at.
 
 `docs/04_PRINT_CHECKLIST.md` marks every part that wants one — currently 34 of 220 —
 so you can see before you slice which plates matter. The facade plates are mostly
