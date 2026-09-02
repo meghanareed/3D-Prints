@@ -9,14 +9,24 @@ Two things this buys over the STL plates:
     sees a single blob per plate: you cannot select a part, cannot arrange, and cannot
     set anything per part. In a 3MF the 64 parts of the left facade arrive as 64
     objects on the plate, already positioned.
-  * The parts that need a brim say so, per object, in the Bambu/Orca settings block.
-    The slicer's Auto brim looked at a 15.4 mm^2 plaque and a 27 x 2.6 mm sill and gave
-    neither one; both came off the plate as spaghetti.
+  * The parts that need a brim are NAMED for it, so they can be found and selected in
+    the slicer's object list. The slicer's Auto brim looked at a 15.4 mm^2 plaque and a
+    27 x 2.6 mm sill and gave neither one; both came off the plate as spaghetti.
 
-The geometry half is plain 3MF core spec and will open anywhere. The per-object brim
-setting is written into Metadata/model_settings.config, which is Bambu Studio's and
-Orca's own extension -- if a slicer ignores that file you still get the objects laid
-out correctly and can set the brim by hand, so nothing is lost either way.
+This writes plain 3MF core spec and nothing else, which loads clean anywhere.
+
+It used to also write Metadata/model_settings.config carrying brim_type and brim_width
+per object. Bambu Studio rejected it -- "The 3mf file has invalid config, load geometry
+data only" -- and discarded the settings, so the brims were silently not applied and
+the only thing the file gained was an alarming dialog. Bambu's project format wants
+considerably more than one settings block (plate and assemble sections, per-part
+subtypes, mesh statistics), and guessing at it is not something that can be checked
+from here. A file that loads clean and tells you what needs a brim in the object list
+beats one that claims to set it and does not.
+
+Set Brim type to "Outer brim on all" at 5 mm and every part gets one, which for this
+kit is the right setting anyway -- 59 of the 220 parts need it, and a brim does the big
+flat parts no harm.
 """
 import json
 import os
@@ -98,18 +108,7 @@ def model_xml(objects):
     return "\n".join(out)
 
 
-def settings_xml(objects, brim):
-    """Bambu Studio / Orca per-object settings."""
-    out = ['<?xml version="1.0" encoding="UTF-8"?>', '<config>']
-    for i, (name, _, _, _) in enumerate(objects, start=1):
-        out.append(f'  <object id="{i}">')
-        out.append(f'    <metadata key="name" value="{escape(name)}"/>')
-        if name in brim:
-            out.append('    <metadata key="brim_type" value="outer_only"/>')
-            out.append('    <metadata key="brim_width" value="5"/>')
-        out.append('  </object>')
-    out.append('</config>')
-    return "\n".join(out)
+BRIM_SUFFIX = " [brim]"
 
 
 def main():
@@ -162,16 +161,15 @@ def main():
             objs, brim = [], set()
             for it, x, y in placed:
                 verts, tris = mesh_of_stl(it["path"])
-                objs.append((it["name"], verts, tris, (x, y, 0.0)))
+                nm = it["name"] + (BRIM_SUFFIX if it["id"] in brim_ids else "")
+                objs.append((nm, verts, tris, (x, y, 0.0)))
                 if it["id"] in brim_ids:
-                    brim.add(it["name"])
+                    brim.add(nm)
             path = os.path.join(MF3, f"{label}{suffix}.3mf")
             with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as z:
                 z.writestr("[Content_Types].xml", CONTENT_TYPES)
                 z.writestr("_rels/.rels", RELS)
                 z.writestr("3D/3dmodel.model", model_xml(objs))
-                z.writestr("Metadata/model_settings.config",
-                           settings_xml(objs, brim))
             g = sum(grams.get(it["id"], 0.0) for it, _, _ in placed)
             print(f"  {label + suffix:<22} {len(objs):3d} objects  {g:6.0f} g   "
                   f"{len(brim)} with a brim   {os.path.getsize(path)/1024:6.0f} kB")
@@ -183,15 +181,15 @@ def main():
             objs, brim = [], set()
             for it, x, y in placed:
                 verts, tris = mesh_of_stl(it["path"])
-                objs.append((it["name"], verts, tris, (x, y, 0.0)))
+                nm = it["name"] + (BRIM_SUFFIX if it["id"] in brim_ids else "")
+                objs.append((nm, verts, tris, (x, y, 0.0)))
                 if it["id"] in brim_ids:
-                    brim.add(it["name"])
+                    brim.add(nm)
             path = os.path.join(MF3, "TRIAL_first_fit.3mf")
             with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as z:
                 z.writestr("[Content_Types].xml", CONTENT_TYPES)
                 z.writestr("_rels/.rels", RELS)
                 z.writestr("3D/3dmodel.model", model_xml(objs))
-                z.writestr("Metadata/model_settings.config", settings_xml(objs, brim))
             g = sum(grams.get(it["id"], 0.0) for it, _, _ in placed)
             print(f"  {'TRIAL_first_fit':<22} {len(objs):3d} objects  {g:6.0f} g   "
                   f"{len(brim)} with a brim   {os.path.getsize(path)/1024:6.0f} kB")
