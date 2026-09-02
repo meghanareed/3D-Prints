@@ -243,9 +243,9 @@ def jigs():
            dict(id="74B", name="Joint_Test_Pieces", solid=joint_coupon_pieces()),
            dict(id="72", name="Paint_Handle_Sprue", solid=_paint_handles(8)),
            dict(id="73", name="Assembly_ID_Card", solid=_id_card())]
-    for i, (w, h) in enumerate([(26, 34), (34, 32), (24, 26), (20, 40)]):
+    for i, sheet in enumerate(_glazing_templates()):
         out.append(dict(id=f"71{chr(65+i)}", name=f"Glazing_Cut_Template_{chr(65+i)}",
-                        solid=_glazing_template(w, h)))
+                        solid=sheet))
     return out
 
 
@@ -293,12 +293,101 @@ def _paint_handles(n=8):
     return _sprue(items, pitch=15.0)
 
 
-def _glazing_template(w, h):
-    """Trace round the window in the sheet material of your choice; the rebate is
-    1.2 mm so it takes printed PLA, vellum, acetate, PET or 1 mm acrylic."""
-    t = cq.Workplane("XY").box(w + 8.0, h + 8.0, 1.6, centered=(True, True, False))
-    t = t.cut(cq.Workplane("XY").box(w + 1.2, h + 1.2, 5.0, centered=(True, True, True)))
-    return t
+def _label(plate, txt, size, centre):
+    """Sink a label into the top face at a given offset from its centre.
+
+    lib.util.engrave_id only writes at the middle of a face, which is no use on a sheet
+    carrying twenty-five of them.
+    """
+    try:
+        return (plate.faces(">Z").workplane(centerOption="CenterOfBoundBox")
+                .center(*centre)
+                .text(txt, size, -0.4, font="DejaVu Sans", kind="bold", combine="cut"))
+    except Exception:
+        return plate
+
+
+GLAZING_SHEET_T = 1.6           # template thickness -- stiff enough to hold a knife
+GLAZING_LABEL_H = 5.0           # strip under each opening for its part id
+GLAZING_GAP = 4.0               # between openings
+GLAZING_MARGIN = 5.0            # round the outside of the sheet
+
+
+def glazing_panes():
+    """Every window pane in the kit, as (id, outline prism), largest first.
+
+    The outline is taken from the pane SOLID rather than from its w and h, so an arched
+    window gives an arched opening and the template can never disagree with the part it
+    is a template for. The four templates this replaces were 26x34, 34x32, 24x26 and
+    20x40 -- four guesses for 25 panes, none of which is any of those sizes.
+    """
+    from parts import walls as WL
+    out = []
+    for side in ("L", "R"):
+        for p in WL.collect(side)[0]:
+            if "Glazing" not in p["name"]:
+                continue
+            prism = (cq.Workplane(obj=p["solid"].val())
+                     .faces("<Z").wires().toPending()
+                     .extrude(GLAZING_SHEET_T + 4.0))
+            out.append((p["id"], prism))
+    return sorted(out, key=lambda t: -_area(t[1]))
+
+
+def _area(prism):
+    b = prism.val().BoundingBox()
+    return b.xlen * b.ylen
+
+
+def _glazing_templates(bed=None):
+    """Sheets of pane outlines to lay on acetate and cut round.
+
+    The rebate behind every frame is DIFFUSER_SLOT_T deep and takes vellum, acetate, PET
+    or 1 mm acrylic as readily as it takes a printed pane -- cut sheet is a designed-in
+    option, not a substitute. Cutting them takes 25 parts off the facade plates, and a
+    pane cut from acetate reads as glass where 0.8 mm of clear PLA reads as fog.
+    """
+    # Leave room for the brim it will need: a 1.6 mm sheet this size curls.
+    bed = bed or (P.BED_X - 2 * GLAZING_MARGIN - 26.0)
+    panes = glazing_panes()
+    sheets, row, rows, x, row_h = [], [], [], 0.0, 0.0
+
+    def flush_row():
+        nonlocal row, x, row_h
+        if row:
+            rows.append((row, row_h))
+        row, x, row_h = [], 0.0, 0.0
+
+    for pid, prism in panes:
+        b = prism.val().BoundingBox()
+        w, h = b.xlen + GLAZING_GAP, b.ylen + GLAZING_LABEL_H + GLAZING_GAP
+        if x + w > bed:
+            flush_row()
+        row.append((pid, prism, x, w, h))
+        x += w
+        row_h = max(row_h, h)
+    flush_row()
+
+    y, total_w, placed = 0.0, 0.0, []
+    for r, h in rows:
+        for pid, prism, x, w, _h in r:
+            placed.append((pid, prism, x, y))
+            total_w = max(total_w, x + w)
+        y += h
+    sheet_w = total_w + 2 * GLAZING_MARGIN - GLAZING_GAP
+    sheet_h = y + 2 * GLAZING_MARGIN - GLAZING_GAP
+
+    plate = cq.Workplane("XY").box(sheet_w, sheet_h, GLAZING_SHEET_T,
+                                   centered=(False, False, False))
+    for pid, prism, px, py in placed:
+        b = prism.val().BoundingBox()
+        dx = GLAZING_MARGIN + px - b.xmin
+        dy = GLAZING_MARGIN + py + GLAZING_LABEL_H - b.ymin
+        plate = plate.cut(prism.translate((dx, dy, -2.0)))
+        plate = _label(plate, pid, 3.2,
+                       (dx + (b.xmin + b.xmax) / 2 - sheet_w / 2,
+                        GLAZING_MARGIN + py + GLAZING_LABEL_H / 2 - sheet_h / 2))
+    return [plate]
 
 
 def _id_card():

@@ -42,12 +42,27 @@ PLATES = os.path.join(OUT, "plates")
 SMALL_BASE = 25.0        # mm^2 of first layer, in absolute terms
 TIPPY = 2.0              # height as a multiple of the narrower footprint dimension
 BRIM_OVERHANG = 50.0     # mm^2, below which a big ratio does not matter
-WIDE = 150.0             # mm across, at which a sheet is wide enough to curl
+WIDE = 150.0             # mm LONG, at which a sheet is long enough to curl along it
 THIN = 6.0               # mm tall, below which it has no height to resist curling
 SPARSE = 0.25            # fraction of its own footprint a wide part puts on the bed
 SLENDER = 8.0            # length as a multiple of width, at which a footprint is a strip
 NARROW = 8.0             # mm, the width below which that strip has nothing to hold it
 BRIM_WIDTH = 5.0         # mm. plates.py spaces parts so two of these cannot touch
+
+
+def is_cut(row):
+    """Is this part CUT from sheet rather than printed?
+
+    The window panes drop into a DIFFUSER_SLOT_T rebate that is documented as taking
+    vellum, acetate, PET or 1 mm acrylic as readily as a printed pane -- cut sheet is a
+    designed-in option. Cutting them takes 25 parts off the facade plates, and acetate
+    reads as glass where 0.8 mm of clear PLA reads as fog. 71A is the template: the
+    outlines of all 25, taken from the panes themselves.
+
+    They stay in the manifest and in the parts list -- they are still parts of the model
+    and the template is generated from them -- but plates.py and mf3.py leave them off.
+    """
+    return row.get("group") in ("facade_L", "facade_R") and "Glazing" in row.get("name", "")
 
 
 def needs_brim(row):
@@ -68,7 +83,11 @@ def needs_brim(row):
     # The wall ribs are the same problem in the other form: 10 mm tall, so not thin, but
     # a skeleton -- 5,864 mm^2 of first layer spread over a 203 x 197 mm footprint, in
     # strips two nozzles wide and 200 mm long. Strips like that curl exactly like a sheet.
-    if min(w, d) > WIDE and (h < THIN or bed < SPARSE * w * d):
+    # Measured on the LONG side, not the short one. A sheet curls along its length, and
+    # the width it curls across is beside the point: the glazing cut template is
+    # 224 x 102 x 1.6 and will lift exactly like the 203 x 193 x 3.1 wall face, but a
+    # min() test sees 102 and lets it through.
+    if max(w, d) > WIDE and (h < THIN or bed < SPARSE * w * d):
         return True
     # A long thin strip. 15A_L_L_Drainpipe_Lower is 91.6 mm long and 4.3 mm wide with
     # 228 mm^2 on the bed -- too much base for the small-part rule, not wide enough for

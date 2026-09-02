@@ -4571,75 +4571,18 @@
   "name": "Glazing_Cut_Template_A",
   "group": "jigs",
   "status": "ok",
-  "grams": 0.9,
+  "grams": 28.1,
   "solids": 1,
   "bbox": [
-   34.0,
-   42.0,
+   215.7,
+   105.7,
    1.6
   ],
-  "bed": 470.6,
+  "bed": 14188.0,
   "overhang": 0.0,
   "fits_bed": true,
   "colour": "white",
   "note": "",
   "file": "71A_Glazing_Cut_Template_A.stl"
- },
- {
-  "id": "71B",
-  "name": "Glazing_Cut_Template_B",
-  "group": "jigs",
-  "status": "ok",
-  "grams": 1.0,
-  "solids": 1,
-  "bbox": [
-   42.0,
-   40.0,
-   1.6
-  ],
-  "bed": 511.4,
-  "overhang": 0.0,
-  "fits_bed": true,
-  "colour": "white",
-  "note": "",
-  "file": "71B_Glazing_Cut_Template_B.stl"
- },
- {
-  "id": "71C",
-  "name": "Glazing_Cut_Template_C",
-  "group": "jigs",
-  "status": "ok",
-  "grams": 0.8,
-  "solids": 1,
-  "bbox": [
-   32.0,
-   34.0,
-   1.6
-  ],
-  "bed": 402.6,
-  "overhang": 0.0,
-  "fits_bed": true,
-  "colour": "white",
-  "note": "",
-  "file": "71C_Glazing_Cut_Template_C.stl"
- },
- {
-  "id": "71D",
-  "name": "Glazing_Cut_Template_D",
-  "group": "jigs",
-  "status": "ok",
-  "grams": 0.9,
-  "solids": 1,
-  "bbox": [
-   28.0,
-   48.0,
-   1.6
-  ],
-  "bed": 470.6,
-  "overhang": 0.0,
-  "fits_bed": true,
-  "colour": "white",
-  "note": "",
-  "file": "71D_Glazing_Cut_Template_D.stl"
  }
 ]

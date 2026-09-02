@@ -72,12 +72,16 @@ PLATE_GROUPS = [
 # It is emitted IN ADDITION to the twenty plates and deliberately sits outside their
 # bookkeeping -- these parts still belong to the facade plates for the real build, so
 # this is the one place the "a part belongs to exactly one plate" rule is suspended.
+# The sills, roofs and corbels that used to be listed here separately are part of their
+# frames now, and the glazing is cut from acetate rather than printed -- 71A is the
+# template. Anything left here that is_cut() would be dropped by the builder anyway;
+# naming it would just be a promise the plate cannot keep.
 TRIAL_PLATE = [
-    "13A", "13Ag", "13As",     # P2 keyed pair: frame, glazing, sill
+    "13A",                     # P2 keyed pair -- and the sill is part of it now
     "19C",                     # P1 micro peg on its own
-    "11A", "11Ag", "11Ar", "11Ac",   # T3 tongue: bay body, glazing, roof, corbel
-    "12G",                     # door -- the knob is incised now, not proud
-    "15A",                     # drainpipe -- the crown is planed flat now
+    "11A",                     # T3 tongue -- bay body with its roof and corbel on it
+    "12G",                     # door -- frame and leaf in one, incised knob
+    "15A",                     # drainpipe -- the crown is planed flat
     "30H",                     # a sign, printed face up
 ]
 
@@ -133,6 +137,8 @@ def main():
     print("building parts ...")
     built = {}
     for m in B.manifest():
+        if B.is_cut(m):                 # cut from acetate; see 71A_Glazing_Cut_Template
+            continue
         try:
             solid = B.drop_to_bed(B.print_orient(m["fn"](), m["print_rot"]))
         except Exception as e:
@@ -270,7 +276,9 @@ def write_parts_list(brim):
             for r in group:
                 bb = r["bbox"]
                 note = r.get("note") or ""
-                if r["id"] in brim:
+                if B.is_cut(r):
+                    note = (note + "; " if note else "") + "**cut from acetate, not printed -- template `71A`**"
+                elif r["id"] in brim:
                     note = (note + "; " if note else "") + "**brim**"
                 w(f"| `{r['id']}` | {r['name']} | {bb[0]:.0f} x {bb[1]:.0f} x {bb[2]:.0f} "
                   f"| {r['grams']:.1f} | {note} |\n")

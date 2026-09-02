@@ -773,6 +773,8 @@ def main():
         path = os.path.join(OUT, "stl", r["file"])
         if r.get("status") != "ok" or not os.path.exists(path):
             continue
+        if B.is_cut(r):                 # cut from acetate; see 71A_Glazing_Cut_Template
+            continue
         w, d, _ = r["bbox"]
         built[pid] = dict(id=pid, name=f"{pid}_{r['name']}", path=path,
                           group=group.get(pid, ""), w=w, d=d)
