@@ -193,12 +193,22 @@ def check_envelope():
 
 
 def check_assembled_envelope():
-    """Does the built chassis actually fit inside the built case?
+    """Does the built chassis fit inside the built case?
 
     Not the same question as "do the numbers add up". CASE_CAVITY_H is DEFINED as
-    BOOKNOOK_HEIGHT - PLINTH_HEIGHT - SHELL_THICKNESS, so comparing the two was
-    comparing a value with its own definition -- it could never fail. This reads the
-    placed bounding boxes build.py records and measures the real stack.
+    BOOKNOOK_HEIGHT - PLINTH_HEIGHT - SHELL_THICKNESS, so comparing the two compared a
+    value with its own definition and could never fail.
+
+    Nor is it "how big is the bounding box", which is what this check asked next and
+    got wrong twice. The chassis datum is the plane it SITS on, not the lowest point of
+    any part: the base pan's dovetail feet drop 3 mm below it into the plinth's rails,
+    and counting those made a chassis that fits by 0.12 mm look 2.9 mm too tall. The
+    front is open -- it is the nook's opening -- so a cornice reaching forward of the
+    front plane is not a collision either, and counting that made the depth look 2.8 mm
+    over. Both were the measurement, not the model.
+
+    So: measure height and depth from the datums, and ask about anything below the
+    seating plane or proud of the front separately, where the answer is legible.
     """
     print("\n[envelope] the assembled chassis against the case cavity")
     try:
@@ -211,28 +221,41 @@ def check_assembled_envelope():
     if not boxes:
         warn("manifest has no placed bounding boxes -- rebuild with the current build.py")
         return
-    # the extent of the WHOLE assembly, not of the largest single part -- measuring
-    # each part on its own says nothing about whether they collectively fit
-    def span(lo_i, hi_i, room):
-        lo = min(b[lo_i] for _, b in boxes)
-        hi = max(b[hi_i] for _, b in boxes)
-        who = max(((r["name"], b[hi_i]) for r, b in boxes), key=lambda t: t[1])[0] \
-            if hi - room > lo else \
-            min(((r["name"], b[lo_i]) for r, b in boxes), key=lambda t: t[1])[0]
-        return hi - lo, who
 
-    height, tallest = span(2, 5, P.CASE_CAVITY_H)
-    width, widest = span(0, 3, P.CASE_CAVITY_W)
-    depth, deepest = span(1, 4, P.CASE_CAVITY_D)
-    for what, got, room, who in (("height", height, P.CASE_CAVITY_H, tallest),
-                                 ("width", width, P.CASE_CAVITY_W, widest),
-                                 ("depth", depth, P.CASE_CAVITY_D, deepest)):
+    # the pan's feet are the only thing meant to sit below the seating plane
+    FEET = {"00"}
+    top = max(b[5] for _, b in boxes)
+    tallest = max(((r["name"], b[5]) for r, b in boxes), key=lambda t: t[1])[0]
+    rear = max(b[4] for _, b in boxes)
+    deepest = max(((r["name"], b[4]) for r, b in boxes), key=lambda t: t[1])[0]
+    xlo = min(b[0] for _, b in boxes)
+    xhi = max(b[3] for _, b in boxes)
+    widest = max(((r["name"], max(b[3] - P.CHASSIS_W, -b[0])) for r, b in boxes),
+                 key=lambda t: t[1])[0]
+
+    for what, got, room, who in (("height", top, P.CASE_CAVITY_H, tallest),
+                                 ("depth", rear, P.CASE_CAVITY_D, deepest),
+                                 ("width", xhi - xlo, P.CASE_CAVITY_W, widest)):
         if got > room + 0.01:
             fail(f"chassis {what} {got:.1f} exceeds the {room:.1f} cavity by "
                  f"{got - room:.1f} mm -- the case will not close ({who})")
         else:
             ok(f"chassis {what} {got:.1f} fits the {room:.1f} cavity "
                f"({room - got:.1f} mm spare)")
+
+    below = [(r["name"], b[2]) for r, b in boxes if b[2] < -0.01 and r["id"] not in FEET]
+    if below:
+        for name, z in sorted(below, key=lambda t: t[1]):
+            fail(f"{name} drops {-z:.1f} mm below the plinth top and is not a foot "
+                 "-- nothing is cut away for it")
+    else:
+        ok("nothing but the base pan's feet sits below the plinth top")
+
+    proud = [(r["name"], b[1]) for r, b in boxes if b[1] < -0.01]
+    if proud:
+        for name, y in sorted(proud, key=lambda t: t[1])[:4]:
+            warn(f"{name} stands {-y:.1f} mm proud of the front plane -- the opening is "
+                 "open so it will not foul, but check it against the bezel")
 
 
 def check_grip_across_clearances():

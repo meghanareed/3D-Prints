@@ -113,8 +113,8 @@ PRINT_ROT_MEASURED = {
     "30E": ("X", -90),     "30F": ("X", -90),     "30G1": ("X", -90),
     "30G2": ("X", -90),    "30G3": ("X", -90),    "30G4": ("X", -90),
     "30H": None,           "30J": ("X", -90),     "30L": ("X", -90),
-    "31A": ("X", 90),      "31B": ("X", 90),      "31C": ("X", 90),
-    "31D": ("X", 90),      "32B": None,           "32C": ("X", 90),
+    "31A": ("Y", -90),      "31B": ("Y", -90),      "31C": ("Y", -90),
+    "31D": ("Y", -90),      "32B": None,           "32C": ("X", 90),
     "33A": None,           "34A": None,           "34C": ("X", -90),
     "36B": ("Y", 90),      "37C": ("X", 180),     "39C": ("X", 90),
     "43": ("X", 180),      "44": ("X", 180),      "45A": ("X", 180),
@@ -155,8 +155,20 @@ def manifest():
             s = s.translate((0, 0, 0))
         s = s.translate((0, 0, BP))
         # the forced-perspective cant, applied at assembly only
-        return s.rotate((0 if side == "L" else W, 0, 0), (0 if side == "L" else W, 0, 1),
-                        -P.WALL_CANT_DEG if side == "L" else P.WALL_CANT_DEG)
+        s = s.rotate((0 if side == "L" else W, 0, 0), (0 if side == "L" else W, 0, 1),
+                     -P.WALL_CANT_DEG if side == "L" else P.WALL_CANT_DEG)
+        # Then sit the assembly on the pan.
+        #
+        # A wall is FACE + RIB_GAP + WALL_SERVICE_D deep and is built about the face
+        # plate: the face runs 0..FACE and the rib hangs behind it at -(GAP + D)..-GAP,
+        # exactly as wall_rib's docstring says. So wall-local x=0 is the BACK of the
+        # face, not the back of the assembly, and placing the assembly at x=0 hung the
+        # ribs 7.5 mm off the side of the base pan -- most of the 21 mm by which the
+        # chassis would not fit its own case. Offsetting by the depth behind the face
+        # puts the rib's outer face flush with the pan edge and the face's brick
+        # surface on the alley line.
+        off = P.RIB_GAP + P.WALL_SERVICE_D
+        return s.translate((off if side == "L" else -off, 0, 0))
 
     # ---- 00-09 structure ---------------------------------------------------
     add("00", "Chassis_Base_Pan", ST.base_pan, "structure",
@@ -187,8 +199,12 @@ def manifest():
         note="holds the 59.5 x 8.3 RGB/CCT puck")
     add("03F", "Sky_Diffuser", ST.sky_diffuser, "lighting",
         place=lambda s: s.rotate((0, 0, 0), (1, 0, 0), 90)
-        .translate((P.CHASSIS_W / 2, ST.Y_SKYDIFF + 1.0, BP + 28.0)), colour="white",
+        .translate((P.CHASSIS_W / 2, ST.Y_SKYDIFF + 1.0, BP + 68.0)), colour="white",
         note="natural/white PLA, 3 walls, 0 % infill")
+    # 68.0, not 28.0: the diffuser hangs 40 mm below the point it is placed at, so at
+    # 28 it ran from z -2 to 78 and drove 193 mm^3 straight through the base pan, while
+    # the puck it diffuses sits centred on z 78. The old envelope check folded this
+    # into a bounding-box height and reported it as the chassis being 2.9 mm too tall.
     add("04", "Cobblestone_Floor", ST.cobblestone_floor, "structure",
         place=lambda s: s.translate((P.CHASSIS_W / 2, 0, BP)), colour="stone")
     for side in ("L", "R"):

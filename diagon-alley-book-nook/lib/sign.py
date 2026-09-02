@@ -122,6 +122,22 @@ def plate_swing(w, h, txt="", t=PLATE_T):
     return _text_on(body, txt, w * 0.86, h, top_z=t)
 
 
+# THE PART FRAME, as lib/window.py documents it: +X across the wall's depth, +Y up the
+# wall, +Z out of the wall into the alley, and pegs pointing -Z. to_wall() assumes it.
+#
+# The brackets below are DRAWN in a different frame, because drawing a scroll in XZ is
+# how you get it to print flat with the layer lines running along the arm. That is a
+# good reason to draw them that way and no reason at all to hand them to to_wall() like
+# that: the arm came out running along the wall's depth instead of projecting from it,
+# and the whole part landed 12 mm outboard of the base pan -- the rest of the 21 mm the
+# chassis overhung its own case. So they are rotated into the convention on the way
+# out. It is the same mistake the bay-window grooves made, and it looks right in CAD
+# both times.
+def _to_part_frame(body):
+    """Drawing frame (arm +X, post +Z, width -Y) -> part frame (arm +Z, post +Y)."""
+    return body.rotate((0, 0, 0), (1, 1, 1), -120)
+
+
 def bracket_scroll(reach=14.0, drop=16.0, t=2.4, w=2.6):
     """Wrought-iron scroll bracket. Drawn in XZ and extruded so it prints flat with
     the scroll lying on the bed -- no supports, and the layer lines run along the arm."""
@@ -148,7 +164,8 @@ def bracket_scroll(reach=14.0, drop=16.0, t=2.4, w=2.6):
                       .extrude(-w)
                       .cut(cq.Workplane("XZ").center(reach - 1.5, -t - 1.6).circle(0.85)
                            .extrude(-w)))
-    return body.union(peg_p1((0.0, w / 2, -drop * 0.5), axis="-X"))
+    body = body.union(peg_p1((0.0, w / 2, -drop * 0.5), axis="-X"))
+    return _to_part_frame(body)
 
 
 def bracket_straight(reach=10.0, t=2.2, w=2.4):
@@ -157,7 +174,8 @@ def bracket_straight(reach=10.0, t=2.2, w=2.4):
     body = body.union(cq.Workplane("XZ").moveTo(0, -reach * 0.8).lineTo(t, -reach * 0.8)
                       .lineTo(reach * 0.8, -t).lineTo(reach * 0.8 - t, -t)
                       .close().extrude(-w))
-    return body.union(peg_p1((0.0, w / 2, -reach * 0.4), axis="-X"))
+    body = body.union(peg_p1((0.0, w / 2, -reach * 0.4), axis="-X"))
+    return _to_part_frame(body)
 
 
 def chain(links=4, link_l=5.0, link_w=3.0, wire=0.9):
