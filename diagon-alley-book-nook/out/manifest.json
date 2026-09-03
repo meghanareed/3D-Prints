@@ -657,9 +657,9 @@
   "bbox": [
    25.7,
    46.8,
-   6.4
+   6.2
   ],
-  "bed": 440.4,
+  "bed": 792.7,
   "overhang": 340.1,
   "fits_bed": true,
   "colour": "wood",
@@ -669,7 +669,7 @@
    7.16,
    30.99,
    28.62,
-   14.13,
+   13.93,
    56.75,
    75.38
   ]
@@ -706,15 +706,15 @@
   "name": "L_L2_Bay_Window_Body",
   "group": "facade_L",
   "status": "ok",
-  "grams": 3.8,
+  "grams": 3.7,
   "solids": 1,
   "bbox": [
    26.8,
    40.7,
-   15.3
+   13.8
   ],
-  "bed": 42.8,
-  "overhang": 699.6,
+  "bed": 351.5,
+  "overhang": 395.1,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -723,7 +723,7 @@
    8.73,
    60.49,
    37.08,
-   24.38,
+   22.89,
    87.29,
    77.78
   ]
@@ -787,14 +787,14 @@
   "name": "L_L2_Door",
   "group": "facade_L",
   "status": "ok",
-  "grams": 1.7,
+  "grams": 1.6,
   "solids": 1,
   "bbox": [
    19.5,
    33.4,
-   5.9
+   5.7
   ],
-  "bed": 287.4,
+  "bed": 449.9,
   "overhang": 154.7,
   "fits_bed": true,
   "colour": "wood",
@@ -802,9 +802,9 @@
   "file": "11F_L_L2_Door.stl",
   "place_bbox": [
    9.46,
-   88.07,
+   88.08,
    46.44,
-   15.69,
+   15.49,
    107.61,
    79.86
   ]
@@ -927,9 +927,9 @@
   "bbox": [
    14.9,
    19.5,
-   5.9
+   5.7
   ],
-  "bed": 163.5,
+  "bed": 225.3,
   "overhang": 57.0,
   "fits_bed": true,
   "colour": "wood",
@@ -937,9 +937,9 @@
   "file": "12G_L_L3_Door.stl",
   "place_bbox": [
    10.81,
-   134.36,
+   134.37,
    60.43,
-   16.96,
+   16.76,
    149.28,
    79.94
   ]
@@ -949,24 +949,24 @@
   "name": "L_L_Window_A_Frame",
   "group": "facade_L",
   "status": "ok",
-  "grams": 1.4,
+  "grams": 1.3,
   "solids": 1,
   "bbox": [
    27.0,
    34.7,
-   7.8
+   6.8
   ],
-  "bed": 48.6,
-  "overhang": 463.6,
+  "bed": 308.9,
+  "overhang": 203.4,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "13A_L_L_Window_A_Frame.stl",
   "place_bbox": [
    6.3,
-   2.3,
+   2.33,
    86.44,
-   14.72,
+   13.7,
    29.42,
    121.1
   ]
@@ -1008,19 +1008,19 @@
   "bbox": [
    23.4,
    30.4,
-   7.5
+   6.8
   ],
-  "bed": 42.2,
-  "overhang": 392.9,
+  "bed": 262.5,
+  "overhang": 172.6,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "13B_L_L_Window_B_Frame.stl",
   "place_bbox": [
    7.22,
-   34.08,
+   34.11,
    89.14,
-   15.25,
+   14.56,
    57.61,
    119.55
   ]
@@ -1057,15 +1057,15 @@
   "name": "L_L_Oriel_Body",
   "group": "facade_L",
   "status": "ok",
-  "grams": 2.5,
+  "grams": 2.4,
   "solids": 1,
   "bbox": [
    21.9,
    31.0,
-   12.9
+   11.4
   ],
-  "bed": 35.8,
-  "overhang": 456.2,
+  "bed": 261.1,
+  "overhang": 234.6,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
@@ -1074,7 +1074,7 @@
    8.79,
    64.94,
    88.62,
-   21.95,
+   20.46,
    86.84,
    119.59
   ]
@@ -1224,19 +1224,19 @@
   "bbox": [
    24.7,
    30.3,
-   7.7
+   6.8
   ],
-  "bed": 44.4,
-  "overhang": 404.0,
+  "bed": 272.0,
+  "overhang": 176.4,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "13E_L_L_Window_E_Frame.stl",
   "place_bbox": [
    6.54,
-   11.47,
+   11.5,
    133.16,
-   14.84,
+   13.91,
    36.24,
    163.42
   ]
@@ -1278,19 +1278,19 @@
   "bbox": [
    20.9,
    25.9,
-   6.8
+   6.3
   ],
-  "bed": 37.6,
-  "overhang": 296.6,
+  "bed": 190.5,
+  "overhang": 143.7,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "13F_L_L_Window_F_Frame.stl",
   "place_bbox": [
    8.36,
-   51.35,
+   51.37,
    128.66,
-   15.52,
+   15.01,
    72.33,
    154.51
   ]
@@ -1332,9 +1332,9 @@
   "bbox": [
    16.8,
    20.4,
-   6.4
+   6.3
   ],
-  "bed": 98.7,
+  "bed": 133.7,
   "overhang": 107.4,
   "fits_bed": true,
   "colour": "wood",
@@ -1342,9 +1342,9 @@
   "file": "13G_L_L_Window_G_Frame.stl",
   "place_bbox": [
    9.53,
-   91.38,
+   91.39,
    124.67,
-   16.19,
+   16.11,
    108.28,
    145.09
   ]
@@ -1386,19 +1386,19 @@
   "bbox": [
    20.4,
    24.0,
-   7.1
+   6.3
   ],
-  "bed": 36.7,
-  "overhang": 237.6,
+  "bed": 153.0,
+  "overhang": 121.3,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "14A_L_L_Attic_Dormer_Frame.stl",
   "place_bbox": [
    7.57,
-   25.6,
+   25.63,
    169.2,
-   15.01,
+   14.21,
    46.1,
    193.19
   ]
@@ -1440,9 +1440,9 @@
   "bbox": [
    15.8,
    18.1,
-   6.5
+   6.3
   ],
-  "bed": 37.3,
+  "bed": 98.0,
   "overhang": 85.3,
   "fits_bed": true,
   "colour": "wood",
@@ -1450,9 +1450,9 @@
   "file": "14B_L_L_Attic_B_Frame.stl",
   "place_bbox": [
    9.16,
-   79.89,
+   79.9,
    155.11,
-   15.94,
+   15.73,
    95.78,
    173.18
   ]
@@ -1705,22 +1705,22 @@
   "name": "R_R1_Arched_Door",
   "group": "facade_R",
   "status": "ok",
-  "grams": 2.9,
+  "grams": 2.8,
   "solids": 1,
   "bbox": [
    24.3,
    47.1,
-   6.4
+   6.2
   ],
-  "bed": 411.1,
+  "bed": 751.9,
   "overhang": 322.9,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "20B_R_R1_Arched_Door.stl",
   "place_bbox": [
-   81.49,
-   8.7,
+   81.69,
+   8.71,
    21.03,
    88.45,
    33.05,
@@ -1737,17 +1737,17 @@
   "bbox": [
    23.7,
    41.3,
-   7.5
+   6.8
   ],
-  "bed": 42.6,
-  "overhang": 484.6,
+  "bed": 308.0,
+  "overhang": 219.2,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "20E_R_R1_Tall_Window_Frame.stl",
   "place_bbox": [
-   79.73,
-   29.97,
+   80.46,
+   30.0,
    32.02,
    87.81,
    53.73,
@@ -2056,22 +2056,22 @@
   "name": "R_R3_Door",
   "group": "facade_R",
   "status": "ok",
-  "grams": 0.8,
+  "grams": 0.7,
   "solids": 1,
   "bbox": [
    14.4,
    18.6,
-   5.9
+   5.7
   ],
-  "bed": 154.3,
+  "bed": 209.5,
   "overhang": 50.6,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "22D_R_R3_Door.stl",
   "place_bbox": [
-   78.07,
-   130.59,
+   78.27,
+   130.6,
    59.1,
    84.21,
    145.05,
@@ -2083,21 +2083,21 @@
   "name": "R_R_Bay_Window_Body",
   "group": "facade_R",
   "status": "ok",
-  "grams": 3.9,
+  "grams": 3.8,
   "solids": 1,
   "bbox": [
    26.8,
    40.0,
-   16.0
+   14.5
   ],
-  "bed": 42.8,
-  "overhang": 690.7,
+  "bed": 348.4,
+  "overhang": 389.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "24A_R_R_Bay_Window_Body.stl",
   "place_bbox": [
-   71.19,
+   72.67,
    16.5,
    82.67,
    87.51,
@@ -2142,17 +2142,17 @@
   "bbox": [
    22.5,
    29.2,
-   7.3
+   6.8
   ],
-  "bed": 40.6,
-  "overhang": 373.8,
+  "bed": 250.2,
+  "overhang": 164.1,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "23A_R_R_Window_A_Frame.stl",
   "place_bbox": [
-   79.36,
-   50.53,
+   79.86,
+   50.54,
    90.58,
    87.2,
    73.16,
@@ -2196,17 +2196,17 @@
   "bbox": [
    18.5,
    23.0,
-   6.5
+   6.3
   ],
-  "bed": 85.5,
+  "bed": 165.4,
   "overhang": 123.2,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "23B_R_R_Window_B_Frame.stl",
   "place_bbox": [
-   78.8,
-   84.52,
+   78.95,
+   84.53,
    92.09,
    85.56,
    103.15,
@@ -2304,17 +2304,17 @@
   "bbox": [
    24.9,
    30.5,
-   7.8
+   6.8
   ],
-  "bed": 44.8,
-  "overhang": 408.6,
+  "bed": 275.0,
+  "overhang": 178.4,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "23D_R_R_Window_D_Frame.stl",
   "place_bbox": [
-   80.14,
-   7.36,
+   81.11,
+   7.39,
    133.47,
    88.48,
    32.35,
@@ -2353,22 +2353,22 @@
   "name": "R_R_Window_E_Frame",
   "group": "facade_R",
   "status": "ok",
-  "grams": 0.9,
+  "grams": 0.8,
   "solids": 1,
   "bbox": [
    20.3,
    25.3,
-   6.9
+   6.3
   ],
-  "bed": 36.5,
-  "overhang": 287.1,
+  "bed": 184.6,
+  "overhang": 139.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "23E_R_R_Window_E_Frame.stl",
   "place_bbox": [
-   79.47,
-   47.67,
+   80.02,
+   47.69,
    128.94,
    86.66,
    68.02,
@@ -2412,16 +2412,16 @@
   "bbox": [
    16.3,
    19.9,
-   6.4
+   6.3
   ],
-  "bed": 77.5,
+  "bed": 129.1,
   "overhang": 103.3,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "23F_R_R_Window_F_Frame.stl",
   "place_bbox": [
-   78.79,
+   78.92,
    87.67,
    124.92,
    85.5,
@@ -2461,22 +2461,22 @@
   "name": "R_R_Attic_A_Frame",
   "group": "facade_R",
   "status": "ok",
-  "grams": 0.7,
+  "grams": 0.6,
   "solids": 1,
   "bbox": [
    19.2,
    22.7,
-   7.0
+   6.3
   ],
-  "bed": 34.5,
-  "overhang": 220.7,
+  "bed": 142.8,
+  "overhang": 112.4,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "23G_R_R_Attic_A_Frame.stl",
   "place_bbox": [
-   79.76,
-   34.22,
+   80.47,
+   34.24,
    167.47,
    87.08,
    53.48,
@@ -2520,16 +2520,16 @@
   "bbox": [
    14.8,
    17.0,
-   6.4
+   6.3
   ],
-  "bed": 57.7,
+  "bed": 90.8,
   "overhang": 78.0,
   "fits_bed": true,
   "colour": "wood",
   "note": "face down, pegs up",
   "file": "23H_R_R_Attic_B_Frame.stl",
   "place_bbox": [
-   78.82,
+   78.94,
    88.4,
    153.48,
    85.5,

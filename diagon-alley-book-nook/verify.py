@@ -613,6 +613,21 @@ def check_bed_contact():
     tiny = [r for r in rows if r["bed"] < STAND_ON_POINT]
     risky = [r for r in rows if r not in tiny and r["overhang"] > 50.0
              and ratio(r) > 4.0 and r["bed"] < TOO_LITTLE_BASE]
+
+    # A third way, and the one that got through. A part can have a perfectly respectable
+    # 48.6 mm^2 on the bed and still be resting on a LINE: fusing the sills onto the
+    # window frames put a proud sill under a 27 x 35 mm frame, so the frame floated
+    # 1 mm up and stood on the sill's nose. Bambu called it a floating cantilever; the
+    # absolute-area rules above did not, because 48.6 is not a small number until you
+    # notice it is 5% of the 945 mm^2 the part covers. Fifteen parts regressed that way
+    # in one commit. What matters is the FRACTION of its own footprint a part stands on.
+    ON_A_LINE = 0.08
+    def footprint(r):
+        w, d, _ = r.get("bbox", [1, 1, 0])
+        return max(w * d, 0.01)
+    online = [r for r in rows if r not in tiny and r not in risky
+              and r["overhang"] > 50.0 and ratio(r) > 4.0
+              and r["bed"] < ON_A_LINE * footprint(r)]
     # Two more ways to lose a small part, both learned the hard way when 19C and 13As
     # came off the plate as spaghetti with the slicer's Auto brim enabled:
     #   * not much base in absolute terms, whatever the ratio says. 19C had 15.4 mm^2.
@@ -631,6 +646,11 @@ def check_bed_contact():
         fail(f"{r['id']} {r['name']}: {r['overhang']:.0f} mm^2 of overhang on only "
              f"{r['bed']:.1f} mm^2 of first layer (x{ratio(r):.0f}) -- it will come off "
              "the plate")
+    for r in sorted(online, key=lambda r: r["bed"] / footprint(r)):
+        fail(f"{r['id']} {r['name']}: stands on {r['bed']:.0f} mm^2, which is "
+             f"{100 * r['bed'] / footprint(r):.0f}% of the {footprint(r):.0f} mm^2 it "
+             f"covers, with {r['overhang']:.0f} mm^2 hanging -- it is resting on a line, "
+             "not an area")
     def why_brim(r):
         """The clause of build.needs_brim that caught this part, in words."""
         w, d, h = r["bbox"]
@@ -650,7 +670,7 @@ def check_bed_contact():
     for r in sorted(brim, key=lambda r: r["bed"]):
         why = why_brim(r)
         warn(f"{r['id']} {r['name']}: {why} -- print it with a brim")
-    if not tiny and not risky:
+    if not tiny and not risky and not online:
         ok(f"all {len(rows)} parts have a first layer that carries what is above it"
            + (f" ({len(brim)} want a brim)" if brim else ""))
 

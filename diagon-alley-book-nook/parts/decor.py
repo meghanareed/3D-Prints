@@ -122,6 +122,29 @@ def _pack(row, side, items, spec, beads):
             suffix, _name, solid, (u, z) = it
             if suffix in fuse:
                 moved = solid.translate((u - bu, z - bz, 0.0))
+                # ... and pulled back so it does not stand PROUD of the part it joins.
+                # A sill projects further out of the wall than the frame it sits under,
+                # which is what a sill is for -- but these print face down, so a proud
+                # sill puts the whole frame in the air and the slicer calls it a
+                # floating cantilever. Fusing the sills on cost 13A 294.4 mm^2 of first
+                # layer and left it 48.6, undoing the bead that fixed exactly this
+                # warning once already; 15 parts lost more than 40% of their bed. The
+                # overshoot is 0.08-1.50 mm, so flush costs nothing you can see and
+                # there is no orientation that fixes it -- orient.py's best of 24 for
+                # every one of them is the one they are already in.
+                #
+                # CUT to the plane rather than translated back to it. Translating a
+                # sill 1.02 mm deeper drives 1.02 mm of its 27 mm body into a plate
+                # that only has a 4 mm socket in it: 13A then fouled its wall by
+                # 47.1 mm^3 and 11A by 80.5. Removing material cannot foul anything,
+                # and it cannot move a peg off its socket either.
+                front = merged.val().BoundingBox().zmax
+                if moved.val().BoundingBox().zmax > front + 0.005:
+                    b = moved.val().BoundingBox()
+                    moved = moved.cut(cq.Workplane("XY")
+                                      .box(b.xlen + 4, b.ylen + 4, b.zmax - front + 2,
+                                           centered=(False, False, False))
+                                      .translate((b.xmin - 2, b.ymin - 2, front)))
                 web = _weld(merged, moved)
                 merged = merged.union(moved)
                 if web is not None:

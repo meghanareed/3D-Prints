@@ -21,7 +21,7 @@ are ever dropped.
 
 | | Setting | Why |
 |---|---|---|
-| 1 | **An outer brim, 5 mm, on the 62 parts listed below** | Auto brim looks at a 6 mm^2 keystone, decides it is fine, and it comes off as spaghetti |
+| 1 | **An outer brim, 5 mm, on the 49 parts listed below** | Auto brim looks at a 6 mm^2 keystone, decides it is fine, and it comes off as spaghetti |
 | 2 | **Avoid crossing walls** | The window interiors came out webbed with strings; every one was a travel move across the opening |
 | 3 | **Bed 65 C first layer, 60 C after** | The wall faces and the base pan are big flat parts and they lift at 55 |
 | 4 | **Do not re-orient anything** | Every part is exported already lying the way it should print. `orient.py` chose these; see the note at the bottom |
@@ -109,7 +109,7 @@ orientation, measured off the mesh by `build.needs_brim`:
 
 ### Parts that need a brim
 
-62 of 182 parts. If picking them out one by one is more trouble than
+49 of 182 parts. If picking them out one by one is more trouble than
 it is worth, set an outer brim on the whole plate instead: a 5 mm brim does the
 other parts no harm beyond a little cleanup.
 
@@ -157,17 +157,10 @@ brims that merge into one raft peel as one raft, and take every part on it.
 * `51_Outer_Right` -- 42366 mm^2 on the bed, 200 x 214 x 5 mm
 * `58B_Case_Spine_Trim_R` -- 396 mm^2 on the bed, 214 x 8 x 4 mm
 
-**09_facade_left** -- 17 of 31
+**09_facade_left** -- 10 of 31
 
 * `10B_L_L1_Bow_Window` -- 315 mm^2 on the bed, 46 x 47 x 17 mm
 * `10D_L_L1_Cornice` -- 138 mm^2 on the bed, 46 x 3 x 6 mm
-* `11A_L_L2_Bay_Window_Body` -- 43 mm^2 on the bed, 27 x 41 x 15 mm
-* `12B_L_L_Oriel_Body` -- 36 mm^2 on the bed, 22 x 31 x 13 mm
-* `13A_L_L_Window_A_Frame` -- 49 mm^2 on the bed, 27 x 35 x 8 mm
-* `13B_L_L_Window_B_Frame` -- 42 mm^2 on the bed, 23 x 30 x 8 mm
-* `13E_L_L_Window_E_Frame` -- 44 mm^2 on the bed, 25 x 30 x 8 mm
-* `13F_L_L_Window_F_Frame` -- 38 mm^2 on the bed, 21 x 26 x 7 mm
-* `14A_L_L_Attic_Dormer_Frame` -- 37 mm^2 on the bed, 20 x 24 x 7 mm
 * `15A_L_L_Drainpipe_Lower` -- 228 mm^2 on the bed, 4 x 92 x 5 mm
 * `15B_L_L_Drainpipe_Upper` -- 139 mm^2 on the bed, 4 x 63 x 5 mm
 * `15C_L_L_Hopper` -- 13 mm^2 on the bed, 7 x 6 x 8 mm
@@ -177,17 +170,11 @@ brims that merge into one raft peel as one raft, and take every part on it.
 * `19B_L_L_Keystone` -- 6 mm^2 on the bed, 7 x 6 x 6 mm
 * `19C_L_L_Wall_Plaque` -- 15 mm^2 on the bed, 11 x 8 x 6 mm
 
-**10_facade_right** -- 17 of 28
+**10_facade_right** -- 11 of 28
 
-* `20E_R_R1_Tall_Window_Frame` -- 43 mm^2 on the bed, 24 x 41 x 8 mm
 * `20G_R_R1_Door_Keystone` -- 14 mm^2 on the bed, 11 x 8 x 6 mm
 * `21D_R_R2_Pilaster_Left` -- 25 mm^2 on the bed, 8 x 37 x 8 mm
 * `21E_R_R2_Pilaster_Right` -- 23 mm^2 on the bed, 7 x 33 x 8 mm
-* `23A_R_R_Window_A_Frame` -- 41 mm^2 on the bed, 22 x 29 x 7 mm
-* `23D_R_R_Window_D_Frame` -- 45 mm^2 on the bed, 25 x 30 x 8 mm
-* `23E_R_R_Window_E_Frame` -- 36 mm^2 on the bed, 20 x 25 x 7 mm
-* `23G_R_R_Attic_A_Frame` -- 34 mm^2 on the bed, 19 x 23 x 7 mm
-* `24A_R_R_Bay_Window_Body` -- 43 mm^2 on the bed, 27 x 40 x 16 mm
 * `25A_R_R_Drainpipe_Lower` -- 153 mm^2 on the bed, 3 x 75 x 5 mm
 * `25B_R_R_Drainpipe_Upper` -- 95 mm^2 on the bed, 3 x 53 x 5 mm
 * `25C_R_R_Hopper` -- 9 mm^2 on the bed, 5 x 5 x 6 mm
@@ -218,10 +205,8 @@ brims that merge into one raft peel as one raft, and take every part on it.
 
 * `71A_Glazing_Cut_Template_A` -- 14188 mm^2 on the bed, 216 x 106 x 2 mm
 
-**TRIAL_first_fit** -- 4 of 6
+**TRIAL_first_fit** -- 2 of 6
 
-* `11A_L_L2_Bay_Window_Body` -- 43 mm^2 on the bed, 27 x 41 x 15 mm
-* `13A_L_L_Window_A_Frame` -- 49 mm^2 on the bed, 27 x 35 x 8 mm
 * `15A_L_L_Drainpipe_Lower` -- 228 mm^2 on the bed, 4 x 92 x 5 mm
 * `19C_L_L_Wall_Plaque` -- 15 mm^2 on the bed, 11 x 8 x 6 mm
 
