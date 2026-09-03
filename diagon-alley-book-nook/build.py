@@ -474,6 +474,20 @@ def main():
     else:
         with open(os.path.join(OUT, "manifest.json"), "w") as f:
             json.dump(report, f, indent=1)
+        # ... and a full build owns out/stl. Merging the sills into their frames removed
+        # 35 parts and collapsing the glazing templates removed 3 more, and every one of
+        # their STLs stayed on disk and went into the repo: a 13As_L_L_Window_A_Sill.stl
+        # that is now part of 13A, ready to be printed by anyone browsing the folder.
+        # plates.py already clears its own directory for exactly this reason. A partial
+        # build owns nothing and deletes nothing.
+        want = {r["file"] for r in report}
+        gone = sorted(f for f in os.listdir(STL) if f.endswith(".stl") and f not in want)
+        for f in gone:
+            os.remove(os.path.join(STL, f))
+        if gone:
+            print(f"  removed {len(gone)} STL(s) for parts that no longer exist: "
+                  + ", ".join(g[:-4] for g in gone[:3])
+                  + (" ..." if len(gone) > 3 else ""))
 
     if assembly and not args.no_preview:
         _write_previews(assembly)
