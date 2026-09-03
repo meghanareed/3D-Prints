@@ -24,9 +24,23 @@ PEG_ROOT = 1.0   # Every peg starts this far INSIDE its parent. Sized exactly to
                  # OCCT to fuse reliably against a narrow arm, hence 1.0.
 
 # ------------------------------------------------------------------ P1 micro --
-P1_W, P1_H, P1_L = 2.5, 2.0, 3.5
+# ROUND, with one flat, and no crush ribs. The rectangular version did not work and
+# could not have: a round nozzle cannot cut a sharp internal corner, so a printed
+# socket has corners radiused to about half the line width -- 0.21 mm on a 0.4 mm
+# nozzle -- while the peg's external corners print sharp. The two bind on the diagonal
+# before their flats ever touch, and a hole that prints 0.2 mm undersize (which is
+# normal) makes it certain. docs/08_JOINT_DESIGN.md has the arithmetic.
+#
+# The flat gives anti-rotation without a single 90 degree internal corner: where it
+# meets the arc the bore turns through an obtuse angle, which a round nozzle traces
+# accurately. The crush ribs are gone -- they asked for 0.15 mm of interference from a
+# machine whose XY repeatability is +/-0.20, and each rib was a 0.40 mm protrusion
+# where the minimum dependable feature on this nozzle is 1.2 mm.
+P1_D, P1_FLAT, P1_L = 2.4, 1.0, 3.5     # dia, flat this far off axis, length
 # ------------------------------------------------------------- P2 standard ---
-P2_WA, P2_WB, P2_H, P2_L, P2_SPACING = 3.0, 2.0, 2.0, 4.0, 10.0
+# Two ROUND pegs of unequal diameter. The pair prevents rotation and the difference in
+# diameter is the key: the part physically cannot go in backwards.
+P2_DA, P2_DB, P2_L, P2_SPACING = 2.8, 2.0, 4.0, 10.0
 # ----------------------------------------------------------------- T3 tongue --
 T3_W, T3_D = 4.0, 2.5
 T3_DETENT_R, T3_DETENT_L = 0.5, 6.0
@@ -89,23 +103,20 @@ def _place(solid, point, axis="+Z", rot=0.0):
 # outward normal for the peg. Those are opposite directions, which mirrors the keyed
 # cross-section: every P2 pair landed wide-peg-in-narrow-hole and fouled by 20 mm^3.
 
-P1_KEY = 1.1   # size of the clipped corner. At 0.8 a wrong-way install only fouled by
-               # 0.22 mm^3, which a determined thumb would simply crush through.
-
-
-def _p1_profile(w, h):
-    return (cq.Workplane("XY")
-            .polyline([(-w / 2, -h / 2), (w / 2, -h / 2),
-                       (w / 2, h / 2 - P1_KEY), (w / 2 - P1_KEY, h / 2), (-w / 2, h / 2)])
-            .close())
+def _d_solid(dia, flat, length, root=0.0):
+    """A D-section prism: a cylinder with one chord flattened `flat` off the axis."""
+    body = cq.Workplane("XY").circle(dia / 2).extrude(length)
+    if root:
+        body = body.union(cq.Workplane("XY").circle(dia / 2)
+                          .extrude(root).translate((0, 0, -root)))
+    keep = cq.Workplane("XY").box(dia + 2, dia + 2, length + root + 2,
+                                  centered=(True, False, False))
+    return body.cut(keep.translate((0, flat, -root - 1)))
 
 
 def _p1_solid():
-    prof = _p1_profile(P1_W, P1_H).extrude(P1_L)
-    prof = try_chamfer(prof, ">Z", P.PEG_TIP_CHAMFER)
-    return prof.union(cq.Workplane("XY").box(P1_W, P1_H, PEG_ROOT,
-                                             centered=(True, True, False))
-                      .translate((0, 0, -PEG_ROOT)))
+    peg = _d_solid(P1_D, P1_FLAT, P1_L, root=PEG_ROOT)
+    return try_chamfer(peg, ">Z", P.PEG_TIP_CHAMFER)
 
 
 def peg_p1(point, axis="+Z", rot=0.0):
@@ -121,27 +132,24 @@ def socket_p1_solids(point, axis="+Z", rot=0.0, depth=None, decorative=True):
     """
     c = _clear(decorative)
     d = depth or (P1_L + 0.6)
-    w, h = P1_W + 2 * c, P1_H + 2 * c
-    bore = _p1_profile(w, h).extrude(d)
-    bore = bore.union(_leadin(w, h))
-    ribs = _rib_solid(w, h, d, c, n=2)
-    return _place(bore, point, axis, rot), _place(ribs, point, axis, rot)
+    bore = _d_solid(P1_D + 2 * c, P1_FLAT + c, d)
+    bore = bore.union(_leadin_round(P1_D + 2 * c))
+    return _place(bore, point, axis, rot), None
 
 
 def socket_p1(wp, point, axis="+Z", rot=0.0, depth=None, decorative=True):
-    cut, add = socket_p1_solids(point, axis, rot, depth, decorative)
-    return wp.cut(cut).union(add)
+    cut, _ = socket_p1_solids(point, axis, rot, depth, decorative)
+    return wp.cut(cut)
 
 
 # =========================================================== P2: standard pair ==
 def peg_p2(point, axis="+Z", rot=0.0):
-    """Two pegs of unequal width -- the part physically cannot go in backwards."""
+    """Two round pegs of unequal diameter -- the part cannot go in backwards."""
     out = None
-    for dx, w in ((-P2_SPACING / 2, P2_WA), (P2_SPACING / 2, P2_WB)):
-        peg = try_chamfer(cq.Workplane("XY").rect(w, P2_H).extrude(P2_L),
-                          ">Z", P.PEG_TIP_CHAMFER)
-        peg = peg.union(cq.Workplane("XY").box(w, P2_H, PEG_ROOT,
-                                               centered=(True, True, False))
+    for dx, dia in ((-P2_SPACING / 2, P2_DA), (P2_SPACING / 2, P2_DB)):
+        peg = cq.Workplane("XY").circle(dia / 2).extrude(P2_L)
+        peg = try_chamfer(peg, ">Z", P.PEG_TIP_CHAMFER)
+        peg = peg.union(cq.Workplane("XY").circle(dia / 2).extrude(PEG_ROOT)
                         .translate((0, 0, -PEG_ROOT))).translate((dx, 0, 0))
         out = peg if out is None else out.union(peg)
     return _place(out, point, axis, rot)
@@ -150,20 +158,17 @@ def peg_p2(point, axis="+Z", rot=0.0):
 def socket_p2_solids(point, axis="+Z", rot=0.0, depth=None, decorative=True):
     c = _clear(decorative)
     d = depth or (P2_L + 0.6)
-    bores = ribs = None
-    for dx, w in ((-P2_SPACING / 2, P2_WA), (P2_SPACING / 2, P2_WB)):
-        ww, hh = w + 2 * c, P2_H + 2 * c
-        b = (cq.Workplane("XY").rect(ww, hh).extrude(d)
-             .union(_leadin(ww, hh)).translate((dx, 0, 0)))
+    bores = None
+    for dx, dia in ((-P2_SPACING / 2, P2_DA), (P2_SPACING / 2, P2_DB)):
+        b = (cq.Workplane("XY").circle(dia / 2 + c).extrude(d)
+             .union(_leadin_round(dia + 2 * c)).translate((dx, 0, 0)))
         bores = b if bores is None else bores.union(b)
-        r = _rib_solid(ww, hh, d, c, n=2).translate((dx, 0, 0))
-        ribs = r if ribs is None else ribs.union(r)
-    return _place(bores, point, axis, rot), _place(ribs, point, axis, rot)
+    return _place(bores, point, axis, rot), None
 
 
 def socket_p2(wp, point, axis="+Z", rot=0.0, depth=None, decorative=True):
-    cut, add = socket_p2_solids(point, axis, rot, depth, decorative)
-    return wp.cut(cut).union(add)
+    cut, _ = socket_p2_solids(point, axis, rot, depth, decorative)
+    return wp.cut(cut)
 
 
 def _leadin(w, h):
@@ -173,6 +178,14 @@ def _leadin(w, h):
     elephant's foot that would otherwise make every socket undersize."""
     return cq.Workplane("XY").box(w + 2 * P.LEAD_IN_CHAMFER, h + 2 * P.LEAD_IN_CHAMFER,
                                   P.LEAD_IN_CHAMFER, centered=(True, True, False))
+
+
+def _leadin_round(dia):
+    """The same counterbore step for a round bore. T3 keeps the rectangular one: it is
+    a sliding tongue, it was validated on a printed coupon, and it is not being
+    redesigned on the strength of a problem that belongs to the peg mounts."""
+    return (cq.Workplane("XY").circle(dia / 2 + P.LEAD_IN_CHAMFER)
+            .extrude(P.LEAD_IN_CHAMFER))
 
 
 RIB_EMBED = 0.6   # how far a crush rib buries itself in the parent material

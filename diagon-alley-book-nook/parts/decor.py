@@ -25,7 +25,13 @@ FACE = P.WALL_FACE_T
 
 
 def to_wall(solid, u, z):
-    """Place a part built in its own flat XY frame onto the wall face."""
+    """Place a part built in its own flat XY frame onto the wall face.
+
+    Passes None through: a socket returns None for its "add" solid now that P1 and P2
+    have no crush ribs, and every call site would otherwise have to test for it.
+    """
+    if solid is None:
+        return None
     return solid.rotate((0, 0, 0), (1, 1, 1), 120).translate((FACE, u, z))
 
 
