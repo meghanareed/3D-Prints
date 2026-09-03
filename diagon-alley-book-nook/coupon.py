@@ -38,6 +38,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "out", "coupon")
 
 LADDER = (0.20, 0.25, 0.30, 0.35, 0.40, 0.45)
+WALL_PRINT_ROT = ("Y", -90)   # the wall face prints brick-up and flat; so does a tile of it
 BLOCK_W, BLOCK_D, BLOCK_H = 18.0, 20.0, 6.0
 HANDLE_W, HANDLE_D, HANDLE_H = 12.0, 16.0, 3.0
 SOCKET_Y, PEG_Y = 5.0, 4.0      # feature sits in the top half
@@ -88,20 +89,63 @@ def _peg_handle(clearance, label, square=False):
 
 
 def _wall_tile():
-    """A patch of the REAL left wall around the REAL 13A aperture."""
+    """A patch of the REAL left wall around the REAL 13A aperture.
+
+    Two things the first version got wrong, both visible the moment it was sliced.
+
+    It kept the wall's own frame, so the tile stood on its 3.1 mm edge, 48 mm tall --
+    "floating regions" and an empty layer at 29.8-34.6 mm. The wall prints FLAT, brick
+    up, and so must a piece of it.
+
+    And a fixed pad cut straight through the sockets of neighbouring elements, leaving
+    half-bores opening onto the edge: nothing for a peg to grip and nothing holding
+    those crescents on. The box now GROWS until every cut it touches is wholly inside
+    it, so the tile carries whole sockets or none.
+    """
     from parts import walls as W
     import data.facade as F
     row = next(r for r in F.LEFT if r["id"] == "13A")
-    parts, _, _ = W.build_element(row, "L")
+    parts, (cuts, _adds), _ = W.build_element(row, "L")
     frame = next(p for p in parts if p["id"] == "13A")
+
     b = frame["placed"].val().BoundingBox()
-    pad = 7.0
-    box = (cq.Workplane("XY")
-           .box(20.0, b.ylen + 2 * pad, b.zlen + 2 * pad, centered=(False, False, False))
-           .translate((-5.0, b.ymin - pad, b.zmin - pad)))
+    y0, y1 = b.ymin - 7.0, b.ymax + 7.0
+    z0, z1 = b.zmin - 7.0, b.zmax + 7.0
+
+    # Grow the box until every cut it touches is WHOLLY inside it. Pulling the boundary
+    # back instead leaves the tile in two pieces: 13A's aperture very nearly reaches the
+    # wall's torn front edge, so almost nothing joins the material above it to the
+    # material below except the rail on the far side, and that rail is where the
+    # neighbouring sockets are. Growing costs a bigger tile and gains a second element's
+    # mounts to test.
+    allc = [c.val().BoundingBox() for c in W.collect("L")[1]]
+    for _ in range(12):
+        grew = False
+        for c in allc:
+            inside = (c.ymin >= y0 and c.ymax <= y1 and c.zmin >= z0 and c.zmax <= z1)
+            clear = (c.ymax <= y0 or c.ymin >= y1 or c.zmax <= z0 or c.zmin >= z1)
+            if inside or clear:
+                continue
+            y0, y1 = min(y0, c.ymin - 3.0), max(y1, c.ymax + 3.0)
+            z0, z1 = min(z0, c.zmin - 3.0), max(z1, c.zmax + 3.0)
+            grew = True
+        if not grew:
+            break
+    else:
+        raise SystemExit("tile box will not settle -- the sockets overlap each other")
+
+    box = (cq.Workplane("XY").box(20.0, y1 - y0, z1 - z0, centered=(False, False, False))
+           .translate((-5.0, y0, z0)))
     tile = W.wall_face("L").intersect(box)
-    bb = tile.val().BoundingBox()
-    return tile.translate((-bb.xmin, -bb.ymin, -bb.zmin)), frame["solid"]
+    n = len(tile.val().Solids())
+    if n != 1:
+        raise SystemExit(f"tile came out in {n} pieces -- widen it")
+    print(f"  tile: depth {y0:.1f}..{y1:.1f}, height {z0:.1f}..{z1:.1f} "
+          f"({y1-y0:.0f} x {z1-z0:.0f} mm)")
+    # ("Y", -90) is the wall face's own print orientation from build.manifest -- brick
+    # up, lying flat. PRINT_ROT_MEASURED has no entry for 01, so looking it up there
+    # returned None and the tile stood on its 3.1 mm edge, 112 mm tall.
+    return B.drop_to_bed(B.print_orient(tile, WALL_PRINT_ROT)), frame["solid"]
 
 
 def build():
