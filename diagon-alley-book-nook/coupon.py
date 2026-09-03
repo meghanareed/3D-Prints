@@ -33,30 +33,47 @@ import build as B
 import plates as PL
 import mf3
 from lib import mount as M
-from lib.util import emboss_text
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "out", "coupon")
 
 LADDER = (0.20, 0.25, 0.30, 0.35, 0.40, 0.45)
-BLOCK_W, BLOCK_D, BLOCK_H = 16.0, 14.0, 6.0
-HANDLE_W, HANDLE_D, HANDLE_H = 10.0, 8.0, 3.0
+BLOCK_W, BLOCK_D, BLOCK_H = 18.0, 20.0, 6.0
+HANDLE_W, HANDLE_D, HANDLE_H = 12.0, 16.0, 3.0
+SOCKET_Y, PEG_Y = 5.0, 4.0      # feature sits in the top half
+LABEL_Y = -6.0                  # label in the bottom half, clear of it
+
+
+def _engrave(solid, txt, size, top_z, y):
+    """Sink a label into the top face at an ABSOLUTE position.
+
+    lib.util.emboss_text works in the selected face's own frame, which after a socket
+    and its counterbore have been cut is not the frame you think it is -- the first
+    version of this plate put "0.35" straight through the bore. Building the text on a
+    global XY workplane at a known height and cutting it leaves nothing to guess at.
+    """
+    try:
+        cut = (cq.Workplane("XY").workplane(offset=top_z).center(0, y)
+               .text(txt, size, -0.5, font="DejaVu Sans", kind="bold", combine=False))
+        return solid.cut(cut)
+    except Exception:
+        return solid
 
 
 def _socket_block(clearance, label, square=False):
-    """A block with one socket in its top face, labelled with its clearance."""
+    """A block with one socket in the top half of its face and its label in the bottom."""
     blk = cq.Workplane("XY").box(BLOCK_W, BLOCK_D, BLOCK_H, centered=(True, True, False))
+    z0 = BLOCK_H - M.P1_L - 0.6
     if square:
         # the mount as it was: a rectangular bore, for the A/B comparison only
         w, h = 2.5 + 2 * clearance, 2.0 + 2 * clearance
         bore = (cq.Workplane("XY").box(w, h, M.P1_L + 0.6, centered=(True, True, False))
-                .translate((0, 0, BLOCK_H - M.P1_L - 0.6)))
+                .translate((0, SOCKET_Y, z0)))
         blk = blk.cut(bore)
     else:
-        cut, _ = M.socket_p1_solids((0, 0, BLOCK_H - M.P1_L - 0.6), axis="+Z",
-                                    decorative=False)
+        cut, _ = M.socket_p1_solids((0, SOCKET_Y, z0), axis="+Z", decorative=False)
         blk = blk.cut(cut)
-    return emboss_text(blk, label, 3.4, -0.4, face=">Z", centre=(0, -4.4))
+    return _engrave(blk, label, 3.6, BLOCK_H, LABEL_Y)
 
 
 def _peg_handle(clearance, label, square=False):
@@ -64,10 +81,10 @@ def _peg_handle(clearance, label, square=False):
     h = cq.Workplane("XY").box(HANDLE_W, HANDLE_D, HANDLE_H, centered=(True, True, False))
     if square:
         peg = (cq.Workplane("XY").box(2.5, 2.0, M.P1_L, centered=(True, True, False))
-               .translate((0, 0, HANDLE_H)))
+               .translate((0, PEG_Y, HANDLE_H)))
     else:
-        peg = M.peg_p1((0, 0, HANDLE_H), axis="+Z")
-    return emboss_text(h.union(peg), label, 2.6, -0.4, face=">Z", centre=(0, -2.8))
+        peg = M.peg_p1((0, PEG_Y, HANDLE_H), axis="+Z")
+    return _engrave(h.union(peg), label, 3.0, HANDLE_H, -4.5)
 
 
 def _wall_tile():
