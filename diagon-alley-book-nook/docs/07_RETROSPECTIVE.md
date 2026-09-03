@@ -13,6 +13,14 @@ bench, both correct:
 * **the sockets are misshapen and nothing snaps in** — this one is a real defect, and it
   is the root cause below.
 
+> **Corrected after the fact.** The first version of this named the crush ribs as the
+> root cause. The bench observation that settles it is simpler and was made from the
+> printed wall: **the sockets come out with rounded corners, not square ones.** A round
+> nozzle cannot cut a sharp internal corner, so a sharp-cornered peg binds on the
+> diagonal before its flats ever touch — and that is true of every rectangular socket in
+> the kit, with or without ribs. `docs/08_JOINT_DESIGN.md` works it through with the
+> numbers and the design rules that follow from it.
+
 ## The root cause: a joint that was never printed
 
 Every facade part mounts with **P1**, a 2.5 × 2.0 × 3.5 mm peg into a 3.0 × 2.5 mm
