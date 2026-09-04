@@ -3,42 +3,52 @@
 
     python3 coupon.py     ->  out/coupon/FIT_TEST.stl  and  .3mf
 
-Nothing over 10 g gets printed again until this plate goes together in your hand. It
-answers three questions, in the order they matter:
+Nothing over 10 g gets printed again until a plate off this file goes together in your
+hand.
 
-  1. WHAT CLEARANCE FITS.  Six stations, 0.20 to 0.45 mm per side in 0.05 steps, each a
-     block with a P1 socket and a peg on a handle to try in it. Whichever one presses in
-     with thumb pressure and stays is the number that goes into params.FIT_CLEARANCE.
-     This is the coupon that existed all along as 70A/70B and whose answer never reached
-     the model: T3 and C4 were measured from a printed coupon, P1 and P2 never were.
+---------------------------------------------------------------------- plate 1 ------
+Printed. It asked three questions and answered two of them, one of them by accident.
 
-     READ IT AS A RETENTION TEST, NOT AN ENTRY TEST.  Printed once, all six went in --
-     which is the expected result and not a pass. The crush ribs are gone, so the only
-     thing holding a peg in its socket now is the interference, and every station that
-     accepts the peg still differs in how hard it is to pull back out. For each station:
-     press in by thumb (no tool), then turn the block over. The answer is the TIGHTEST
-     station that still seats without a tool and does not drop out or rock. If 0.20 does
-     that, 0.20 is not automatically the number -- the printer repeats to about
-     +-0.20 mm, so a clearance at that figure will be a no-go on some parts of a real
-     wall. 0.25 is the floor worth shipping.
+  SHAPE.  A square-cornered socket and a round one, the old peg and the new. Reported:
+  the square "fits but comes out when turned over and you can see that the shape is not
+  perfectly aligned"; the round "is almost a perfect shape match". That is the rounded
+  internal corner, seen directly, and it settles the redesign: round is right.
 
-  2. WHETHER THE SHAPE WAS THE PROBLEM.  Two sockets side by side at the same clearance
-     -- the old square-cornered peg and the new D-section round one. A round nozzle
-     leaves internal corners radiused to about half its line width while the peg's
-     corners print sharp, so the old pair binds on the diagonal before the flats meet.
-     If the round one goes in and the square one does not, that is the whole story.
+  THE REAL PART.  The 13A frame went into the aperture of a tile cut from the real left
+  wall and fitted well -- the first thing in this project to assemble.
 
-  3. WHETHER IT WORKS ON THE REAL PART.  A tile cut straight out of the real left wall
-     around the real 13A aperture, with the real 13A frame that mounts to it. Not a
-     representative test piece -- the actual geometry, so nothing can be lost in
-     translation between the coupon and the kit.
+  CLEARANCE.  Nothing, because of a bug in this file: the ladder passed its clearance to
+  the SQUARE bore only, so all seven round sockets were cut at FIT_CLEARANCE and the six
+  labels were decoration. Cross-sections measured 6.4064 mm^2 at every station.
+
+That bug turned the ladder into something more useful than the test it replaced: seven
+identical sockets, seven identical pegs, one plate. Three held the peg when turned over
+and four dropped it. So the scatter between one socket and the next is wider than the
+whole 0.20-0.45 mm range the ladder meant to span, and NO nominal clearance gives a
+repeatable press fit on a 2.4 mm peg on this machine.
+
+---------------------------------------------------------------------- plate 2 ------
+Which is what a crush rib is for. A rib stands proud of the bore wall by the clearance
+plus a fixed bite, so it reaches the peg whether that particular bore came out tight or
+loose, and shears to suit. The kit's old ribs were rectangular, in a rectangular bore
+whose corners the nozzle could not cut; that pairing failed, and the rib got the blame.
+
+This plate puts ribs in a ROUND bore and asks one question -- does a ribbed socket hold
+a peg that a plain socket at the same clearance drops? -- with three copies of every
+station, because a single sample is what got us here:
+
+    P30   plain bore, 0.30/side          the control: expected to drop the peg
+    R30   ribbed bore, 0.30/side         same hole, three ribs
+    R40   ribbed bore, 0.40/side         goes in easily; do the ribs still hold it?
+
+and the same comparison once more on P2, the pair mount that every window and door in
+the kit actually uses, since the ladder only ever tested P1.
 """
 import os
 import sys
 
 import cadquery as cq
 
-import params as P
 import build as B
 import plates as PL
 import mf3
@@ -47,134 +57,129 @@ from lib import mount as M
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "out", "coupon")
 
-LADDER = (0.20, 0.25, 0.30, 0.35, 0.40, 0.45)
-WALL_PRINT_ROT = ("Y", -90)   # the wall face prints brick-up and flat; so does a tile of it
-BLOCK_W, BLOCK_D, BLOCK_H = 18.0, 20.0, 6.0
-HANDLE_W, HANDLE_D, HANDLE_H = 12.0, 16.0, 3.0
-SOCKET_Y, PEG_Y = 5.0, 4.0      # feature sits in the top half
-LABEL_Y = -6.0                  # label in the bottom half, clear of it
+# (label, clearance per side, ribbed)
+P1_STATIONS = [("P30", 0.30, False), ("R30", 0.30, True), ("R40", 0.40, True)]
+P2_STATIONS = [("P30", 0.30, False), ("R30", 0.30, True)]
+COPIES = 3
+
+BLOCK_W, BLOCK_D, BLOCK_H = 13.0, 13.5, 5.5
+HANDLE_W, HANDLE_D, HANDLE_H = 10.0, 13.5, 3.0
+BAR_W, BAR_D, BAR_H = 24.0, 13.5, 6.0   # P2 bores go 4.6 deep, so the bar is taller
+SOCKET_Y, PEG_Y = 3.6, 3.6      # feature in the top half, label in the bottom
+LABEL_Y = -4.6
 
 
-def _engrave(solid, txt, size, top_z, y):
+def _engrave(solid, txt, size, top_z, y, flip=False):
     """Sink a label into the top face at an ABSOLUTE position.
 
     lib.util.emboss_text works in the selected face's own frame, which after a socket
-    and its counterbore have been cut is not the frame you think it is -- the first
+    and its counterbore have been cut is not the frame you think it is -- an earlier
     version of this plate put "0.35" straight through the bore. Building the text on a
     global XY workplane at a known height and cutting it leaves nothing to guess at.
+
+    `flip` is for the peg handles. They are built peg-down and printed peg-up, so the
+    face that carries their label is turned over on the way to the bed; mirroring the
+    text about XZ first means it reads the right way round in your hand.
     """
     try:
         cut = (cq.Workplane("XY").workplane(offset=top_z).center(0, y)
                .text(txt, size, -0.5, font="DejaVu Sans", kind="bold", combine=False))
+        if flip:
+            cut = cut.mirror("XZ")
         return solid.cut(cut)
     except Exception:
         return solid
 
 
-def _socket_block(clearance, label, square=False):
-    """A block with one socket in the top half of its face and its label in the bottom."""
-    blk = cq.Workplane("XY").box(BLOCK_W, BLOCK_D, BLOCK_H, centered=(True, True, False))
-    z0 = BLOCK_H - M.P1_L - 0.6
-    if square:
-        # the mount as it was: a rectangular bore, for the A/B comparison only
-        w, h = 2.5 + 2 * clearance, 2.0 + 2 * clearance
-        bore = (cq.Workplane("XY").box(w, h, M.P1_L + 0.6, centered=(True, True, False))
-                .translate((0, SOCKET_Y, z0)))
-        blk = blk.cut(bore)
-    else:
-        cut, _ = M.socket_p1_solids((0, SOCKET_Y, z0), axis="+Z", decorative=False)
-        blk = blk.cut(cut)
-    return _engrave(blk, label, 3.6, BLOCK_H, LABEL_Y)
+def _socket_block(label, clearance, ribbed, pair=False):
+    """A block with one mount in the top half of its face and its label in the bottom.
 
-
-def _peg_handle(clearance, label, square=False):
-    """A peg standing on a handle you can hold, labelled to match its block."""
-    h = cq.Workplane("XY").box(HANDLE_W, HANDLE_D, HANDLE_H, centered=(True, True, False))
-    if square:
-        peg = (cq.Workplane("XY").box(2.5, 2.0, M.P1_L, centered=(True, True, False))
-               .translate((0, PEG_Y, HANDLE_H)))
-    else:
-        peg = M.peg_p1((0, PEG_Y, HANDLE_H), axis="+Z")
-    return _engrave(h.union(peg), label, 3.0, HANDLE_H, -4.5)
-
-
-def _wall_tile():
-    """A patch of the REAL left wall around the REAL 13A aperture.
-
-    Two things the first version got wrong, both visible the moment it was sliced.
-
-    It kept the wall's own frame, so the tile stood on its 3.1 mm edge, 48 mm tall --
-    "floating regions" and an empty layer at 29.8-34.6 mm. The wall prints FLAT, brick
-    up, and so must a piece of it.
-
-    And a fixed pad cut straight through the sockets of neighbouring elements, leaving
-    half-bores opening onto the edge: nothing for a peg to grip and nothing holding
-    those crescents on. The box now GROWS until every cut it touches is wholly inside
-    it, so the tile carries whole sockets or none.
+    The socket is driven DOWN from the top face, the same direction the peg travels.
+    That is the library's convention -- a socket is the oversized swept volume of its
+    peg, built in the same frame and with the same axis -- and it also puts the lead-in
+    counterbore at the mouth. Plate 1 drove the bore upward from inside the block, which
+    left the lead-in at the blind end and the mouth square.
     """
-    from parts import walls as W
-    import data.facade as F
-    row = next(r for r in F.LEFT if r["id"] == "13A")
-    parts, (cuts, _adds), _ = W.build_element(row, "L")
-    frame = next(p for p in parts if p["id"] == "13A")
+    w = BAR_W if pair else BLOCK_W
+    d = BAR_D if pair else BLOCK_D
+    top = BAR_H if pair else BLOCK_H
+    blk = cq.Workplane("XY").box(w, d, top, centered=(True, True, False))
+    fn = M.socket_p2_solids if pair else M.socket_p1_solids
+    cut, add = fn((0, SOCKET_Y, top), axis="-Z", decorative=False,
+                  clear=clearance, ribs=ribbed)
+    blk = blk.cut(cut)
+    if add is not None:
+        blk = blk.union(add)
+    return _engrave(blk, label, 3.0, top, LABEL_Y)
 
-    b = frame["placed"].val().BoundingBox()
-    y0, y1 = b.ymin - 7.0, b.ymax + 7.0
-    z0, z1 = b.zmin - 7.0, b.zmax + 7.0
 
-    # Grow the box until every cut it touches is WHOLLY inside it. Pulling the boundary
-    # back instead leaves the tile in two pieces: 13A's aperture very nearly reaches the
-    # wall's torn front edge, so almost nothing joins the material above it to the
-    # material below except the rail on the far side, and that rail is where the
-    # neighbouring sockets are. Growing costs a bigger tile and gains a second element's
-    # mounts to test.
-    allc = [c.val().BoundingBox() for c in W.collect("L")[1]]
-    for _ in range(12):
-        grew = False
-        for c in allc:
-            inside = (c.ymin >= y0 and c.ymax <= y1 and c.zmin >= z0 and c.zmax <= z1)
-            clear = (c.ymax <= y0 or c.ymin >= y1 or c.zmax <= z0 or c.zmin >= z1)
-            if inside or clear:
-                continue
-            y0, y1 = min(y0, c.ymin - 3.0), max(y1, c.ymax + 3.0)
-            z0, z1 = min(z0, c.zmin - 3.0), max(z1, c.zmax + 3.0)
-            grew = True
-        if not grew:
-            break
-    else:
-        raise SystemExit("tile box will not settle -- the sockets overlap each other")
+def _peg_handle(label, pair=False):
+    """A peg on a handle you can hold.
 
-    box = (cq.Workplane("XY").box(20.0, y1 - y0, z1 - z0, centered=(False, False, False))
-           .translate((-5.0, y0, z0)))
-    tile = W.wall_face("L").intersect(box)
-    n = len(tile.val().Solids())
-    if n != 1:
-        raise SystemExit(f"tile came out in {n} pieces -- widen it")
-    print(f"  tile: depth {y0:.1f}..{y1:.1f}, height {z0:.1f}..{z1:.1f} "
-          f"({y1-y0:.0f} x {z1-z0:.0f} mm)")
-    # ("Y", -90) is the wall face's own print orientation from build.manifest -- brick
-    # up, lying flat. PRINT_ROT_MEASURED has no entry for 01, so looking it up there
-    # returned None and the tile stood on its 3.1 mm edge, 112 mm tall.
-    return B.drop_to_bed(B.print_orient(tile, WALL_PRINT_ROT)), frame["solid"]
+    Built peg-DOWN, like every mounting part in the kit: the handle is the part, the
+    block is the wall, and lowering one onto the other is a translation with no flip in
+    it. A flip would mirror the D-flat and the unequal P2 pair, which is the mistake
+    this library's header warns about and which has shipped three times.
+
+    Every station takes the SAME peg -- only the bores differ -- so any handle fits any
+    block and one peg can be tried in two sockets.
+    """
+    w = BAR_W if pair else HANDLE_W
+    d = BAR_D if pair else HANDLE_D
+    h = (cq.Workplane("XY").box(w, d, HANDLE_H, centered=(True, True, False))
+         .translate((0, 0, 0)))
+    peg = (M.peg_p2 if pair else M.peg_p1)((0, PEG_Y, 0.0), axis="-Z")
+    # +4.4, not -4.4: the mirror puts the text on the far side of the peg, and the flip
+    # onto the bed puts it back. Sign it the other way and the label lands on the peg.
+    return _engrave(h.union(peg), label, 2.6, 0.5, 4.4, flip=True)
+
+
+def _check_mates(pair=False):
+    """Lower a handle onto a block and measure the interference, for real.
+
+    Not "both were built from the same numbers" -- that check has passed three times on
+    geometry that did not fit. Move the peg the way your hand moves it and subtract.
+    """
+    top = BAR_H if pair else BLOCK_H
+    blk = _socket_block("X", 0.30, False, pair=pair)
+    hnd = _peg_handle("X", pair=pair).translate((0, 0, top))
+    peg = hnd.cut(cq.Workplane("XY").box(60, 60, HANDLE_H, centered=(True, True, False))
+                  .translate((0, 0, top)))
+    return blk, hnd, peg.val().Volume(), peg.intersect(blk).val().Volume()
+
+
+def _print_peg(solid):
+    """Handles are built peg-down and printed peg-up, exactly as the kit's parts are."""
+    return B.drop_to_bed(B.print_orient(solid, ("X", 180)))
 
 
 def build():
     items = []
-    for c in LADDER:
-        items.append((f"L{int(c*100):02d}_socket", _socket_block(c, f"{c:.2f}")))
-        items.append((f"L{int(c*100):02d}_peg", _peg_handle(c, f"{c:.2f}")))
-    items.append(("AB_round_socket", _socket_block(0.30, "RND")))
-    items.append(("AB_round_peg", _peg_handle(0.30, "RND")))
-    items.append(("AB_square_socket", _socket_block(0.30, "SQR", square=True)))
-    items.append(("AB_square_peg", _peg_handle(0.30, "SQR", square=True)))
-    tile, frame = _wall_tile()
-    items.append(("TILE_wall_13A", tile))
-    items.append(("TILE_frame_13A", B.drop_to_bed(B.print_orient(frame, ("X", 180)))))
+    for label, clearance, ribbed in P1_STATIONS:
+        for i in range(COPIES):
+            tag = f"{label}{chr(ord('a') + i)}"
+            items.append((f"P1_{tag}_socket", _socket_block(label, clearance, ribbed)))
+            items.append((f"P1_{tag}_peg", _print_peg(_peg_handle(label))))
+    for label, clearance, ribbed in P2_STATIONS:
+        for i in range(2):
+            tag = f"{label}{chr(ord('a') + i)}"
+            items.append((f"P2_{tag}_socket",
+                          _socket_block(label, clearance, ribbed, pair=True)))
+            items.append((f"P2_{tag}_peg", _print_peg(_peg_handle(label, pair=True))))
     return items
 
 
 def main():
     os.makedirs(OUT, exist_ok=True)
+
+    for pair in (False, True):
+        _, _, pegvol, fouled = _check_mates(pair=pair)
+        kind = "P2" if pair else "P1"
+        print(f"  {kind}: peg {pegvol:.2f} mm^3, fouling the block {fouled:.3f} mm^3")
+        if fouled > 0.05:
+            raise SystemExit(f"{kind} peg does not enter its own socket -- "
+                             "the mating flip is wrong again")
+
     items = build()
     placed = []
     for name, solid in items:

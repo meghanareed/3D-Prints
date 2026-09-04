@@ -17,6 +17,7 @@ import numpy as np
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import cadquery as cq
 from matplotlib.patches import Polygon
 
 import build as B
@@ -26,14 +27,26 @@ import coupon as C
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "docs", "img")
 
-BED = (0.0, 0.6)        # first layers: the footprint
-TOP = (0.8, 0.2)        # zmax minus this band: the top face
+BED = 0.3        # section height for the footprint
+FEATURE = 1.0    # section this far below the top: pegs on a handle, bore in a block
 
 
-def _slab(tris, lo, hi):
-    """Triangles whose whole span lies between lo and hi, as XY polygons."""
-    z = tris[:, :, 2]
-    keep = (z.min(axis=1) >= lo) & (z.max(axis=1) <= hi)
+def _section(solid, z):
+    """Triangles of a real horizontal slice, as XY polygons.
+
+    Filtering the mesh for triangles that happen to lie in a band does not work: the
+    side wall of a 2.4 mm peg is two triangles spanning its whole height, so a peg
+    drawn that way is invisible. Cutting an actual slab and tessellating that shows
+    what is really there at that height.
+    """
+    slab = (cq.Workplane("XY").box(400, 400, 0.2, centered=(True, True, False))
+            .translate((0, 0, z)))
+    cut = slab.intersect(solid)
+    if not cut.val().Solids():
+        return []
+    v, t = cut.val().tessellate(0.08)
+    tris = np.array([[p.x, p.y, p.z] for p in v])[np.array(t)]
+    keep = tris[:, :, 2].max(axis=1) <= z + 0.05
     return tris[keep][:, :, :2]
 
 
@@ -52,12 +65,9 @@ def main():
 
     fig, ax = plt.subplots(figsize=(15, 8.5), facecolor="white")
     for it, x, y in laid:
-        v, t = it["solid"].val().tessellate(0.10)
-        tris = np.array([[p.x, p.y, p.z] for p in v])[np.array(t)]
-        zmax = tris[:, :, 2].max()
-        for band, colour, zo in ((( BED[0], BED[1]), "#c9ced3", 1),
-                                 ((zmax - TOP[0], zmax - TOP[1]), "#5b6670", 2)):
-            for poly in _slab(tris, *band):
+        zmax = it["solid"].val().BoundingBox().zmax
+        for z, colour, zo in ((BED, "#c9ced3", 1), (zmax - FEATURE, "#5b6670", 2)):
+            for poly in _section(it["solid"], z):
                 ax.add_patch(Polygon(poly + (x, y), closed=True, facecolor=colour,
                                      edgecolor="none", zorder=zo))
         ax.text(x + it["w"] / 2, y + it["d"] + 2.5,
@@ -72,8 +82,8 @@ def main():
     ax.set_ylim(-14, d + 16)
     ax.set_aspect("equal")
     ax.set_axis_off()
-    ax.set_title("FIT_TEST plate, true scale — light grey touches the bed, "
-                 "dark grey is the top face", fontsize=11, color="#222")
+    ax.set_title("FIT_TEST plate, true scale — light grey is the footprint on the bed, "
+                 "dark grey is a slice 1 mm below the top", fontsize=11, color="#222")
     fig.tight_layout()
     out = os.path.join(OUT, "coupon_pieces.png")
     fig.savefig(out, dpi=150, bbox_inches="tight", facecolor="white")

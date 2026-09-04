@@ -33,9 +33,15 @@ PEG_ROOT = 1.0   # Every peg starts this far INSIDE its parent. Sized exactly to
 #
 # The flat gives anti-rotation without a single 90 degree internal corner: where it
 # meets the arc the bore turns through an obtuse angle, which a round nozzle traces
-# accurately. The crush ribs are gone -- they asked for 0.15 mm of interference from a
-# machine whose XY repeatability is +/-0.20, and each rib was a 0.40 mm protrusion
-# where the minimum dependable feature on this nozzle is 1.2 mm.
+# accurately.
+#
+# Crush ribs came off with the corners and are coming back on a switch (`ribs=`), for a
+# reason the first printed coupon supplied: seven sockets cut to the SAME number held
+# the peg three times out of seven. A fixed clearance cannot cover scatter that wide,
+# and a rib is the standard thing that can -- it is sized from the clearance, so it
+# meets the peg whether the bore printed tight or loose. It was the rectangular bore it
+# lived in that failed, not the rib. docs/09_COUPON_RESULTS.md has the numbers; the
+# kit stays plain until the ribbed plate comes back.
 P1_D, P1_FLAT, P1_L = 2.4, 1.0, 3.5     # dia, flat this far off axis, length
 # ------------------------------------------------------------- P2 standard ---
 # Two ROUND pegs of unequal diameter. The pair prevents rotation and the difference in
@@ -48,7 +54,15 @@ T3_DETENT_R, T3_DETENT_L = 0.5, 6.0
 C4_L, C4_W, C4_T, C4_BARB = 14.0, 4.0, 2.0, 0.9
 
 
-def _clear(decorative):
+def _clear(decorative, override=None):
+    """Per-side clearance for a socket.
+
+    `override` exists for one caller only -- the fit coupon, which has to cut several
+    bores at DIFFERENT clearances on one plate. Without it the coupon's six-station
+    ladder printed six identical sockets and measured nothing but repeatability.
+    """
+    if override is not None:
+        return override
     return P.DECORATIVE_CLEARANCE if decorative else P.FIT_CLEARANCE
 
 
@@ -124,17 +138,19 @@ def peg_p1(point, axis="+Z", rot=0.0):
     return _place(_p1_solid(), point, axis, rot)
 
 
-def socket_p1_solids(point, axis="+Z", rot=0.0, depth=None, decorative=True):
+def socket_p1_solids(point, axis="+Z", rot=0.0, depth=None, decorative=True,
+                     clear=None, ribs=False):
     """Bore for a peg travelling along `axis` from `point`.
 
     Returns (cut_solid, add_solid) so a wall can batch hundreds of mounts into two
     booleans instead of hundreds.
     """
-    c = _clear(decorative)
+    c = _clear(decorative, clear)
     d = depth or (P1_L + 0.6)
     bore = _d_solid(P1_D + 2 * c, P1_FLAT + c, d)
     bore = bore.union(_leadin_round(P1_D + 2 * c))
-    return _place(bore, point, axis, rot), None
+    add = _place(_rib_round(P1_D / 2, c, d), point, axis, rot) if ribs else None
+    return _place(bore, point, axis, rot), add
 
 
 def socket_p1(wp, point, axis="+Z", rot=0.0, depth=None, decorative=True):
@@ -155,15 +171,21 @@ def peg_p2(point, axis="+Z", rot=0.0):
     return _place(out, point, axis, rot)
 
 
-def socket_p2_solids(point, axis="+Z", rot=0.0, depth=None, decorative=True):
-    c = _clear(decorative)
+def socket_p2_solids(point, axis="+Z", rot=0.0, depth=None, decorative=True,
+                     clear=None, ribs=False):
+    c = _clear(decorative, clear)
     d = depth or (P2_L + 0.6)
-    bores = None
+    bores, add = None, None
     for dx, dia in ((-P2_SPACING / 2, P2_DA), (P2_SPACING / 2, P2_DB)):
         b = (cq.Workplane("XY").circle(dia / 2 + c).extrude(d)
              .union(_leadin_round(dia + 2 * c)).translate((dx, 0, 0)))
         bores = b if bores is None else bores.union(b)
-    return _place(bores, point, axis, rot), None
+        if ribs:
+            # no D-flat on a P2 bore, so the ribs go on thirds
+            r = _rib_round(dia / 2, c, d, angles=(0.0, 120.0, 240.0)).translate((dx, 0, 0))
+            add = r if add is None else add.union(r)
+    return (_place(bores, point, axis, rot),
+            _place(add, point, axis, rot) if add is not None else None)
 
 
 def socket_p2(wp, point, axis="+Z", rot=0.0, depth=None, decorative=True):
@@ -217,6 +239,40 @@ def _rib_solid(w, h, depth, clearance, n=2):
                  .box(width, min(h * 0.6, 1.6), depth / (n + 2))
                  .translate((sx * (inner + width / 2), 0, zc)))
             ribs = r if ribs is None else ribs.union(r)
+    return ribs
+
+
+RIB_ARC = 0.9    # tangential width of one round-bore crush rib
+
+
+def _rib_round(r_peg, clearance, depth, angles=(0.0, 180.0, 270.0)):
+    """Crush ribs for a ROUND bore.
+
+    The printed ladder said what a fixed clearance cannot fix: seven sockets cut to the
+    same number, three held the peg and four dropped it. The scatter between one socket
+    and the next is larger than the whole 0.20-0.45 range the ladder was meant to span,
+    so no single clearance gives a repeatable press fit on a 2.4 mm peg.
+
+    A crush rib absorbs exactly that scatter -- it stands proud of the bore wall by the
+    clearance plus a fixed bite, so it meets the peg whether that particular bore came
+    out 0.1 mm tight or 0.1 mm loose, and shears to suit. The ribs the kit used to carry
+    were the rectangular kind, on a rectangular bore whose corners the nozzle could not
+    cut; that pairing is what failed, not the rib.
+
+    Ribs sit at 0, 180 and 270 degrees. The D-flat is at +Y and spans roughly 56 to 124
+    degrees, so none of the three lands on it -- a rib on the flat would fight the very
+    face that keys the peg's rotation.
+    """
+    inner = r_peg - P.CRUSH_INTERFERENCE
+    outer = r_peg + clearance + RIB_EMBED
+    width = outer - inner
+    ribs = None
+    for a in angles:
+        r = (cq.Workplane("XY")
+             .box(width, RIB_ARC, depth * 0.70, centered=(True, True, False))
+             .translate((inner + width / 2, 0, depth * 0.15))
+             .rotate((0, 0, 0), (0, 0, 1), a))
+        ribs = r if ribs is None else ribs.union(r)
     return ribs
 
 
