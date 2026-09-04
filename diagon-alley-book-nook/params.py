@@ -23,8 +23,16 @@ PANEL_SPLIT = (BOOKNOOK_HEIGHT + 6.0) > min(BED_X, BED_Y)   # False at 256
 # value to BOTH clearances, so both are 0.25 -- 0.20 was the value that test rejected,
 # and leaving the decorative mounts there would make every one of them tighter than
 # anything actually tried by hand.
-FIT_CLEARANCE        = 0.25   # press and snap mounts -- P1, P2, C4 -- per side
-DECORATIVE_CLEARANCE = 0.25   # decorative snap-ins, per side
+# 0.30, and the joint is GLUED, not pressed. Two printed coupons said so. Plate 1: seven
+# sockets cut to one number, three held the peg and four dropped it -- the scatter
+# between one socket and the next is wider than the whole 0.20-0.45 range, so no
+# clearance gives a repeatable press fit. Plate 2 tried crush ribs against that scatter:
+# on P1 they held every time but bit so hard the peg could not be pulled back out, and
+# on P2, with two pegs and six ribs, the part would not go in at all. A joint that is
+# either permanent or impossible is not a joint. 0.30 plain inserts every time on both
+# and drops out on both, which is exactly what a glued locator should do.
+FIT_CLEARANCE        = 0.30   # P1, P2, C4 -- per side. Locating only; glue retains.
+DECORATIVE_CLEARANCE = 0.30   # decorative snap-ins, per side -- also glued
 T3_CLEARANCE         = 0.30   # T3 sliding tongues, per side. A joint you SLIDE wants
                               # more room than one you PRESS: on the printed joint
                               # coupon (74A/74B) the C4 snap was right at 0.25 and the
@@ -32,7 +40,8 @@ T3_CLEARANCE         = 0.30   # T3 sliding tongues, per side. A joint you SLIDE 
                               # crush ribs are sized from the clearance -- so this only
                               # buys the tongue an easier entry.
 SLIP_CLEARANCE       = 0.35   # chassis sliding into the case, per side
-CRUSH_INTERFERENCE   = 0.15  # how far each sacrificial rib bites INTO the peg. This
+CRUSH_INTERFERENCE   = 0.15  # T3 ONLY now -- P1 and P2 carry no ribs; see plate 2 in
+                             # docs/09_COUPON_RESULTS.md. How far a rib bites the peg. This
                              # is an interference, NOT a rib height: the rib is sized
                              # from the clearance so the bite stays constant however
                              # you set the clearances above. A fixed rib measured from

@@ -114,23 +114,50 @@ def check_all_mates():
 
 
 def check_keying():
-    """A keyed mount must NOT accept its part rotated 180 degrees."""
+    """A keyed mount must NOT accept its part rotated 180 degrees -- at ANY clearance.
+
+    The sweep is the point. P1's key is a flat chord, and turned the wrong way round the
+    peg presents its arc at P1_D/2 where the bore presents its flat at P1_FLAT +
+    clearance: the key works only while the second is smaller than the first. With the
+    old 1.0 mm flat that stopped being true at 0.20, so the kit's 0.25 had a P1 that
+    keyed nothing, and it took raising the clearance to 0.30 for anything to say so.
+    A check that only ever looks at today's number cannot see a cliff one step away.
+    """
     print("\n[keying] wrong-way-round rejection")
+    real = (P.DECORATIVE_CLEARANCE, P.FIT_CLEARANCE)
     plate = cq.Workplane("XY").box(40, 40, 6, centered=(True, True, False))
-    for name, peg_fn, sock_fn in (("P1", MT.peg_p1, MT.socket_p1_solids),
-                                  ("P2", MT.peg_p2, MT.socket_p2_solids)):
-        cut, _ = sock_fn((0, 0, 6), axis="-Z")
-        bored = plate.cut(cut)
-        right = bored.intersect(peg_fn((0, 0, 6), axis="-Z"))
-        vr = right.val().Volume() if right.val().Solids() else 0.0
-        flipped = bored.intersect(peg_fn((0, 0, 6), axis="-Z", rot=180))
-        vf = flipped.val().Volume() if flipped.val().Solids() else 0.0
-        if vr > 0.05:
-            fail(f"{name}: correct orientation does not seat ({vr:.2f} mm^3)")
-        elif vf < 0.2:
-            fail(f"{name}: accepts a 180 deg install -- the key does nothing")
-        else:
-            ok(f"{name}: seats one way only (wrong way fouls by {vf:.2f} mm^3)")
+    sweep = (0.20, 0.25, 0.30, 0.35, 0.40, 0.45)
+    try:
+        for name, peg_fn, sock_fn in (("P1", MT.peg_p1, MT.socket_p1_solids),
+                                      ("P2", MT.peg_p2, MT.socket_p2_solids)):
+            here, cliff = None, None
+            for v in sweep:
+                P.DECORATIVE_CLEARANCE = P.FIT_CLEARANCE = v
+                cut, _ = sock_fn((0, 0, 6), axis="-Z")
+                bored = plate.cut(cut)
+                right = bored.intersect(peg_fn((0, 0, 6), axis="-Z"))
+                vr = right.val().Volume() if right.val().Solids() else 0.0
+                flipped = bored.intersect(peg_fn((0, 0, 6), axis="-Z", rot=180))
+                vf = flipped.val().Volume() if flipped.val().Solids() else 0.0
+                if vr > 0.05:
+                    fail(f"{name} @ {v:.2f}: correct orientation does not seat "
+                         f"({vr:.2f} mm^3)")
+                    continue
+                if vf < 0.2 and cliff is None:
+                    cliff = v
+                if abs(v - real[1]) < 1e-9:
+                    here = vf
+            if here is None:
+                warn(f"{name}: FIT_CLEARANCE {real[1]} is not in the swept range")
+            elif here < 0.2:
+                fail(f"{name}: accepts a 180 deg install at the configured "
+                     f"{real[1]:.2f} -- the key does nothing")
+            else:
+                last = max(v for v in sweep if cliff is None or v < cliff)
+                ok(f"{name}: seats one way only at {real[1]:.2f} (wrong way fouls by "
+                   f"{here:.2f} mm^3); the key stops working above {last:.2f}")
+    finally:
+        P.DECORATIVE_CLEARANCE, P.FIT_CLEARANCE = real
 
 
 def check_clearance_sanity():
@@ -138,18 +165,19 @@ def check_clearance_sanity():
     if P.DECORATIVE_CLEARANCE > P.FIT_CLEARANCE:
         warn("DECORATIVE_CLEARANCE > FIT_CLEARANCE: decorative parts will be looser "
              "than structural ones, which is usually backwards")
+    # CRUSH_INTERFERENCE reaches only T3 now: P1 and P2 are glued locators with no ribs.
     if P.CRUSH_INTERFERENCE > 0.30:
-        warn(f"CRUSH_INTERFERENCE {P.CRUSH_INTERFERENCE} is a lot of material to shear "
-             "-- parts will need real force")
+        warn(f"CRUSH_INTERFERENCE {P.CRUSH_INTERFERENCE} is a lot of material for a T3 "
+             "tongue to shear -- it will need real force to slide")
     if P.CRUSH_INTERFERENCE < 0.06:
-        warn(f"CRUSH_INTERFERENCE {P.CRUSH_INTERFERENCE} may not grip once painted")
+        warn(f"CRUSH_INTERFERENCE {P.CRUSH_INTERFERENCE} may not hold a T3 once painted")
     if P.LEAD_IN_CHAMFER <= 0:
         fail("LEAD_IN_CHAMFER is 0: sockets will be undersize after elephant's foot "
              "and the kit will not assemble")
     else:
         ok(f"lead-in {P.LEAD_IN_CHAMFER}, press/decorative/slide clearances "
            f"{P.FIT_CLEARANCE}/{P.DECORATIVE_CLEARANCE}/{P.T3_CLEARANCE}, "
-           f"rib bite {P.CRUSH_INTERFERENCE}")
+           f"T3 rib bite {P.CRUSH_INTERFERENCE}")
     if P.T3_CLEARANCE < P.FIT_CLEARANCE:
         warn(f"T3_CLEARANCE {P.T3_CLEARANCE} is tighter than FIT_CLEARANCE "
              f"{P.FIT_CLEARANCE} -- a joint you slide should not be tighter than one "
@@ -258,35 +286,43 @@ def check_assembled_envelope():
                  "open so it will not foul, but check it against the bezel")
 
 
-def check_grip_across_clearances():
-    """Retention must survive the user actually changing the clearance.
+GLUE_GAP_MIN, GLUE_GAP_MAX = 0.15, 0.45     # per side, for a gel CA joint
 
-    The tolerance coupon invites setting FIT_CLEARANCE anywhere from 0.20 to 0.35. With
-    a fixed-height crush rib measured from the bore wall, everything at or above 0.30
-    had ZERO grip and every part in the kit would have fallen out -- silently, because
-    the geometry is still perfectly valid.
+
+def check_glue_gap_across_clearances():
+    """P1 and P2 are glued locators, so what matters is that they always go together.
+
+    This check used to demand crush-rib GRIP at every clearance, because the kit used
+    to rely on an interference fit. Two printed coupons ended that: a fixed clearance
+    cannot beat this printer's socket-to-socket scatter -- seven identical sockets, three
+    held and four dropped -- and ribs beat it far too well, giving a P1 joint that could
+    not be pulled apart and a P2 joint that would not go together.
+
+    So the requirement is now the opposite of grip. At every clearance anyone might set,
+    the peg must enter its bore with NOTHING fouling, and the annulus left around it must
+    be a gap a gel cyanoacrylate can actually bridge: too tight and the glue is scraped
+    off on the way in, too loose and the part floats while it sets.
     """
-    print("\n[fit] crush-rib grip across the usable clearance range")
+    print("\n[fit] the glued locator goes together across the usable clearance range")
     real = (P.DECORATIVE_CLEARANCE, P.FIT_CLEARANCE)
     try:
         for v in (0.15, 0.20, 0.25, 0.30, 0.35, 0.40):
             P.DECORATIVE_CLEARANCE = P.FIT_CLEARANCE = v
             plate = cq.Workplane("XY").box(30, 30, 6, centered=(True, True, False))
-            c1, r1 = MT.socket_p1_solids((0, 8, 6), axis="-Z")
-            c2, r2 = MT.socket_p2_solids((0, -6, 6), axis="-Z")
+            c1, _r1 = MT.socket_p1_solids((0, 8, 6), axis="-Z")
+            c2, _r2 = MT.socket_p2_solids((0, -6, 6), axis="-Z")
             bored = plate.cut(c1).cut(c2)
-            ribbed = bored.union(r1).union(r2)
             pegs = MT.peg_p1((0, 8, 6), axis="-Z").union(MT.peg_p2((0, -6, 6), axis="-Z"))
             f = bored.intersect(pegs)
-            g = ribbed.intersect(pegs)
             fv = f.val().Volume() if f.val().Solids() else 0.0
-            gv = (g.val().Volume() if g.val().Solids() else 0.0) - fv
             if fv > 0.05:
-                fail(f"clearance {v:.2f}: peg fouls the bore by {fv:.2f} mm^3")
-            elif gv < 0.30:
-                fail(f"clearance {v:.2f}: grip is only {gv:.2f} mm^3 -- parts fall out")
+                fail(f"clearance {v:.2f}: peg fouls the bore by {fv:.2f} mm^3 -- "
+                     "it will not go in")
+            elif not GLUE_GAP_MIN <= v <= GLUE_GAP_MAX:
+                warn(f"clearance {v:.2f} is outside the {GLUE_GAP_MIN}-{GLUE_GAP_MAX} mm "
+                     "a gel CA joint wants per side")
             else:
-                ok(f"clearance {v:.2f}: clears the bore, grip {gv:.2f} mm^3")
+                ok(f"clearance {v:.2f}: enters clean, {v:.2f} mm of glue gap per side")
     finally:
         P.DECORATIVE_CLEARANCE, P.FIT_CLEARANCE = real
 
@@ -471,8 +507,8 @@ def check_facade_seating():
 
     That was 20 of the 49 parts touching the left wall, from 0.4 mm^3 under a window
     frame to 48.8 under the rear cornice, and it was found by hand after 13A would not
-    seat. Interference with the PLATE is a different matter and is deliberate: it is
-    the crush ribs, 0.15 mm of bite each, and this check leaves them alone.
+    seat. Seating matters more now than it did: with the mounts glued rather than
+    pressed, the back face against the plate is what holds a part square, not the peg.
     """
     print("\n[fit] facade parts seat on the plate, not on the brick")
     import cadquery as cq
@@ -773,7 +809,7 @@ if __name__ == "__main__":
     check_keying()
     check_fits()
     check_all_mates()
-    check_grip_across_clearances()
+    check_glue_gap_across_clearances()
     check_coupon_tab_flips()
     check_joint_coupon()
     check_t3_grip()

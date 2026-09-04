@@ -10,8 +10,11 @@ Four types, each with a matched peg/socket pair so clearances can never drift ap
 Two rules are load-bearing and must not be "cleaned up":
   * every socket mouth gets a 45 deg lead-in chamfer, or first-layer squish and
     elephant's foot make every socket undersize and the kit will not assemble;
-  * grip comes from sacrificial crush ribs, not from a tight nominal fit, so the
-    kit tolerates printer-to-printer variation.
+  * P1 and P2 LOCATE, they do not RETAIN. They are glued. Two printed coupons settled
+    it: a fixed clearance cannot beat this printer's socket-to-socket scatter, and
+    crush ribs beat it far too well -- on P1 the peg could not be pulled back out, on
+    P2 it would not go in. T3 keeps its ribs and its detent; it was validated on a
+    printed coupon and it slides rather than presses. docs/09_COUPON_RESULTS.md.
 """
 import cadquery as cq
 import params as P
@@ -35,14 +38,20 @@ PEG_ROOT = 1.0   # Every peg starts this far INSIDE its parent. Sized exactly to
 # meets the arc the bore turns through an obtuse angle, which a round nozzle traces
 # accurately.
 #
-# Crush ribs came off with the corners and are coming back on a switch (`ribs=`), for a
-# reason the first printed coupon supplied: seven sockets cut to the SAME number held
-# the peg three times out of seven. A fixed clearance cannot cover scatter that wide,
-# and a rib is the standard thing that can -- it is sized from the clearance, so it
-# meets the peg whether the bore printed tight or loose. It was the rectangular bore it
-# lived in that failed, not the rib. docs/09_COUPON_RESULTS.md has the numbers; the
-# kit stays plain until the ribbed plate comes back.
-P1_D, P1_FLAT, P1_L = 2.4, 1.0, 3.5     # dia, flat this far off axis, length
+# `ribs=` exists and is off, and stays off. The ribbed plate came back: on P1 every
+# ribbed socket held, and held so hard the peg could not be pulled out again; on P2,
+# two pegs and six ribs, the part would not enter at all. The rib does beat the
+# socket-to-socket scatter -- it beats it into a joint you can only assemble once, or
+# not at all. Plain 0.30 goes in every time and drops out every time, which is what a
+# locator should do when the glue is doing the holding.
+# The flat has to be deeper than the clearance or it keys nothing: turned 180 degrees,
+# the peg presents its ARC at radius P1_D/2 where the bore presents its flat at
+# P1_FLAT + clearance, so the wrong way round only fouls while
+# P1_FLAT + clearance < P1_D/2. At the old 1.0 that meant clearance under 0.20 -- so the
+# key had already stopped working at the kit's 0.25 and would have gone on doing
+# nothing at 0.30. 0.6 leaves 0.30 mm of interference the wrong way round at 0.30
+# clearance, and still keeps 3.6 of the peg's 4.5 mm^2 of section.
+P1_D, P1_FLAT, P1_L = 2.4, 0.6, 3.5     # dia, flat this far off axis, length
 # ------------------------------------------------------------- P2 standard ---
 # Two ROUND pegs of unequal diameter. The pair prevents rotation and the difference in
 # diameter is the key: the part physically cannot go in backwards.

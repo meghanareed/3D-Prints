@@ -137,3 +137,57 @@ carries it have to move together, a fascia nameplate belongs on the fascia board
 than on the wall behind it, and the poster layer belongs on the notice board. That
 happens when the kit is regenerated after the coupon settles, and the check will say
 when it is done.
+
+---
+
+## Plate 2 — printed. The answer is glue.
+
+| Station | Reported |
+|---|---|
+| P1 `P30` ×3 | all three drop the peg |
+| P1 `R30` ×3 | all three hold — but very tight, and **cannot be removed once inserted** |
+| P1 `R40` ×3 | all three hold — same, cannot be removed |
+| P2 `P30` ×2 | both drop the peg |
+| P2 `R30` ×2 | **will not insert at all** |
+
+The ribs work. They work far too well. On one peg they turn the joint permanent; on two
+pegs and six ribs they turn it impossible. A joint that can only be assembled once, or
+not at all, is not a joint on a kit with 182 parts and a first-time builder.
+
+And plain 0.30 does exactly what it should: it enters every time on both mounts and
+falls out every time. That is a perfect **locating** feature and a hopeless retaining
+one — which is fine, because there is no reason a book-nook facade has to come apart.
+
+### The decision
+
+**P1 and P2 locate. Glue retains.** `FIT_CLEARANCE` and `DECORATIVE_CLEARANCE` are
+0.30. `ribs=` stays in `lib/mount.py`, off, with this result recorded next to it. T3
+keeps its ribs and its detent: it is a sliding joint, it was validated on a printed
+coupon, and nothing here touches it.
+
+### What the change moved
+
+Raising the clearance to 0.30 broke P1's key, and `check_keying` caught it. The flat
+only keys while `P1_FLAT + clearance < P1_D/2`; at the old flat of 1.0 that meant
+clearance under 0.20, so the key had **already** been doing nothing at the kit's 0.25
+and nobody knew. The flat is 0.6 now, which leaves 0.30 mm of interference the wrong way
+round and keeps 3.6 of the peg's 4.5 mm² of section. `check_keying` sweeps the clearance
+range instead of testing today's number, and reports where each key gives out: P1 above
+0.45, P2 above 0.35.
+
+`check_grip_across_clearances` is gone. In its place `check_glue_gap_across_clearances`
+asks the opposite question — that the peg enters with nothing fouling, and that the
+annulus left round it is a gap gel cyanoacrylate can bridge.
+
+### Gluing
+
+- **Gel cyanoacrylate**, not thin. Thin CA wicks along the joint and out onto the brick
+  face before it sets; gel stays in the 0.30 mm annulus where it is put.
+- One small bead **in the socket**, not on the peg — a bead on the peg is scraped off
+  by the bore on the way in and ends up as a ring of glue on the wall face.
+- Dry-fit the whole wall first. Every part goes in and comes out freely, which is the
+  point of 0.30, so there is no cost to laying the entire facade out unglued, looking at
+  it, and only then gluing.
+- The part is squared by its **back face against the plate**, not by the peg. That is
+  why `check_facade_seating` matters more under a glued design than it did under a
+  pressed one.
