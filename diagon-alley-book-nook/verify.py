@@ -10,6 +10,8 @@ import json
 import os
 import sys
 
+import math
+
 import cadquery as cq
 
 import params as P
@@ -243,6 +245,58 @@ def check_sign_text():
         else:
             ok(f"{it['id']}: {dv:.1f} mm^3 raised, standing {ab.zmax - ab.zmin:.1f} mm "
                f"proud, text up")
+
+
+def check_sign_hanging():
+    """A hanging sign has to be assemblable after it is printed.
+
+    This is the check that was missing when three of the kit's most visible parts --
+    the Ollivanders, Eeylops and Scribbulus swing signs -- had no way to attach to
+    anything. Their plates carry two closed eyes, the brackets carry a closed eye, and
+    the chain between them is printed with closed end links. Three closed rings cannot
+    be threaded together once they exist, and nothing in this file looked.
+
+    So: the hook must be OPEN, its wire must pass both eyes with clearance, and the
+    printed chain -- which is a decorative prop, not a working chain -- must not be
+    mistaken for the thing that carries the sign.
+    """
+    print("\n[signs] a hanging sign can actually be hung")
+    import lib.sign as SG
+
+    hook = SG.s_hook()
+    n = len(hook.val().Solids())
+    ring = (cq.Workplane("XY").circle(2.7 + SG.HOOK_WIRE / 2).extrude(SG.HOOK_WIRE)
+            .cut(cq.Workplane("XY").circle(2.7 - SG.HOOK_WIRE / 2)
+                 .extrude(SG.HOOK_WIRE)))
+    if n != 1:
+        fail(f"the hook is {n} solids")
+    elif hook.val().Volume() >= ring.val().Volume() - 0.05:
+        fail("the hook is a CLOSED ring -- it cannot be sprung into an eye")
+    else:
+        ok(f"hook is open, {SG.HOOK_WIRE} mm wire, "
+           f"{ring.val().Volume() - hook.val().Volume():.1f} mm^3 of mouth cut out")
+
+    slack = SG.EYE_HOLE - SG.HOOK_WIRE
+    if slack < 0.6:
+        fail(f"eye {SG.EYE_HOLE} takes {SG.HOOK_WIRE} wire with only {slack:.2f} mm "
+             "spare -- it will not pass")
+    else:
+        ok(f"eye {SG.EYE_HOLE} mm passes {SG.HOOK_WIRE} mm wire with {slack:.2f} to spare")
+
+    # every swing sign, and every bracket, must present that eye
+    import data.facade as F
+    from parts import kit as KT
+    for it in KT.signs():
+        row = next(r for r in F.SIGNS if r["id"] == it["id"])
+        if row["kind"] != "swing":
+            continue
+        holes = [f for f in it["solid"].faces("%CYLINDER").vals()
+                 if abs(f.Area() / (2 * math.pi * SG.PLATE_T) - SG.EYE_HOLE / 2) < 0.25]
+        if len(holes) < 2:
+            fail(f"{it['id']} {it['name']}: {len(holes)} eye(s) of {SG.EYE_HOLE} mm "
+                 "-- a swing sign hangs by two")
+        else:
+            ok(f"{it['id']} {it['name']}: two {SG.EYE_HOLE} mm eyes")
 
 
 def check_clearance_sanity():
@@ -941,6 +995,7 @@ if __name__ == "__main__":
     print("Crooked Lane Book Nook -- verification")
     check_clearance_sanity()
     check_sign_text()
+    check_sign_hanging()
     check_envelope()
     check_assembled_envelope()
     check_light_block()

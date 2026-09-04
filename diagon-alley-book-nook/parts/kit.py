@@ -88,6 +88,11 @@ def brackets():
     # made the printed pegs come out blobbed.
     out.append(dict(id="32D", name="Mount_Pin_x16", solid=pin_sprue(16),
                     side=None, u=0, z=0))
+    # The open hook a hanging sign actually hangs by. Without it the sign's eye, the
+    # bracket's eye and the chain's end links are three closed rings and the assembly
+    # is impossible, which is what 30B, 30C and 30H shipped as.
+    out.append(dict(id="32E", name="Sign_Hook_x8", solid=S.hook_sprue(8),
+                    side=None, u=0, z=0))
     return out
 
 

@@ -15,6 +15,15 @@ from lib.util import try_fillet, emboss_text
 # plate takes a 1.6 mm bore, one 3.2 mm pin fits every joint, and the plate is stiffer.
 PLATE_T = 2.4
 
+# A hanging sign hangs on something. Both halves of that joint used to be CLOSED rings
+# -- a 1.6 mm eye on the sign, a 1.7 mm eye on the bracket tip -- with a printed chain
+# between them whose end links were closed too. Three closed loops cannot be threaded
+# together after printing, so 30B, 30C and 30H had no way to attach to anything at all.
+# The eyes are wider now and an open hook (s_hook, part 32E) springs into both.
+EYE_HOLE = 2.4          # both eyes, so one hook size fits every hanging sign
+EYE_WALL = 1.1          # ring material around the hole
+HOOK_WIRE = 1.4         # section of the open hook: passes a 2.4 eye with 1.0 to spare
+
 
 def _fit_size(txt, w, h):
     """Pick a size that actually fits the plate. Letters that overhang the plate edge
@@ -141,10 +150,11 @@ def plate_swing(w, h, txt="", t=PLATE_T):
     """Projecting swing sign: plate plus two hanging eyes for the chain."""
     body = cq.Workplane("XY").box(w, h, t, centered=(True, True, False))
     body = try_fillet(body, "|Z", 1.2)
+    r_in = EYE_HOLE / 2
     for s in (-1, 1):
-        eye = (cq.Workplane("XY").circle(1.6).extrude(t)
-               .cut(cq.Workplane("XY").circle(0.8).extrude(t))
-               .translate((s * (w / 2 - 3.0), h / 2 + 1.4, 0)))
+        eye = (cq.Workplane("XY").circle(r_in + EYE_WALL).extrude(t)
+               .cut(cq.Workplane("XY").circle(r_in).extrude(t))
+               .translate((s * (w / 2 - 3.4), h / 2 + r_in + EYE_WALL - 0.6, 0)))
         body = body.union(eye)
     return _text_on(body, txt, w * 0.86, h, top_z=t)
 
@@ -186,11 +196,12 @@ def bracket_scroll(reach=14.0, drop=16.0, t=2.4, w=2.6):
                             .center(reach * 0.5, -drop * 0.42)
                             .circle(drop * 0.20 - 1.1).extrude(-w)))
     body = body.union(curl)
-    # tip eye for the sign to hang from
-    body = body.union(cq.Workplane("XZ").center(reach - 1.5, -t - 1.6).circle(1.7)
-                      .extrude(-w)
-                      .cut(cq.Workplane("XZ").center(reach - 1.5, -t - 1.6).circle(0.85)
-                           .extrude(-w)))
+    # tip eye for the sign to hang from -- same hole as the sign's, so one hook fits both
+    r_in = EYE_HOLE / 2
+    body = body.union(cq.Workplane("XZ").center(reach - 1.5, -t - r_in - EYE_WALL)
+                      .circle(r_in + EYE_WALL).extrude(-w)
+                      .cut(cq.Workplane("XZ").center(reach - 1.5, -t - r_in - EYE_WALL)
+                           .circle(r_in).extrude(-w)))
     body = body.union(peg_p1((0.0, w / 2, -drop * 0.5), axis="-X"))
     return _to_part_frame(body)
 
@@ -219,6 +230,33 @@ def chain(links=4, link_l=5.0, link_w=3.0, wire=0.9):
                            (0, i * (link_l - link_w * 0.6), 1), 90)
         body = lk if body is None else body.union(lk)
     return body
+
+
+def s_hook(gap=2.0, wire=HOOK_WIRE, mean_r=2.7):
+    """An OPEN ring, so it can be sprung into two closed eyes after printing.
+
+    This is the part that was missing. It prints lying flat -- a split washer, one
+    extrusion tall at the thinnest -- and it is the only piece in the kit meant to be
+    elastic, so it wants to come off the plate with the layer lines running round it.
+    """
+    ring = (cq.Workplane("XY").circle(mean_r + wire / 2).extrude(wire)
+            .cut(cq.Workplane("XY").circle(mean_r - wire / 2).extrude(wire)))
+    mouth = (cq.Workplane("XY").box(mean_r * 2 + wire * 2, gap, wire,
+                                    centered=(False, True, False))
+             .translate((0, 0, 0)))
+    return ring.cut(mouth)
+
+
+def hook_sprue(n=8, pitch=8.0):
+    """n hooks on a runner. They are 6 mm across and would otherwise be lost."""
+    out = None
+    for i in range(n):
+        h = s_hook().translate((0, pitch * i, 0))
+        out = h if out is None else out.union(h)
+    bar = (cq.Workplane("XY").box(1.2, pitch * (n - 1) + 6.0, 0.9,
+                                  centered=(True, True, False))
+           .translate((-2.7 - HOOK_WIRE / 2 + 0.4, pitch * (n - 1) / 2, 0)))
+    return out.union(bar)
 
 
 def rail_hook(h=6.0, t=2.0, w=4.0):

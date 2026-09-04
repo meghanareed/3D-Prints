@@ -21,7 +21,14 @@ small enough to be cheap and carries one of each:
   the real name plate that pins onto it, which is the other place a pin has to work.
   Every one of them is the part the kit will ship, at the clearance it will ship.
 
-4 g. Print it, dry-fit every joint, and glue nothing until they all go together.
+  THE HANGING SIGN.  30H, its bracket 31D and the open hook that joins them. The first
+  version of this plate carried 30H on its own to see whether the smallest lettering in
+  the kit reads -- which was a piece that fitted nothing, on a plate about fits. Asking
+  what it mated with is what turned up the real answer: nothing, ever. Its eyes and the
+  bracket's were closed rings with a closed-link chain between them.
+
+EVERY PIECE HERE MATES WITH ANOTHER PIECE HERE. If one does not, it should not be on
+the plate. Print it, dry-fit every joint, and glue nothing until they all go together.
 """
 import os
 import sys
@@ -44,9 +51,9 @@ OUT = os.path.join(HERE, "out", "coupon")
 TILE_AROUND = (98.0, 27.0)     # 30D's socket, in wall-local (u, z)
 TILE_PAD = 8.0
 WALL_PRINT_ROT = ("Y", -90)    # the wall face prints brick-up and flat; so does a tile
-# 30H carries the smallest lettering in the kit, 3.81 mm, just over the floor:
-# the worst case for whether raised text reads on a 0.4 mm nozzle.
-PIECES = ["30D", "11K", "30J", "30H", "32D"]
+# 30H carries the smallest lettering in the kit, 3.81 mm, just over the floor -- and it
+# comes with 31D, the bracket it hangs from, and 32E, the hook that joins them.
+PIECES = ["30D", "11K", "30J", "30H", "31D", "32D", "32E"]
 
 
 def wall_tile(side="L", around=TILE_AROUND, pad=TILE_PAD):
