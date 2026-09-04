@@ -246,7 +246,17 @@ def check_sign_text():
         if pb.zmax - ab.zmax > 1.0:
             warn(f"{it['id']}: the lettering sits {pb.zmax - ab.zmax:.2f} mm below the "
                  "top of the plate -- check nothing is standing over it")
-        if ab.zmin < 0.2:
+        # ...and it has to stay ON the plate. _fit_size used to assume 0.62 em of advance
+        # per character; all-caps bold serif is nearer 0.72, so POTIONS and APOTHECARY
+        # both ran off the edge of the part they were cut into. It measures the string
+        # now, and this asserts the result rather than trusting the arithmetic.
+        blank_b = B.print_orient(blank, rot).translate((0, 0, dz)).val().BoundingBox()
+        over = max(blank_b.xmin - ab.xmin, ab.xmax - blank_b.xmax,
+                   blank_b.ymin - ab.ymin, ab.ymax - blank_b.ymax)
+        if over > -0.2:
+            fail(f"{it['id']}: the lettering overhangs the plate by {over:.2f} mm -- "
+                 "letters off the edge come out as loose solids")
+        elif ab.zmin < 0.2:
             fail(f"{it['id']}: the lettering reaches the bed -- it prints face down")
         else:
             ok(f"{it['id']}: {dv:.1f} mm^3 raised, standing {ab.zmax - ab.zmin:.1f} mm "

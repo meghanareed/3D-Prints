@@ -323,6 +323,43 @@ def _rib_round(r_peg, clearance, depth, angles=(0.0, 180.0, 270.0)):
     return ribs
 
 
+# ------------------------------------------------------- T5: flat wall tenon --
+#
+# For a part that mounts EDGE-ON to the wall: a hanging sign turned to face the alley
+# lies in a plane containing the wall's normal, so anything joining it to the wall runs
+# along that plane. A round peg there is a horizontal cylinder floating at mid-thickness
+# with nothing under it -- printed flat it droops off the edge of the part, and the post
+# it grows from is only 2.6 mm thick, too thin to bore a socket into instead.
+#
+# A tenon in the part's own plane has neither problem. It is the same material at the
+# same height, so it prints as a flat extension with no overhang anywhere, and the wall
+# takes a mortise. The corners are chamfered because a mortise cut by a round nozzle has
+# internal corners radiused to about half a line width, and sharp external corners bind
+# on them long before the flats meet -- the failure this whole kit was rebuilt around.
+T5_W, T5_H, T5_L = 4.0, 2.6, 2.2      # across the post, its thickness, into the wall
+T5_CHAMFER = 0.6
+
+
+def tenon_t5(point, axis="+Z", rot=0.0, w=T5_W, h=T5_H, length=T5_L, root=PEG_ROOT):
+    body = (cq.Workplane("XY").box(w, h, length + root, centered=(True, True, False))
+            .translate((0, 0, -root)))
+    body = try_chamfer(body, "|Z", T5_CHAMFER)
+    body = try_chamfer(body, ">Z", 0.3)
+    return _place(body, point, axis, rot)
+
+
+def mortise_t5_solids(point, axis="+Z", rot=0.0, depth=None, decorative=True,
+                      clear=None, w=T5_W, h=T5_H):
+    c = _clear(decorative, clear)
+    d = depth or (T5_L + 0.6)
+    slot = cq.Workplane("XY").box(w + 2 * c, h + 2 * c, d, centered=(True, True, False))
+    slot = slot.union(cq.Workplane("XY")
+                      .box(w + 2 * c + 2 * P.LEAD_IN_CHAMFER,
+                           h + 2 * c + 2 * P.LEAD_IN_CHAMFER, P.LEAD_IN_CHAMFER,
+                           centered=(True, True, False)))
+    return _place(slot, point, axis, rot), None
+
+
 # ============================================================== T3: tongue ======
 def tongue_t3(point, length, axis="+Z", rot=0.0, extra=0.0):
     """`extra` lengthens the root so a tongue can bridge a standoff gap before it

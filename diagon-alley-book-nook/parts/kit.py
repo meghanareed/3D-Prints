@@ -12,7 +12,7 @@ from lib import sign as S
 from lib import prop as PR
 from lib.light import baffle_cap, coil_bay_cover, diffuser_plate, puck_cradle
 from lib.mount import (peg_p1, pin_sprue, socket_p1_solids, socket_p2_solids,
-                       tolerance_coupon,
+                       mortise_t5_solids, tolerance_coupon,
                        joint_coupon, joint_coupon_pieces, c4_clip, P1_L, P2_L)
 from lib.util import keep_largest, compound
 from parts.decor import to_wall, FACE
@@ -216,9 +216,19 @@ def wall_mount_cuts(side):
     leave its crush ribs floating in the service gap.
     """
     cuts, adds = [], []
-    for _kind, row, rot, offsets in wall_mount_rows(side):
+    for kind, row, rot, offsets in wall_mount_rows(side):
+        # Anything carried on a bracket arm meets the wall edge-on and joins it with a
+        # flat tenon; everything else lies against the wall and takes a round pin.
+        edge_on = len(offsets) > 1
         for du, dz in offsets:
-            c, a = socket_p1_solids((0.0, 0.0, 0.0), axis="-Z", rot=rot, depth=FACE)
+            if edge_on:
+                # NOT scaled by the perspective: the bracket's post is 2.6 mm thick at
+                # every depth, because it is ironwork and not architecture. Scaling the
+                # mortise and not the tenon leaves the tenon floating in it.
+                c, a = mortise_t5_solids((0.0, 0.0, 0.0), axis="-Z", rot=rot, depth=FACE,
+                                         h=S.BRACKET_W)
+            else:
+                c, a = socket_p1_solids((0.0, 0.0, 0.0), axis="-Z", rot=rot, depth=FACE)
             cuts.append(to_wall(c, row["u"] + du, row.get("z", 20.0) + dz))
             adds.append(to_wall(a, row["u"] + du, row.get("z", 20.0) + dz))
     return cuts, adds

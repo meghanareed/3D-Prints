@@ -66,7 +66,7 @@ LEFT = [
     dict(id="11J", kind="awning",    u=74,  z=68, w=30, proj=8, name="L2_Awning"),
     dict(id="11F", kind="door",      u=98,  z=6,  w=18, h=36, panels=2, lit=1,
          name="L2_Door", fanlight=True),
-    dict(id="11K", kind="fascia",    u=86,  z=54, w=38, name="L2_Fascia"),
+    dict(id="11K", kind="fascia",    u=86,  z=54, w=46, name="L2_Fascia"),
 
     # --- L3  Scribbulus Writing Implements : rear, compressed -----------------
     dict(id="12A", kind="shopwin",   u=124, z=8,  w=24, h=26, cols=3, rows=2, lit=1,
@@ -181,41 +181,43 @@ SIGNS = [
     # shop's trade instead, which is what a real alley sign does anyway.
     dict(id="30A", kind="banner",  side="R", u=66,  z=96, w=14, h=64, lit=1,
          text="DIAGON", name="Sign_Vertical_Banner"),
-    dict(id="30B", kind="swing",   side="L", u=18,  z=62, w=34, h=8,
+    dict(id="30B", kind="swing",   side="L", u=18,  z=62, w=39, h=8,
          text="OLLIVANDERS", name="Sign_Swing_Ollivanders", bracket="31A"),
-    dict(id="30C", kind="swing",   side="R", u=52,  z=62, w=26, h=9,
+    dict(id="30C", kind="swing",   side="R", u=52,  z=62, w=27, h=9,
          text="EEYLOPS", name="Sign_Swing_Eeylops", bracket="31B"),
     # beside the L2 door at eye height: the only patch of the Apothecary's wall not
     # already carrying the bay, the awning, the fascia or the oriel above it. It is a
     # badge fixed flat to the wall, so it has no bracket -- 31C carries nothing now,
     # which is what an old scroll bracket with its sign long gone looks like.
-    dict(id="30D", kind="shield",  side="L", u=98,  z=27, w=23, h=21,
+    dict(id="30D", kind="shield",  side="L", u=98,  z=27, w=28, h=24,
          text="POTIONS", name="Sign_Shield_Apothecary"),
     # fasciaplate: pinned to the fascia BOARD it sits on (21F), so its u and z match
     # that row's and its width stays inside the board's.
     dict(id="30E", kind="fasciaplate", side="R", u=72, z=46, w=38, h=8,
          text="QUIDDITCH", name="Sign_Fascia_Quidditch"),
-    dict(id="30F", kind="arrow",   side="L", u=130, z=75, w=49, h=11,
-         text="GRINGOTTS", name="Sign_Directional"),
+    # "BANK", not "GRINGOTTS": measured rather than guessed, the name wants a 57 mm
+    # plate on a wall whose free band is 31. An arrow already says which way.
+    dict(id="30F", kind="arrow",   side="L", u=130, z=75, w=32, h=11,
+         text="BANK", name="Sign_Directional"),
     # the lozenge column is a shop directory: four more of the alley's trades
-    dict(id="30G1", kind="lozenge", side="R", u=104, z=38, w=21, h=9,
+    dict(id="30G1", kind="lozenge", side="R", u=104, z=38, w=27, h=9,
          text="PETS", name="Sign_Lozenge_Menagerie"),
-    dict(id="30G2", kind="lozenge", side="R", u=104, z=28, w=21, h=9,
+    dict(id="30G2", kind="lozenge", side="R", u=104, z=28, w=27, h=9,
          text="JOKE", name="Sign_Lozenge_Wheezes"),
-    dict(id="30G3", kind="lozenge", side="R", u=104, z=18, w=21, h=9,
+    dict(id="30G3", kind="lozenge", side="R", u=104, z=18, w=27, h=9,
          text="ICES", name="Sign_Lozenge_Fortescue"),
-    dict(id="30G4", kind="lozenge", side="R", u=104, z=8,  w=21, h=9,
+    dict(id="30G4", kind="lozenge", side="R", u=104, z=8,  w=27, h=9,
          text="ROBES", name="Sign_Lozenge_Malkin"),
     dict(id="30H", kind="swing",   side="L", u=143, z=80.5, w=20, h=10,
          text="INK", name="Sign_Swing_Scribbulus", bracket="31D"),
-    dict(id="30J", kind="fasciaplate", side="L", u=86, z=54, w=34, h=8,
+    dict(id="30J", kind="fasciaplate", side="L", u=86, z=54, w=43, h=8,
          text="APOTHECARY", name="Sign_Fascia_Apothecary"),
     # blank spares -- deliberately textless so custom names can be added later
     dict(id="30K", kind="swing",   side=None, u=0, z=0, w=34, h=9, text="",
          name="Sign_Blank_Swing"),
-    dict(id="30L", kind="shield",  side=None, u=0, z=0, w=23, h=21, text="",
+    dict(id="30L", kind="shield",  side=None, u=0, z=0, w=28, h=24, text="",
          name="Sign_Blank_Shield"),
-    dict(id="30M", kind="lozenge", side=None, u=0, z=0, w=21, h=9, text="",
+    dict(id="30M", kind="lozenge", side=None, u=0, z=0, w=27, h=9, text="",
          name="Sign_Blank_Lozenge"),
     dict(id="30N", kind="fasciaplate", side=None, u=0, z=0, w=38, h=8, text="",
          name="Sign_Blank_Fascia"),

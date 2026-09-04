@@ -6,7 +6,7 @@ and are all separate parts with replaceable text plates.
 import math
 import cadquery as cq
 import params as P
-from lib.mount import peg_p1, socket_p1, socket_p1_solids
+from lib.mount import peg_p1, socket_p1, socket_p1_solids, tenon_t5, T5_W
 from lib.util import try_fillet, emboss_text
 
 # 2.4, not 1.8. A sign is located by a loose pin into a socket in its back, and a
@@ -26,12 +26,24 @@ HOOK_WIRE = 1.4         # section of the open hook: passes a 2.4 eye with 1.0 to
 
 
 def _fit_size(txt, w, h):
-    """Pick a size that actually fits the plate. Letters that overhang the plate edge
-    become detached solids, which is what happened to the long fascia names."""
+    """Pick a size that actually fits the plate -- by MEASURING the text, not guessing.
+
+    This used to assume 0.62 em of advance per character. All-caps bold serif is nearer
+    0.72, so every name ran wide: POTIONS and APOTHECARY both came off the plate, which
+    is how a letter ends up a detached solid.
+    """
     if not txt:
         return 0.0
-    per_char = 0.62                     # rough advance width of DejaVu Serif Bold
-    return max(1.6, min(h * 0.62, (w * 0.92) / (per_char * len(txt))))
+    try:
+        probe = (cq.Workplane("XY")
+                 .text(txt, 10.0, 1.0, font=P.TEXT_FONT, kind="bold", combine=False))
+        b = probe.val().BoundingBox()
+        by_w = 10.0 * (w * 0.92) / b.xlen if b.xlen else h * 0.62
+        by_h = 10.0 * (h * 0.80) / b.ylen if b.ylen else h * 0.62
+    except Exception:
+        by_w = (w * 0.92) / (0.72 * len(txt))
+        by_h = h * 0.62
+    return max(1.6, min(by_w, by_h))
 
 
 def _text_on(body, txt, w, h, vertical=False, size=None, top_z=None):
@@ -194,6 +206,7 @@ def bracket_pegs(drop, arm_t=2.4):
 
 
 POST_RISE = 1.0     # how far the post stands above the arm
+BRACKET_W = 2.6     # ironwork thickness, the same at every depth
 
 
 def _scroll_body(reach, drop, t, w):
@@ -224,19 +237,27 @@ def _scroll_body(reach, drop, t, w):
 
 
 def _wall_pegs(body, drop, w, t=2.4):
-    """The wall pegs, in the drawing frame.
+    """Flat tenons in the bracket's own plane, in the drawing frame.
 
-    +w/2, not -w/2, and the sign is not obvious from the drawing: the body extrudes to
-    y = -w, but _to_part_frame's rotation lands drawing +y on the same side of the part
-    as the body. Pegs at -w/2 come out 3.2 mm clear of it as loose solids. Measured, not
-    reasoned -- verify.check_bracket_solidity() rebuilds every bracket and counts.
+    These used to be round pegs, and a round peg here cannot print. The bracket lies in
+    a plane containing the wall's normal, so anything reaching the wall runs along that
+    plane: printed flat, the peg was a 2.4 mm cylinder floating at mid-thickness with
+    air under it, cantilevered off the edge of the part. The post is 2.6 mm thick, so
+    there is no room to bore a socket there either.
+
+    A tenon is the same material at the same height -- a flat extension of the post,
+    no overhang anywhere -- and the wall takes a mortise. lib.mount.tenon_t5.
+
+    +w/2, not -w/2: the body extrudes to y = -w, but _to_part_frame's rotation lands
+    drawing +y on the same side of the part as the body. At -w/2 they come out 3.2 mm
+    clear of it as loose solids, which is how 31B shipped as two pieces.
     """
     for zp in bracket_pegs(drop, t):
-        body = body.union(peg_p1((0.0, w / 2, zp), axis="-X"))
+        body = body.union(tenon_t5((0.0, w / 2, zp), axis="-X", h=w))
     return body
 
 
-def bracket_scroll(reach=14.0, drop=16.0, t=2.4, w=2.6):
+def bracket_scroll(reach=14.0, drop=16.0, t=2.4, w=BRACKET_W):
     """Wrought-iron scroll bracket, no sign on it. Drawn in XZ and extruded so it
     prints flat with the scroll lying on the bed -- no supports, and the layer lines
     run along the arm."""
@@ -254,7 +275,8 @@ def bracket_scroll(reach=14.0, drop=16.0, t=2.4, w=2.6):
     return _to_part_frame(_wall_pegs(body, drop, w, t))
 
 
-def swing_assembly(reach, drop, plate_w, plate_h, txt, t=PLATE_T, arm_t=2.4, w=2.6):
+def swing_assembly(reach, drop, plate_w, plate_h, txt, t=PLATE_T, arm_t=2.4,
+                   w=BRACKET_W):
     """A hanging shop sign and its bracket as ONE part, in the bracket's PLANE.
 
     This is the shape a book nook needs. A sign built parallel to the wall shows the
