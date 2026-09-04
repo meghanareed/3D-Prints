@@ -12,6 +12,16 @@ answers three questions, in the order they matter:
      This is the coupon that existed all along as 70A/70B and whose answer never reached
      the model: T3 and C4 were measured from a printed coupon, P1 and P2 never were.
 
+     READ IT AS A RETENTION TEST, NOT AN ENTRY TEST.  Printed once, all six went in --
+     which is the expected result and not a pass. The crush ribs are gone, so the only
+     thing holding a peg in its socket now is the interference, and every station that
+     accepts the peg still differs in how hard it is to pull back out. For each station:
+     press in by thumb (no tool), then turn the block over. The answer is the TIGHTEST
+     station that still seats without a tool and does not drop out or rock. If 0.20 does
+     that, 0.20 is not automatically the number -- the printer repeats to about
+     +-0.20 mm, so a clearance at that figure will be a no-go on some parts of a real
+     wall. 0.25 is the floor worth shipping.
+
   2. WHETHER THE SHAPE WAS THE PROBLEM.  Two sockets side by side at the same clearance
      -- the old square-cornered peg and the new D-section round one. A round nozzle
      leaves internal corners radiused to about half its line width while the peg's
