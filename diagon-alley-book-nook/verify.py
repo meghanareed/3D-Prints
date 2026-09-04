@@ -990,6 +990,46 @@ def check_bed_contact():
            + (f" ({len(brim)} want a brim)" if brim else ""))
 
 
+def check_every_part_builds():
+    """Rebuild all 182 parts from the CURRENT model and count their solids.
+
+    check_manifest() reads out/manifest.json, which is the last build. 31B was two
+    disconnected solids -- its wall peg 3.2 mm clear of the body -- for as long as that
+    file was older than the change that broke it, and check_manifest reported "all
+    single-solid" the whole time. This one asks the model instead of the record of it.
+
+    Slow. That is the point: it is the sweep that stops a whole class of these being
+    found one at a time on the bed.
+    """
+    print("\n[build] every part, rebuilt from the model as it stands now")
+    import build as B
+
+    bad = 0
+    for m in B.manifest():
+        try:
+            solid = B.drop_to_bed(B.print_orient(m["fn"](), m["print_rot"]))
+        except Exception as e:
+            fail(f"{m['id']} {m['name']}: will not build -- {type(e).__name__}: {e}")
+            bad += 1
+            continue
+        n = len(solid.val().Solids())
+        if n != 1:
+            fail(f"{m['id']} {m['name']}: {n} disconnected solids -- something is not "
+                 "touching the rest of the part")
+            bad += 1
+            continue
+        bb = solid.val().BoundingBox()
+        if min(bb.xlen, bb.ylen, bb.zlen) < 0.8:
+            warn(f"{m['id']} {m['name']}: {min(bb.xlen, bb.ylen, bb.zlen):.2f} mm "
+                 "thinnest dimension -- under two extrusions")
+        if not B.fits_bed(solid):
+            fail(f"{m['id']} {m['name']}: {bb.xlen:.0f} x {bb.ylen:.0f} x {bb.zlen:.0f} "
+                 "does not fit the bed")
+            bad += 1
+    if not bad:
+        ok("every part builds, and every one is a single connected solid")
+
+
 def check_manifest():
     print("\n[build] manifest")
     path = os.path.join(OUT, "manifest.json")
@@ -997,6 +1037,18 @@ def check_manifest():
         warn("no manifest.json -- run build.py first")
         return
     rep = json.load(open(path))
+    # This file is the last BUILD, not the current model. 31B shipped as two
+    # disconnected solids for as long as the manifest was older than the change that
+    # broke it, and this check reported "all single-solid" the whole time.
+    newest = max(os.path.getmtime(f) for f in
+                 [os.path.join(os.path.dirname(os.path.abspath(__file__)), d, x)
+                  for d in ("", "lib", "parts", "data")
+                  for x in os.listdir(os.path.join(
+                      os.path.dirname(os.path.abspath(__file__)), d))
+                  if x.endswith(".py")])
+    if newest > os.path.getmtime(path):
+        warn("manifest.json is older than the model -- everything below describes the "
+             "last build, not what build.py would make now. Run build.py.")
     bad = [r for r in rep if r.get("status") != "ok"]
     big = [r for r in rep if r.get("status") == "ok" and not r.get("fits_bed")]
     multi = [r for r in rep if r.get("status") == "ok" and r.get("solids", 1) != 1]
@@ -1039,6 +1091,7 @@ if __name__ == "__main__":
     check_mount_crowding()
     check_first_layer_islands()
     check_bed_contact()
+    check_every_part_builds()
     check_manifest()
     print(f"\n{len(FAILS)} failures, {len(WARNS)} warnings")
     sys.exit(1 if FAILS else 0)

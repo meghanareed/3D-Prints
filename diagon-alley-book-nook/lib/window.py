@@ -51,21 +51,29 @@ def mount_offsets(w, h, arch=False):
     """Where this part's mounts sit, in part-local (x, z). One list, used by both the
     part and the wall, so a peg and its socket can never drift apart.
 
-    The arch allowance is not cosmetic. An arched opening is a semicircle of radius w/2,
-    so at the P2 pair's own spacing -- 5 mm either side of centre, which is exactly
-    where the bores go -- its edge sits BELOW the crown by w/2 - sqrt((w/2)^2 - 25).
-    Without the allowance the top bores are cut into that dip: on the R1 arched door it
-    left a 0.25 mm web between bore and opening, a quarter of an extrusion, and
-    check_first_layer_islands found the crumb it leaves on the wall face.
+    The arch allowance is not cosmetic, and it is not universal either. An arched
+    opening is a semicircle of radius w/2, so its edge sits below the crown by
+    w/2 - sqrt((w/2)^2 - dx^2) at a horizontal offset dx. A P2 PAIR sits at dx = 5, in
+    that dip, and without the allowance its bores are cut into the opening: on the R1
+    arched door it left a 0.25 mm web between bore and aperture.
+
+    A P1 mount sits at dx = 0, on the crown, where there is no dip at all -- and lifting
+    it anyway pushed the peg clean off the top of the frame. 14B, 23H and 20B all came
+    back from check_every_part_builds() as disconnected solids.
+
+    So the mount goes midway between the opening's edge and the frame's outer edge at
+    its OWN dx, which is inside the frame band by construction for every case.
     """
-    rise = 0.0
-    if arch:
-        r = w / 2.0
-        half = P2_SPACING / 2.0
-        rise = r - math.sqrt(max(r * r - half * half, 0.0))
+    dx = P2_SPACING / 2.0 if w >= P2_SPACING + 6 else 0.0
+
+    def dip(width):
+        r = width / 2.0
+        return r - math.sqrt(max(r * r - dx * dx, 0.0)) if arch else 0.0
+
+    ow, oh = w + 2 * FRAME_LIP, h + 2 * FRAME_LIP
+    top = ((h / 2 - dip(w)) + (oh / 2 - dip(ow))) / 2.0
     a = -(h / 2 + FRAME_LIP / 2) + 0.6
-    b = (h / 2 + FRAME_LIP / 2) - 0.6 + rise
-    return [(0.0, a), (0.0, b)]
+    return [(0.0, a), (0.0, top)]
 
 
 def _mount_pegs(body, w, h, z=0.0, arch=False):
