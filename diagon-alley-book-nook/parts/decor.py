@@ -167,11 +167,11 @@ def _pack(row, side, items, spec, beads):
     return out, spec, beads
 
 
-def _frame_mounts(u, z, w, h):
+def _frame_mounts(u, z, w, h, arch=False):
     """Cut/add solids for a frame's mounts, using the SAME offsets the part uses."""
     cuts, adds = [], []
     big = w >= P2_SPACING + 6
-    for i, (ox, oz) in enumerate(W.mount_offsets(w, h)):
+    for i, (ox, oz) in enumerate(W.mount_offsets(w, h, arch)):
         # built in the PART's own frame, at the same point and rotation as its peg,
         # then carried into wall coordinates by the same to_wall() the part uses
         pt = (ox, oz, 0.0)
@@ -213,7 +213,7 @@ def _window(row, side):
     glaz = W.glazing(w, h, arch=arch)
     sl = W.sill(w, proj=4.0 * s)
 
-    cuts, adds = _frame_mounts(u, z, w, h)
+    cuts, adds = _frame_mounts(u, z, w, h, arch)
     cuts.append(_ap(w, h, u, z, arch=arch))
     z_sill = z - h / 2 - 1.5
     c, a = _p1_mount(u, z_sill)
@@ -325,7 +325,7 @@ def _door(row, side):
         items.append(("l", row["name"] + "_Fanlight",
                       W.fanlight(w * 0.94, h=fan_h), (u, z + h / 2 + 1.0)))
 
-    cuts, adds = _frame_mounts(u, z, w, h)
+    cuts, adds = _frame_mounts(u, z, w, h, arch)
     cuts.append(_ap(w, h, u, z, arch=arch))
     if row.get("fanlight"):
         c, a = _p1_mount(u, z + h / 2 + 1.0 + fan_h * 0.45)

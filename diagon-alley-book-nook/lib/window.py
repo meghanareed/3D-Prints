@@ -47,17 +47,30 @@ BEAD_W    = 1.4      # outer moulding, proud by the same amount as the glazing b
 # exporter flips them 180 deg so they print front-face-down with the pegs up: no
 # supports, and the textured plate gives the front a free matte finish.
 
-def mount_offsets(w, h):
+def mount_offsets(w, h, arch=False):
     """Where this part's mounts sit, in part-local (x, z). One list, used by both the
-    part and the wall, so a peg and its socket can never drift apart."""
+    part and the wall, so a peg and its socket can never drift apart.
+
+    The arch allowance is not cosmetic. An arched opening is a semicircle of radius w/2,
+    so at the P2 pair's own spacing -- 5 mm either side of centre, which is exactly
+    where the bores go -- its edge sits BELOW the crown by w/2 - sqrt((w/2)^2 - 25).
+    Without the allowance the top bores are cut into that dip: on the R1 arched door it
+    left a 0.25 mm web between bore and opening, a quarter of an extrusion, and
+    check_first_layer_islands found the crumb it leaves on the wall face.
+    """
+    rise = 0.0
+    if arch:
+        r = w / 2.0
+        half = P2_SPACING / 2.0
+        rise = r - math.sqrt(max(r * r - half * half, 0.0))
     a = -(h / 2 + FRAME_LIP / 2) + 0.6
-    b = (h / 2 + FRAME_LIP / 2) - 0.6
+    b = (h / 2 + FRAME_LIP / 2) - 0.6 + rise
     return [(0.0, a), (0.0, b)]
 
 
-def _mount_pegs(body, w, h, z=0.0):
+def _mount_pegs(body, w, h, z=0.0, arch=False):
     big = w >= P2_SPACING + 6
-    for i, (ox, oz) in enumerate(mount_offsets(w, h)):
+    for i, (ox, oz) in enumerate(mount_offsets(w, h, arch)):
         pt = (ox, oz, z)
         # The pair spreads along the part's own X (its width). Spreading it along Y
         # put the pegs 3 mm clear of the frame band and they came off as loose solids.
@@ -66,14 +79,15 @@ def _mount_pegs(body, w, h, z=0.0):
     return body
 
 
-def frame_sockets(wp, x, z, w, h, decorative=True, axis="+X", face=0.0):
+def frame_sockets(wp, x, z, w, h, decorative=True, axis="+X", face=0.0,
+                  arch=False):
     """Cut the matching sockets into a wall face.
 
     axis is the wall's outward normal (+X for the left wall, -X for the right), and
     `face` is the coordinate of that face along the normal.
     """
     big = w >= P2_SPACING + 6
-    for i, (ox, oz) in enumerate(mount_offsets(w, h)):
+    for i, (ox, oz) in enumerate(mount_offsets(w, h, arch)):
         if axis in ("+X", "-X"):
             pt = (face, x + ox, z + oz)
         else:
@@ -157,7 +171,7 @@ def window_frame(w, h, cols=2, rows=3, arch=False, style="sash"):
                                            centered=(True, True, False))
                     .translate((0, 0, -0.01)))
 
-    return _mount_pegs(body, w, h)
+    return _mount_pegs(body, w, h, arch=arch)
 
 
 def glazing(w, h, arch=False, t=None, clear_frame=False):
@@ -325,7 +339,7 @@ def door_frame(w, h, arch=False, t=2.4, lip=3.2):
         outer = cq.Workplane("XY").box(ow, oh, t, centered=(True, True, False))
         inner = aperture(w, h, t)
     body = outer.cut(inner)
-    return _mount_pegs(body, w, h)
+    return _mount_pegs(body, w, h, arch=arch)
 
 
 def fanlight(w, h=8.0, spokes=5, t=1.8):

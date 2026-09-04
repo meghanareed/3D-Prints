@@ -195,7 +195,7 @@ SIGNS = [
     # that row's and its width stays inside the board's.
     dict(id="30E", kind="fasciaplate", side="R", u=72, z=46, w=38, h=8,
          text="QUIDDITCH", name="Sign_Fascia_Quidditch"),
-    dict(id="30F", kind="arrow",   side="L", u=130, z=75, w=46, h=11,
+    dict(id="30F", kind="arrow",   side="L", u=130, z=75, w=49, h=11,
          text="GRINGOTTS", name="Sign_Directional"),
     # the lozenge column is a shop directory: four more of the alley's trades
     dict(id="30G1", kind="lozenge", side="R", u=104, z=38, w=21, h=9,
