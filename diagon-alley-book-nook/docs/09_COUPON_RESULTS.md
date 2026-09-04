@@ -103,3 +103,37 @@ built at the blind end instead of the mouth — were invisible in CAD and invisi
 slicer. Only a printed part and a person's thumb found them. `coupon.py` now measures
 the peg into its own socket with the real physical motion before it will write a file,
 which is the check `lib/mount.py`'s own header has been asking for since the beginning.
+
+---
+
+## What the tile found that the ladder was not looking for
+
+Laid in the tile, the 13A frame covers a round socket at its lower right edge. It is not
+19C's, which is 6.4 mm clear, and it is not 13A's own three mounts, which the frame is
+*supposed* to cover. It belongs to **31A, Bracket_Scroll_A**, and the frame overlaps it
+by 1.5 × 1.5 mm. Nothing can ever mount there.
+
+That is not one bad coordinate. The facade elements get their apertures and sockets from
+`data.facade.LEFT` / `RIGHT`; the signs, brackets, lanterns and wall-hung props get
+theirs from `SIGNS`, `BRACKETS`, `LANTERNS` and `PROPS`. Both cut holes in the same wall
+face and **nothing had ever compared the two tables**:
+
+| Wall | Hung mounts | Fouled |
+|---|---|---|
+| Left | 12 | 11 |
+| Right | 9 | 3 |
+
+Every sign, bracket, lantern and prop on the left wall except the boot scraper has its
+socket under a window, a door, a fascia or an awning. 38A and 38B — the notice board and
+the poster layer that overlays it — are at the same (u, z) and share a single socket:
+two pegs, one hole.
+
+`verify.check_mount_crowding()` now compares them, and `kit.wall_mount_rows()` exists so
+each socket has an owner to name — the loop that built them returned bare solids, which
+is the mechanical reason this family was invisible to every check in the file.
+
+Fixing the placement is a design pass, not a nudge: a swing sign and the bracket that
+carries it have to move together, a fascia nameplate belongs on the fascia board rather
+than on the wall behind it, and the poster layer belongs on the notice board. That
+happens when the kit is regenerated after the coupon settles, and the check will say
+when it is done.

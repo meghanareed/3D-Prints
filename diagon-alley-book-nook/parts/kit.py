@@ -126,6 +126,29 @@ def props():
 
 
 # ------------------------------------- sockets these parts need in the wall --
+def wall_mount_rows(side):
+    """Everything that hangs off this wall, as (kind, row, rotation).
+
+    One list, so the wall builder and verify.py cannot disagree about which sockets
+    exist or which part owns each one. Rebuilding the same loop in two places is how
+    a whole family of mounts went unchecked: verify had no way to name them.
+    """
+    out = []
+    for row in F.SIGNS:
+        if row.get("side") == side and row["kind"] != "banner":
+            out.append(("sign", row, 0.0))
+    for row in F.BRACKETS:
+        if row["side"] == side:
+            out.append(("bracket", row, 90.0))
+    for row in F.LANTERNS:
+        if row["side"] == side:
+            out.append(("lantern", row, 90.0))
+    for row in F.PROPS:
+        if row.get("side") == side and row["kind"] in ("notice", "posters", "scraper"):
+            out.append(("prop", row, 0.0))
+    return out
+
+
 def wall_mount_cuts(side):
     """Sockets for signs, brackets, lanterns and the wall-hung notice board.
 
@@ -134,24 +157,10 @@ def wall_mount_cuts(side):
     leave its crush ribs floating in the service gap.
     """
     cuts, adds = [], []
-
-    def mount(u, z, rot=0.0):
+    for _kind, row, rot in wall_mount_rows(side):
         c, a = socket_p1_solids((0.0, 0.0, 0.0), axis="-Z", rot=rot, depth=FACE)
-        cuts.append(to_wall(c, u, z))
-        adds.append(to_wall(a, u, z))
-
-    for row in F.SIGNS:
-        if row.get("side") == side and row["kind"] != "banner":
-            mount(row["u"], row["z"])
-    for row in F.BRACKETS:
-        if row["side"] == side:
-            mount(row["u"], row["z"], rot=90)
-    for row in F.LANTERNS:
-        if row["side"] == side:
-            mount(row["u"], row["z"], rot=90)
-    for row in F.PROPS:
-        if row.get("side") == side and row["kind"] in ("notice", "posters", "scraper"):
-            mount(row["u"], row.get("z", 20.0))
+        cuts.append(to_wall(c, row["u"], row.get("z", 20.0)))
+        adds.append(to_wall(a, row["u"], row.get("z", 20.0)))
     return cuts, adds
 
 

@@ -500,6 +500,67 @@ def check_facade_seating():
             ok(f"{side} wall: all {n} parts that touch it seat on the plate")
 
 
+MOUNT_CLEAR = 1.0     # wall material a socket needs on every side of it
+
+
+def check_mount_crowding():
+    """A wall socket must be on bare wall, not under the part next door.
+
+    Signs, brackets, lanterns and the wall-hung props get their sockets from one table
+    of (u, z) coordinates, and the facade elements get their apertures and sockets from
+    another. Nothing ever compared the two. Every one of them is a hole in the same
+    wall face, so a sign bracket placed a couple of millimetres from a window ends up
+    with its socket UNDER the window frame: the frame covers it, the bracket has
+    nothing to reach, and neither part is wrong on its own.
+
+    Found from a photograph -- a printed tile with the 13A frame laid in it and one
+    round hole disappearing under the frame's edge, which is bracket 31A's. It was 21
+    mounts out of 21, on both walls, and nothing in this file could see it because the
+    sockets had no owner: kit.py built them in a loop that returned bare solids. They
+    come from kit.wall_mount_rows now, which names each one.
+
+    The margin is what a socket needs to be a socket: MOUNT_CLEAR of wall on every side
+    of the 3.9 mm bore, so its wall is not the last 0.3 mm before an aperture.
+    """
+    print("\n[fit] wall sockets sit on bare wall")
+    from parts import walls as WL
+    from parts import kit as K
+
+    for side in ("L", "R"):
+        placed, _c, _a, _b = WL.collect(side)
+        parts = [(p["id"], p["name"], p["placed"].val().BoundingBox()) for p in placed]
+        mounts = []
+        for kind, row, _rot in K.wall_mount_rows(side):
+            u, z = row["u"], row.get("z", 20.0)
+            mounts.append((kind, row["id"], row.get("name", ""), u, z))
+
+        def gap(u, z, bb):
+            dy = max(u - 1.95 - bb.ymax, bb.ymin - u - 1.95, 0.0)
+            dz = max(z - 1.95 - bb.zmax, bb.zmin - z - 1.95, 0.0)
+            return (dy * dy + dz * dz) ** 0.5
+
+        bad = 0
+        for kind, mid, mname, u, z in mounts:
+            for pid, pname, bb in parts:
+                g = gap(u, z, bb)
+                if g >= MOUNT_CLEAR:
+                    continue
+                bad += 1
+                where = "sits under" if g == 0.0 else f"is {g:.2f} mm from"
+                fail(f"{side}: {kind} {mid} {mname}'s socket at u={u:.0f} z={z:.0f} "
+                     f"{where} {pid} {pname} -- nothing can mount there")
+        for i in range(len(mounts)):
+            for j in range(i + 1, len(mounts)):
+                _, ai, an, au, az = mounts[i]
+                _, bi, bn, bu, bz = mounts[j]
+                if abs(au - bu) < 3.9 + MOUNT_CLEAR and abs(az - bz) < 3.9 + MOUNT_CLEAR:
+                    bad += 1
+                    fail(f"{side}: {ai} {an} and {bi} {bn} share one socket at "
+                         f"u={au:.0f} z={az:.0f} -- two pegs, one hole")
+        if not bad:
+            ok(f"{side} wall: all {len(mounts)} hung mounts have bare wall around them")
+
+
 def check_first_layer_islands():
     """Is the first layer one piece, and is it joined by more than a hair?
 
@@ -719,6 +780,7 @@ if __name__ == "__main__":
     check_paint_handles()
     check_unsupported_relief()
     check_facade_seating()
+    check_mount_crowding()
     check_first_layer_islands()
     check_bed_contact()
     check_manifest()
