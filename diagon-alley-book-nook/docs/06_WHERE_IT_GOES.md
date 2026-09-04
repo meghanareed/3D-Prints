@@ -18,9 +18,9 @@ numbers the drawings are laid out on.
 | `18A` | L_L_Chimney | 45.1 – 58.9 | 180.2 – 203.7 | 10.8 mm |
 | `17B` | L_L_Cornice_Rear | 80.0 – 150.0 | 162.7 – 167.3 | 3.9 mm |
 | `14Ag` | L_L_Attic_Dormer_Glazing | 28.2 – 43.8 | 161.6 – 180.8 | 0.8 mm |
-| `14A` | L_L_Attic_Dormer_Frame | 25.8 – 46.2 | 159.2 – 183.2 | 2.8 mm |
+| `14A` | L_L_Attic_Dormer_Frame | 25.8 – 46.2 | 159.2 – 183.7 | 2.8 mm |
 | `14Bg` | L_L_Attic_B_Glazing | 82.5 – 93.5 | 147.5 – 160.8 | 0.8 mm |
-| `14B` | L_L_Attic_B_Frame | 80.1 – 95.9 | 145.1 – 163.2 | 2.8 mm |
+| `14B` | L_L_Attic_B_Frame | 80.1 – 95.9 | 145.1 – 166.6 | 2.8 mm |
 | `13Eg` | L_L_Window_E_Glazing | 14.1 – 33.9 | 125.6 – 151.0 | 0.8 mm |
 | `13E` | L_L_Window_E_Frame | 11.7 – 36.3 | 123.2 – 153.4 | 2.8 mm |
 | `13Fg` | L_L_Window_F_Glazing | 54.0 – 70.0 | 121.1 – 142.1 | 0.8 mm |
@@ -42,7 +42,7 @@ numbers the drawings are laid out on.
 | `13A` | L_L_Window_A_Frame | 2.5 – 29.5 | 76.4 – 111.1 | 2.8 mm |
 | `31D` | Bracket_Scroll_D | 134.0 – 142.0 | 73.0 – 81.0 | pegs into a socket here |
 | `19B` | L_L_Keystone | 106.5 – 113.5 | 69.9 – 75.5 | 2.2 mm |
-| `30F` | Sign_Directional | 107.0 – 153.0 | 69.5 – 80.5 | pegs into a socket here |
+| `30F` | Sign_Directional | 105.5 – 154.5 | 69.5 – 80.5 | pegs into a socket here |
 | `11J` | L_L2_Awning | 62.1 – 85.9 | 68.2 – 77.3 | 6.3 mm |
 | `31A` | Bracket_Scroll_A | 14.0 – 22.0 | 68.0 – 76.0 | pegs into a socket here |
 | `19C` | L_L_Wall_Plaque | 24.5 – 35.5 | 64.0 – 72.2 | 2.9 mm |
@@ -81,9 +81,9 @@ numbers the drawings are laid out on.
 | `28A` | R_R_Chimney | 98.8 – 109.2 | 163.1 – 178.8 | 8.2 mm |
 | `27B` | R_R_Cornice_Rear | 78.0 – 150.0 | 161.7 – 166.4 | 3.9 mm |
 | `23Gg` | R_R_Attic_A_Glazing | 36.8 – 51.2 | 159.9 – 177.7 | 0.8 mm |
-| `23G` | R_R_Attic_A_Frame | 34.4 – 53.6 | 157.5 – 180.1 | 2.8 mm |
+| `23G` | R_R_Attic_A_Frame | 34.4 – 53.6 | 157.5 – 180.9 | 2.8 mm |
 | `23Hg` | R_R_Attic_B_Glazing | 91.0 – 101.0 | 145.9 – 158.1 | 0.8 mm |
-| `23H` | R_R_Attic_B_Frame | 88.6 – 103.4 | 143.5 – 160.5 | 2.8 mm |
+| `23H` | R_R_Attic_B_Frame | 88.6 – 103.4 | 143.5 – 163.4 | 2.8 mm |
 | `23Dg` | R_R_Window_D_Glazing | 10.0 – 30.0 | 125.9 – 151.6 | 0.8 mm |
 | `23D` | R_R_Window_D_Frame | 7.6 – 32.4 | 123.5 – 154.0 | 2.8 mm |
 | `23Eg` | R_R_Window_E_Glazing | 50.3 – 65.7 | 121.3 – 141.8 | 0.8 mm |
@@ -123,7 +123,7 @@ numbers the drawings are laid out on.
 | `21D` | R_R2_Pilaster_Left | 50.1 – 57.9 | 22.2 – 59.6 | 4.5 mm |
 | `20E` | R_R1_Tall_Window_Frame | 30.2 – 53.8 | 22.0 – 63.3 | 2.8 mm |
 | `30G3` | Sign_Lozenge_Fortescue | 93.5 – 114.5 | 13.5 – 22.5 | pegs into a socket here |
-| `20B` | R_R1_Arched_Door | 8.9 – 33.1 | 10.6 – 58.5 | 2.2 mm |
+| `20B` | R_R1_Arched_Door | 8.9 – 33.1 | 10.6 – 60.1 | 2.2 mm |
 | `30G4` | Sign_Lozenge_Malkin | 93.5 – 114.5 | 3.5 – 12.5 | pegs into a socket here |
 | `29A` | R_R_Quoin_Front | 3.0 – 11.6 | -0.0 – 69.6 | 2.6 mm |
 
