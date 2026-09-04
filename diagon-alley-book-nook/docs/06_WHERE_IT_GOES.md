@@ -34,42 +34,42 @@ numbers the drawings are laid out on.
 | `13Cg` | L_L_Window_C_Glazing | 101.1 – 114.9 | 85.8 – 103.8 | 0.8 mm |
 | `13D` | L_L_Window_D_Frame | 126.3 – 141.7 | 84.8 – 103.4 | 2.8 mm |
 | `13C` | L_L_Window_C_Frame | 98.7 – 117.3 | 83.4 – 106.2 | 2.8 mm |
+| `31C` | Bracket_Scroll_C | 86.0 – 94.0 | 83.0 – 91.0 | pegs into a socket here |
 | `13Bg` | L_L_Window_B_Glazing | 36.7 – 55.3 | 81.5 – 107.1 | 0.8 mm |
 | `13B` | L_L_Window_B_Frame | 34.3 – 57.7 | 79.1 – 109.5 | 2.8 mm |
 | `13Ag` | L_L_Window_A_Glazing | 4.9 – 27.1 | 78.8 – 108.7 | 0.8 mm |
 | `12B` | L_L_Oriel_Body | 65.0 – 87.0 | 78.6 – 109.6 | 7.9 mm |
 | `13A` | L_L_Window_A_Frame | 2.5 – 29.5 | 76.4 – 111.1 | 2.8 mm |
-| `31C` | Bracket_Scroll_C | 84.0 – 92.0 | 74.0 – 82.0 | pegs into a socket here |
-| `31A` | Bracket_Scroll_A | 26.0 – 34.0 | 72.0 – 80.0 | pegs into a socket here |
+| `31D` | Bracket_Scroll_D | 134.0 – 142.0 | 73.0 – 81.0 | pegs into a socket here |
 | `19B` | L_L_Keystone | 106.5 – 113.5 | 69.9 – 75.5 | 2.2 mm |
-| `11J` | L_L2_Awning | 62.1 – 85.9 | 68.2 – 77.1 | 6.3 mm |
-| `11K` | L_L2_Fascia | 72.1 – 99.9 | 64.3 – 72.9 | 3.8 mm |
+| `30F` | Sign_Directional | 107.0 – 153.0 | 69.5 – 80.5 | pegs into a socket here |
+| `11J` | L_L2_Awning | 62.1 – 85.9 | 68.2 – 77.3 | 6.3 mm |
+| `31A` | Bracket_Scroll_A | 14.0 – 22.0 | 68.0 – 76.0 | pegs into a socket here |
 | `19C` | L_L_Wall_Plaque | 24.5 – 35.5 | 64.0 – 72.2 | 2.9 mm |
+| `11K` | L_L2_Fascia | 70.6 – 101.4 | 63.9 – 73.3 | 3.8 mm |
+| `33A` | Lantern_Large | 38.0 – 48.0 | 59.0 – 85.0 | pegs into a socket here |
 | `10D` | L_L1_Cornice | -2.9 – 42.9 | 57.8 – 60.8 | 2.0 mm |
-| `30B` | Sign_Swing_A | 17.0 – 43.0 | 57.5 – 70.5 | pegs into a socket here |
-| `30D` | Sign_Shield_A | 79.5 – 96.5 | 56.5 – 75.5 | pegs into a socket here |
-| `31D` | Bracket_Scroll_D | 134.0 – 142.0 | 56.0 – 64.0 | pegs into a socket here |
-| `30F` | Sign_Directional | 109.0 – 131.0 | 54.5 – 61.5 | pegs into a socket here |
-| `30J` | Sign_Fascia_L2 | 70.0 – 102.0 | 50.5 – 57.5 | pegs into a socket here |
-| `12G` | L_L3_Door | 134.6 – 149.4 | 50.4 – 69.9 | 2.2 mm |
-| `30H` | Sign_Small_Rear_A | 130.0 – 146.0 | 48.0 – 56.0 | pegs into a socket here |
+| `30B` | Sign_Swing_Ollivanders | 1.0 – 35.0 | 54.5 – 69.5 | pegs into a socket here |
+| `12G` | L_L3_Door | 134.6 – 149.4 | 50.7 – 69.6 | 2.2 mm |
+| `30J` | Sign_Fascia_Apothecary | 69.0 – 103.0 | 50.0 – 58.0 | pegs into a socket here |
 | `12Ag` | L_L3_Shop_Window_Glazing | 115.5 – 132.5 | 47.5 – 65.7 | 0.8 mm |
-| `12A` | L_L3_Shop_Window_Frame | 112.1 – 135.9 | 45.1 – 68.1 | 2.8 mm |
+| `30H` | Sign_Swing_Scribbulus | 128.0 – 148.0 | 47.0 – 57.0 | pegs into a socket here |
+| `12A` | L_L3_Shop_Window_Frame | 112.1 – 135.9 | 45.1 – 68.3 | 2.8 mm |
 | `12D` | L_L3_Stallriser | 116.1 – 131.9 | 44.6 – 49.2 | 2.0 mm |
-| `33A` | Lantern_Large | 29.0 – 39.0 | 39.0 – 65.0 | pegs into a socket here |
 | `11Ag` | L_L2_Bay_Window_Glazing | 66.0 – 82.0 | 38.4 – 57.0 | 0.8 mm |
-| `11F` | L_L2_Door | 88.3 – 107.7 | 36.4 – 69.9 | 2.2 mm |
+| `11F` | L_L2_Door | 88.3 – 107.7 | 36.7 – 69.9 | 2.2 mm |
 | `11A` | L_L2_Bay_Window_Body | 60.6 – 87.4 | 27.1 – 67.8 | 10.3 mm |
-| `38A` | Notice_Board | 64.0 – 72.0 | 26.0 – 34.0 | pegs into a socket here |
-| `38B` | Poster_Layer | 64.0 – 72.0 | 26.0 – 34.0 | pegs into a socket here |
 | `15A` | L_L_Drainpipe_Lower | 57.9 – 62.1 | 25.8 – 117.4 | 1.8 mm |
 | `10Bg` | L_L1_Bow_Window_Glazing | 6.2 – 33.8 | 20.8 – 44.6 | 0.8 mm |
 | `10Bd` | L_L1_Bow_Window_Diffuser | 5.4 – 34.6 | 19.9 – 45.5 | 0.8 mm |
-| `10G` | L_L1_Door | 31.1 – 56.9 | 18.6 – 65.4 | 2.2 mm |
+| `10G` | L_L1_Door | 31.1 – 56.9 | 18.2 – 65.4 | 2.2 mm |
+| `30D` | Sign_Shield_Apothecary | 86.5 – 109.5 | 16.5 – 37.5 | pegs into a socket here |
 | `10B` | L_L1_Bow_Window | -2.9 – 42.9 | 14.5 – 61.5 | 13.5 mm |
+| `38A` | Notice_Board | 65.0 – 73.0 | 12.0 – 20.0 | pegs into a socket here |
+| `38B` | Poster_Layer | 65.0 – 73.0 | 12.0 – 20.0 | pegs into a socket here |
 | `10E` | L_L1_Stallriser | 1.1 – 38.9 | 8.9 – 18.3 | 2.0 mm |
+| `39C` | Boot_Scraper | 42.0 – 50.0 | 0.0 – 8.0 | pegs into a socket here |
 | `19A` | L_L_Quoin_Front | 3.0 – 11.6 | -0.0 – 69.6 | 2.6 mm |
-| `39C` | Boot_Scraper | 42.0 – 50.0 | -2.0 – 6.0 | pegs into a socket here |
 
 ## Right wall -- `02_R_Wall_Face`
 
@@ -99,31 +99,31 @@ numbers the drawings are laid out on.
 | `23Ag` | R_R_Window_A_Glazing | 53.1 – 70.9 | 83.0 – 107.3 | 0.8 mm |
 | `23B` | R_R_Window_B_Frame | 84.7 – 103.3 | 82.1 – 105.1 | 2.8 mm |
 | `23A` | R_R_Window_A_Frame | 50.7 – 73.3 | 80.6 – 109.7 | 2.8 mm |
+| `31B` | Bracket_Scroll_B | 43.0 – 51.0 | 74.5 – 82.5 | pegs into a socket here |
 | `24A` | R_R_Bay_Window_Body | 16.6 – 43.4 | 72.7 – 112.7 | 11.0 mm |
-| `31B` | Bracket_Scroll_B | 48.0 – 56.0 | 70.0 – 78.0 | pegs into a socket here |
 | `29B` | R_R_Keystone | 115.0 – 121.0 | 69.3 – 74.0 | 2.1 mm |
 | `29C` | R_R_Guild_Badge | 71.7 – 80.3 | 68.2 – 74.6 | 2.5 mm |
-| `30G1` | Sign_Lozenge_1 | 96.5 – 111.5 | 61.0 – 67.0 | pegs into a socket here |
-| `30C` | Sign_Swing_B | 40.0 – 64.0 | 56.0 – 68.0 | pegs into a socket here |
+| `34A` | Lantern_Small | 79.8 – 88.2 | 62.0 – 83.0 | pegs into a socket here |
 | `20G` | R_R1_Door_Keystone | 15.4 – 26.6 | 55.7 – 63.2 | 3.0 mm |
-| `21F` | R_R2_Fascia | 55.0 – 89.0 | 55.7 – 64.7 | 3.8 mm |
-| `30G2` | Sign_Lozenge_2 | 96.5 – 111.5 | 53.0 – 59.0 | pegs into a socket here |
-| `22D` | R_R3_Door | 130.8 – 145.2 | 49.1 – 67.7 | 2.2 mm |
+| `30C` | Sign_Swing_Eeylops | 39.0 – 65.0 | 55.5 – 68.5 | pegs into a socket here |
+| `21F` | R_R2_Fascia | 55.0 – 89.0 | 55.3 – 65.1 | 3.8 mm |
+| `22D` | R_R3_Door | 130.8 – 145.2 | 49.4 – 67.4 | 2.2 mm |
 | `22Ag` | R_R3_Shop_Window_Glazing | 112.1 – 127.9 | 46.2 – 63.4 | 0.8 mm |
-| `30G3` | Sign_Lozenge_3 | 97.0 – 111.0 | 45.0 – 51.0 | pegs into a socket here |
-| `22A` | R_R3_Shop_Window_Frame | 108.7 – 131.3 | 43.8 – 65.8 | 2.8 mm |
+| `22A` | R_R3_Shop_Window_Frame | 108.7 – 131.3 | 43.8 – 66.0 | 2.8 mm |
 | `25A` | R_R_Drainpipe_Lower | 108.3 – 111.7 | 42.3 – 117.2 | 1.4 mm |
-| `30E` | Sign_Fascia_Long | 53.0 – 91.0 | 42.0 – 50.0 | pegs into a socket here |
-| `34A` | Lantern_Small | 79.8 – 88.2 | 37.5 – 58.5 | pegs into a socket here |
-| `30G4` | Sign_Lozenge_4 | 97.0 – 111.0 | 37.0 – 43.0 | pegs into a socket here |
+| `30E` | Sign_Fascia_Quidditch | 53.0 – 91.0 | 42.0 – 50.0 | pegs into a socket here |
 | `21E` | R_R2_Pilaster_Right | 86.4 – 93.6 | 34.3 – 67.3 | 4.1 mm |
-| `34C` | Lantern_Rear_Tiny | 128.8 – 135.2 | 32.5 – 47.5 | pegs into a socket here |
+| `30G1` | Sign_Lozenge_Menagerie | 93.5 – 114.5 | 33.5 – 42.5 | pegs into a socket here |
 | `21Bg` | R_R2_Shop_Window_Glazing | 57.8 – 86.2 | 32.2 – 59.0 | 0.8 mm |
+| `34C` | Lantern_Rear_Tiny | 128.8 – 135.2 | 31.0 – 46.0 | pegs into a socket here |
 | `21B` | R_R2_Shop_Window_Frame | 54.4 – 89.6 | 29.8 – 61.6 | 2.8 mm |
 | `21G` | R_R2_Stallriser | 58.4 – 85.6 | 26.7 – 33.1 | 2.0 mm |
 | `20Eg` | R_R1_Tall_Window_Glazing | 32.6 – 51.4 | 24.4 – 60.9 | 0.8 mm |
+| `30G2` | Sign_Lozenge_Wheezes | 93.5 – 114.5 | 23.5 – 32.5 | pegs into a socket here |
 | `21D` | R_R2_Pilaster_Left | 50.1 – 57.9 | 22.2 – 59.6 | 4.5 mm |
 | `20E` | R_R1_Tall_Window_Frame | 30.2 – 53.8 | 22.0 – 63.3 | 2.8 mm |
-| `20B` | R_R1_Arched_Door | 8.9 – 33.1 | 11.0 – 58.1 | 2.2 mm |
+| `30G3` | Sign_Lozenge_Fortescue | 93.5 – 114.5 | 13.5 – 22.5 | pegs into a socket here |
+| `20B` | R_R1_Arched_Door | 8.9 – 33.1 | 10.6 – 58.5 | 2.2 mm |
+| `30G4` | Sign_Lozenge_Malkin | 93.5 – 114.5 | 3.5 – 12.5 | pegs into a socket here |
 | `29A` | R_R_Quoin_Front | 3.0 – 11.6 | -0.0 – 69.6 | 2.6 mm |
 
