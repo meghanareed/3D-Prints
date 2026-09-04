@@ -181,9 +181,9 @@ SIGNS = [
     # shop's trade instead, which is what a real alley sign does anyway.
     dict(id="30A", kind="banner",  side="R", u=66,  z=96, w=14, h=64, lit=1,
          text="DIAGON", name="Sign_Vertical_Banner"),
-    dict(id="30B", kind="swing",   side="L", u=18,  z=62, w=34, h=15,
+    dict(id="30B", kind="swing",   side="L", u=18,  z=62, w=34, h=8,
          text="OLLIVANDERS", name="Sign_Swing_Ollivanders", bracket="31A"),
-    dict(id="30C", kind="swing",   side="R", u=52,  z=62, w=26, h=13,
+    dict(id="30C", kind="swing",   side="R", u=52,  z=62, w=26, h=9,
          text="EEYLOPS", name="Sign_Swing_Eeylops", bracket="31B"),
     # beside the L2 door at eye height: the only patch of the Apothecary's wall not
     # already carrying the bay, the awning, the fascia or the oriel above it. It is a
@@ -206,12 +206,12 @@ SIGNS = [
          text="ICES", name="Sign_Lozenge_Fortescue"),
     dict(id="30G4", kind="lozenge", side="R", u=104, z=8,  w=21, h=9,
          text="ROBES", name="Sign_Lozenge_Malkin"),
-    dict(id="30H", kind="swing",   side="L", u=138, z=52, w=20, h=10,
+    dict(id="30H", kind="swing",   side="L", u=143, z=80.5, w=20, h=10,
          text="INK", name="Sign_Swing_Scribbulus", bracket="31D"),
     dict(id="30J", kind="fasciaplate", side="L", u=86, z=54, w=34, h=8,
          text="APOTHECARY", name="Sign_Fascia_Apothecary"),
     # blank spares -- deliberately textless so custom names can be added later
-    dict(id="30K", kind="swing",   side=None, u=0, z=0, w=34, h=15, text="",
+    dict(id="30K", kind="swing",   side=None, u=0, z=0, w=34, h=9, text="",
          name="Sign_Blank_Swing"),
     dict(id="30L", kind="shield",  side=None, u=0, z=0, w=23, h=21, text="",
          name="Sign_Blank_Shield"),
@@ -232,11 +232,11 @@ BRACKETS = [
     # there is no 17 mm band of bare wall anywhere near L1 -- the nearest free spot was
     # 29 mm away on the second storey. At 9 it fits between the shopfront cornice and
     # the 13A window, which is where a hanging sign belongs.
-    dict(id="31A", side="L", u=18,  z=72, reach=13, drop=9, name="Bracket_Scroll_A"),
-    dict(id="31B", side="R", u=47,  z=78.5, reach=14, drop=16, name="Bracket_Scroll_B"),
+    dict(id="31A", side="L", u=18,  z=73, reach=13, drop=6, name="Bracket_Scroll_A"),
+    dict(id="31B", side="R", u=46.5, z=79.5, reach=14, drop=6, name="Bracket_Scroll_B"),
     # 30D's bracket, lifted with it to clear the L2 awning and the oriel above
     dict(id="31C", side="L", u=90,  z=87, reach=12, drop=14, name="Bracket_Scroll_C"),
-    dict(id="31D", side="L", u=138, z=77, reach=8,  drop=10, name="Bracket_Scroll_D"),
+    dict(id="31D", side="L", u=143, z=80.5, reach=8, drop=6, name="Bracket_Scroll_D"),
 ]
 
 LANTERNS = [

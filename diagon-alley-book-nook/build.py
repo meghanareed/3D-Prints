@@ -312,12 +312,21 @@ def manifest():
     # peg is gone from the back of a sign plate (it is a socket and a loose pin now), so
     # the plate lies back-down and flat with its lettering standing in clear air.
     # Brackets and lanterns still carry pegs and still print pegs-up.
+    import data.facade as FD
     for it in KT.signs():
         sd = it.get("side")
+        row = next((r for r in FD.SIGNS if r["id"] == it["id"]), {})
+        br = KT._bracket_row(row) if row.get("kind") == "swing" else None
+        u, z = it["u"], it["z"]        # kit.signs() already anchors a fused sign
+        # A flat sign already lies plate-down. A fused hanging sign is built in the
+        # bracket's plane, which puts its 2.9 mm thickness along the part's X, so it
+        # would stand on edge 32 mm tall; a quarter turn lays it down with the
+        # lettering up, which is the whole reason the plate turned in the first place.
         add(it["id"], it["name"], (lambda i=it: i["solid"]), "signs",
-            place=((lambda s, i=it, q=sd: wall_xf(q, to_wall(i["solid"], i["u"], i["z"])))
+            place=((lambda s, i=it, q=sd, uu=u, zz=z:
+                    wall_xf(q, to_wall(i["solid"], uu, zz)))
                    if sd in ("L", "R") else None),
-            colour="iron", print_rot=None,
+            colour="iron", print_rot=(("Y", -90) if br else None),
             note="text up" if sd in ("L", "R") else "blank spare -- text up")
     for it in KT.brackets() + KT.lanterns():
         sd = it.get("side")

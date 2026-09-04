@@ -21,11 +21,10 @@ small enough to be cheap and carries one of each:
   the real name plate that pins onto it, which is the other place a pin has to work.
   Every one of them is the part the kit will ship, at the clearance it will ship.
 
-  THE HANGING SIGN.  30H, its bracket 31D and the open hook that joins them. The first
-  version of this plate carried 30H on its own to see whether the smallest lettering in
-  the kit reads -- which was a piece that fitted nothing, on a plate about fits. Asking
-  what it mated with is what turned up the real answer: nothing, ever. Its eyes and the
-  bracket's were closed rings with a closed-link chain between them.
+  THE HANGING SIGN, TURNED TO FACE THE OPENING.  30H is now its bracket: plate and arm
+  fused, coplanar, projecting into the alley so the viewer sees its face instead of its
+  edge. It carries the smallest lettering in the kit at 3.8 mm and mounts on two pins,
+  because a sign on the end of an arm is a cantilever and one pin is a hinge.
 
 EVERY PIECE HERE MATES WITH ANOTHER PIECE HERE. If one does not, it should not be on
 the plate. Print it, dry-fit every joint, and glue nothing until they all go together.
@@ -49,11 +48,12 @@ OUT = os.path.join(HERE, "out", "coupon")
 # swallows the door and the oriel and comes out 92 x 75 mm and 15 g. Here nothing else
 # is within reach and it settles at 16 x 16.
 TILE_AROUND = (98.0, 27.0)     # 30D's socket, in wall-local (u, z)
+TILE2_AROUND = (143.0, 80.5)   # 30H's pair, over the L3 shopfront
 TILE_PAD = 8.0
 WALL_PRINT_ROT = ("Y", -90)    # the wall face prints brick-up and flat; so does a tile
-# 30H carries the smallest lettering in the kit, 3.81 mm, just over the floor -- and it
-# comes with 31D, the bracket it hangs from, and 32E, the hook that joins them.
-PIECES = ["30D", "11K", "30J", "30H", "31D", "32D", "32E"]
+# 30H carries the smallest lettering in the kit and is its own bracket, so the tile has
+# to be the one with ITS sockets in it -- two of them, at the bracket's peg spacing.
+PIECES = ["30D", "11K", "30J", "30H", "32D"]
 
 
 def wall_tile(side="L", around=TILE_AROUND, pad=TILE_PAD):
@@ -95,7 +95,8 @@ def wall_tile(side="L", around=TILE_AROUND, pad=TILE_PAD):
 
 def build():
     rows = {m["id"]: m for m in B.manifest()}
-    items = [("TILE_wall_30D", wall_tile())]
+    items = [("TILE_wall_30D", wall_tile()),
+             ("TILE_wall_30H", wall_tile(around=TILE2_AROUND))]
     for pid in PIECES:
         m = rows[pid]
         items.append((f"{pid}_{m['name']}",

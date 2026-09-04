@@ -19,10 +19,23 @@ from parts.decor import to_wall, FACE
 
 
 # ------------------------------------------------------------------ signs ----
+def _bracket_row(row):
+    """The bracket a hanging sign is fused to, or None."""
+    bid = row.get("bracket")
+    if not bid:
+        return None
+    return next((b for b in F.BRACKETS if b["id"] == bid), None)
+
+
 def _sign_part(row):
     k, w, h, txt = row["kind"], row["w"], row["h"], row.get("text", "")
     s = F.wpersp(row["u"]) if row.get("side") else 1.0
     w, h = w * s, h * s
+    br = _bracket_row(row)
+    if k == "swing" and br is not None:
+        # fused to its bracket and turned into the bracket's plane, so it faces the
+        # opening instead of showing the viewer its edge. See lib.sign.swing_assembly.
+        return S.swing_assembly(br["reach"] * s, br["drop"] * s, w, h, txt)
     if k == "banner":
         return S.plate_vertical_banner(w, h, txt)
     if k == "swing":
@@ -63,17 +76,30 @@ def _bracket_solid(row):
 
 
 def signs():
+    """Every sign part, with the (u, z) it actually mounts at.
+
+    A hanging sign fused to its bracket lives where the BRACKET does, because the
+    bracket is what carries the pegs and the wall is cut for those. Reporting the sign
+    row's own (u, z) here put 30B twelve millimetres below where its sockets are, and
+    every consumer -- the preview, the clearance check -- believed it.
+    """
     out = []
     for row in F.SIGNS:
+        br = _bracket_row(row)
+        anchor = br if (br is not None and row["kind"] == "swing") else row
         out.append(dict(id=row["id"], name=row["name"],
                         solid=keep_largest(_sign_part(row), row["id"]),
-                        side=row.get("side"), u=row["u"], z=row["z"]))
+                        side=row.get("side"), u=anchor["u"], z=anchor["z"]))
     return out
 
 
 def brackets():
+    # a bracket named by a hanging sign is PART of that sign now, not its own part
+    fused = {r.get("bracket") for r in F.SIGNS if r["kind"] == "swing"} - {None}
     out = []
     for row in F.BRACKETS:
+        if row["id"] in fused:
+            continue
         out.append(dict(id=row["id"], name=row["name"],
                         solid=_bracket_solid(row),
                         side=row["side"], u=row["u"], z=row["z"]))
@@ -141,32 +167,44 @@ def props():
 
 # ------------------------------------- sockets these parts need in the wall --
 def wall_mount_rows(side):
-    """Everything that hangs off this wall, as (kind, row, rotation).
+    """Everything that hangs off this wall, as (kind, row, rotation, socket offsets).
+
+    `offsets` is where this part's sockets sit relative to its (u, z) -- one for most
+    things, two for anything carried on a bracket arm, because a cantilever on one peg
+    is a hinge. They come from lib.sign.bracket_pegs, the same call the pegs come from.
 
     One list, so the wall builder and verify.py cannot disagree about which sockets
     exist or which part owns each one. Rebuilding the same loop in two places is how
     a whole family of mounts went unchecked: verify had no way to name them.
     """
     out = []
+    fused = {r.get("bracket") for r in F.SIGNS if r["kind"] == "swing"} - {None}
     for row in F.SIGNS:
-        # banner: hangs from the overhead rail. swing: hangs on chain from its bracket,
-        # and its plate has no peg at all -- every swing sign in the kit had a wall
-        # socket that nothing was ever going to enter. fasciaplate: pinned to the
-        # fascia board, which is what it sits on.
-        if row.get("side") == side and row["kind"] not in ("banner", "swing",
-                                                           "fasciaplate"):
-            out.append(("sign", row, 0.0))
+        # banner: hangs from the overhead rail. fasciaplate: pinned to the fascia board,
+        # which is what it sits on. A swing sign IS its bracket now and carries the
+        # bracket's two wall pegs, so it is back in this list -- with two sockets.
+        if row.get("side") != side or row["kind"] in ("banner", "fasciaplate"):
+            continue
+        br = _bracket_row(row)
+        if row["kind"] == "swing" and br is not None:
+            sc = F.wpersp(br["u"])
+            out.append(("sign", dict(row, u=br["u"], z=br["z"]), 0.0,
+                        [(0.0, zp) for zp in S.bracket_pegs(br["drop"] * sc)]))
+        else:
+            out.append(("sign", row, 0.0, [(0.0, 0.0)]))
     for row in F.BRACKETS:
-        if row["side"] == side:
-            out.append(("bracket", row, 90.0))
+        if row["side"] == side and row["id"] not in fused:
+            sc = F.wpersp(row["u"])
+            out.append(("bracket", row, 0.0,
+                        [(0.0, zp) for zp in S.bracket_pegs(row["drop"] * sc)]))
     for row in F.LANTERNS:
         if row["side"] == side:
-            out.append(("lantern", row, 90.0))
+            out.append(("lantern", row, 90.0, [(0.0, 0.0)]))
     for row in F.PROPS:
         # "posters" is a layer that glues onto the notice board; it shared the board's
         # socket, which is two pegs in one hole.
         if row.get("side") == side and row["kind"] in ("notice", "scraper"):
-            out.append(("prop", row, 0.0))
+            out.append(("prop", row, 0.0, [(0.0, 0.0)]))
     return out
 
 
@@ -178,10 +216,11 @@ def wall_mount_cuts(side):
     leave its crush ribs floating in the service gap.
     """
     cuts, adds = [], []
-    for _kind, row, rot in wall_mount_rows(side):
-        c, a = socket_p1_solids((0.0, 0.0, 0.0), axis="-Z", rot=rot, depth=FACE)
-        cuts.append(to_wall(c, row["u"], row.get("z", 20.0)))
-        adds.append(to_wall(a, row["u"], row.get("z", 20.0)))
+    for _kind, row, rot, offsets in wall_mount_rows(side):
+        for du, dz in offsets:
+            c, a = socket_p1_solids((0.0, 0.0, 0.0), axis="-Z", rot=rot, depth=FACE)
+            cuts.append(to_wall(c, row["u"] + du, row.get("z", 20.0) + dz))
+            adds.append(to_wall(a, row["u"] + du, row.get("z", 20.0) + dz))
     return cuts, adds
 
 

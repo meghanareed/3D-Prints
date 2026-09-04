@@ -216,10 +216,9 @@ def check_sign_text():
         if not row.get("text"):
             continue
         m = rows[it["id"]]
-        if m["print_rot"] is not None:
-            fail(f"{it['id']}: print_rot {m['print_rot']} -- a sign with raised text "
-                 "must print text up, back on the bed")
-            continue
+        # No rule about WHICH rotation -- a flat sign needs none, a sign fused into its
+        # bracket's plane needs a quarter turn to lie down. The rule is about where the
+        # letters end up, and that is measured below rather than asserted here.
         real = P.RENDER_TEXT
         try:
             P.RENDER_TEXT = False
@@ -231,9 +230,16 @@ def check_sign_text():
         if dv <= 0.05:
             fail(f"{it['id']}: text removes {-dv:.2f} mm^3 -- it is engraved, not raised")
             continue
-        added = lettered.cut(blank)
-        ab = added.val().BoundingBox()
-        pb = B.drop_to_bed(B.print_orient(lettered, m["print_rot"])).val().BoundingBox()
+        # BOTH have to be carried into the print orientation. Measuring the letters in
+        # the part frame and the part on the bed compares two different spaces, and it
+        # passed every flat sign (whose print_rot is None, where the two spaces are the
+        # same) while calling the rotated ones face-down whichever way they turned.
+        rot = m["print_rot"]
+        printed = B.print_orient(lettered, rot)
+        dz = -printed.val().BoundingBox().zmin
+        pb = printed.translate((0, 0, dz)).val().BoundingBox()
+        ab = B.print_orient(lettered.cut(blank), rot).translate((0, 0, dz)) \
+              .val().BoundingBox()
         # The letters need not be the highest thing on the plate -- the banner's side
         # rails stand 0.6 proud of its face on purpose, and lettering in that channel is
         # protected rather than wrong. What matters is that they are not on the bed.
@@ -283,20 +289,29 @@ def check_sign_hanging():
     else:
         ok(f"eye {SG.EYE_HOLE} mm passes {SG.HOOK_WIRE} mm wire with {slack:.2f} to spare")
 
-    # every swing sign, and every bracket, must present that eye
+    # A swing sign is FUSED to its bracket now and hangs by neither eye nor hook, so
+    # what has to be true of it is different: one solid, and two wall pegs, because a
+    # sign on the end of an arm is a cantilever and one peg is a hinge.
     import data.facade as F
     from parts import kit as KT
     for it in KT.signs():
         row = next(r for r in F.SIGNS if r["id"] == it["id"])
-        if row["kind"] != "swing":
+        if row["kind"] != "swing" or not row.get("bracket"):
             continue
-        holes = [f for f in it["solid"].faces("%CYLINDER").vals()
-                 if abs(f.Area() / (2 * math.pi * SG.PLATE_T) - SG.EYE_HOLE / 2) < 0.25]
-        if len(holes) < 2:
-            fail(f"{it['id']} {it['name']}: {len(holes)} eye(s) of {SG.EYE_HOLE} mm "
-                 "-- a swing sign hangs by two")
+        n = len(it["solid"].val().Solids())
+        if n != 1:
+            fail(f"{it['id']} {it['name']}: {n} disconnected solids -- a peg or the "
+                 "plate is not touching the arm")
         else:
-            ok(f"{it['id']} {it['name']}: two {SG.EYE_HOLE} mm eyes")
+            ok(f"{it['id']} {it['name']}: one solid, fused to its bracket")
+    for it in KT.brackets():
+        if not it["id"].startswith("31"):
+            continue
+        n = len(it["solid"].val().Solids())
+        if n != 1:
+            fail(f"{it['id']} {it['name']}: {n} disconnected solids")
+        else:
+            ok(f"{it['id']} {it['name']}: one solid")
 
 
 def check_clearance_sanity():
@@ -705,9 +720,11 @@ def check_mount_crowding():
         placed, _c, _a, _b = WL.collect(side)
         parts = [(p["id"], p["name"], p["placed"].val().BoundingBox()) for p in placed]
         mounts = []
-        for kind, row, _rot in K.wall_mount_rows(side):
-            u, z = row["u"], row.get("z", 20.0)
-            mounts.append((kind, row["id"], row.get("name", ""), u, z))
+        for kind, row, _rot, offsets in K.wall_mount_rows(side):
+            for i, (du, dz) in enumerate(offsets):
+                tag = row["id"] if len(offsets) == 1 else f"{row['id']}.{i + 1}"
+                mounts.append((kind, tag, row.get("name", ""),
+                               row["u"] + du, row.get("z", 20.0) + dz))
 
         def gap(u, z, bb):
             dy = max(u - 1.95 - bb.ymax, bb.ymin - u - 1.95, 0.0)
@@ -762,7 +779,7 @@ def check_hung_clearance():
         # hangs off the overhead rail: placing either flat on the wall and measuring
         # what it runs into measures nothing. A fascia name plate sits on its board,
         # which is a joint of its own and is checked by the pin geometry.
-        want = {r["id"] for _k, r, _ in KT.wall_mount_rows(side)}
+        want = {r["id"] for _k, r, _rot, _o in KT.wall_mount_rows(side)}
         hung = []
         for it in KT.signs() + KT.brackets() + KT.lanterns() + KT.props():
             if it.get("side") != side or it["id"] not in want:

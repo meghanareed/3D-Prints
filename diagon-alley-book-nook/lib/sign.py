@@ -146,12 +146,17 @@ def plate_arrow(w, h, txt="", t=PLATE_T):
     return _back_socket(body, -w * 0.3, 0.0)
 
 
-def plate_swing(w, h, txt="", t=PLATE_T):
-    """Projecting swing sign: plate plus two hanging eyes for the chain."""
+def plate_swing(w, h, txt="", t=PLATE_T, eyes=True):
+    """Projecting swing sign.
+
+    `eyes` are for a plate that hangs on hooks. A plate fused into its bracket's plane
+    is carried by the arm above it and hangs from nothing, so eyes on it are 4 mm of
+    dead height on a part fighting for a 15 mm band of bare wall.
+    """
     body = cq.Workplane("XY").box(w, h, t, centered=(True, True, False))
     body = try_fillet(body, "|Z", 1.2)
     r_in = EYE_HOLE / 2
-    for s in (-1, 1):
+    for s in (-1, 1) if eyes else ():
         eye = (cq.Workplane("XY").circle(r_in + EYE_WALL).extrude(t)
                .cut(cq.Workplane("XY").circle(r_in).extrude(t))
                .translate((s * (w / 2 - 3.4), h / 2 + r_in + EYE_WALL - 0.6, 0)))
@@ -175,35 +180,108 @@ def _to_part_frame(body):
     return body.rotate((0, 0, 0), (1, 1, 1), -120)
 
 
-def bracket_scroll(reach=14.0, drop=16.0, t=2.4, w=2.6):
-    """Wrought-iron scroll bracket. Drawn in XZ and extruded so it prints flat with
-    the scroll lying on the bed -- no supports, and the layer lines run along the arm."""
+def bracket_pegs(drop, arm_t=2.4):
+    """Where a bracket's wall pegs sit, in the DRAWING frame (z along the post).
+
+    Two, not one. A bracket carrying a sign that projects into the alley is a
+    cantilever, and one peg is a hinge -- the sign would swing down and stay there.
+    Spaced as widely as the post allows, and never closer than a socket is wide.
+    """
+    post_h = drop + POST_RISE
+    sp = max(5.0, min(9.0, post_h - 4.4))
+    zc = (POST_RISE - drop) / 2.0
+    return [zc - sp / 2, zc + sp / 2]
+
+
+POST_RISE = 1.0     # how far the post stands above the arm
+
+
+def _scroll_body(reach, drop, t, w):
+    """The ironwork, in the drawing frame: arm +X, post +Z, width -Y."""
     arm = (cq.Workplane("XZ")
            .moveTo(0, 0).lineTo(reach, 0).lineTo(reach, -t).lineTo(0, -t)
            .close().extrude(-w))
     post = (cq.Workplane("XZ")
-            .moveTo(0, -drop).lineTo(t, -drop).lineTo(t, 2.0).lineTo(0, 2.0)
-            .close().extrude(-w))
+            .moveTo(0, -drop).lineTo(t, -drop).lineTo(t, POST_RISE)
+            .lineTo(0, POST_RISE).close().extrude(-w))
     body = arm.union(post)
-    # diagonal stay plus a scroll curl
     stay = (cq.Workplane("XZ")
             .moveTo(t, -drop * 0.85).lineTo(reach * 0.86, -t)
             .lineTo(reach * 0.86, -t - 2.0).lineTo(t + 2.2, -drop * 0.85)
             .close().extrude(-w))
     body = body.union(stay)
-    curl = (cq.Workplane("XZ").center(reach * 0.5, -drop * 0.42).circle(drop * 0.20)
-            .extrude(-w).cut(cq.Workplane("XZ")
-                            .center(reach * 0.5, -drop * 0.42)
-                            .circle(drop * 0.20 - 1.1).extrude(-w)))
-    body = body.union(curl)
-    # tip eye for the sign to hang from -- same hole as the sign's, so one hook fits both
+    # The curl is a ring of wall 1.1 mm thick, and a shallow bracket at the back of the
+    # alley has no room for one: at drop 6 scaled to 0.6 the inner radius goes negative
+    # and OCCT refuses the circle. Below that it is simply left off.
+    r_out = drop * 0.20
+    if r_out - 1.1 > 0.4:
+        curl = (cq.Workplane("XZ").center(reach * 0.5, -drop * 0.42).circle(r_out)
+                .extrude(-w).cut(cq.Workplane("XZ")
+                                 .center(reach * 0.5, -drop * 0.42)
+                                 .circle(r_out - 1.1).extrude(-w)))
+        body = body.union(curl)
+    return body
+
+
+def _wall_pegs(body, drop, w, t=2.4):
+    """The wall pegs, in the drawing frame.
+
+    +w/2, not -w/2, and the sign is not obvious from the drawing: the body extrudes to
+    y = -w, but _to_part_frame's rotation lands drawing +y on the same side of the part
+    as the body. Pegs at -w/2 come out 3.2 mm clear of it as loose solids. Measured, not
+    reasoned -- verify.check_bracket_solidity() rebuilds every bracket and counts.
+    """
+    for zp in bracket_pegs(drop, t):
+        body = body.union(peg_p1((0.0, w / 2, zp), axis="-X"))
+    return body
+
+
+def bracket_scroll(reach=14.0, drop=16.0, t=2.4, w=2.6):
+    """Wrought-iron scroll bracket, no sign on it. Drawn in XZ and extruded so it
+    prints flat with the scroll lying on the bed -- no supports, and the layer lines
+    run along the arm."""
+    body = _scroll_body(reach, drop, t, w)
+    # tip eye, kept for a bracket that carries nothing but looks like it once did
+    # 0.6 up into the arm. Sized to sit exactly under it the ring is TANGENT, and a
+    # tangent solid is a separate solid: widening the eye to 2.4 mm quietly turned the
+    # bracket into three pieces.
     r_in = EYE_HOLE / 2
-    body = body.union(cq.Workplane("XZ").center(reach - 1.5, -t - r_in - EYE_WALL)
+    ez = -t - r_in - EYE_WALL + 0.6
+    body = body.union(cq.Workplane("XZ").center(reach - 1.5, ez)
                       .circle(r_in + EYE_WALL).extrude(-w)
-                      .cut(cq.Workplane("XZ").center(reach - 1.5, -t - r_in - EYE_WALL)
+                      .cut(cq.Workplane("XZ").center(reach - 1.5, ez)
                            .circle(r_in).extrude(-w)))
-    body = body.union(peg_p1((0.0, w / 2, -drop * 0.5), axis="-X"))
-    return _to_part_frame(body)
+    return _to_part_frame(_wall_pegs(body, drop, w, t))
+
+
+def swing_assembly(reach, drop, plate_w, plate_h, txt, t=PLATE_T, arm_t=2.4, w=2.6):
+    """A hanging shop sign and its bracket as ONE part, in the bracket's PLANE.
+
+    This is the shape a book nook needs. A sign built parallel to the wall shows the
+    viewer its edge: you look down the alley from the front, so a plate flat on a side
+    wall is raked away to nothing and no lettering on it can be read. Turned into the
+    bracket's plane it faces the opening squarely, which is also how a real hanging
+    shop sign works and why they read down a street.
+
+    It is also the only orientation in which the pair prints flat. kit.py used to carry
+    a note that fusing them made "a T in three dimensions with no flat lie anywhere" --
+    true while the plate stayed parallel to the wall, and untrue the moment it turns:
+    coplanar with the arm, the whole assembly lies on the bed in one piece with its
+    lettering up, no chain, no hook and no eye doing any work.
+    """
+    body = _scroll_body(reach, drop, arm_t, w)
+    plate = plate_swing(plate_w, plate_h, txt, t, eyes=False)   # lettering on +Z
+    # into the bracket's plane: the plate's face turns to -Y, which is the face the
+    # alley sees, and its width runs out along the arm
+    plate = plate.rotate((0, 0, 0), (1, 0, 0), -90)
+    plate = plate.translate((reach / 2.0, -w / 2 + t / 2, -arm_t - plate_h / 2 - 0.4))
+    # a short hanger each side, so the plate is carried by the arm and not floating
+    for sx in (-1, 1):
+        x = reach / 2.0 + sx * (plate_w / 2 - 3.4)
+        body = body.union(cq.Workplane("XZ").center(x, -arm_t - 0.3).rect(1.8, 1.8)
+                          .extrude(-w))
+    body = body.union(plate)
+    return _to_part_frame(_wall_pegs(body, drop, w, arm_t))
 
 
 def bracket_straight(reach=10.0, t=2.2, w=2.4):
