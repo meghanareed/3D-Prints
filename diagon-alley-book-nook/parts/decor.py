@@ -351,7 +351,8 @@ def _fascia(row, side):
     w = row["w"] * s
     h = 9.0 * s
     u, z = row["u"], F.storey_z(row["z"], row["u"])
-    part = W.fascia(w, h)
+    from lib.sign import NAMEPLATE_PITCH
+    part = W.fascia(w, h, pitch=NAMEPLATE_PITCH * s)
 
     spec = _frame_mounts(u, z, w - 12, h - 2)
     return _pack(row, side, [("", row["name"], part, (u, z))], spec, [])

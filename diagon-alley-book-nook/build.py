@@ -177,10 +177,10 @@ PRINT_ROT_MEASURED = {
     "23Hs": ("X", 180),    "24Ac": ("X", 180),    "25A": ("X", 180),
     "25B": ("X", 180),     "27A": ("X", 180),     "27B": ("X", 180),
     "28A": ("X", 180),     "29B": ("X", 180),     "29C": ("X", 180),
-    "30B": None,           "30C": None,           "30D": ("X", -90),
-    "30E": ("X", -90),     "30F": ("X", -90),     "30G1": ("X", -90),
-    "30G2": ("X", -90),    "30G3": ("X", -90),    "30G4": ("X", -90),
-    "30H": None,           "30J": ("X", -90),     "30L": ("X", -90),
+    # Signs are deliberately ABSENT from this table. It used to stand nine of them on
+    # edge, ("X", -90), which was measured back when a sign carried a peg on its back
+    # and the only question was where the peg pointed. A sign now lies back-down with
+    # its lettering standing up, and manifest() sets that for every sign in one place.
     "31A": ("Y", -90),      "31B": ("Y", -90),      "31C": ("Y", -90),
     "31D": ("Y", -90),      "32B": None,           "32C": ("X", 90),
     "33A": None,           "34A": None,           "34C": ("X", -90),
@@ -307,16 +307,25 @@ def manifest():
                 note="face down, pegs up")
 
     # ---- 30-39 signs, brackets, lanterns, props -----------------------------
-    for it in KT.signs() + KT.brackets() + KT.lanterns():
-        sd, u, z = it.get("side"), it.get("u", 0), it.get("z", 0)
-        if sd in ("L", "R"):
-            add(it["id"], it["name"], (lambda i=it: i["solid"]), "signs",
-                place=(lambda s, i=it, q=sd: wall_xf(q, to_wall(i["solid"], i["u"], i["z"]))),
-                colour="iron", print_rot=("X", 180), note="face down, pegs up")
-        else:
-            add(it["id"], it["name"], (lambda i=it: i["solid"]), "signs",
-                place=None, colour="iron", print_rot=("X", 180),
-                note="blank spare -- face down, pegs up")
+    # Signs print TEXT UP. They used to print ("X", 180) -- "face down, pegs up" --
+    # which laid every raised letter on the bed to be squashed and elephant-footed. The
+    # peg is gone from the back of a sign plate (it is a socket and a loose pin now), so
+    # the plate lies back-down and flat with its lettering standing in clear air.
+    # Brackets and lanterns still carry pegs and still print pegs-up.
+    for it in KT.signs():
+        sd = it.get("side")
+        add(it["id"], it["name"], (lambda i=it: i["solid"]), "signs",
+            place=((lambda s, i=it, q=sd: wall_xf(q, to_wall(i["solid"], i["u"], i["z"])))
+                   if sd in ("L", "R") else None),
+            colour="iron", print_rot=None,
+            note="text up" if sd in ("L", "R") else "blank spare -- text up")
+    for it in KT.brackets() + KT.lanterns():
+        sd = it.get("side")
+        add(it["id"], it["name"], (lambda i=it: i["solid"]), "signs",
+            place=((lambda s, i=it, q=sd: wall_xf(q, to_wall(i["solid"], i["u"], i["z"])))
+                   if sd in ("L", "R") else None),
+            colour="iron", print_rot=("X", 180),
+            note="face down, pegs up" if sd in ("L", "R") else "blank spare")
     PROP_ROT = {"37B": ("X", -90),        # broom rack lies flat
                 "38A": ("X", 180), "38B": ("X", 180),   # wall-hung, pegs up
                 "39C": ("X", 180)}

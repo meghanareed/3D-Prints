@@ -6,10 +6,14 @@ and are all separate parts with replaceable text plates.
 import math
 import cadquery as cq
 import params as P
-from lib.mount import peg_p1, socket_p1
+from lib.mount import peg_p1, socket_p1, socket_p1_solids
 from lib.util import try_fillet, emboss_text
 
-PLATE_T = 1.8
+# 2.4, not 1.8. A sign is located by a loose pin into a socket in its back, and a
+# 1.8 mm plate leaves only 1.2 mm of bore before the floor -- too little for one pin
+# length to serve both the wall (2.5 mm bore) and a fascia board (1.6 mm). At 2.4 the
+# plate takes a 1.6 mm bore, one 3.2 mm pin fits every joint, and the plate is stiffer.
+PLATE_T = 2.4
 
 
 def _fit_size(txt, w, h):
@@ -55,6 +59,29 @@ def _text_on(body, txt, w, h, vertical=False, size=None, top_z=None):
         return body
 
 
+BACK_BORE = 1.6      # bore into a 2.4 mm plate, leaving a 0.8 mm floor
+NAMEPLATE_PITCH = 20.0   # pin spacing shared by a fascia board and its name plate
+
+
+def _back_socket(body, x=0.0, y=0.0, depth=BACK_BORE):
+    """Locating socket in the plate's BACK, for a loose pin.
+
+    Signs used to carry a peg here, and a peg on the back is what forced the plate onto
+    the bed face-down -- print_rot ("X", 180), "face down, pegs up" -- with every raised
+    letter crushed into the plate and elephant-footed. A socket does the same locating
+    job and lets the plate lie back-down with its lettering standing up in clean air.
+
+    Built along +Z, the direction the pin travels as it enters from the back, so the
+    lead-in lands on the back face where the pin meets it. rot=180 because the pin is
+    the peg this plate used to carry: that peg was placed axis="-Z", which turns the
+    D-flat to -Y, and a bore built the other way up puts its flat at +Y and jams on the
+    key. verify.check_pin_joints() assembles the real pair and measures it.
+    """
+    cut, _ = socket_p1_solids((x, y, 0.0), axis="+Z", rot=180.0, depth=depth,
+                              decorative=True)
+    return body.cut(cut)
+
+
 def plate_rect(w, h, txt="", t=PLATE_T, bevel=True):
     body = cq.Workplane("XY").box(w, h, t, centered=(True, True, False))
     if bevel:
@@ -75,7 +102,7 @@ def plate_vertical_banner(w, h, txt="", t=PLATE_T):
                                              centered=(True, True, False))
                       .translate((0, -h / 2 + 1.5, 0)))
     body = _text_on(body, txt, w, h, vertical=True, top_z=t)
-    return body.union(peg_p1((0.0, h / 2 - 1.5, 0.0), axis="-Z"))
+    return _back_socket(body, 0.0, h / 2 - 1.5)
 
 
 def plate_shield(w, h, txt="", t=PLATE_T):
@@ -87,7 +114,7 @@ def plate_shield(w, h, txt="", t=PLATE_T):
                                              centered=(True, True, False))
                       .translate((0, h / 2 - 1.2, 0)))
     body = _text_on(body, txt, w, h * 0.7, top_z=t)
-    return body.union(peg_p1((0.0, 0.0, 0.0), axis="-Z"))
+    return _back_socket(body)
 
 
 def plate_lozenge(w, h, txt="", t=PLATE_T):
@@ -98,7 +125,7 @@ def plate_lozenge(w, h, txt="", t=PLATE_T):
                        (w / 2, 0), (w / 2 - k, -h / 2), (-w / 2 + k, -h / 2)])
             .close().extrude(t))
     body = _text_on(body, txt, w * 0.8, h, top_z=t)
-    return body.union(peg_p1((0.0, 0.0, 0.0), axis="-Z"))
+    return _back_socket(body)
 
 
 def plate_arrow(w, h, txt="", t=PLATE_T):
@@ -107,7 +134,7 @@ def plate_arrow(w, h, txt="", t=PLATE_T):
                        (w / 2 - h * 0.5, -h / 2), (-w / 2, -h / 2)])
             .close().extrude(t))
     body = _text_on(body, txt, w * 0.72, h, top_z=t)
-    return body.union(peg_p1((-w * 0.3, 0.0, 0.0), axis="-Z"))
+    return _back_socket(body, -w * 0.3, 0.0)
 
 
 def plate_swing(w, h, txt="", t=PLATE_T):

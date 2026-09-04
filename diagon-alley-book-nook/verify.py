@@ -69,16 +69,20 @@ def check_fits():
         b = ribbed.intersect(placed)
         foul = a.val().Volume() if a.val().Solids() else 0.0
         grip = (b.val().Volume() if b.val().Solids() else 0.0) - foul
-        # 11A used to be exempt from the grip test, because T3 had no grip to test --
-        # it relied on a detent that measured 0.008 mm^3. Now that T3 carries the same
-        # crush ribs as P1 and P2, it is held to the same standard. An exemption that
-        # outlives its reason is how a regression hides.
+        # Grip is now a T3 question only. P1 and P2 are glued locators with no ribs and
+        # nothing to grip with, by decision and not by accident: docs/09_COUPON_RESULTS.
+        # Demanding grip of them here would fail the kit for being built as designed --
+        # which is what this check did the moment the clearance changed. What P1 and P2
+        # owe is the opposite: enter with nothing fouling and leave a gap for glue.
+        ribbed_joint = rid == "11A"
         if foul > 0.05:
             fail(f"{rid} {what}: part fouls the wall by {foul:.2f} mm^3 -- will not seat")
-        elif grip < 0.05:
+        elif ribbed_joint and grip < 0.05:
             fail(f"{rid} {what}: no crush-rib grip, the part will fall out")
-        else:
+        elif ribbed_joint:
             ok(f"{rid} {what}: clears the bore, grip {grip:.2f} mm^3")
+        else:
+            ok(f"{rid} {what}: enters clean, glued -- {grip:.2f} mm^3 of rib (expected 0)")
 
 
 def check_all_mates():
@@ -158,6 +162,87 @@ def check_keying():
                    f"{here:.2f} mm^3); the key stops working above {last:.2f}")
     finally:
         P.DECORATIVE_CLEARANCE, P.FIT_CLEARANCE = real
+
+
+MIN_TEXT_SIZE = 3.5    # a bold serif stem is ~0.12 of the glyph size; below this the
+                       # stems are under one 0.42 mm extrusion and print as mush
+
+
+def check_sign_text():
+    """Sign lettering must be RAISED, land face UP on the bed, and be big enough to print.
+
+    Three ways a sign can carry text nobody can read, and the kit had all three.
+
+    RAISED: text sunk into a plate that will be painted fills with paint and disappears.
+    lib.sign embosses, and this checks it still adds material rather than cutting it.
+
+    FACE UP: signs used to print ("X", 180) -- "face down, pegs up" -- which laid every
+    raised letter on the bed to be squashed flat and elephant-footed. The peg is a
+    socket and a loose pin now, so the plate lies back-down and the letters stand up.
+
+    BIG ENOUGH: the forced perspective scales a rear plate to 0.6, and the fitter then
+    shrinks the type to keep it inside the plate. Eight of the kit's twelve signs were
+    sized between 1.97 and 3.05 mm, which on a 0.4 mm nozzle is not lettering.
+    """
+    print("\n[signs] lettering is raised, faces up, and is big enough to print")
+    import build as B
+    import data.facade as F
+    from parts import kit as KT
+    from lib.sign import _fit_size
+
+    EFF = {"swing": 0.86, "shield": 1.0, "lozenge": 0.8, "arrow": 0.72,
+           "fasciaplate": 0.94}
+    for r in F.SIGNS:
+        txt = r.get("text", "")
+        if not txt:
+            continue
+        sc = F.wpersp(r["u"]) if r.get("side") else 1.0
+        w, h = r["w"] * sc, r["h"] * sc
+        if r["kind"] == "banner":
+            size = min(w * 0.62, h / (len(txt) + 0.4) * 0.82)
+        else:
+            size = _fit_size(txt, w * EFF[r["kind"]],
+                             h * 0.7 if r["kind"] == "shield" else h)
+        if size < MIN_TEXT_SIZE:
+            fail(f"{r['id']} {r['name']}: {txt!r} comes out at {size:.2f} mm on a "
+                 f"{w:.1f} x {h:.1f} plate -- under {MIN_TEXT_SIZE}, the stems are "
+                 "thinner than one extrusion. Shorten it or widen the plate.")
+
+    rows = {m["id"]: m for m in B.manifest()}
+    for it in KT.signs():
+        row = next(r for r in F.SIGNS if r["id"] == it["id"])
+        if not row.get("text"):
+            continue
+        m = rows[it["id"]]
+        if m["print_rot"] is not None:
+            fail(f"{it['id']}: print_rot {m['print_rot']} -- a sign with raised text "
+                 "must print text up, back on the bed")
+            continue
+        real = P.RENDER_TEXT
+        try:
+            P.RENDER_TEXT = False
+            blank = KT._sign_part(row)
+        finally:
+            P.RENDER_TEXT = real
+        lettered = it["solid"]
+        dv = lettered.val().Volume() - blank.val().Volume()
+        if dv <= 0.05:
+            fail(f"{it['id']}: text removes {-dv:.2f} mm^3 -- it is engraved, not raised")
+            continue
+        added = lettered.cut(blank)
+        ab = added.val().BoundingBox()
+        pb = B.drop_to_bed(B.print_orient(lettered, m["print_rot"])).val().BoundingBox()
+        # The letters need not be the highest thing on the plate -- the banner's side
+        # rails stand 0.6 proud of its face on purpose, and lettering in that channel is
+        # protected rather than wrong. What matters is that they are not on the bed.
+        if pb.zmax - ab.zmax > 1.0:
+            warn(f"{it['id']}: the lettering sits {pb.zmax - ab.zmax:.2f} mm below the "
+                 "top of the plate -- check nothing is standing over it")
+        if ab.zmin < 0.2:
+            fail(f"{it['id']}: the lettering reaches the bed -- it prints face down")
+        else:
+            ok(f"{it['id']}: {dv:.1f} mm^3 raised, standing {ab.zmax - ab.zmin:.1f} mm "
+               f"proud, text up")
 
 
 def check_clearance_sanity():
@@ -597,6 +682,58 @@ def check_mount_crowding():
             ok(f"{side} wall: all {len(mounts)} hung mounts have bare wall around them")
 
 
+def check_hung_clearance():
+    """A sign moved to clear its SOCKET must still clear the parts around its BODY.
+
+    check_mount_crowding()
+    check_hung_clearance() compares 3.9 mm holes. A sign is a 30 mm plate on a bracket
+    that reaches 15 mm into the alley, and the wall it hangs on carries a bay window
+    that projects 13 and an oriel that projects 10. Move a socket up to find bare wall
+    and the plate it carries can arrive inside the oriel, with the geometry still
+    perfectly valid and the check still green.
+
+    So this is the second half of the mount pass: every hung part, placed where its row
+    puts it, against every facade part on that wall.
+    """
+    print("\n[fit] hung parts clear the facade they hang on")
+    from parts import walls as WL
+    from parts import kit as KT
+    from parts.decor import to_wall
+
+    for side in ("L", "R"):
+        placed, _c, _a, _b = WL.collect(side)
+        facade = [(p["id"], p["name"], p["placed"]) for p in placed]
+        # Only the parts that actually lie against the wall. A swing sign hangs on chain
+        # at the end of a bracket that reaches 15 mm into the alley, and the banner
+        # hangs off the overhead rail: placing either flat on the wall and measuring
+        # what it runs into measures nothing. A fascia name plate sits on its board,
+        # which is a joint of its own and is checked by the pin geometry.
+        want = {r["id"] for _k, r, _ in KT.wall_mount_rows(side)}
+        hung = []
+        for it in KT.signs() + KT.brackets() + KT.lanterns() + KT.props():
+            if it.get("side") != side or it["id"] not in want:
+                continue
+            hung.append((it["id"], it["name"],
+                         to_wall(it["solid"], it["u"], it.get("z", 0) or 0)))
+        bad = 0
+        for hid, hname, hsolid in hung:
+            hb = hsolid.val().BoundingBox()
+            for pid, pname, psolid in facade:
+                pb = psolid.val().BoundingBox()
+                if (hb.xmax <= pb.xmin or hb.xmin >= pb.xmax
+                        or hb.ymax <= pb.ymin or hb.ymin >= pb.ymax
+                        or hb.zmax <= pb.zmin or hb.zmin >= pb.zmax):
+                    continue
+                hit = hsolid.intersect(psolid)
+                v = hit.val().Volume() if hit.val().Solids() else 0.0
+                if v > 0.05:
+                    bad += 1
+                    fail(f"{side}: {hid} {hname} is inside {pid} {pname} by "
+                         f"{v:.2f} mm^3")
+        if not bad:
+            ok(f"{side} wall: all {len(hung)} hung parts clear the facade")
+
+
 def check_first_layer_islands():
     """Is the first layer one piece, and is it joined by more than a hair?
 
@@ -803,6 +940,7 @@ def check_manifest():
 if __name__ == "__main__":
     print("Crooked Lane Book Nook -- verification")
     check_clearance_sanity()
+    check_sign_text()
     check_envelope()
     check_assembled_envelope()
     check_light_block()

@@ -8,7 +8,7 @@ import math
 import cadquery as cq
 import params as P
 from lib.mount import (peg_p1, socket_p1, peg_p2, socket_p2, tongue_t3, groove_t3,
-                       P2_SPACING)
+                       socket_p1_solids, P2_SPACING)
 from lib.util import try_chamfer, try_fillet
 
 # PART FRAME CONVENTION -- every wall-mounted part in this file uses it, and to_wall()
@@ -376,13 +376,25 @@ def stallriser(w, h=12.0, t=2.0, boards=4):
     return _mount_pegs(body, w - 2 * FRAME_LIP, h - 2 * FRAME_LIP)
 
 
-def fascia(w, h=9.0, t=2.4):
-    """Blank shop fascia board -- takes a separate sign plate."""
+def fascia(w, h=9.0, t=2.4, pitch=None):
+    """Shop fascia board. Blank: the name lives on a separate plate pinned to it.
+
+    Two sockets on the FRONT take that plate. They are here rather than in the wall
+    because a name plate mounted to the wall has to find bare brick beside the board it
+    is meant to sit on, and on this facade there is none -- every fascia name plate in
+    the kit had its wall socket underneath the shopfront it belonged to.
+    """
     body = cq.Workplane("XY").box(w, h, t, centered=(True, True, False))
     body = body.union(cq.Workplane("XY").box(w + 2.0, 2.0, t + 1.4,
                                              centered=(True, True, False))
                       .translate((0, h / 2 - 1.0, 0)))
-    return _mount_pegs(body, w - 12, h - 2)
+    body = _mount_pegs(body, w - 12, h - 2)
+    if pitch:
+        for sx in (-1, 1):
+            c, _a = socket_p1_solids((sx * pitch / 2, 0.0, t), axis="-Z", depth=t - 0.8,
+                                     decorative=True)
+            body = body.cut(c)
+    return body
 
 
 def awning(w, proj=9.0, h=7.0, scallops=6, t=1.6):

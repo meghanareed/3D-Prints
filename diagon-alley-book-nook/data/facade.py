@@ -27,14 +27,19 @@ def storey_z(z_front, u):
     return z_front + (VP_Z - z_front) * (min(u, P.ALLEY_D) / VP_U)
 
 
-# Shop names -- original, fictional
+# The six shopfronts, by their Diagon Alley names. The full name is the shop's
+# identity; what a given sign can physically SAY is a different question, answered by
+# verify.check_sign_text() -- at 0.4 mm of nozzle a bold serif glyph needs about 3.5 mm
+# of size before its stems are one extrusion wide, and the rear plates are scaled to
+# 0.6 by the forced perspective. So the front shops carry their name and the rear ones
+# carry their trade.
 SHOPS = {
-    "L1": "MOONWRIGHT & DAUGHTERS",
-    "L2": "THE BRASS CAULDRON",
-    "L3": "PENNYQUILL'S",
-    "R1": "GRIMSBY'S OWLERY",
-    "R2": "HOLLOWAY BROOM CO.",
-    "R3": "THE INKWELL",
+    "L1": "OLLIVANDERS",                    # wands -- the hero bow front
+    "L2": "THE APOTHECARY",                 # potion ingredients, projecting bay
+    "L3": "SCRIBBULUS WRITING IMPLEMENTS",  # quills and ink, rear
+    "R1": "EEYLOPS OWL EMPORIUM",           # owls, arched door
+    "R2": "QUALITY QUIDDITCH SUPPLIES",     # brooms, full storefront
+    "R3": "FLOURISH AND BLOTTS",            # books, rear
 }
 
 # ---------------------------------------------------------------------------
@@ -42,7 +47,7 @@ SHOPS = {
 # geometry keys each kind needs.  `lit` marks a bead pocket behind the element.
 # ---------------------------------------------------------------------------
 LEFT = [
-    # --- L1  Moonwright & Daughters : the hero bow-fronted wandmaker ----------
+    # --- L1  Ollivanders : the hero bow-fronted wandmaker ---------------------
     dict(id="10B", kind="bow",       u=20,  z=8,  w=40, h=46, proj=15, lit=2,
          name="L1_Bow_Window"),
     dict(id="10E", kind="stallriser", u=20, z=2,  w=40, h=10, name="L1_Stallriser"),
@@ -51,7 +56,7 @@ LEFT = [
          name="L1_Door", fanlight=True),
     dict(id="19A", kind="quoin",     u=3,   z=0,  h=70, name="L_Quoin_Front"),
 
-    # --- L2  The Brass Cauldron : apothecary, projecting bay ------------------
+    # --- L2  The Apothecary : projecting bay ----------------------------------
     dict(id="11A", kind="bay",       u=74,  z=10, w=30, h=40, proj=13, lit=2,
          name="L2_Bay_Window"),
     # z=68, above the bay's roof. At its original 52 the awning's single mount landed
@@ -61,9 +66,9 @@ LEFT = [
     dict(id="11J", kind="awning",    u=74,  z=68, w=30, proj=8, name="L2_Awning"),
     dict(id="11F", kind="door",      u=98,  z=6,  w=18, h=36, panels=2, lit=1,
          name="L2_Door", fanlight=True),
-    dict(id="11K", kind="fascia",    u=86,  z=54, w=34, name="L2_Fascia"),
+    dict(id="11K", kind="fascia",    u=86,  z=54, w=38, name="L2_Fascia"),
 
-    # --- L3  Pennyquill's : rear, compressed ----------------------------------
+    # --- L3  Scribbulus Writing Implements : rear, compressed -----------------
     dict(id="12A", kind="shopwin",   u=124, z=8,  w=24, h=26, cols=3, rows=2, lit=1,
          name="L3_Shop_Window"),
     dict(id="12D", kind="stallriser", u=124, z=2, w=24, h=7,  name="L3_Stallriser"),
@@ -104,7 +109,7 @@ LEFT = [
 ]
 
 RIGHT = [
-    # --- R1  Grimsby's Owlery & Post : arched door, tall window ---------------
+    # --- R1  Eeylops Owl Emporium : arched door, tall window ------------------
     # u=21 w=19, not u=16 w=22. The door's opening reached to within 1.5 mm of the
     # wall's front edge, so the front quoin's mounts -- which sit at depth 5.5-9.5 for
     # the quoin's whole height -- landed INSIDE the door opening. The quoin ended up
@@ -119,7 +124,7 @@ RIGHT = [
     dict(id="20G", kind="ornament",  u=21,  z=56, w=12, h=8,  name="R1_Door_Keystone"),
     dict(id="29A", kind="quoin",     u=3,   z=0,  h=70, name="R_Quoin_Front"),
 
-    # --- R2  Holloway Broom Co. : full storefront under the banner ------------
+    # --- R2  Quality Quidditch Supplies : full storefront under the banner ----
     dict(id="21B", kind="shopwin",   u=72,  z=10, w=34, h=32, cols=3, rows=2, lit=2,
          name="R2_Shop_Window"),
     dict(id="21D", kind="pilaster",  u=54,  z=4,  h=44, name="R2_Pilaster_Left"),
@@ -127,7 +132,7 @@ RIGHT = [
     dict(id="21F", kind="fascia",    u=72,  z=46, w=40, name="R2_Fascia"),
     dict(id="21G", kind="stallriser", u=72, z=2,  w=34, h=8, name="R2_Stallriser"),
 
-    # --- R3  The Inkwell : rear, compressed ----------------------------------
+    # --- R3  Flourish and Blotts : rear, compressed ---------------------------
     dict(id="22A", kind="shopwin",   u=120, z=8,  w=22, h=24, cols=2, rows=2, lit=1,
          name="R3_Shop_Window"),
     dict(id="22D", kind="door",      u=138, z=5,  w=13, h=24, panels=2,
@@ -168,51 +173,70 @@ RIGHT = [
 # Signs.  side: "L" | "R" | "X" (crossing the alley from the overhead rail).
 # ---------------------------------------------------------------------------
 SIGNS = [
-    dict(id="30A", kind="banner",  side="R", u=66,  z=96, w=12, h=58, lit=1,
-         text="CROOKED LANE", name="Sign_Vertical_Banner"),
-    dict(id="30B", kind="swing",   side="L", u=30,  z=64, w=26, h=13,
-         text="WANDS", name="Sign_Swing_A", bracket="31A"),
-    dict(id="30C", kind="swing",   side="R", u=52,  z=62, w=24, h=12,
-         text="OWLERY", name="Sign_Swing_B", bracket="31B"),
-    dict(id="30D", kind="shield",  side="L", u=88,  z=66, w=17, h=19,
-         text="BC", name="Sign_Shield_A", bracket="31C"),
+    # Sizes here are set by legibility, not by taste. verify.check_sign_text() computes
+    # the size the letters actually come out at after the forced-perspective scale and
+    # fails anything under MIN_TEXT_SIZE, because a bold serif stem is about 0.12 of the
+    # glyph size and anything under one 0.42 mm extrusion prints as mush. Several of
+    # these plates grew to carry their name; the ones that could not grow carry the
+    # shop's trade instead, which is what a real alley sign does anyway.
+    dict(id="30A", kind="banner",  side="R", u=66,  z=96, w=14, h=64, lit=1,
+         text="DIAGON", name="Sign_Vertical_Banner"),
+    dict(id="30B", kind="swing",   side="L", u=30,  z=64, w=34, h=15,
+         text="OLLIVANDERS", name="Sign_Swing_Ollivanders", bracket="31A"),
+    dict(id="30C", kind="swing",   side="R", u=52,  z=62, w=26, h=13,
+         text="EEYLOPS", name="Sign_Swing_Eeylops", bracket="31B"),
+    dict(id="30D", kind="shield",  side="L", u=90,  z=77, w=23, h=21,
+         text="POTIONS", name="Sign_Shield_Apothecary", bracket="31C"),
+    # fasciaplate: pinned to the fascia BOARD it sits on (21F), so its u and z match
+    # that row's and its width stays inside the board's.
     dict(id="30E", kind="fasciaplate", side="R", u=72, z=46, w=38, h=8,
-         text="HOLLOWAY BROOM CO.", name="Sign_Fascia_Long"),
-    dict(id="30F", kind="arrow",   side="L", u=120, z=58, w=22, h=7,
-         text="TO THE LANE", name="Sign_Directional"),
-    dict(id="30G1", kind="lozenge", side="R", u=104, z=64, w=15, h=6,
-         text="STYLE", name="Sign_Lozenge_1"),
-    dict(id="30G2", kind="lozenge", side="R", u=104, z=56, w=15, h=6,
-         text="VALUE", name="Sign_Lozenge_2"),
-    dict(id="30G3", kind="lozenge", side="R", u=104, z=48, w=14, h=6,
-         text="EASE", name="Sign_Lozenge_3"),
-    dict(id="30G4", kind="lozenge", side="R", u=104, z=40, w=14, h=6,
-         text="VARIETY", name="Sign_Lozenge_4"),
-    dict(id="30H", kind="swing",   side="L", u=138, z=52, w=16, h=8,
-         text="INK", name="Sign_Small_Rear_A", bracket="31D"),
-    dict(id="30J", kind="fasciaplate", side="L", u=86, z=54, w=32, h=7,
-         text="THE BRASS CAULDRON", name="Sign_Fascia_L2"),
+         text="QUIDDITCH", name="Sign_Fascia_Quidditch"),
+    dict(id="30F", kind="arrow",   side="L", u=120, z=72, w=46, h=11,
+         text="GRINGOTTS", name="Sign_Directional"),
+    # the lozenge column is a shop directory: four more of the alley's trades
+    dict(id="30G1", kind="lozenge", side="R", u=104, z=64, w=21, h=9,
+         text="PETS", name="Sign_Lozenge_Menagerie"),
+    dict(id="30G2", kind="lozenge", side="R", u=104, z=52, w=21, h=9,
+         text="JOKE", name="Sign_Lozenge_Wheezes"),
+    dict(id="30G3", kind="lozenge", side="R", u=104, z=40, w=21, h=9,
+         text="ICES", name="Sign_Lozenge_Fortescue"),
+    dict(id="30G4", kind="lozenge", side="R", u=104, z=28, w=21, h=9,
+         text="ROBES", name="Sign_Lozenge_Malkin"),
+    dict(id="30H", kind="swing",   side="L", u=138, z=52, w=20, h=10,
+         text="INK", name="Sign_Swing_Scribbulus", bracket="31D"),
+    dict(id="30J", kind="fasciaplate", side="L", u=86, z=54, w=34, h=8,
+         text="APOTHECARY", name="Sign_Fascia_Apothecary"),
     # blank spares -- deliberately textless so custom names can be added later
-    dict(id="30K", kind="swing",   side=None, u=0, z=0, w=26, h=13, text="",
+    dict(id="30K", kind="swing",   side=None, u=0, z=0, w=34, h=15, text="",
          name="Sign_Blank_Swing"),
-    dict(id="30L", kind="shield",  side=None, u=0, z=0, w=17, h=19, text="",
+    dict(id="30L", kind="shield",  side=None, u=0, z=0, w=23, h=21, text="",
          name="Sign_Blank_Shield"),
-    dict(id="30M", kind="lozenge", side=None, u=0, z=0, w=15, h=6, text="",
+    dict(id="30M", kind="lozenge", side=None, u=0, z=0, w=21, h=9, text="",
          name="Sign_Blank_Lozenge"),
     dict(id="30N", kind="fasciaplate", side=None, u=0, z=0, w=38, h=8, text="",
          name="Sign_Blank_Fascia"),
 ]
 
+# Positions here are constrained, not chosen: every one of these sockets is a hole in
+# the same wall face as the shopfronts, and verify.check_mount_crowding() will not let
+# one sit under the part next door. The lower storey is solid shopfront, so a mount with
+# nowhere to go goes UP -- which is where a bracket carrying a hanging sign belongs.
 BRACKETS = [
-    dict(id="31A", side="L", u=30,  z=76, reach=15, drop=17, name="Bracket_Scroll_A"),
+    # 30B's bracket. 2.5 mm along the wall, because at u=30 the socket was 1.5 mm
+    # inside the 13A window frame above it -- the hole that showed up on the coupon tile.
+    dict(id="31A", side="L", u=33,  z=76, reach=15, drop=17, name="Bracket_Scroll_A"),
     dict(id="31B", side="R", u=52,  z=74, reach=14, drop=16, name="Bracket_Scroll_B"),
-    dict(id="31C", side="L", u=88,  z=78, reach=12, drop=14, name="Bracket_Scroll_C"),
-    dict(id="31D", side="L", u=138, z=60, reach=8,  drop=10, name="Bracket_Scroll_D"),
+    # 30D's bracket, lifted with it to clear the L2 awning and the oriel above
+    dict(id="31C", side="L", u=90,  z=87, reach=12, drop=14, name="Bracket_Scroll_C"),
+    dict(id="31D", side="L", u=138, z=73, reach=8,  drop=10, name="Bracket_Scroll_D"),
 ]
 
 LANTERNS = [
-    dict(id="33A", side="L", u=34,  z=52, h=26, w=10, lit=1, name="Lantern_Large"),
-    dict(id="34A", side="R", u=84,  z=48, h=21, w=8.5, lit=1, name="Lantern_Small"),
+    # Both of the big lanterns hung on shopfront: 33A's socket was under the bow window
+    # AND the door, 34A's under the R2 shop window. They hang above the fascia now,
+    # which is where a street lantern goes anyway.
+    dict(id="33A", side="L", u=40,  z=76, h=26, w=10, lit=1, name="Lantern_Large"),
+    dict(id="34A", side="R", u=84,  z=71, h=21, w=8.5, lit=1, name="Lantern_Small"),
     dict(id="34C", side="R", u=132, z=40, h=15, w=6.5, lit=1, name="Lantern_Rear_Tiny"),
 ]
 
@@ -231,8 +255,11 @@ PROPS = [
          foot=(21.0, 13.0)),
     dict(id="37B", kind="brooms", side="R", u=64,  name="Broom_Rack"),
     dict(id="37C", kind="postbox", side="R", u=26, name="Post_Box", foot=(10.0, 9.0)),
-    dict(id="38A", kind="notice", side="L", u=68,  z=30, name="Notice_Board"),
-    dict(id="38B", kind="posters", side="L", u=68, z=30, name="Poster_Layer"),
+    # down 6 mm: the board's socket was under the L2 bay. The poster layer glues
+    # ONTO the board and has no wall socket of its own -- it used to share the
+    # board's, which is two pegs in one hole.
+    dict(id="38A", kind="notice", side="L", u=68,  z=24, name="Notice_Board"),
+    dict(id="38B", kind="posters", side="L", u=68, z=24, name="Poster_Layer"),
     dict(id="39A", kind="kerb", side="L", u=80,  name="Kerb_Step", foot=(18.0, 6.0)),
     dict(id="39B", kind="hatch", side="R", u=48,  name="Cellar_Hatch", foot=(14.0, 11.0)),
     dict(id="39C", kind="scraper", side="L", u=46, z=2, name="Boot_Scraper"),

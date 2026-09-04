@@ -167,6 +167,44 @@ def socket_p1(wp, point, axis="+Z", rot=0.0, depth=None, decorative=True):
     return wp.cut(cut)
 
 
+# --------------------------------------------------------------- P1 as a pin --
+#
+# A part whose FRONT carries relief -- a sign, a name board -- cannot print with a peg
+# on its back, because the peg forces it onto the bed face-down and the lettering is
+# squashed into the plate. Give both halves a socket instead and join them with a
+# separate pin: the plate then lies back-down with its text standing up in clean air,
+# and the pin prints lying on its side on a sprue, which is also the end of the 2.4 mm
+# vertical islands that came out of the printer blobbed.
+PIN_L = 3.2          # 1.6 into the plate, 1.6 into the wall or the fascia board
+
+
+def pin_p1(length=PIN_L):
+    """The loose dowel that joins a socket to a socket. Built lying on +Z."""
+    pin = _d_solid(P1_D, P1_FLAT, length)
+    pin = try_chamfer(pin, ">Z", P.PEG_TIP_CHAMFER)
+    return try_chamfer(pin, "<Z", P.PEG_TIP_CHAMFER)
+
+
+def pin_sprue(n=12, length=PIN_L, pitch=4.0):
+    """n pins lying down on a thin runner, so none of them is a tower.
+
+    Standing up, a 2.4 mm pin is 4.5 mm^2 per layer and never gets time to cool. Lying
+    down it is one continuous extrusion path and the runner snaps off with a blade.
+    """
+    runner = (cq.Workplane("XY")
+              .box(length + 2.0, pitch * n, 0.8, centered=(True, True, False)))
+    out = runner
+    for i in range(n):
+        y = -pitch * n / 2 + pitch * (i + 0.5)
+        pin = (pin_p1(length).rotate((0, 0, 0), (0, 1, 0), 90)
+               .translate((-length / 2, y, 0.8 + P1_D / 2)))
+        out = out.union(pin)
+        out = out.union(cq.Workplane("XY")
+                        .box(length + 2.0, 1.0, P1_D / 2 + 0.8,
+                             centered=(True, True, False)).translate((0, y, 0)))
+    return out
+
+
 # =========================================================== P2: standard pair ==
 def peg_p2(point, axis="+Z", rot=0.0):
     """Two round pegs of unequal diameter -- the part cannot go in backwards."""

@@ -11,7 +11,8 @@ import data.facade as F
 from lib import sign as S
 from lib import prop as PR
 from lib.light import baffle_cap, coil_bay_cover, diffuser_plate, puck_cradle
-from lib.mount import (peg_p1, socket_p1_solids, socket_p2_solids, tolerance_coupon,
+from lib.mount import (peg_p1, pin_sprue, socket_p1_solids, socket_p2_solids,
+                       tolerance_coupon,
                        joint_coupon, joint_coupon_pieces, c4_clip, P1_L, P2_L)
 from lib.util import keep_largest, compound
 from parts.decor import to_wall, FACE
@@ -35,8 +36,11 @@ def _sign_part(row):
     if k == "fasciaplate":
         body = cq.Workplane("XY").box(w, h, S.PLATE_T, centered=(True, True, False))
         body = S._text_on(body, txt, w * 0.94, h, top_z=S.PLATE_T)
+        # pinned to the FASCIA BOARD it sits on, not to the wall behind it -- the wall
+        # there is entirely covered by the shopfront. Same pitch as lib.window.fascia
+        # cuts on its front, scaled the same way, so the two always line up.
         for sx in (-1, 1):
-            body = body.union(peg_p1((sx * (w / 2 - 6.0), 0.0, 0.0), axis="-Z"))
+            body = S._back_socket(body, sx * S.NAMEPLATE_PITCH * s / 2, 0.0)
         return body
     raise KeyError(k)
 
@@ -78,6 +82,11 @@ def brackets():
     out.append(dict(id="32B", name="Sign_Hanging_Chain_B", solid=S.chain(3),
                     side=None, u=0, z=0))
     out.append(dict(id="32C", name="Sign_Rail_Hook", solid=S.rail_hook(),
+                    side=None, u=0, z=0))
+    # The loose dowels every sign and name plate is located by. On a sprue, lying down:
+    # a 2.4 mm pin standing up is 4.5 mm^2 per layer with no time to cool, which is what
+    # made the printed pegs come out blobbed.
+    out.append(dict(id="32D", name="Mount_Pin_x16", solid=pin_sprue(16),
                     side=None, u=0, z=0))
     return out
 
@@ -135,7 +144,12 @@ def wall_mount_rows(side):
     """
     out = []
     for row in F.SIGNS:
-        if row.get("side") == side and row["kind"] != "banner":
+        # banner: hangs from the overhead rail. swing: hangs on chain from its bracket,
+        # and its plate has no peg at all -- every swing sign in the kit had a wall
+        # socket that nothing was ever going to enter. fasciaplate: pinned to the
+        # fascia board, which is what it sits on.
+        if row.get("side") == side and row["kind"] not in ("banner", "swing",
+                                                           "fasciaplate"):
             out.append(("sign", row, 0.0))
     for row in F.BRACKETS:
         if row["side"] == side:
@@ -144,7 +158,9 @@ def wall_mount_rows(side):
         if row["side"] == side:
             out.append(("lantern", row, 90.0))
     for row in F.PROPS:
-        if row.get("side") == side and row["kind"] in ("notice", "posters", "scraper"):
+        # "posters" is a layer that glues onto the notice board; it shared the board's
+        # socket, which is two pegs in one hole.
+        if row.get("side") == side and row["kind"] in ("notice", "scraper"):
             out.append(("prop", row, 0.0))
     return out
 
