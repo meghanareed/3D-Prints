@@ -22,6 +22,7 @@ import cadquery as cq
 import params as P
 import build as B
 from lib.util import compound
+from lib.platemap import draw as draw_plate
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "out")
@@ -121,13 +122,25 @@ def _assert_no_overlap(placed, label):
                     f"{label}: {aid} and {bid} overlap on the plate")
 
 
+def _map(placed, names, label):
+    """One labelled map per plate, beside the plate's own STL.
+
+    Without it a printed plate is thirty anonymous pieces: the id lives in the STL's
+    object name, which stops being reachable the moment the part is off the bed.
+    """
+    items = [(it["id"], names.get(it["id"], ""), it["solid"], x, y, it["w"], it["d"])
+             for it, x, y in placed]
+    draw_plate(items, os.path.join(PLATES, f"{label}.png"),
+               f"Plate {label} — true scale, in the positions it prints")
+
+
 def main():
     os.makedirs(PLATES, exist_ok=True)
     # Clear the directory first. Renaming a plate used to leave the old file sitting
     # there -- "01_jigs_first.stl" survived three renames and would have been opened
     # as plate 01 by anyone reading the folder rather than the docs.
     for f in os.listdir(PLATES):
-        if f.endswith(".stl"):
+        if f.endswith(".stl") or f.endswith(".png"):
             os.remove(os.path.join(PLATES, f))
     grams = {}
     mpath = os.path.join(OUT, "manifest.json")
@@ -135,6 +148,7 @@ def main():
         grams = {r["id"]: r.get("grams", 0.0) for r in json.load(open(mpath))}
 
     print("building parts ...")
+    names_all = {m["id"]: m["name"] for m in B.manifest()}
     built = {}
     for m in B.manifest():
         if B.is_cut(m):                 # cut from acetate; see 71A_Glazing_Cut_Template
@@ -173,6 +187,7 @@ def main():
             suffix = "" if part_no == 1 else f"_{part_no}"
             fn = os.path.join(PLATES, f"{label}{suffix}.stl")
             cq.exporters.export(out, fn, tolerance=0.04, angularTolerance=0.25)
+            _map(placed, names_all, f"{label}{suffix}")
             bb = out.val().BoundingBox()
             g = sum(grams.get(it["id"], 0.0) for it, _, _ in placed)
             sheet.append((label + suffix, g, [it["id"] for it, _, _ in placed]))
@@ -190,6 +205,7 @@ def main():
             out = compound([it["solid"].translate((x, y, 0)) for it, x, y in placed])
             fn = os.path.join(PLATES, "TRIAL_first_fit.stl")
             cq.exporters.export(out, fn, tolerance=0.04, angularTolerance=0.25)
+            _map(placed, names_all, "TRIAL_first_fit")
             g = sum(grams.get(it["id"], 0.0) for it, _, _ in placed)
             bb = out.val().BoundingBox()
             print(f"  {'TRIAL_first_fit':<22} {len(placed):3d} parts  {g:6.0f} g   "
@@ -310,6 +326,10 @@ def write_checklist(sheet, names, notes, grams):
           f"kit across {len(sheet)} plates.\n\n")
         w("Tick a part when it is printed AND you have looked at it. A part that came\n"
           "off the plate warped or with a bit missing is not printed.\n\n")
+        w("Every plate has a map beside it -- `out/plates/<plate>.png`, the same parts\n"
+          "drawn to scale in the positions they print. Nothing is engraved with its id,\n"
+          "so once a part is off the bed the map is the only way to name it: lay the\n"
+          "plate out the way it came off and read it off the picture.\n\n")
         w("## Order\n\n")
         w("| # | Plate | Why in this position |\n|---|---|---|\n")
         for n, (lbl, why) in enumerate(ORDER_NOTES, 1):
