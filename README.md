@@ -38,21 +38,22 @@ several wasted plates bought this table, and it carries across projects.
 
 | | | |
 |---|---|---|
-| **Fit clearance** | **0.30 mm per side, and glue it** | Seven identical sockets cut to one number: three held a peg, four dropped it. The scatter between one socket and the next is wider than the whole 0.20–0.45 range, so **no nominal clearance gives a repeatable press fit** at small scale. Locating features locate; adhesive retains |
+| **Fit clearance** | **0.25 mm per side at Ø3.0, and glue it** | Nine blocks, three per clearance: 0.35 all loose, 0.30 dropped two of three, **0.25 held all three inverted and still came off by hand**. Better than a pure locator — a part stays where it is put while you dry-fit — and 0.25 mm is still an annulus gel CA bridges |
+| **Clearance does not travel between diameters** | Ø2.4 → 0.30. Ø3.0 → **0.25** | A bigger peg has more circumference in contact, so the *same* absolute gap grips less. Neither the gap nor the ratio is constant, so there is nothing to extrapolate with — **change the diameter and the clearance is a guess again** until a coupon says otherwise. Assuming it carried over is what made a second plate necessary |
 | **XY repeatability** | ±0.20 mm | Any fit depending on a dimension tighter than this is a coin toss, not a joint |
 | **Hole shrinkage** | 0.1–0.3 mm per side, undersize | Normal, not the bad case. Outer dimensions run 0.05–0.15 mm large |
 | **Internal corner radius** | **≈ 0.21 mm** | Half the line width. A round nozzle *cannot* cut a sharp internal corner, so a square peg binds on the diagonal of a square socket long before the flats meet. Proven on a coupon: a square bore cut 0.05 mm **looser** per side still would not seat while the round one did |
 | **Minimum feature** | 1.2 mm thick × 2.0 mm long | Below this it will not survive handling |
 | **Minimum wall** | 0.84 mm | Two perimeters. Use 1.2–1.6 mm if structural |
 | **Crush ribs** | **Do not** | Printed twice. Permanent on one peg, impossible to assemble on two |
-| **Raised text** | **stroke ≥ 0.70 mm**, so **glyph ≥ 6 mm** for a bold serif | A four-size ladder settled it: 0.30 and 0.36 mm strokes printed as **blobs**, 0.48 held **partially**, 0.72 **held**. One extrusion (0.42) is the floor; 0.70 is where it is reliable. Stroke is the limit, not glyph height — a bold serif stem is ≈0.12 of its size, so a fatter face goes smaller and a finer one cannot |
+| **Raised text** | **stroke ≥ 0.84 mm = two full extrusions**, so **glyph ≥ 7 mm** for a bold serif | The limit is a *printing* mechanism, not legibility. A stroke of 0.72 mm is **1.7 line widths** — too wide for one perimeter, too narrow for two — and prints as the classic thin-wall gap. Beside it on the same plate, 1.6 mm bars (3.8×) came out perfectly. **A stroke must be a whole number of extrusions.** Stroke is the limit, not glyph height: a bold serif stem is ≈0.12 of its size, so a fatter face goes smaller and a finer one cannot |
 | **Text advance** | **0.72 em per character**, all-caps bold serif | Not 0.62. This has run lettering off a plate **twice**: once assumed in a fitter, once again when OLLIVANDERS at 6 mm measured 47.5 mm on a 46 mm plate and lost its O and its S off the two ends. **Measure text against the thing it sits on** — `params.text_fits()` |
 
-**Bigger did not fix the scatter.** The clearance was re-tested at Ø3.0 after being
-measured at Ø2.4, and two sockets cut to the *same* number still behaved differently — one
-held its pin inverted, one dropped it. Going up in diameter made assembly more forgiving
-and retention no more repeatable. **"Locate, then glue" is the answer, not a stage on the
-way to a press fit.**
+**Scatter is real, and the right clearance reduces it.** At Ø2.4, seven sockets cut to one
+number split three-held / four-dropped. At Ø3.0, 0.30 split two-dropped / one-held — but
+**0.25 gave all three the same answer.** Scatter is not a fixed property of the machine;
+it is what a *wrong* clearance looks like. Glue is still not optional, but the joint gets
+markedly more predictable once the clearance is right for the diameter.
 
 **A caution about compensating twice.** Elephant foot adds material at a socket mouth and
 hole compensation is 0, so nothing corrects it — but the 0.30 clearance was measured on
@@ -90,8 +91,9 @@ Adding a second correction opens every joint too far.
 12. **Identify parts by geometry, not by text.** Countable raised bars, notches, a
     distinctive corner — something well above the minimum feature. Text at label sizes is
     the *first* thing a 0.4 mm nozzle declines to print, and a part you cannot identify
-    is a result you cannot record. This cost a whole plate's answer: three test blocks
-    printed with blob labels, and which clearance did what is now unknowable.
+    is a result you cannot record. This cost a whole plate's answer once, and the next
+    plate proved the point directly: **its 1.6 mm bars were unmistakable while the
+    digits beside them were mush.** Bars ran the experiment; the text was decoration.
 13. **Three copies of anything you are measuring, never one.** Socket-to-socket scatter
     here is wider than the entire clearance range worth testing, so a single sample tells
     you about that sample. Two plates have now been spent learning this.

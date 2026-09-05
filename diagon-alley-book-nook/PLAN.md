@@ -1078,6 +1078,45 @@ plate-1 failures retroactively. `_stamp` now refuses to build a label under the 
 **And identification no longer trusts text.** Countable raised bars, 1.6 × 7 mm, far above
 the minimum feature. Text can fail to print; a bar cannot.
 
+### 6.17 Plate 2 — printed. The clearance moved
+
+| Bars | Clearance | Result |
+|---|---|---|
+| 1 | **0.25** | **3/3 held when inverted, removable by hand** |
+| 2 | 0.30 | 2 of 3 fell off easily |
+| 3 | 0.35 | all loose |
+
+**`FIT_CLEARANCE` is 0.25 at Ø3.0.** R-5 is closed.
+
+Two things fall out of it that matter more than the number.
+
+**Clearance does not travel between diameters.** 0.30 was correct at Ø2.4 and is too loose
+at Ø3.0 — a bigger peg has more circumference in contact, so the same absolute gap grips
+less. Neither the gap nor the ratio is constant across the two points, so there is nothing
+to extrapolate with. `CLEARANCE_IS_DIAMETER_DEPENDENT` records this: **change `PEG_D` and
+the clearance is ASSUMED again.** Believing it carried over is precisely what made plate 2
+necessary.
+
+**Scatter is what a wrong clearance looks like.** 0.30 split 2/1 while 0.25 gave 3/3 the
+same answer. The scatter reported at Ø2.4 was real, but it is not a fixed property of the
+machine — it shrinks once the clearance suits the diameter. Glue is still not optional;
+the joint is simply far more predictable now.
+
+And the result is *better* than the design assumed. The plan expected a pure locator —
+"enters every time, drops out every time". 0.25 holds an inverted part and still releases
+by hand, which means a wall can be fully dry-fitted without pieces falling out of it.
+
+#### The text failed again, and it named its own cause
+
+6 mm glyphs have a 0.72 mm stroke — **1.71 line widths.** Too wide for one perimeter, too
+narrow for two, which is the classic thin-wall gap. The 1.6 mm bars beside them (3.81×)
+printed perfectly.
+
+So the floor is not a round number, it is **two whole extrusions: 0.84 mm**, and glyph
+height follows at 7 mm. More usefully: **rule 12 was vindicated in the same photograph.**
+The bars ran the experiment and the digits were decoration. On a part this small, do not
+put a result on text.
+
 ### 6.16 Plate 2 — the clearance question, asked properly
 
 `out/plate_2_clearance.3mf`, 10 pieces, 39.1 g. One peg tile and **three copies each** of
@@ -1411,7 +1450,7 @@ which is the only kind of evidence this project has ever actually learned from.
 | ~~R-2~~ | ~~Pin the versions~~ | **Closed.** `pip freeze > requirements.txt` | — |
 | ~~**R-3**~~ | **CLOSED 2026-09-05.** A fresh export from the installed Studio is byte-identical to the vendored profile — **0 of 582 keys differ** — so it needed confirming, not replacing. Now installed at `profiles/` so nothing is read out of `archive/` | **Corrected:** the vendored profile *is* a genuine `Bambu Lab P2S` export at 0.4 mm — read out of `printer_model`, not assumed. What is unverified is that it matches the current Studio version and AMS setup; it carries 7 filament slots where a later project carried 8. Lower risk than first written, still worth two minutes. Run `python ingest.py <project>.3mf --install` | First print |
 | **R-4** | Confirm a generated 3MF opens, slices and prints | Bambu only accepts a project whose `Application` metadata starts with `BambuStudio-`; that took two rounds of guessing to find last time. Format-correct ≠ prints | First print |
-| **R-5** | **Partly closed, plate 1**: Ø3.0 pegs all seated by thumb and a 5.0 pin closes two sockets flush. The CLEARANCE is still open — plate 1's labels blobbed and the three blocks became unidentifiable. Plate 2 re-asks it with three copies each. **Peg diameter, engagement and clearance** — test **Ø3.0 at 0.30/side into Ø3.6**, 4 mm long, on plate 1 | §6.3 and §6.9. Ø3.0 moves away from the small-feature edge; 4 mm finally clears the 2 mm engagement floor guidance names. Note 0.25/side is the *guessed* number attempt one failed on — do not standardise on Ø3.5 | Geometry, and the alley's standard |
+| ~~**R-5**~~ | **CLOSED, plate 2 — `FIT_CLEARANCE` 0.25 at Ø3.0.** ~~Partly closed, plate 1: Ø3.0 pegs all seated by thumb and a 5.0 pin closes two sockets flush. The CLEARANCE is still open — plate 1's labels blobbed and the three blocks became unidentifiable. Plate 2 re-asks it with three copies each. **Peg diameter, engagement and clearance** — test **Ø3.0 at 0.30/side into Ø3.6**, 4 mm long, on plate 1 | §6.3 and §6.9. Ø3.0 moves away from the small-feature edge; 4 mm finally clears the 2 mm engagement floor guidance names. Note 0.25/side is the *guessed* number attempt one failed on — do not standardise on Ø3.5 | Geometry, and the alley's standard |
 | **R-6** | Does 0.30 + gel CA hold on a **vertical** wall | Both coupons were tested flat in the hand. The wall stands up and the parts hang off it | Phase 1 exit |
 | **R-7** | **Measure paint thickness**, two coats, with calipers | D3 turns on it, and §6.5 shows the fallback is unavailable | Phase 2 |
 | **R-8** | **Forced perspective vs grouping** — render before modelling | A grouped shopfront spans a range of depth, so it cannot take one perspective scale without either flattening the perspective inside the shop or stepping it at every shop boundary — a seam where the eye follows the street. Neither reference model has perspective, so neither answers this. Decide from a render, not from reasoning | **Phase 2 geometry** |

@@ -125,11 +125,28 @@ MIN_WALL = Param(WALL_LOOPS * LINE_W, MACHINE, "two perimeters, nothing between 
 # Printed on this machine, in PLA, and read with calipers or a thumb. ~70 g of filament
 # paid for this block and it survives the rewrite; see archive/docs/09_COUPON_RESULTS.md.
 FIT_CLEARANCE = Param(
-    0.30, MEASURED,
-    "per side, and the joint is GLUED not pressed. Coupon plate 1: seven sockets cut to "
-    "one number, three held and four dropped -- the scatter between sockets is wider "
-    "than the whole 0.20-0.45 range, so no clearance gives a repeatable press fit",
-    "coupon plate 1 + 2")
+    0.25, MEASURED,
+    "per side at PEG_D 3.0, and the joint is still GLUED. Plate 2, nine blocks, three "
+    "per clearance: 0.35 all loose; 0.30 dropped two of three; 0.25 held all three when "
+    "inverted and still came off by hand. That is better than a pure locator -- a part "
+    "stays where it is put while the wall is dry-fitted, and 0.25 mm of annulus is still "
+    "a gap gel CA bridges. NOTE IT MOVED: 0.30 was correct at 2.4 mm and is too loose at "
+    "3.0. See CLEARANCE_IS_DIAMETER_DEPENDENT",
+    "plate 2")
+
+# Clearance does not travel between diameters, and assuming it does is what made plate 2
+# necessary. A bigger peg has more circumference in contact, so the SAME absolute gap
+# grips less: going 2.4 -> 3.0 mm required going 0.30 -> 0.25.
+#
+#   Ø2.4  0.30/side   7.54 mm circumference   12.5% of diameter
+#   Ø3.0  0.25/side   9.42 mm circumference    8.3% of diameter
+#
+# Neither the absolute gap nor the ratio is constant, so there is no formula here to
+# extrapolate with -- only two measured points. Change PEG_D and the clearance is
+# ASSUMED again until a coupon says otherwise.
+CLEARANCE_IS_DIAMETER_DEPENDENT = True
+CLEARANCE_MEASURED_AT_DIA = 3.0
+
 CRUSH_RIBS = False   # measured, not a parameter: plate 2 made the joint permanent on one
                      # peg and impossible on two. Kept as a named constant so the reason
                      # travels with the decision.
@@ -302,17 +319,22 @@ TEXT_DEPTH = Param(0.6, ASSUMED,
                    "exactly 3 layers at 0.2, so an AMS colour change lands on a clean "
                    "boundary. 0.5 was 2.5 layers and could not", "R-15")
 # ---- settled by the plate-1 print, 2026-09-05 ----------------------------------
-TEXT_STROKE_MIN = Param(0.70, MEASURED,
-                        "stroke, not glyph height, is the limit -- and 0.5 was optimistic. "
-                        "A four-size ladder printed on plate 1 located the threshold: "
-                        "0.30 and 0.36 mm strokes came out as blobs, 0.48 held partially, "
-                        "0.72 held. One extrusion (0.42) is the floor; 0.70 is where it "
-                        "is reliable", "plate 1")
-TEXT_SIZE_MIN = Param(6.0, MEASURED,
-                      "glyph height that actually READS, for a bold serif whose stem is "
-                      "0.12 of its size. Follows from TEXT_STROKE_MIN, not chosen "
-                      "separately -- a fatter face goes smaller and a finer one cannot",
-                      "plate 1")
+TEXT_STROKE_MIN = Param(0.84, MEASURED,
+                        "TWO full extrusions, and the reason is a printing mechanism "
+                        "rather than a legibility one. Plate 1 put the floor at 0.70; "
+                        "plate 2 printed 0.72 mm digits badly anyway while 1.60 mm bars "
+                        "beside them came out perfectly. 0.72 is 1.71 line widths -- too "
+                        "wide for one perimeter, too narrow for two -- which is the "
+                        "classic thin-wall gap. A stroke must be a whole number of "
+                        "extrusions, so the floor is 2 x LINE_W, not a round number "
+                        "someone liked", "plate 1 + plate 2")
+TEXT_SIZE_MIN = Param(7.0, MEASURED,
+                      "glyph height for a bold serif whose stem is 0.12 of its size. "
+                      "Follows from TEXT_STROKE_MIN (0.84 / 0.12 = 7.0), not chosen "
+                      "separately -- a fatter face goes smaller and a finer one cannot. "
+                      "But see rule 12: on a part this small, DO NOT rely on text at all. "
+                      "Plate 2's bars were unmistakable while its digits were mush",
+                      "plate 1 + plate 2")
 TEXT_ADVANCE_EM = Param(0.72, MEASURED,
                         "advance width per character, all-caps bold serif. 0.62 was "
                         "ASSUMED in attempt two and ran the lettering off the plate; the "
