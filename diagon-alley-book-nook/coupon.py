@@ -335,6 +335,38 @@ def parts():
     return out
 
 
+# ============================================================ plate 2: the re-run ==
+COPIES = 3
+
+
+def clearance_rerun():
+    """Plate 2 -- the one question plate 1 lost, asked properly.
+
+    Plate 1 answered the clearance question and then threw the answer away: its labels
+    printed as blobs, so of three socket blocks, two dropped their peg and one held, and
+    nobody can say which clearance was which.
+
+    Two changes rather than one.
+
+    Labels are 6 mm and backed by countable bars, so identification cannot fail again.
+
+    And THREE COPIES of every clearance, because one sample per station is exactly the
+    mistake this project already made once. Coupon plate 1's own conclusion was that the
+    scatter between one socket and the next is wider than the whole clearance range --
+    and plate 1 then re-ran it with a single sample each. Nine blocks against three pegs
+    is 27 fits, which measures the scatter instead of being surprised by it.
+
+    A fresh peg tile rides along so the plate is self-contained (P6), and so the pegs
+    are from the same print as the sockets.
+    """
+    out = [("00_peg_tile", peg_tile(), None)]
+    for c in CLEARANCES:
+        for i in range(COPIES):
+            out.append((f"01_socket_{int(c * 100)}_{chr(ord('a') + i)}",
+                        socket_block(c, str(int(c * 100))), None))
+    return out
+
+
 def _bbox(w):
     bb = w.val().BoundingBox()
     return bb.xlen, bb.ylen, bb.zlen

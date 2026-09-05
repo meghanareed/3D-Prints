@@ -285,6 +285,9 @@ def self_test(path):
     sprues = [o for o in cfg.findall("object")
               if any(m.get("key") == "name" and "sprue" in (m.get("value") or "")
                      for m in o.findall("metadata"))]
+    if not any("sprue" in (m.get("value") or "") for o in cfg.findall("object")
+               for m in o.findall("metadata")):
+        return out                      # the clearance re-run carries no sprue
     t("both sprue orientations are on the plate", len(sprues) == 2,
       f"{len(sprues)} found -- horizontal and vertical settle R-14 against each other")
     # Only the HORIZONTAL sprue needs the brim suppressed: its pins lie in 7 mm channels
@@ -304,13 +307,14 @@ def self_test(path):
     return out
 
 
-def coupon_items():
+def coupon_items(which="plate1"):
     import coupon
-    return coupon.parts()
+    return coupon.clearance_rerun() if which == "rerun" else coupon.parts()
 
 
 if __name__ == "__main__":
-    items = coupon_items()
+    rerun = "--rerun" in sys.argv
+    items = coupon_items("rerun" if rerun else "plate1")
     placed, height = layout(items)
     bed = float(P.BED_X)
     print("plate -- Bambu project writer\n")
@@ -321,7 +325,8 @@ if __name__ == "__main__":
 
     out_dir = os.path.join(HERE, "out")
     os.makedirs(out_dir, exist_ok=True)
-    path = os.path.join(out_dir, "plate_1_coupon.3mf")
+    path = os.path.join(out_dir,
+                        "plate_2_clearance.3mf" if rerun else "plate_1_coupon.3mf")
     write(items, path)
 
     bad = 0
