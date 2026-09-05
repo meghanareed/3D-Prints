@@ -142,6 +142,64 @@ TYPE_STEM_RATIO = Param(
     0.12, MEASURED, "bold serif stem as a fraction of glyph size. This is what makes "
     "3.5 mm the floor FOR THAT FACE -- a fatter face goes smaller", "attempt two")
 
+# ===================================================================== brim ==
+# Four prints were damaged or wasted by brim behaviour and the cause was different every
+# time. All of it lives here, because there were once THREE definitions of "needs a brim"
+# in three files that disagreed, and a part that had already failed on the bed was warned
+# about by one, listed without a brim by another, and shipped with no brim by the third.
+# ONE definition, in ONE place. Do not write a second one.
+BRIM_WIDTH = machine("brim_width", "outer only, on the parts that need it")
+BRIM_TYPE_WANTED = "outer_only"     # the profile ships `auto_brim`; it must be overridden
+BRIM_TYPE_IN_PROFILE = PROFILE.get("brim_type")
+
+# B3. The one that cost a whole plate: at 6 mm spacing the brims of neighbouring parts
+# merged and 22 of 64 left-facade parts fused into a single raft. A raft that peels takes
+# every part on it with it.
+PLATE_SPACING = Param(
+    2 * BRIM_WIDTH + 1.0, MEASURED,
+    "2 x brim + 1. At 6 mm the brims of neighbours merge -- 22 of 64 parts fused into one "
+    "raft. Costs an extra plate and is worth it", "B3")
+
+# B6. Thresholds that flagged 49 of 182 parts. Each was paid for by a part that came off
+# the bed, so they are MEASURED, not tuned.
+BRIM_MIN_BED_AREA   = Param(25.0, MEASURED, "first-layer area below this cannot hold on", "B6")
+BRIM_TIPPY_RATIO    = Param(2.0, MEASURED, "height > this x the narrower footprint side", "B6")
+BRIM_WIDE_LEN       = Param(150.0, MEASURED, "long parts lift at the corners", "B6")
+BRIM_WIDE_MAX_H     = Param(6.0, MEASURED, "...if they are also flat", "B6")
+BRIM_WIDE_BED_FRAC  = Param(0.25, MEASURED, "...or barely touch their own footprint", "B6")
+BRIM_STRIP_RATIO    = Param(8.0, MEASURED, "length > this x width makes a strip", "B6")
+BRIM_STRIP_MAX_W    = Param(8.0, MEASURED, "...and a narrow one", "B6")
+BRIM_TOPHEAVY_AREA  = Param(50.0, MEASURED, "downward-facing area above this", "B6")
+BRIM_TOPHEAVY_RATIO = Param(4.0, MEASURED, "...and more than this x the bed area", "B6")
+
+
+def needs_brim(stats, force=None):
+    """THE definition. `stats` needs bed_area, height, foot_w, foot_l, down_area.
+
+    `force` is an explicit per-part override and it wins outright -- B4: a brim rule that
+    scores bed area, height and slenderness cannot see the 4 mm channels inside a sprue's
+    own outline. Sixteen pins on a runner were torn off by their own brim flooding between
+    them, so no pin joint on that plate could be tried at all. Sprues, combs and anything
+    with internal gaps pass force=False; their runner is the adhesion.
+    """
+    if force is not None:
+        return bool(force), "explicit override"
+    bed, h = stats["bed_area"], stats["height"]
+    w, l = sorted((stats["foot_w"], stats["foot_l"]))
+    if bed < BRIM_MIN_BED_AREA:
+        return True, f"footprint {bed:.0f} mm2 under {float(BRIM_MIN_BED_AREA):.0f}"
+    if h > BRIM_TIPPY_RATIO * w:
+        return True, f"tippy: {h:.0f} tall on a {w:.0f} mm side"
+    if l > BRIM_WIDE_LEN and (h < BRIM_WIDE_MAX_H or bed < BRIM_WIDE_BED_FRAC * (w * l)):
+        return True, f"wide and thin: {l:.0f} mm long"
+    if l > BRIM_STRIP_RATIO * w and w < BRIM_STRIP_MAX_W:
+        return True, f"a strip: {l:.0f} x {w:.1f}"
+    if stats["down_area"] > BRIM_TOPHEAVY_AREA and \
+       stats["down_area"] > BRIM_TOPHEAVY_RATIO * bed:
+        return True, f"top-heavy: {stats['down_area']:.0f} mm2 overhanging {bed:.0f}"
+    return False, ""
+
+
 # ==================================================================== chosen ==
 # Design decisions. Changing these changes the model; they are not facts about anything.
 BOOKNOOK_WIDTH  = Param(100.0, CHOSEN, "X, across the alley -- sized to sit between books")
@@ -198,8 +256,14 @@ SUPPORT_THRESHOLD = Param(30.0, ASSUMED,
 
 # ================================================================== derived ==
 SOCKET_D = Param(PEG_D + 2 * FIT_CLEARANCE, ASSUMED,
-                 "3.0 + 0.30/side = 3.6. NOT 3.5: that is 0.25/side, which is the guessed "
-                 "number attempt one shipped on and failed with", "R-5")
+                 "3.0 + 0.30/side = 3.6. NOT 3.4 and NOT 3.5 -- those are 0.20 and 0.25 "
+                 "per side, and 0.25 is the guessed number attempt one shipped on and "
+                 "failed with. Generic guides quote 3.4-3.6 as a starting range; this "
+                 "machine has measured its own answer and it is the top of it", "R-5")
+SOCKET_DEPTH = Param(PEG_L + 1.0, ASSUMED,
+                     "deeper than the peg is long, ON PURPOSE: the module must seat on its "
+                     "flange against the wall, never bottom out on the peg tip. A peg that "
+                     "bottoms holds the part proud and no amount of glue fixes it", "R-5")
 PEG_ENGAGE = Param(PEG_L - LEAD_IN_CHAMFER, ASSUMED,
                    "integral peg: parallel bore actually gripping, once the mouth chamfer "
                    "is taken off", "R-5")
@@ -263,6 +327,17 @@ def sanity():
         bad.append("MIN_WALL is under two nozzle widths")
     if PAINT_PER_COAT <= 0:
         bad.append("PAINT_PER_COAT is a placeholder -- R-7 has not been measured")
+    if PLATE_SPACING < 2 * BRIM_WIDTH + 1.0:
+        bad.append(f"plate spacing {float(PLATE_SPACING)} is under 2 x brim + 1 -- "
+                   f"neighbouring brims will merge into a raft (B3)")
+    if BRIM_TYPE_IN_PROFILE != BRIM_TYPE_WANTED:
+        bad.append(f"profile ships brim_type={BRIM_TYPE_IN_PROFILE!r}; it must be "
+                   f"overridden to {BRIM_TYPE_WANTED!r} at the plate AND set per object "
+                   f"(B2) -- Auto gave a 15 mm2 plaque no brim and it came off the bed")
+    if ELEPHANT_FOOT > 0 and XY_HOLE_COMP == 0:
+        bad.append(f"elephant foot {float(ELEPHANT_FOOT)} with hole compensation 0: every "
+                   f"socket mouth gets MORE material and none of it is corrected (B8). "
+                   f"The model must carry the correction")
     return bad
 
 

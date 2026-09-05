@@ -589,13 +589,29 @@ So the direction is right and the axis matters. Which gives the rule:
 
 | | Earns separation? | Why |
 |---|---|---|
-| Bay/bow **roof or canopy** | **Yes** | Different orientation — lies on its largest face instead of becoming an unsupported ceiling |
+| Bay/bow **roof or canopy** | **Only if its underside cannot be made self-supporting** | See the note below — this row changed |
 | **Glazing** | **Yes** | Different material |
 | **Signs** | **Yes** | Different orientation (text up) *and* different filament (AMS) |
 | **Window frame** vs its wall | **Yes** | Needs a hollow cavity behind the panes |
 | **Drainpipes, lamps** | **Yes** | Different colour; and the pipe sits on a building seam anyway |
 | **Balconies** | **Yes** | Undercut |
 | Sills, ledges, lintels, quoins, **roof trim, moulding** | **No — fuse** | Same colour, same orientation, no undercut. This is D1, and it is where the 181 came from |
+
+> **The roof row changed, and the two source documents disagreed.** An earlier note said
+> *"don't make the window frame print a huge unsupported roof — make the roof separate."*
+> The design plan says the opposite: *"Window roofs should remain attached when practical.
+> The goal is **not** to separate every roof just to make printing easy — engineer the
+> invisible underside for FDM"* with sloped undersides and ~45° self-supporting
+> transitions.
+>
+> **The second position wins, and it is the fuse rule agreeing with itself.** A part earns
+> separation only when it *needs* a different orientation. A canopy whose underside is
+> chamfered to 45° does not need one — it prints attached, with no support and no joint.
+> Separating it would buy a printability fix this project does not need and pay for it in
+> assembly risk, which is the risk that has actually bitten. So: **the roof stays attached
+> wherever the hidden underside can be made self-supporting; it separates only where the
+> visible profile demands an underside that cannot be.** The exterior keeps the
+> architectural shape either way.
 
 That last row is the whole guard rail. Assemblies as parts: yes. **Trim as parts: no.**
 Applied across a wall this lands near 20–25 objects — three building panels, their window
@@ -879,6 +895,76 @@ buildings × 2–5 modules ≈ 6–15 modules per wall, plus one wall plate, gla
 Comfortably inside the under-20 goal, and arrived at by decomposition rather than by
 counting down to it.
 
+### 6.12 Reconciliation with `Diagon_Alley_3D_Printing_Design_Plan.md`
+
+That document and this one were written from the same conversation and agree almost
+everywhere. Recorded here is only what is **new**, what **differs**, and why.
+
+**Agrees, nothing to do:** modular strategy, wall pegs into module sockets, four
+attachment points, perimeter flange with the centre open, large wall openings rather than
+matched panes, faceted bow at 3–5 facets, hollow interiors, mullions 1.2–1.6 mm, chamfered
+pane tops, PET/acetate glazing installed after painting into a channel, AMS lettering
+printed text-up, the sign hierarchy and library, symbols, 70/30, cobble relief 0.6–1.0 with
+a 0.3–0.5 chamfer, tiles 100–150 mm with seams following the mortar, curbs and street
+interruptions, a segmental entrance arch 10–20 mm deep with brick returns in three pieces,
+wiring under the street, removable access, and glue that retains rather than aligns.
+
+#### Adopted — genuinely new, now folded in
+
+| | |
+|---|---|
+| **Sacrificial modelled supports** | Thin removable bridges or corner tabs *modelled in* for difficult rectangular openings, instead of slicer support. Better than the enforcer/blocker approach where you want exact control; the two are complementary — blockers keep the slicer out, modelled tabs do the job it was kept out of |
+| **PETG support interface via AMS** | PLA and PETG adhere poorly, so a PETG interface layer releases cleanly with a PLA bulk. Real technique, untested here — **R-19** |
+| **Lettering on the glazing** | OLLIVANDERS across the clear pane rather than as raised FDM text, with decals or vinyl for the smallest cases. This is a third answer to the type-size problem alongside raised text and implied texture — **R-20** |
+| **The torture-test module** | §25 of that document is a better first print than the joint-only plate this plan had. See below |
+| **Socket depth 4–5 mm** | Exposed a gap: this plan specified peg length but never socket depth. Now `SOCKET_DEPTH = PEG_L + 1.0`, deliberately deeper than the peg is long, so a module seats on its flange and never bottoms out on a peg tip |
+
+#### Differs — and why
+
+**Socket diameter: take 3.6, not the 3.4–3.6 range.** 3.4 on a Ø3.0 peg is 0.20 mm per
+side and 3.5 is 0.25. **0.25 is the number attempt one shipped on and failed with, and
+0.20 is what coupon plate 1 explicitly rejected.** A 3.4–3.6 range is a sound *generic*
+starting point; this machine has already spent ~70 g of filament establishing that its own
+answer is the top of it. Recorded in `params.py` next to the value.
+
+**Forced perspective is far stronger here than "5–15 %".** `PERSP_STRENGTH` is 0.42 — a 42 %
+reduction front to rear. The two are not really in conflict: 5–15 % is offered for
+*repeating elements* like cobbles, whereas the scale ladder here applies to every facade
+element and is the thing §9 of `SPEC.md` names as what this kit does better than either
+reference model. Keep 0.42. Apply 5–15 % thinking only where the document means it — cobble
+size — and note the existing ladder already exceeds it there too.
+
+**A curved or bent alley is not free here.** The document suggests avoiding a straight
+corridor via a curve or bend. This kit already narrows (`WALL_CANT_DEG` 1.75) but is
+otherwise straight, and a genuinely *curved* wall cannot print flat — which would forfeit
+the §6.9 result where the wall prints flat with its pegs pointing up. Cant, width variation
+and irregular building lines give most of the effect at no cost; a true curve should be
+taken only with that trade understood.
+
+#### The first print becomes the torture test
+
+§25's torture-test module is the better plate 1: square, chamfered and arched windows,
+mullions at 1.0/1.2/1.6, a representative faceted bay, a roof overhang, a supported canopy,
+peg/socket combinations at several clearances, brick texture, and raised text at several
+sizes.
+
+It is bigger than the ~2 g joint plate this plan had — but it closes **R-5, R-9, R-10,
+R-14 and R-17 in one print**, and probably R-15. One print that answers six unknowns beats
+six prints that answer one each, and "print the joint before the parts" is satisfied either
+way. **Adopt it as plate 1**, keeping it as small as the coupon count allows, and keep the
+pin/peg stations on it so R-5 and R-14 still get their dedicated comparison.
+
+Its stated output — *"one consistent set of Diagon Alley Design Rules for the P2S"* — is
+exactly what `params.py` is for. Every rule that document lists as an output (minimum
+mullion, minimum text, maximum bridge, standard peg, standard clearance, flange thickness,
+brick relief, cobble relief, roof angle, glazing channel) becomes a `Param` whose
+provenance flips from `ASSUMED` to `MEASURED` when the plate comes off. That is the moment
+this project has never reached twice running.
+
+#### One question the document raises that this plan cannot answer
+
+Scale. See §10, Q-4.
+
 ---
 
 ## 7. Per-object print settings — where brim and supports actually live
@@ -1068,6 +1154,8 @@ which is the only kind of evidence this project has ever actually learned from.
 | **R-16** | **Diffusion without depth** — the light cavity is capped near 7.5–12.5 mm | §6.8. A 20–40 mm cavity would cut the alley from 74.9 mm to 29.9 mm. Test diffuser-close-to-pane, side-washing, and a frosted pane instead | Phase 6 |
 | **R-17** | Does a 5-facet bow read as curved once mullioned and painted | Free to check — `render.py`, no print. The old code asserts it does; nobody has looked | Phase 2 geometry |
 | **R-18** | **Cobble apron vs "sits on a shelf between books"** | §6.10. A 30–50 mm apron protrudes past a book spine and breaks Phase 8's exit test. Removable display piece, or keep it to ~10–15 mm | Phase 8 |
+| **R-19** | **PETG support interface via the AMS** | §6.12. PLA and PETG adhere poorly, so a PETG interface releases cleanly under a PLA bulk — real technique, never tried here. Test it on the canopy of the torture module | Phase 2 print |
+| **R-20** | **Lettering on the glazing** — printed, decal or vinyl | §6.12. A third answer to the type-size problem, and the one that makes OLLIVANDERS readable at hero scale without raised FDM text. Fold into the torture module | Phase 5 / hero shops |
 | **R-11** | Printed glazing: does one 0.2 mm layer diffuse and release | Reference does it; this kit never has. Needs transparent or white filament | Phase 7 |
 | **R-12** | Measure the real puck and fairy string | Recorded from a product listing, not calipers | Phase 6 |
 
@@ -1086,6 +1174,24 @@ depend on · masking material for R-7.
   and `archive/`. If it is one of the reference models from §9, name it as such or remove
   it — §9 is explicit that no geometry from them enters this kit, and an unlabelled
   reference 3MF in the output directory is how that promise gets broken by accident.
+
+* **Q-4 — Is the target still the 100 × 240 × 200 mm book nook, or has this become a
+  larger diorama?** This is the one real divergence in
+  `Diagon_Alley_3D_Printing_Design_Plan.md` and it changes a great deal. That document
+  sizes the project at **3–4 hero buildings, 5–7 secondary, plus background buildings**
+  (twelve or more), **20–25 signs**, and **25–35 printed architectural modules**. This kit
+  is **six shops** — L1–L3 and R1–R3 — in a nook 100 mm wide with a **74.9 mm** alley.
+
+  Some of those numbers fit anyway: 25–35 modules across two walls is roughly the 6–15 per
+  wall in §6.11. Others do not: twelve buildings will not go in six bays, and 20–25 signs
+  is about double what a 150 mm alley can carry before it reads as noise — which the same
+  document's own 70/30 rule would forbid.
+
+  It matters because it changes the envelope, the module sizes, the sign budget, whether
+  the forced-perspective ladder still applies, and whether a wall still fits the bed in one
+  piece. **Phase 1 is unaffected either way** — a wall tile, a joint and a torture test are
+  the same work at any scale — so this is not blocking, but it should be answered before
+  Phase 2 geometry.
 
 *(Q-1 — where the work happens — is answered: net new, nothing from `archive/`.)*
 
