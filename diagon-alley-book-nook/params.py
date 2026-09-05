@@ -206,22 +206,43 @@ def needs_brim(stats, force=None):
 # (4-5" W x 8-10" H x 7-10" D) because projecting bays, readable signs, LEDs, cobbles and
 # an entrance arch all need room. The 12" depth is the one that matters most -- a 7-8"
 # nook has no room to establish the alley.
-BOOKNOOK_WIDTH  = Param(152.4, CHOSEN, "6 in. X, across the alley")
-BOOKNOOK_HEIGHT = Param(279.4, CHOSEN, "11 in. Z")
+BOOKNOOK_WIDTH  = Param(203.2, CHOSEN, "8 in. X. Split the difference between the 6 in "
+                                       "and 9.5-10 in briefs: 6 gave no room for deep "
+                                       "shopfronts, 9.5+ made the plan nearly square and "
+                                       "ate the shelf")
+BOOKNOOK_HEIGHT = Param(266.7, CHOSEN, "10.5 in. Z")
 BOOKNOOK_DEPTH  = Param(304.8, CHOSEN, "12 in. Y, front to back -- this is the one that "
                                        "buys the forced perspective")
 SHELL_THICKNESS = Param(2.2, CHOSEN, "outer case wall")
-PLINTH_HEIGHT   = Param(24.0, CHOSEN, "houses the battery/controller drawer")
+PLINTH_HEIGHT   = Param(8.0, CHOSEN, "a foot, NOT a drawer. The electronics moved to the "                                     "rear service cavity behind the forced-perspective "                                     "end wall, which frees 16 mm straight into building "                                     "height -- and the brief is explicit that the "                                     "buildings stay tall while the alley narrows")
 BASE_PAN_T      = Param(10.0, CHOSEN, "floor build-up under the cobbles")
-REAR_BAY_D      = Param(46.5, CHOSEN, "rear assembly depth")
+REAR_BAY_D      = Param(20.0, CHOSEN, "rear service cavity: the visible end of the alley "                                      "sits this far in front of the exterior rear panel. "                                      "From the front it reads as a dark alley continuing "                                      "through an arch; behind it is the electrical "                                      "cabinet -- junctions, controller, USB")
 SLIP_CLEARANCE  = Param(0.35, CHOSEN, "chassis sliding into the case, per side")
 WALL_FACE_T     = Param(2.5, CHOSEN, "the brick plate the viewer sees")
 RIB_GAP         = Param(2.5, CHOSEN, "clear gap behind the plate")
 WALL_SERVICE_D  = Param(5.0, CHOSEN, "open service lattice behind the gap")
-WALL_CANT_DEG   = Param(3.6, CHOSEN, "up from 1.75: at the new depth this takes the alley "
-                                     "from ~5 in. at the front to ~3.7 in. at the rear, "
-                                     "which is the taper the brief asks for")
-ARCH_OPENING_W  = Param(133.4, CHOSEN, "5.25 in. clear, out of 6 in. exterior -- thin brick "
+WALL_CANT_DEG   = Param(3.6, CHOSEN, "takes the alley from 6.9 in at the front to about "
+                                     "5.5 in at the rear")
+STOREFRONT_PROJ = Param(35.0, CHOSEN, "how far a storefront module stands into the alley. "
+                                      "It is ALSO the light-diffusion path: the bay is "
+                                      "hollow, so the LED sits at the wall plane and "
+                                      "throws 35 mm forward to the glazing. The wall does "
+                                      "not have to be thick to diffuse")
+OUTER_SKIN_T    = Param(2.5, CHOSEN, "removable brick panel: the finished outside AND the "
+                                     "access hatch for the wiring behind it")
+WIRE_CAVITY_D   = Param(6.0, CHOSEN, "between inner wall and outer skin. WIRING ONLY -- "
+                                     "diffusion is STOREFRONT_PROJ. Sizing this for "
+                                     "diffusion instead would cost 18 mm of alley")
+WIRE_CHANNEL_W  = Param(6.0, CHOSEN, "concealed vertical channel in each wall module, "
+                                     "dropping into the floor channel. The floor is the "
+                                     "wiring highway; nothing runs across visible brick")
+ROOF_LIP_D      = Param(10.0, CHOSEN, "concealed inner lip on the removable roof. Ambient "
+                                      "LEDs sit behind it, so a viewer sees the glow on "
+                                      "the buildings and cobbles, never the emitter")
+LIT_WINDOWS_MAX = Param(7.0, CHOSEN, "light 5-7 KEY windows, not every one. Selective "
+                                     "lighting reads as atmosphere; lighting everything "
+                                     "reads as a lamp")
+ARCH_OPENING_W  = Param(182.0, CHOSEN, "7.17 in. clear, out of 8 in. exterior -- thin brick "
                                        "piers. Deliberately WIDER than the alley so the "
                                        "reveal does not shadow the near shopfronts")
 PERSP_STRENGTH  = Param(0.42, CHOSEN, "element scale at the rear = 1 - this. The thing "
@@ -288,7 +309,9 @@ PIN_ENGAGE = Param(PIN_L / 2.0 - LEAD_IN_CHAMFER, ASSUMED,
                    "loose pin: gripping length PER SIDE. The one that nearly shipped short",
                    "R-5")
 
-WALL_ASSEMBLY_D = WALL_FACE_T + RIB_GAP + WALL_SERVICE_D
+# The wall is a sandwich now, not a ribbed plate: storefront | glazing | inner wall |
+# wiring cavity | removable outer brick skin. PLAN 6.14.
+WALL_ASSEMBLY_D = WALL_FACE_T + WIRE_CAVITY_D + OUTER_SKIN_T
 
 CASE_CAVITY_W = BOOKNOOK_WIDTH - 2 * SHELL_THICKNESS
 CASE_CAVITY_H = BOOKNOOK_HEIGHT - PLINTH_HEIGHT - SHELL_THICKNESS
@@ -301,6 +324,7 @@ CHASSIS_D = CASE_CAVITY_D - 2 * SLIP_CLEARANCE
 SCENE_H = CHASSIS_H - BASE_PAN_T
 ALLEY_D = CHASSIS_D - REAR_BAY_D
 ALLEY_W_FRONT = CHASSIS_W - 2 * WALL_ASSEMBLY_D
+CLEAR_WALK_FRONT = ALLEY_W_FRONT - 2 * STOREFRONT_PROJ
 
 import math
 CANT_OFFSET = ALLEY_D * math.tan(math.radians(WALL_CANT_DEG))
@@ -380,6 +404,15 @@ def sanity():
             f"a one-piece wall face is {WALL_FACE_L:.0f} x {WALL_FACE_H:.0f} on a "
             f"{float(BED_X):.0f} bed -- {margin:.1f} mm of margin. That is not a fit, it "
             f"is a coincidence. The wall must be PANELS (PLAN 6.6), not one object")
+    # A tall part still has to fit WITH its brim, and the brim is 5 mm on every side.
+    # Splitting a wall lengthways does not help: the binding dimension is scene height.
+    brimmed = SCENE_H + 2 * BRIM_WIDTH
+    if brimmed > min(BED_X, BED_Y) - 10.0:
+        bad.append(
+            f"a full-height wall module is {SCENE_H:.0f} mm tall, {brimmed:.0f} mm with "
+            f"its brim, on a {float(BED_X):.0f} bed. Splitting the wall lengthways does "
+            f"NOT help -- height is the binding dimension. Either let the removable roof "
+            f"section carry the top band, or place the module diagonally")
     if ARCH_OPENING_W <= ALLEY_W_FRONT:
         bad.append(f"arch opening {float(ARCH_OPENING_W):.0f} is not wider than the "
                    f"{ALLEY_W_FRONT:.0f} alley -- the reveal will shadow the near "

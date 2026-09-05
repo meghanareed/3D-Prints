@@ -1030,6 +1030,144 @@ than what is there now — `PLINTH_HEIGHT` is 24 mm (0.94 in) and it exists to h
 the building band absorbs it, or the power moves out of the plinth. Worth settling when
 Phase 6 is designed, not before.
 
+### 6.14 The envelope settled at 8 in, and the wall becomes a sandwich
+
+`Diagon_Alley_Book_Nook_P2S_Build_Plan.md` gave a third width — **9.5–10 in** — against
+the **6 in** of the message before it. Put through `params.py` the two are different
+buildings, not a rounding difference:
+
+| | 6 in | 9.5 in | 10 in |
+|---|---|---|---|
+| Alley width, front | 5.01 in | 8.51 in | 9.01 in |
+| **Depth : width** | **2.01 : 1** | 1.18 : 1 | 1.12 : 1 |
+
+At 9.5–10 in the plan is nearly square — a courtyard, not an alley — unless the width is
+spent on deep storefronts rather than on empty floor.
+
+**Settled: 8 in (203.2 mm).** Alley **176.1 mm (6.93 in)** front, 144.0 mm (5.67 in) rear;
+storefronts project 35 mm per side, leaving a **clear walk of 106.1 mm (4.18 in)** and a
+**2.41 : 1** ratio on the walk. An alley silhouette with shopfronts deep enough to be worth
+modelling.
+
+#### The wall is now three layers, and the outer one earns its keep twice
+
+The requirement was lights hidden *between* two pieces, with a brick outer face that looks
+finished. That gives:
+
+```
+ALLEY --> storefront module   ~35 mm deep, HOLLOW behind the glazing
+          glazing (PET)       at the bay front
+             :                35 mm of empty bay
+          inner wall          2.5   big opening, carries the module pegs
+          wiring cavity       6.0   LEDs + wire, invisible from both sides
+          outer brick skin    2.5   REMOVABLE: the finished outside AND the access hatch
+```
+
+**The move that makes it cheap: the diffusion path is the storefront's own projection, not
+the wall's thickness.** The bay is already 35 mm deep and already hollow — §6.8 requires
+that for light — so the LED sits at the wall plane and throws forward 35 mm to the
+glazing. The wall only has to carry *wiring*, which needs 6 mm, not the 15–20 mm a
+diffusing cavity would want.
+
+| | Clear walk | Ratio |
+|---|---|---|
+| Wall does the diffusing (15 mm cavity) | 3.47 in | 2.90 : 1 |
+| **Storefront does it (6 mm wiring cavity)** | **4.18 in** | **2.41 : 1** |
+
+**18 mm of alley saved**, and the emitter ends up recessed *behind* the wall plane, so
+"no emitter visible from the front" is satisfied by construction rather than by shielding.
+
+The removable outer brick panel answers R4 — access is a removable wall, not removable
+parts — and together with the two removable roof sections it means any LED can be reached
+without touching a storefront. **Nothing is glued until the electronics are tested.**
+
+#### The U-shell replaces the chassis-in-a-case
+
+Floor (2 sections) + two side walls (2 modules each) + back/end wall + front arch + two
+removable roof sections = **10 major structural prints**. Simpler than a chassis sliding
+into a case, and the access story is better. The C4 cantilever snap and the outer case
+leave the design; **T3, the one validated sliding joint, stays available** for the
+module-to-module seams.
+
+Structural connectors are a **different joint family from the facade pegs** and both
+belong: Ø5–6 mm pegs with 5–7 mm engagement for wall-to-floor, module-to-module and
+back-wall corners, against Ø3.0 for facade modules onto walls. Clearance stays at the
+measured **0.30 per side** — the top of the 0.20–0.30 range that document suggests — with
+one exception flagged: the front arch and roof are meant to be *removable and unglued*,
+and friction retention is the one thing two printed coupons said does not work here. Those
+coupons were at Ø2.4; at Ø5–6 it may be a different regime. **R-21.**
+
+Connector priority, taken as given: wall-to-floor, then module-to-module, then
+walls-to-back-wall, then floor-to-floor, then arch, then roof.
+
+#### Settled at 8 in, and the lighting is designed in rather than retrofitted
+
+**8 in W × 12 in D × 10.5 in H.** The instruction that shapes the rest: *do not shrink
+everything proportionally — keep the buildings tall and dimensional, make the alley
+narrower.* That crowding is the point.
+
+| | | |
+|---|---|---|
+| Scene height | 245.8 mm | 9.68 in |
+| Alley depth | 281.9 mm | 11.10 in |
+| Alley width, front | 176.1 mm | **6.93 in** |
+| Alley width, rear | 140.6 mm | 5.54 in |
+| Clear walk | 106.1 mm | 4.18 in, **2.66 : 1** |
+| Rear service cavity | 20.0 mm | 0.79 in |
+
+**The plinth drawer is gone, and that is a gain.** Electronics move to the rear service
+cavity behind the forced-perspective end wall, so `PLINTH_HEIGHT` drops 24 → 8 mm — a
+foot, not a drawer. Sixteen millimetres straight into building height, which is exactly
+what "keep the buildings tall" asks for. The rear cavity also shortens `REAR_BAY_D`
+46.5 → 20 mm, which *lengthens* the alley to 11.1 in.
+
+Lighting provisions, built in:
+
+* **6 mm concealed vertical channel** in each wall module, dropping into an underside
+  floor channel — the floor is the wiring highway, nothing crosses visible brick.
+* **5–7 key windows lit, not every window.** Selective lighting reads as atmosphere;
+  lighting everything reads as a lamp.
+* **Wire passages through the façade** for lantern brackets, into the vertical channel.
+* **A 10 mm concealed lip on the removable roof**, with the ambient LEDs behind it: the
+  viewer sees glow on the buildings and cobbles, never an emitter.
+* **Connectors at roof → rear compartment → left wall → right wall**, so the roof actually
+  lifts off instead of being tethered.
+* **Empty spare channels in every storefront module.** Free at design time, and they mean
+  "actually, light that one too" never requires drilling a finished model.
+
+And the width helps the light: at 6.9 in of interior, warm light from one storefront spills
+onto the opposite building and the cobbles. At 10 in it would have had too much empty space
+to cross.
+
+#### One new constraint, caught by arithmetic
+
+A full-height wall module is **245.8 mm tall — 255.8 mm with its 5 mm brim, on a 256 mm
+bed.** Another coincidence rather than a fit, and `sanity()` now fails on it.
+
+**Splitting the wall lengthways does not help: height is the binding dimension.** Two ways
+out, and the first is free because the structure already has it:
+
+1. **Let the removable roof section carry the top band.** The roof is already a separate
+   piece; if it takes the top ~30 mm of façade, the wall module drops to ~216 mm and
+   prints with 30 mm of margin.
+2. Place the module diagonally on the bed — the 256 mm square has a 362 mm diagonal.
+
+Option 1 is better: it makes the seam fall at the roofline, where a real building has one.
+
+#### What this confirms and what it leaves open
+
+The build plan's *"each 12-inch side wall divided into two approximately 6-inch modules,
+seams falling between buildings"* is independent agreement with §6.6 and with the bed
+arithmetic in §6.13 — a one-piece wall is 255.4 mm long and does not fit. Three documents
+and one geometric constraint now say the same thing.
+
+Two things it changes that are worth naming: the shop lineup becomes **four modules**
+(Ollivanders, Flourish & Blotts, Apothecary, Weasleys') rather than the six of `SPEC.md`,
+and the sign budget lands at **8–12** — against 20–25 in the previous document. The
+smaller number is the right one for a 255 mm alley and is what the 70/30 rule implies
+anyway. Height is 10–11 in there against 11 in before; **11 in stands** unless told
+otherwise.
+
 ---
 
 ## 7. Per-object print settings — where brim and supports actually live
