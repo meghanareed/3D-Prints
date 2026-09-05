@@ -48,6 +48,10 @@ UNCHECKED = [
     "The JOINT geometry is now built and physically tested (check_joints_assemble); "
     "everything else still arrives with its module.",
     "Whether a printed joint holds. Only a bench answers that; see the R-register.",
+    "The slicer's own sharp-tail and cantilever warnings. preflight.py implements the "
+    "real criteria and has a corpus, but it runs on solids and is minutes-per-plate -- "
+    "too slow to gate on. Opening the file in Bambu is currently faster and is the "
+    "review step that has actually been finding things.",
 ]
 
 

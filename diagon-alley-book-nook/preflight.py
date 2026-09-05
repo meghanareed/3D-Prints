@@ -33,6 +33,18 @@ starts in mid-air.
 
     python preflight.py            check every part on the coupon plate
     python preflight.py --self     run the regression corpus only
+
+KNOWN LIMITATION, recorded so nobody plans around a tool that cannot do it: this is far
+too SLOW to sit in the edit-slice loop. Each layer costs several CAD booleans, each
+erosion and dilation costs eight more, and a 13-part plate runs for many minutes -- long
+enough that opening the file in Bambu is simply faster. Two full-plate runs were killed
+rather than waited out.
+
+It is useful for what it IS: a corpus that pins down what the criteria actually are, and
+a way to answer a specific question about a specific part offline. It is not a gate, and
+checks.py deliberately does not call it. Making it practical means working on 2D
+polygons -- slice once, then use a polygon library -- rather than on solids, which is a
+rewrite and not a tuning.
 """
 import math
 import os
