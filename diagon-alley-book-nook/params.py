@@ -202,11 +202,28 @@ def needs_brim(stats, force=None):
 
 # ==================================================================== chosen ==
 # Design decisions. Changing these changes the model; they are not facts about anything.
-BOOKNOOK_WIDTH  = Param(100.0, CHOSEN, "X, across the alley -- sized to sit between books")
-BOOKNOOK_HEIGHT = Param(240.0, CHOSEN, "Z")
-BOOKNOOK_DEPTH  = Param(200.0, CHOSEN, "Y, front to back")
+# Q-4 answered: 6" W x 11" H x 12" D. Deliberately larger than a typical book nook
+# (4-5" W x 8-10" H x 7-10" D) because projecting bays, readable signs, LEDs, cobbles and
+# an entrance arch all need room. The 12" depth is the one that matters most -- a 7-8"
+# nook has no room to establish the alley.
+BOOKNOOK_WIDTH  = Param(152.4, CHOSEN, "6 in. X, across the alley")
+BOOKNOOK_HEIGHT = Param(279.4, CHOSEN, "11 in. Z")
+BOOKNOOK_DEPTH  = Param(304.8, CHOSEN, "12 in. Y, front to back -- this is the one that "
+                                       "buys the forced perspective")
 SHELL_THICKNESS = Param(2.2, CHOSEN, "outer case wall")
+PLINTH_HEIGHT   = Param(24.0, CHOSEN, "houses the battery/controller drawer")
+BASE_PAN_T      = Param(10.0, CHOSEN, "floor build-up under the cobbles")
+REAR_BAY_D      = Param(46.5, CHOSEN, "rear assembly depth")
+SLIP_CLEARANCE  = Param(0.35, CHOSEN, "chassis sliding into the case, per side")
 WALL_FACE_T     = Param(2.5, CHOSEN, "the brick plate the viewer sees")
+RIB_GAP         = Param(2.5, CHOSEN, "clear gap behind the plate")
+WALL_SERVICE_D  = Param(5.0, CHOSEN, "open service lattice behind the gap")
+WALL_CANT_DEG   = Param(3.6, CHOSEN, "up from 1.75: at the new depth this takes the alley "
+                                     "from ~5 in. at the front to ~3.7 in. at the rear, "
+                                     "which is the taper the brief asks for")
+ARCH_OPENING_W  = Param(133.4, CHOSEN, "5.25 in. clear, out of 6 in. exterior -- thin brick "
+                                       "piers. Deliberately WIDER than the alley so the "
+                                       "reveal does not shadow the near shopfronts")
 PERSP_STRENGTH  = Param(0.42, CHOSEN, "element scale at the rear = 1 - this. The thing "
                                       "that makes a 197 mm alley read as a street")
 BRICK_RELIEF    = Param(0.6, CHOSEN, "mortar groove depth. 0.5-0.8 is the useful band")
@@ -271,7 +288,30 @@ PIN_ENGAGE = Param(PIN_L / 2.0 - LEAD_IN_CHAMFER, ASSUMED,
                    "loose pin: gripping length PER SIDE. The one that nearly shipped short",
                    "R-5")
 
+WALL_ASSEMBLY_D = WALL_FACE_T + RIB_GAP + WALL_SERVICE_D
+
 CASE_CAVITY_W = BOOKNOOK_WIDTH - 2 * SHELL_THICKNESS
+CASE_CAVITY_H = BOOKNOOK_HEIGHT - PLINTH_HEIGHT - SHELL_THICKNESS
+CASE_CAVITY_D = BOOKNOOK_DEPTH - SHELL_THICKNESS
+
+CHASSIS_W = CASE_CAVITY_W - 2 * SLIP_CLEARANCE
+CHASSIS_H = CASE_CAVITY_H - 2 * SLIP_CLEARANCE
+CHASSIS_D = CASE_CAVITY_D - 2 * SLIP_CLEARANCE
+
+SCENE_H = CHASSIS_H - BASE_PAN_T
+ALLEY_D = CHASSIS_D - REAR_BAY_D
+ALLEY_W_FRONT = CHASSIS_W - 2 * WALL_ASSEMBLY_D
+
+import math
+CANT_OFFSET = ALLEY_D * math.tan(math.radians(WALL_CANT_DEG))
+ALLEY_W_REAR = ALLEY_W_FRONT - 2 * CANT_OFFSET
+
+# The wall face is the biggest single part in the kit, and whether it fits the bed in one
+# piece decides whether the wall can be one object or must be panels (PLAN 6.6 / 6.9).
+WALL_FACE_L = ALLEY_D
+WALL_FACE_H = SCENE_H
+
+MM_PER_IN = 25.4
 
 
 def _register():
@@ -334,6 +374,16 @@ def sanity():
         bad.append(f"profile ships brim_type={BRIM_TYPE_IN_PROFILE!r}; it must be "
                    f"overridden to {BRIM_TYPE_WANTED!r} at the plate AND set per object "
                    f"(B2) -- Auto gave a 15 mm2 plaque no brim and it came off the bed")
+    margin = min(BED_X, BED_Y) - max(WALL_FACE_L, WALL_FACE_H)
+    if margin < 20.0:
+        bad.append(
+            f"a one-piece wall face is {WALL_FACE_L:.0f} x {WALL_FACE_H:.0f} on a "
+            f"{float(BED_X):.0f} bed -- {margin:.1f} mm of margin. That is not a fit, it "
+            f"is a coincidence. The wall must be PANELS (PLAN 6.6), not one object")
+    if ARCH_OPENING_W <= ALLEY_W_FRONT:
+        bad.append(f"arch opening {float(ARCH_OPENING_W):.0f} is not wider than the "
+                   f"{ALLEY_W_FRONT:.0f} alley -- the reveal will shadow the near "
+                   f"shopfronts off-axis (PLAN 6.10)")
     if ELEPHANT_FOOT > 0 and XY_HOLE_COMP == 0:
         bad.append(f"elephant foot {float(ELEPHANT_FOOT)} with hole compensation 0: every "
                    f"socket mouth gets MORE material and none of it is corrected (B8). "

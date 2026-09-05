@@ -764,9 +764,16 @@ orientations, so give them opposite orientations:
 | **Storefront module** | **standing** on its own base | Bays must project; the base gives a real footprint | Supports where they are wanted, sockets facing sideways |
 
 That is both parts in their best orientation with no compromise, and it retires the
-flat-vs-standing question rather than deciding it. It also makes the wall plate cheap and
-low-risk enough that one plate per wall becomes viable again — a simple 150.6 × 203.1 plate
-with rectangular holes is not the print that fails at hour five.
+flat-vs-standing question rather than deciding it.
+
+> **The "one plate per wall" half of this is now withdrawn — the envelope grew.** At the
+> old 100 mm nook a wall face was 150.6 × 203.1 and sat comfortably on the bed. At the
+> **6 × 11 × 12 in** envelope (§6.13) it is **255.4 × 242.5 on a 256 mm bed: 0.6 mm of
+> margin.** That is not a fit, it is a coincidence, and `params.sanity()` fails the build
+> on it. **The wall must be panels**, which resurrects §6.6's building-panel proposal —
+> now for a hard geometric reason rather than a preference. Everything else in this
+> section stands: the panels still print flat with their pegs up, and they are still dumb
+> plates with big openings.
 
 #### It kills the defect class that fouled 21 of 21 mounts
 
@@ -961,9 +968,67 @@ brick relief, cobble relief, roof angle, glazing channel) becomes a `Param` whos
 provenance flips from `ASSUMED` to `MEASURED` when the plate comes off. That is the moment
 this project has never reached twice running.
 
-#### One question the document raises that this plan cannot answer
+### 6.13 The envelope — Q-4 answered, and what it moves
 
-Scale. See §10, Q-4.
+**6 in W × 11 in H × 12 in D — 152.4 × 279.4 × 304.8 mm.** Deliberately larger than a
+typical book nook (4–5 × 8–10 × 7–10 in), because projecting bays, readable signs, LEDs,
+cobbles and an entrance arch all need room. The **12 in depth** is the one that earns its
+keep: a 7–8 in nook has no room to establish an alley at all.
+
+Put into `params.py`, the derived geometry lands on the brief almost exactly:
+
+| | | |
+|---|---|---|
+| Chassis | 147.3 × 252.5 × 301.9 | |
+| Scene height | 242.5 mm | 9.55 in |
+| Alley depth | 255.4 mm | 10.06 in |
+| **Alley width, front** | **127.3 mm** | **5.01 in** — target was ~5 |
+| **Alley width, rear** | **95.2 mm** | **3.75 in** — target was 3.5–4 |
+| Arch clear opening | 133.4 mm | 5.25 in, out of 6 in exterior |
+
+`WALL_CANT_DEG` goes **1.75° → 3.6°** to produce that taper over the greater depth. The
+arch opening is deliberately **wider than the alley** (5.25 in against 5.01 in), which is
+the §6.10 requirement that the reveal must not shadow the near shopfronts; `sanity()`
+now fails the build if that ordering is ever broken.
+
+#### Three consequences, one of which is a hard stop
+
+**1. A one-piece wall no longer fits — the wall must be panels.** 255.4 × 242.5 on a
+256 mm bed. See the retraction in §6.9. This is the single biggest structural consequence
+and it was found by arithmetic, not by a failed 10-hour print.
+
+**2. R-16 is substantially relieved.** The light cavity was capped near 7.5–12.5 mm only
+because the alley was 74.9 mm wide. At 147.3 mm of chassis there is real width to spend:
+
+| Wall build-up | Cavity | Alley | |
+|---|---|---|---|
+| 10.0 (current) | 7.5 | 127.3 | 5.01 in |
+| 15.0 | 12.5 | 117.3 | 4.62 in |
+| **20.0** | **17.5** | **107.3** | **4.22 in** |
+| 25.0 | 22.5 | 97.3 | 3.83 in |
+
+A 17.5 mm cavity at a 4.2 in alley is a genuine option now, where before it would have
+left a corridor. R-16 stops being "diffusion without depth" and becomes "how much alley is
+diffusion worth" — a trade rather than a constraint. Worth deciding alongside the wall
+build-up, because they are the same number.
+
+**3. Everything gets bigger, and the element table was drawn for the old envelope.** The
+wall face roughly **doubles in area** (×2.02), so a full wall face would have been ~213 g
+against the old ~105 g — except it is now panels, which puts each building panel back near
+70 g and comfortably inside P9's appetite. The facade rows in the old table were sized for
+a 74.9 mm alley and need scaling by roughly **1.6–1.7×** to suit; Ollivanders' lower
+storefront should land at the brief's **3–4 in (76–102 mm) tall**, against the ~56 mm it
+occupies today. That is a table-wide rescale, and it is one more reason the element data
+is being rebuilt rather than carried across.
+
+#### Height budget
+
+The brief allocates ~0.5–0.75 in base, ~8.5–9 in buildings, ~1–1.5 in roofline. The
+derived scene height of 9.55 in fits that. **One caution:** the base allocation is tighter
+than what is there now — `PLINTH_HEIGHT` is 24 mm (0.94 in) and it exists to house an
+18 mm battery drawer. At 0.5 in there is no drawer. Either the plinth stays near 24 mm and
+the building band absorbs it, or the power moves out of the plinth. Worth settling when
+Phase 6 is designed, not before.
 
 ---
 
@@ -1151,7 +1216,7 @@ which is the only kind of evidence this project has ever actually learned from.
 | **R-14** | **Does a peg on a large plate blob?** Two pegs on the plate-1 wall tile | §6.7 inverts the sign joint on the reasoning that the blobbing was a layer-time effect on *small* parts. Sound, but an inference — and ~0 g to settle | The sign joint family |
 | **R-15** | **AMS colour change for lettering** — purge, boundary crispness at 3 layers, legibility | §6.7. Removes hand-painting every glyph and partly defuses D3. Needs one printed sign to confirm | Phase 5, and the paint plan |
 | **R-10** | **Type legibility strip** — candidate faces at a range of sizes, read at arm's length | §6.8 reformulates the rule: **stroke ≥ 0.5 mm** is the real limit, with glyph height derived from the face's stem ratio, replacing the flat "≥3.5 mm". Fold into R-15's plate | Phase 5 |
-| **R-16** | **Diffusion without depth** — the light cavity is capped near 7.5–12.5 mm | §6.8. A 20–40 mm cavity would cut the alley from 74.9 mm to 29.9 mm. Test diffuser-close-to-pane, side-washing, and a frosted pane instead | Phase 6 |
+| **R-16** | **How much alley is diffusion worth?** — cavity vs alley width | **Relieved by §6.13.** At the 6 in envelope a 17.5 mm cavity still leaves a 4.2 in alley, so this is now a trade rather than a hard cap. Still test diffuser-close-to-pane and side-washing — they may buy the same result for less alley | Phase 6 |
 | **R-17** | Does a 5-facet bow read as curved once mullioned and painted | Free to check — `render.py`, no print. The old code asserts it does; nobody has looked | Phase 2 geometry |
 | **R-18** | **Cobble apron vs "sits on a shelf between books"** | §6.10. A 30–50 mm apron protrudes past a book spine and breaks Phase 8's exit test. Removable display piece, or keep it to ~10–15 mm | Phase 8 |
 | **R-19** | **PETG support interface via the AMS** | §6.12. PLA and PETG adhere poorly, so a PETG interface releases cleanly under a PLA bulk — real technique, never tried here. Test it on the canopy of the torture module | Phase 2 print |
@@ -1175,23 +1240,8 @@ depend on · masking material for R-7.
   it — §9 is explicit that no geometry from them enters this kit, and an unlabelled
   reference 3MF in the output directory is how that promise gets broken by accident.
 
-* **Q-4 — Is the target still the 100 × 240 × 200 mm book nook, or has this become a
-  larger diorama?** This is the one real divergence in
-  `Diagon_Alley_3D_Printing_Design_Plan.md` and it changes a great deal. That document
-  sizes the project at **3–4 hero buildings, 5–7 secondary, plus background buildings**
-  (twelve or more), **20–25 signs**, and **25–35 printed architectural modules**. This kit
-  is **six shops** — L1–L3 and R1–R3 — in a nook 100 mm wide with a **74.9 mm** alley.
-
-  Some of those numbers fit anyway: 25–35 modules across two walls is roughly the 6–15 per
-  wall in §6.11. Others do not: twelve buildings will not go in six bays, and 20–25 signs
-  is about double what a 150 mm alley can carry before it reads as noise — which the same
-  document's own 70/30 rule would forbid.
-
-  It matters because it changes the envelope, the module sizes, the sign budget, whether
-  the forced-perspective ladder still applies, and whether a wall still fits the bed in one
-  piece. **Phase 1 is unaffected either way** — a wall tile, a joint and a torture test are
-  the same work at any scale — so this is not blocking, but it should be answered before
-  Phase 2 geometry.
+*(Q-4 — the envelope — is answered: **6 × 11 × 12 in**, 152.4 × 279.4 × 304.8 mm.
+See §6.13 for the derived geometry and the three things it moves.)*
 
 *(Q-1 — where the work happens — is answered: net new, nothing from `archive/`.)*
 
