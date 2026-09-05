@@ -1,8 +1,10 @@
-# 10 — Build spec
+# Build spec — Diagon Alley book nook
 
-**Read this first, then `07_RETROSPECTIVE.md`, then `08_JOINT_DESIGN.md`.**
+**Read this first, then `archive/docs/07_RETROSPECTIVE.md`, then
+`archive/docs/08_JOINT_DESIGN.md`.**
 
-§8 records the decisions already taken. §9 is what two reference models were measured to do differently, and it changes the shape of Phase 2 onward.
+§8 records the decisions already taken. §9 is what two reference models were measured
+to do differently, and it changes the shape of Phase 2 onward.
 
 This is the working spec for finishing the Diagon Alley book nook. It exists because two
 attempts to build it as one 182-part kit both ended with a bench full of parts that would
@@ -13,6 +15,31 @@ accumulate faster than they are found.
 So the kit is now **phased**. Each phase has an exit test that has to happen in plastic,
 in a hand, before the next phase starts. Phase 1 is one wall. Nothing in Phase 2 gets
 printed until Phase 1 is glued together and sitting on the desk.
+
+---
+
+## 0. What is in this folder
+
+    SPEC.md      this file -- the only live document
+    archive/     everything built in the two previous attempts
+
+Everything is in `archive/` deliberately. It is the record and the raw material, not the
+starting point. Two attempts were made at building this as one 182-part kit and both
+ended with parts that would not go together; carrying that structure forward unexamined
+is how a third attempt ends the same way.
+
+What is worth reusing from it, and what is not:
+
+| | |
+|---|---|
+| `archive/lib/mount.py` | the joint library, with clearances that are now **measured**. Reuse. |
+| `archive/lib/brick.py`, `cobble.py` | brick and cobble texture. Reuse. |
+| `archive/lib/window.py`, `sign.py`, `prop.py` | element generators. Reuse the shapes, re-think the **grouping** (§9). |
+| `archive/verify.py` | fourteen checks, each paid for in filament. Reuse, and read §4 first. |
+| `archive/data/facade.py` | the element tables. The data is good; the one-row-one-part structure is what §9 replaces. |
+| `archive/parts/`, `archive/build.py`, `archive/plates.py` | the 181-part assembly. **This is the thing being replaced.** |
+| `archive/out/` | stale in every file. Regenerate; do not read. |
+| `archive/docs/` | 01–09, including the retrospective and the joint analysis. Read 07 and 08. |
 
 ---
 
@@ -48,8 +75,8 @@ so it means "no check I have written is unhappy", not "this will work".
 
 ### What is stale or untrusted
 
-* `out/` — every STL, plate, 3MF, `manifest.json`, `03_PARTS_LIST.md` and
-  `04_PRINT_CHECKLIST.md` predates the clearance change, the mount redesign, the sign
+* `archive/out/` — every STL, plate, 3MF, `manifest.json`, `03_PARTS_LIST.md`
+  and `04_PRINT_CHECKLIST.md` predates the clearance change, the mount redesign, the sign
   rework and the layout pass. **Regenerate before believing any of it.**
 * There is no check for an unsupported overhang. One was written, its own regression
   test failed it, a rewrite failed a good part, and it was deleted rather than shipped.
@@ -60,7 +87,7 @@ so it means "no check I have written is unhappy", not "this will work".
 
 ## 2. Recap — what went wrong, from the square-peg era on
 
-Full detail is in `07_RETROSPECTIVE.md`. The short version, because a new session needs
+Full detail is in `archive/docs/07_RETROSPECTIVE.md`. The short version, because a new session needs
 to know which mistakes are already paid for.
 
 ### Attempt one — the square peg
@@ -198,7 +225,7 @@ happens in plastic. A phase is not done because the checks pass.
 the desk looking like a wall.
 
 **Build**
-1. **Apply J1 to the facade.** Convert `lib/window.py`'s `_mount_pegs` from pegs to
+1. **Apply J1 to the facade.** Convert `archive/lib/window.py`'s `_mount_pegs` from pegs to
    sockets so every facade part takes a loose pin. The wall already has the matching
    sockets. Verify the pin reaches both and check the part's back is thick enough for a
    1.6 mm bore; thicken locally where it is not.
@@ -295,7 +322,7 @@ shelf between books.
 
 ## 6. What to do first, in a new session
 
-1. Read `07_RETROSPECTIVE.md` and `08_JOINT_DESIGN.md`.
+1. Read `archive/docs/07_RETROSPECTIVE.md` and `archive/docs/08_JOINT_DESIGN.md`.
 2. Run `python3 verify.py`. Expect 0 failures and ~54 warnings, all brim advisories.
 3. Run `python3 build.py` — **this has not been run since the redesign.** Expect it to
    surface things. `out/` is stale and every downstream file with it.
@@ -304,7 +331,7 @@ shelf between books.
 5. Print the pin sprue on its own before anything else.
 6. Read §9 before touching Phase 2. The regrouping there is the largest single
    improvement available to this project and it invalidates a lot of the current
-   `data/facade.py` structure — do not start it until Phase 1 has passed.
+   `archive/data/facade.py` structure — do not start it until Phase 1 has passed.
 
 ---
 
@@ -337,7 +364,7 @@ shelf between books.
 | C4 | cantilever snap 14 × 4 × 2, barb 0.9 |
 | Pin | 3.2 long, D-section, on a sprue |
 
-**Print settings** — full list in `05_PRINT_SETTINGS.md`
+**Print settings** — full list in `archive/docs/05_PRINT_SETTINGS.md`
 
 | | |
 |---|---|

@@ -3,5 +3,5 @@ __pycache__/
 
 # Large intermediate previews only -- the printable STLs ARE committed so the repo
 # can be cloned and printed from without installing CadQuery.
-diagon-alley-book-nook/out/preview/*.step
-diagon-alley-book-nook/out/build.log
+diagon-alley-book-nook/archive/out/preview/*.step
+diagon-alley-book-nook/archive/out/build.log

@@ -2,18 +2,22 @@
 
 ## diagon-alley-book-nook
 
-A parametric, multi-part miniature book nook: a narrow crooked wizarding shopping lane
-(100 × 240 × 200 mm), engineered as a real model kit — ~101 separately printable and
-individually paintable parts, snap-fit assembly, LED lighting, and a removable outer case.
+A parametric miniature book nook: a narrow crooked wizarding shopping lane
+(95 x 213 x 197 mm), built with **CadQuery**, with forced perspective, LED lighting and
+a removable outer case.
 
-Built with **CadQuery** (Python), fully parametric.
+**Start at [`diagon-alley-book-nook/SPEC.md`](diagon-alley-book-nook/SPEC.md).** It is
+the only live document.
 
-| Doc | |
+Two attempts were made at building this as one 182-part kit. Both ended with a bench of
+parts that would not go together, for reasons that are now understood and written down.
+Everything from those attempts is under `diagon-alley-book-nook/archive/` -- the code,
+the 181-part model, the print files and nine documents including the retrospective and
+the joint analysis. It is the record and the raw material, not the starting point.
+
+| | |
 |---|---|
-| [`docs/01_DESIGN_PLAN.md`](diagon-alley-book-nook/docs/01_DESIGN_PLAN.md) | Component architecture, exploded assembly, snap-fit standard, LED routing, dimensions |
-
-Lit with battery fairy-light strings threaded through pass-through bead pockets, with a
-slide-out power drawer in the plinth. Targets a Bambu P2S (256³) — no part needs splitting.
-
-**Status:** design plan **v2** (revised after review) awaiting final go-ahead.
-CAD generation has not started.
+| [`SPEC.md`](diagon-alley-book-nook/SPEC.md) | phases, rules, decisions, and what to do first |
+| [`archive/docs/07_RETROSPECTIVE.md`](diagon-alley-book-nook/archive/docs/07_RETROSPECTIVE.md) | what went wrong, both attempts |
+| [`archive/docs/08_JOINT_DESIGN.md`](diagon-alley-book-nook/archive/docs/08_JOINT_DESIGN.md) | why a round nozzle cannot cut a square socket |
+| [`archive/docs/09_COUPON_RESULTS.md`](diagon-alley-book-nook/archive/docs/09_COUPON_RESULTS.md) | the two printed coupons that settled the joint |
