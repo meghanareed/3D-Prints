@@ -160,6 +160,26 @@ def flat_side(normal="+Z", rot=0.0):
     return (c.x, c.y, c.z)
 
 
+def blind_cone_rise(clearance=None):
+    """How far past the bore's end the self-supporting cone reaches."""
+    c = float(P.FIT_CLEARANCE if clearance is None else clearance)
+    dia = float(P.PEG_D) + 2 * c
+    return (dia / 2.0) / math.tan(math.radians(float(P.BLIND_BORE_CONE) / 2.0))
+
+
+def socket_min_material(depth=None, clearance=None, floor=1.2):
+    """Material a socket needs behind its mouth to stay BLIND.
+
+    The cone that makes a downward-facing bore self-supporting is not free: it adds its
+    own rise past the bore. Size a part to `depth` alone and the cone punches out the
+    far face -- which is exactly what the first coupon plate did, leaving a pinhole in
+    the top of every socket block and no blind end at all. `floor` is the solid left
+    over the cone tip.
+    """
+    depth = float(P.SOCKET_DEPTH if depth is None else depth)
+    return depth + blind_cone_rise(clearance) + floor
+
+
 def socket_in(solid, point, normal="+Z", rot=0.0, depth=None, clearance=None):
     """Cut a socket into `solid` at `point`, opening along `normal`.
 
@@ -303,6 +323,27 @@ def self_test():
 
     # Socket must swallow the male with relief to spare, so the part seats on its face.
     t("socket is deeper than the peg", float(P.SOCKET_DEPTH) > float(P.PEG_L))
+
+    # A blind bore has to actually be BLIND. The cone that makes it self-supporting adds
+    # its own rise, and the first coupon plate sized its blocks to the bore alone -- so
+    # the cone punched a pinhole out of the top of every one and the "blind" end was a
+    # through hole. Caught by eye on a slicer preview, which is one step too late.
+    need = socket_min_material()
+    thin = cq.Workplane("XY").box(14, 14, float(P.SOCKET_DEPTH) + 2.5,
+                                  centered=(True, True, False))
+    thin = socket_in(thin, (0, 0, 0), "+Z")
+    thick = cq.Workplane("XY").box(14, 14, need, centered=(True, True, False))
+    thick = socket_in(thick, (0, 0, 0), "+Z")
+
+    def _far_face_intact(w, h):
+        slab = cq.Workplane("XY").box(40, 40, 0.2).translate((0, 0, h - 0.1))
+        return abs(_vol(w.intersect(slab)) - 14 * 14 * 0.2) < 1e-3
+
+    t("a bore sized to depth alone is NOT blind",
+      not _far_face_intact(thin, float(P.SOCKET_DEPTH) + 2.5),
+      "the regression: this is what shipped on plate 1")
+    t("socket_min_material keeps it blind", _far_face_intact(thick, need),
+      f"{need:.2f} mm = {float(P.SOCKET_DEPTH)} bore + {blind_cone_rise():.2f} cone + floor")
 
     # The real assembly: two socketed parts, face to face, over one pin.
     br = bridge_report()

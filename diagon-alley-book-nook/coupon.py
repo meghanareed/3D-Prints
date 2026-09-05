@@ -41,6 +41,40 @@ MULLIONS = [1.0, 1.2, 1.6]
 TEXT_SIZES = [2.5, 3.0, 4.0, 6.0]
 
 
+def _stamp_many(solid, lines, face="top", z=None):
+    """Stamp several labels on ONE face, at a z captured BEFORE any of them is applied.
+
+    Stamping twice in a row does not work if each call re-reads the bounding box: the
+    first label makes the solid taller by its own relief, so the second lands floating
+    in the air above the face. Capture the face once.
+    """
+    if z is None:
+        bb = solid.val().BoundingBox()
+        z = bb.zmax if face == "top" else bb.zmin
+    for text, size, at in lines:
+        solid = _stamp(solid, text, size, at, face=face, z=z)
+    return solid
+
+
+def _stamp(solid, text, size=3.2, at=None, face="top", z=None):
+    """Emboss a label. Twelve pieces come off this plate and a bench cannot tell a 0.25
+    socket from a 0.35 one by eye -- naming them is not decoration, it is the difference
+    between a result and a pile of plastic."""
+    if z is None:
+        bb = solid.val().BoundingBox()
+        z = bb.zmax if face == "top" else bb.zmin
+    x, y = at if at else (0.0, 0.0)
+    # SINK it. Text extruded from exactly the top face is only TANGENT to the body, and
+    # OCCT leaves a tangent solid separate -- which is how a bracket silently became
+    # three pieces in the last attempt. Start it inside the material and overlap.
+    bite = 0.3
+    txt = (cq.Workplane("XY").workplane(offset=z - bite)
+           .text(text, size, float(P.TEXT_DEPTH) + bite, combine=False, kind="bold",
+                 halign="center", valign="center")
+           .translate((x, y, 0)))
+    return solid.union(txt)
+
+
 # =============================================================== joint station ==
 def peg_tile(n=len(CLEARANCES)):
     """A wall-sized tile with pegs standing UP -- the R-14 question.
@@ -56,19 +90,24 @@ def peg_tile(n=len(CLEARANCES)):
     for i in range(n):
         x = -w / 2 + pitch * (i + 1)
         tile = tile.union(J.peg().translate((x, 0, t)))
+    # z=t explicitly: the pegs stand 4 mm above this face, so bb.zmax is the peg TIPS
+    # and a label placed there would float in mid-air.
+    tile = _stamp_many(tile, [("PEG TILE  R-14", 4.0, (0, 13.0)),
+                              ("do pegs blob on a big plate?", 2.6, (0, -13.0))], z=t)
     return tile
 
 
 def socket_block(clearance, label=None):
     """The mate for one peg. Drops over it; the block's face must land on the tile."""
-    w, d, t = 16.0, 16.0, float(P.SOCKET_DEPTH) + 2.5
+    # Tall enough that the blind cone does NOT punch out of the top. Sized to
+    # depth alone, it did -- every block on the first plate had a pinhole where
+    # its blind end should have been.
+    w, d = 16.0, 16.0
+    t = J.socket_min_material(clearance=clearance)
     blk = cq.Workplane("XY").box(w, d, t, centered=(True, True, False))
     blk = J.socket_in(blk, (0, 0, 0), "+Z", clearance=clearance)
     if label:
-        blk = blk.union(
-            cq.Workplane("XY").workplane(offset=t)
-            .text(label, 4.0, 0.6, combine=False, kind="bold", halign="center")
-            .translate((0, -5.5, 0)))
+        blk = _stamp_many(blk, [("SKT", 3.0, (0, 4.5)), (label, 4.4, (0, -2.5))])
     return blk
 
 
@@ -90,16 +129,26 @@ def pin_sprue(n=6, pitch=None):
         p = (J.pin().rotate((0, 0, 0), (0, 1, 0), 90)
              .translate((2.0, y, float(P.PEG_D) / 2.0)))
         out = out.union(p)
+    # A label needs something to sit ON. The spine is only 4 mm wide, so give the sprue
+    # a small tab at one end -- fused, overlapping, not merely touching.
+    ty = pitch * n / 2
+    tab = (cq.Workplane("XY").box(14.0, 7.0, 2.0, centered=(True, True, False))
+           .translate((0, ty - 0.5, 0)))
+    out = out.union(tab)
+    out = _stamp(out, "PINS", 3.4, at=(0, ty + 3.0), z=2.0)
     return out
 
 
 def pin_pair(clearance):
     """Two blocks that meet face to face over one loose pin -- the real pin joint."""
-    w, d, t = 16.0, 16.0, float(P.SOCKET_DEPTH) + 2.0
+    w, d = 16.0, 16.0
+    t = J.socket_min_material(clearance=clearance)
     a = cq.Workplane("XY").box(w, d, t, centered=(True, True, False))
     a = J.socket_facing(a, (0, 0, t), "-Z", clearance=clearance)
     b = cq.Workplane("XY").box(w, d, t, centered=(True, True, False))
     b = J.socket_facing(b, (0, 0, 0), "+Z", clearance=clearance)
+    a = _stamp_many(a, [("PIN A", 3.4, (0, 4.5)), ("+B+pin", 2.4, (0, -4.5))])
+    b = _stamp_many(b, [("PIN B", 3.4, (0, 4.5)), ("+A+pin", 2.4, (0, -4.5))])
     return a, b
 
 
@@ -177,7 +226,10 @@ def bow_facet(facets=5, w=26.0, h=22.0, proj=9.0):
         a = math.pi * i / facets
         pts.append((-math.cos(a) * w / 2, math.sin(a) * proj))
     pts += [(w / 2, -2.0), (-w / 2, -2.0)]
-    return cq.Workplane("XY").polyline(pts).close().extrude(h)
+    body = cq.Workplane("XY").polyline(pts).close().extrude(h)
+    # Labelled LOOK because it mates with nothing -- R-17 asks whether five facets read
+    # as a curve once painted, which is a question for an eye, not a caliper.
+    return _stamp(body, "BOW  LOOK", 3.0, at=(0, proj / 2))
 
 
 # ==================================================================== the plate ==
