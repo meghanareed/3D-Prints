@@ -1031,6 +1031,71 @@ than what is there now — `PLINTH_HEIGHT` is 24 mm (0.94 in) and it exists to h
 the building band absorbs it, or the power moves out of the plinth. Worth settling when
 Phase 6 is designed, not before.
 
+### 6.15 Plate 1 — printed 2026-09-05, and what it settled
+
+The first thing in three attempts to reach a bench.
+
+| | Result |
+|---|---|
+| **Peg into socket** | Every peg entered by thumb. **R-5 partially closed** — see the loss below |
+| **Pin joint** | Both pairs took a pin and closed **flush**; nothing held the faces apart. `PIN_L` 5.0 confirmed |
+| **Sprue orientation** | **Standing wins.** It snapped off cleanly; the lying one needed pliers and left artefacts on the pins. Both fitted |
+| **Mullions** | **1.0 mm printed best** — no droop, no stringing. 1.2 drooped slightly. 1.6 strung and slouched in the arch |
+| **Faceted bow** | Reads as curved. **R-17 closed** |
+| **Raised type** | Threshold located: strokes of 0.30 and 0.36 blobbed, 0.48 partial, 0.72 held. **R-10 closed** |
+
+**The result that matters most: the scatter survived the size increase.** Two pin pairs cut
+to the *same* 0.30 clearance at Ø3.0 behaved differently — one dropped its pin when
+inverted, one held it. That is exactly what coupon plate 1 found at Ø2.4. Going bigger made
+assembly more forgiving and did **not** make retention repeatable, so *locate, then glue* is
+the answer at both diameters tried, not a waypoint.
+
+**A note on the mullions.** 1.0 mm printed best but sits *below* the 1.2 mm minimum
+dependable feature, so the choice is "prints cleanest" against "survives handling". Take
+1.2 with the chamfer; the droop was slight and a window frame gets handled.
+
+#### What plate 1 lost, and why
+
+Its labels were 2.4–3.4 mm — every one under a single extrusion of stem. They printed as
+blobs, **the three socket blocks became indistinguishable, and the clearance answer the
+plate existed to get was lost.** Two dropped their peg and one held; which was which is
+unknowable, and block heights round to the same layer count so it is not recoverable by
+measurement.
+
+Two failures, both already in this project's record:
+
+* **stroke below one extrusion** — the rule was written (`TEXT_STROKE_MIN`) and I typed
+  3.0 mm labels anyway;
+* **lettering off the plate** — OLLIVANDERS at 6 mm is 47.5 mm on a 46 mm plate and lost
+  its O and its S. That is defect 4 from attempt two verbatim: 0.62 em assumed where
+  all-caps bold serif is 0.72.
+
+Fixed by making both computable rather than remembered — `params.text_width`,
+`text_fits`, `text_prints`, `TEXT_ADVANCE_EM` 0.72, `TEXT_STROKE_MIN` 0.70 MEASURED — and
+by `check_lettering`, which validates the labels **actually stamped** and catches all five
+plate-1 failures retroactively. `_stamp` now refuses to build a label under the floor.
+
+**And identification no longer trusts text.** Countable raised bars, 1.6 × 7 mm, far above
+the minimum feature. Text can fail to print; a bar cannot.
+
+### 6.16 Plate 2 — the clearance question, asked properly
+
+`out/plate_2_clearance.3mf`, 10 pieces, 39.1 g. One peg tile and **three copies each** of
+0.25 / 0.30 / 0.35, labelled at 6 mm and bar-coded 1 / 2 / 3.
+
+Three copies is the change that matters. One sample per station is the mistake this project
+has now made twice — coupon plate 1's own conclusion was that socket-to-socket scatter is
+wider than the whole range worth testing, and plate 1 then re-ran it with one sample each.
+**Nine blocks against three pegs is 27 fits**, enough to measure the scatter rather than be
+surprised by it again.
+
+What to record: for each block, does it go on by thumb, and does it stay when inverted?
+Then run a few blocks across *different* pegs — if one block behaves differently on peg 1
+than peg 3, the scatter is in the **pegs**; if different blocks differ on the same peg, it
+is in the **sockets**. That has never been separated here, and it changes the remedy.
+
+---
+
 ### 6.14 The envelope settled at 8 in, and the wall becomes a sandwich
 
 `Diagon_Alley_Book_Nook_P2S_Build_Plan.md` gave a third width — **9.5–10 in** — against
@@ -1346,7 +1411,7 @@ which is the only kind of evidence this project has ever actually learned from.
 | ~~R-2~~ | ~~Pin the versions~~ | **Closed.** `pip freeze > requirements.txt` | — |
 | ~~**R-3**~~ | **CLOSED 2026-09-05.** A fresh export from the installed Studio is byte-identical to the vendored profile — **0 of 582 keys differ** — so it needed confirming, not replacing. Now installed at `profiles/` so nothing is read out of `archive/` | **Corrected:** the vendored profile *is* a genuine `Bambu Lab P2S` export at 0.4 mm — read out of `printer_model`, not assumed. What is unverified is that it matches the current Studio version and AMS setup; it carries 7 filament slots where a later project carried 8. Lower risk than first written, still worth two minutes. Run `python ingest.py <project>.3mf --install` | First print |
 | **R-4** | Confirm a generated 3MF opens, slices and prints | Bambu only accepts a project whose `Application` metadata starts with `BambuStudio-`; that took two rounds of guessing to find last time. Format-correct ≠ prints | First print |
-| **R-5** | **Peg diameter, engagement and clearance** — test **Ø3.0 at 0.30/side into Ø3.6**, 4 mm long, on plate 1 | §6.3 and §6.9. Ø3.0 moves away from the small-feature edge; 4 mm finally clears the 2 mm engagement floor guidance names. Note 0.25/side is the *guessed* number attempt one failed on — do not standardise on Ø3.5 | Geometry, and the alley's standard |
+| **R-5** | **Partly closed, plate 1**: Ø3.0 pegs all seated by thumb and a 5.0 pin closes two sockets flush. The CLEARANCE is still open — plate 1's labels blobbed and the three blocks became unidentifiable. Plate 2 re-asks it with three copies each. **Peg diameter, engagement and clearance** — test **Ø3.0 at 0.30/side into Ø3.6**, 4 mm long, on plate 1 | §6.3 and §6.9. Ø3.0 moves away from the small-feature edge; 4 mm finally clears the 2 mm engagement floor guidance names. Note 0.25/side is the *guessed* number attempt one failed on — do not standardise on Ø3.5 | Geometry, and the alley's standard |
 | **R-6** | Does 0.30 + gel CA hold on a **vertical** wall | Both coupons were tested flat in the hand. The wall stands up and the parts hang off it | Phase 1 exit |
 | **R-7** | **Measure paint thickness**, two coats, with calipers | D3 turns on it, and §6.5 shows the fallback is unavailable | Phase 2 |
 | **R-8** | **Forced perspective vs grouping** — render before modelling | A grouped shopfront spans a range of depth, so it cannot take one perspective scale without either flattening the perspective inside the shop or stepping it at every shop boundary — a seam where the eye follows the street. Neither reference model has perspective, so neither answers this. Decide from a render, not from reasoning | **Phase 2 geometry** |
@@ -1354,9 +1419,9 @@ which is the only kind of evidence this project has ever actually learned from.
 | ~~**R-13**~~ | **Mostly CLOSED 2026-09-05.** Read off a real project: per-object settings are `<metadata key value>` on `<object>`; booleans are the string `"1"`; numbers are strings; **only keys that DIFFER from the plate default are written**, so the emitter writes overrides rather than a full config. Still open: the `subtype` spelling for enforcer/blocker volumes | Set them by hand in Bambu Studio on a two-object project, save, unzip, read `model_settings.config` — the exact spelling of `tree(auto)`, booleans as `1`/`0`. Two minutes, and it is the method that settled the `Application` tag after two rounds of guessing. §7 | The 3MF emitter |
 | **R-14** | **Does a peg on a large plate blob?** Two pegs on the plate-1 wall tile | §6.7 inverts the sign joint on the reasoning that the blobbing was a layer-time effect on *small* parts. Sound, but an inference — and ~0 g to settle | The sign joint family |
 | **R-15** | **AMS colour change for lettering** — purge, boundary crispness at 3 layers, legibility | §6.7. Removes hand-painting every glyph and partly defuses D3. Needs one printed sign to confirm | Phase 5, and the paint plan |
-| **R-10** | **Type legibility strip** — candidate faces at a range of sizes, read at arm's length | §6.8 reformulates the rule: **stroke ≥ 0.5 mm** is the real limit, with glyph height derived from the face's stem ratio, replacing the flat "≥3.5 mm". Fold into R-15's plate | Phase 5 |
+| ~~**R-10**~~ | **CLOSED, plate 1.** stroke ≥ 0.70 mm, glyph ≥ 6 mm for a bold serif; advance 0.72 em. ~~Type legibility strip~~ — candidate faces at a range of sizes, read at arm's length | §6.8 reformulates the rule: **stroke ≥ 0.5 mm** is the real limit, with glyph height derived from the face's stem ratio, replacing the flat "≥3.5 mm". Fold into R-15's plate | Phase 5 |
 | **R-16** | **How much alley is diffusion worth?** — cavity vs alley width | **Relieved by §6.13.** At the 6 in envelope a 17.5 mm cavity still leaves a 4.2 in alley, so this is now a trade rather than a hard cap. Still test diffuser-close-to-pane and side-washing — they may buy the same result for less alley | Phase 6 |
-| **R-17** | Does a 5-facet bow read as curved once mullioned and painted | Free to check — `render.py`, no print. The old code asserts it does; nobody has looked | Phase 2 geometry |
+| ~~**R-17**~~ | **CLOSED, plate 1** — it reads as curved. ~~Does a 5-facet bow read as curved | Free to check — `render.py`, no print. The old code asserts it does; nobody has looked | Phase 2 geometry |
 | **R-18** | **Cobble apron vs "sits on a shelf between books"** | §6.10. A 30–50 mm apron protrudes past a book spine and breaks Phase 8's exit test. Removable display piece, or keep it to ~10–15 mm | Phase 8 |
 | **R-19** | **PETG support interface via the AMS** | §6.12. PLA and PETG adhere poorly, so a PETG interface releases cleanly under a PLA bulk — real technique, never tried here. Test it on the canopy of the torture module | Phase 2 print |
 | **R-20** | **Lettering on the glazing** — printed, decal or vinyl | §6.12. A third answer to the type-size problem, and the one that makes OLLIVANDERS readable at hero scale without raised FDM text. Fold into the torture module | Phase 5 / hero shops |

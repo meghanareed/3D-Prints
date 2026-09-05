@@ -11,6 +11,7 @@ paid for in filament.
 |---|---|
 | Starting a **new** model | Read this file top to bottom first. Everything in it applies to anything printed here |
 | Working on the **book nook** | [`diagon-alley-book-nook/`](diagon-alley-book-nook/) — its `PLAN.md` is the live document |
+| Working on the **inhaler clicker** | [`inhaler-clicker/`](inhaler-clicker/) — its `README.md` is the live document |
 
 Every rule below exists because breaking it cost a print. Where a number came off a
 printed part rather than a datasheet, it says so.
@@ -44,7 +45,14 @@ several wasted plates bought this table, and it carries across projects.
 | **Minimum feature** | 1.2 mm thick × 2.0 mm long | Below this it will not survive handling |
 | **Minimum wall** | 0.84 mm | Two perimeters. Use 1.2–1.6 mm if structural |
 | **Crush ribs** | **Do not** | Printed twice. Permanent on one peg, impossible to assemble on two |
-| **Raised text** | stroke ≥ 0.5 mm | Stroke is the limit, not glyph height. A bold serif stem is ≈0.12 of glyph size, which is where "3.5 mm minimum" comes from *for that face* — a fatter face goes smaller, a finer one cannot |
+| **Raised text** | **stroke ≥ 0.70 mm**, so **glyph ≥ 6 mm** for a bold serif | A four-size ladder settled it: 0.30 and 0.36 mm strokes printed as **blobs**, 0.48 held **partially**, 0.72 **held**. One extrusion (0.42) is the floor; 0.70 is where it is reliable. Stroke is the limit, not glyph height — a bold serif stem is ≈0.12 of its size, so a fatter face goes smaller and a finer one cannot |
+| **Text advance** | **0.72 em per character**, all-caps bold serif | Not 0.62. This has run lettering off a plate **twice**: once assumed in a fitter, once again when OLLIVANDERS at 6 mm measured 47.5 mm on a 46 mm plate and lost its O and its S off the two ends. **Measure text against the thing it sits on** — `params.text_fits()` |
+
+**Bigger did not fix the scatter.** The clearance was re-tested at Ø3.0 after being
+measured at Ø2.4, and two sockets cut to the *same* number still behaved differently — one
+held its pin inverted, one dropped it. Going up in diameter made assembly more forgiving
+and retention no more repeatable. **"Locate, then glue" is the answer, not a stage on the
+way to a press fit.**
 
 **A caution about compensating twice.** Elephant foot adds material at a socket mouth and
 hole compensation is 0, so nothing corrects it — but the 0.30 clearance was measured on
@@ -79,6 +87,14 @@ Adding a second correction opens every joint too far.
     which forces joints, and joints are where failures happen.
 11. **Never let supports reach a mating bore.** Support in a socket does not scar a
     cosmetic surface, it destroys the fit.
+12. **Identify parts by geometry, not by text.** Countable raised bars, notches, a
+    distinctive corner — something well above the minimum feature. Text at label sizes is
+    the *first* thing a 0.4 mm nozzle declines to print, and a part you cannot identify
+    is a result you cannot record. This cost a whole plate's answer: three test blocks
+    printed with blob labels, and which clearance did what is now unknowable.
+13. **Three copies of anything you are measuring, never one.** Socket-to-socket scatter
+    here is wider than the entire clearance range worth testing, so a single sample tells
+    you about that sample. Two plates have now been spent learning this.
 
 ## Brims
 
@@ -129,6 +145,18 @@ in degrees will send you the wrong way — it sent this project the wrong way fo
 
 **Keep clear of the threshold, don't sit on it.** A cone at exactly 30° against a 30°
 threshold was flagged on every part; 22.5° was not. Borderline is the worst place to be.
+
+## Its text tool is a useful sanity check
+
+A project saved with Bambu's own text tool carries its defaults:
+
+```xml
+<text_info text="Text" font_name="Courier New" font_size="10" thickness="2" ... />
+```
+
+**10 mm glyphs at 2 mm of emboss.** When a label here was printing as blobs it was 3 mm
+at 0.6 mm — not marginal, a third of what the slicer itself proposes. If you are unsure
+whether text is big enough, that is a free second opinion.
 
 ## Open the slicer. It is a review step, not a formality
 
@@ -220,6 +248,25 @@ that would not go together. The reasons are written down rather than forgotten, 
 [`07_RETROSPECTIVE.md`](diagon-alley-book-nook/archive/docs/07_RETROSPECTIVE.md),
 [`08_JOINT_DESIGN.md`](diagon-alley-book-nook/archive/docs/08_JOINT_DESIGN.md) and
 [`09_COUPON_RESULTS.md`](diagon-alley-book-nook/archive/docs/09_COUPON_RESULTS.md).
+
+### [`inhaler-clicker/`](inhaler-clicker/)
+
+A life-size faux inhaler whose canister is the button, over a hidden MX keyboard switch.
+**83 mm** tall, three printed parts, raised two-colour lettering. A novelty fidget — the
+mouthpiece cavity is blind and `checks.py` asserts it stays that way.
+
+| | |
+|---|---|
+| [`README.md`](inhaler-clicker/README.md) | the live document — what the reference model measured, and the five places the spec and this machine disagree |
+| [`params.py`](inhaler-clicker/params.py) | every dimension with its provenance, plus the vertical stack the mechanism derives from |
+| [`switch.py`](inhaler-clicker/switch.py) | the MX interface, tested by inserting a switch-shaped solid into it |
+| [`mech.py`](inhaler-clicker/mech.py) | the canister and its collar, tested by actually pressing it |
+| [`ref/`](inhaler-clicker/ref/) | a third-party clicker that works, and the source of half of `params.py` |
+
+The switch mount was read off that reference model rather than guessed: the retention is
+the switch's own clips hooking under a **1.5 mm** plate band with 0.5 mm of relief, not a
+press fit against the pocket. A design built to the spec's 2.0–2.2 mm shelf would have
+had nothing holding the switch in.
 
 ---
 
