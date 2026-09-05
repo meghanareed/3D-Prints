@@ -154,6 +154,38 @@ def pin_sprue(n=6, pitch=None):
     return out
 
 
+def pin_sprue_vertical(n=6, pitch=None):
+    """The same pins, standing on a base -- the other half of the R-14 bet.
+
+    Standing, a pin has NO overhang anywhere: no flanks, no end chamfer hanging over
+    air, no gate. Its cross-section is round on every layer instead of quantised into
+    0.2 mm steps, and -- the part that actually matters for a fit test -- it is printed
+    in the SAME orientation as the bore it has to enter, so both distort the same way.
+
+    The objection is the oldest defect in this project: a small post blobs because the
+    nozzle returns before the plastic sets. But that is a LAYER TIME argument, and layer
+    time is set by the whole plate, not by the post. Eleven other objects print at this
+    height. That is the same reasoning R-14 rests on, so print both and stop guessing.
+    """
+    pitch = pitch or (float(P.PEG_D) + 4.0)
+    base_t = 1.6
+    w = pitch * n
+    base = cq.Workplane("XY").box(w, 12.0, base_t, centered=(True, True, False))
+    out = base
+    for i in range(n):
+        x = -w / 2 + pitch * (i + 0.5)
+        # peg(), not pin(): a pin is chamfered at BOTH ends, and standing up its lower
+        # chamfer leaves a notch just above the base that fills back in -- 7 mm2 of
+        # material appearing over air. peg() is chamfered at the tip only and carries a
+        # root that sinks into the base, so there is no notch and nothing merely touches.
+        #
+        # The honest cost of standing them up: a pin snapped off this sprue is chamfered
+        # at ONE end, not two. The blind cone gives the buried end its clearance anyway.
+        out = out.union(J.peg(length=float(P.PIN_L), root=0.8)
+                        .translate((x, 2.0, base_t)))
+    return _stamp(out, "PINS UP", 3.2, at=(0, -3.5), z=base_t)
+
+
 def pin_pair(clearance):
     """Two blocks that meet face to face over one loose pin -- the real pin joint."""
     w, d = 16.0, 16.0
@@ -254,6 +286,7 @@ def parts():
     for c in CLEARANCES:
         out.append((f"01_socket_{int(c * 100)}", socket_block(c, f"{int(c*100)}"), None))
     out.append(("02_pin_sprue", pin_sprue(), False))
+    out.append(("02b_pin_sprue_up", pin_sprue_vertical(), None))
     for c in (0.30,):
         a, b = pin_pair(c)
         out.append((f"03_pinpair_A_{int(c * 100)}", a, None))
@@ -291,6 +324,7 @@ def self_test():
     mates = {
         "00_peg_tile": [n for n in names if n.startswith("01_socket")],
         "02_pin_sprue": [n for n in names if n.startswith("03_pinpair")],
+        "02b_pin_sprue_up": [n for n in names if n.startswith("03_pinpair")],
         "05_text": ["05_text"],          # read, not mated -- declared, not assumed
         "06_bow": ["06_bow"],
     }

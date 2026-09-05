@@ -282,14 +282,20 @@ def self_test(path):
     t("every build item has settings, and vice versa", wrap_ids == built,
       f"settings {sorted(wrap_ids)} vs build {sorted(built)}")
 
-    sprue = [o for o in cfg.findall("object")
-             if any(m.get("key") == "name" and "sprue" in (m.get("value") or "")
-                    for m in o.findall("metadata"))]
-    t("the sprue is on the plate", len(sprue) == 1)
-    if sprue:
-        keys = {m.get("key"): m.get("value") for m in sprue[0].findall("metadata")}
-        t("sprue overrides its brim to zero", keys.get("brim_width") == "0",
-          "B4: a brim floods a sprue's gaps and tears the pins off")
+    sprues = [o for o in cfg.findall("object")
+              if any(m.get("key") == "name" and "sprue" in (m.get("value") or "")
+                     for m in o.findall("metadata"))]
+    t("both sprue orientations are on the plate", len(sprues) == 2,
+      f"{len(sprues)} found -- horizontal and vertical settle R-14 against each other")
+    # Only the HORIZONTAL sprue needs the brim suppressed: its pins lie in 7 mm channels
+    # a brim would flood. The vertical one stands on a solid base and wants its brim.
+    flat_sprue = [o for o in sprues
+                  if any(m.get("key") == "name" and m.get("value") == "02_pin_sprue"
+                         for m in o.findall("metadata"))]
+    if flat_sprue:
+        keys = {m.get("key"): m.get("value") for m in flat_sprue[0].findall("metadata")}
+        t("the LYING sprue overrides its brim to zero", keys.get("brim_width") == "0",
+          "B4: a brim floods a lying sprue's gaps and tears the pins off")
 
     # Overrides only -- an object carrying dozens of keys means we wrote a whole config.
     worst = max((len([m for m in o.findall("metadata")]) for o in cfg.findall("object")),
