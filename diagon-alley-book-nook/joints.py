@@ -353,4 +353,15 @@ if __name__ == "__main__":
         print(f"\n  wrote pin.stl and peg.stl to {out}")
 
     print(f"\n  {bad} failures")
-    sys.exit(1 if bad else 0)
+
+    # OCCT -- the C++ kernel under CadQuery -- crashes during interpreter teardown on
+    # this build. It happens AFTER all work is done and all output is flushed, but
+    # before Python can hand back its exit code, so the process does its job correctly
+    # and then reports a meaningless status. Any automation gating on `joints.py && ...`
+    # would read that as failure.
+    #
+    # os._exit skips interpreter cleanup entirely, so the teardown never runs and the
+    # code we intend is the code the shell sees. Flush first -- os._exit does not.
+    sys.stdout.flush()
+    sys.stderr.flush()
+    os._exit(1 if bad else 0)

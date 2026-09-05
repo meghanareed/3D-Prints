@@ -90,6 +90,21 @@ python -m venv .venv
 Pin the versions. `cp314` support is recent, and `cadquery-ocp` declares
 `requires_python <3.15`.
 
+**Known quirk — any script that imports `cadquery` needs `os._exit`.** OCCT, the C++
+kernel underneath, crashes during interpreter teardown on this build. It happens *after*
+all work is done and all output is flushed, but before Python hands back its exit code, so
+the script does its job correctly and then reports a meaningless status (`139`/`127`
+rather than `0`). It fires on a bare `import cadquery` too, so it is nothing to do with
+the geometry. Anything gating on `python foo.py && ...` will read success as failure.
+
+```python
+sys.stdout.flush()          # os._exit does not flush
+sys.stderr.flush()
+os._exit(1 if failures else 0)
+```
+
+Scripts that only import `params` are unaffected.
+
 ---
 
 ## Projects
