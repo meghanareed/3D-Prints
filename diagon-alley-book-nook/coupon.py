@@ -120,15 +120,30 @@ def pin_sprue(n=6, pitch=None):
     spine with cantilevered pins, wider pitch, and `needs_brim` is overridden to False.
     """
     pitch = pitch or (float(P.PEG_D) + 4.0)
-    L = float(P.PIN_L)
+    L, flat = float(P.PIN_L), float(P.D_FLAT)
+    spine_x = 2.0
     spine = cq.Workplane("XY").box(4.0, pitch * n, 2.0, centered=(True, True, False))
     out = spine
     for i in range(n):
         y = -pitch * n / 2 + pitch * (i + 0.5)
-        # lying down, so no pin is a tower
-        p = (J.pin().rotate((0, 0, 0), (0, 1, 0), 90)
-             .translate((2.0, y, float(P.PEG_D) / 2.0)))
+        # Lying down, so no pin is a tower -- AND rolled so the D-FLAT is on the bed.
+        # On its round side a pin touches along a hairline and both flanks fall away to
+        # a 0 degree overhang, which is what Bambu flagged. On its flat it sits on a
+        # 2.4 mm band with nothing overhanging at all. The flat now earns its third job:
+        # keying, print orientation, and bed contact.
+        p = (J.pin()
+             .rotate((0, 0, 0), (0, 1, 0), 90)     # axis +Z -> +X, pin lies down
+             .rotate((0, 0, 0), (1, 0, 0), 90)     # roll the flat from -Y to -Z
+             .translate((spine_x, y, flat)))       # flat resting on z=0
         out = out.union(p)
+        # A GATE, not a butt joint. The pin must stay its full length, so it cannot be
+        # sunk into the spine -- but a face that merely touches is tangent, and OCCT
+        # leaves tangent solids separate. A small neck overlaps both and is what you
+        # snip.
+        gate = (cq.Workplane("XY")
+                .box(1.4, 1.6, flat + 0.6, centered=(True, True, False))
+                .translate((spine_x, y, 0)))
+        out = out.union(gate)
     # A label needs something to sit ON. The spine is only 4 mm wide, so give the sprue
     # a small tab at one end -- fused, overlapping, not merely touching.
     ty = pitch * n / 2
@@ -305,6 +320,28 @@ def self_test():
                           .rotate((0, 0, 0), (0, 0, 1), 180).translate((0, 0, tt)))
     sv = spun.val().Volume() if spun.solids().vals() else 0.0
     t("the key refuses a block spun 180", sv > 0.05, f"{sv:.4f} mm3")
+
+    # A pin on the sprue must rest on its FLAT, not its round side. On the round side the
+    # bed contact is a hairline and both flanks fall away to a 16 degree overhang, well
+    # under the profile's 30 degree threshold -- Bambu flagged exactly that. Measured on
+    # the placed geometry rather than trusted from the rotation, because reasoning about
+    # rotations instead of measuring them is a named failure in this project.
+    flat, r = float(P.D_FLAT), float(P.PEG_D) / 2.0
+    one = (J.pin().rotate((0, 0, 0), (0, 1, 0), 90)
+           .rotate((0, 0, 0), (1, 0, 0), 90).translate((0, 0, flat)))
+    first = one.intersect(cq.Workplane("XY").box(40, 40, 0.2))
+    width = first.val().BoundingBox().ylen if first.solids().vals() else 0.0
+    expect = 2 * math.sqrt(r * r - flat * flat)
+    t("a sprue pin rests on its flat", width > expect * 0.8,
+      f"first-layer band {width:.2f} mm, flat is {expect:.2f} mm wide")
+
+    # And the regression: the round-side placement must FAIL that same measure, or the
+    # check is measuring nothing.
+    rnd = J.pin().rotate((0, 0, 0), (0, 1, 0), 90).translate((0, 0, r))
+    rf = rnd.intersect(cq.Workplane("XY").box(40, 40, 0.2))
+    rw = rf.val().BoundingBox().ylen if rf.solids().vals() else 0.0
+    t("the round-side placement WOULD be caught", rw < expect * 0.8,
+      f"round side gives only {rw:.2f} mm")
 
     # The sprue must carry an explicit no-brim override; no heuristic can see its gaps.
     sprue = [b for n, _, b in ps if n == "02_pin_sprue"][0]
