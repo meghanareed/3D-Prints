@@ -5,3 +5,6 @@ __pycache__/
 # can be cloned and printed from without installing CadQuery.
 diagon-alley-book-nook/archive/out/preview/*.step
 diagon-alley-book-nook/archive/out/build.log
+
+# Claude Code personal settings (permission grants are per-machine)
+.claude/settings.local.json

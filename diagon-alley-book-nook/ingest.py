@@ -38,6 +38,35 @@ SUPPORT_KEYS = [
 ]
 BRIM_KEYS = ["brim_type", "brim_width", "brim_object_gap"]
 
+# ============================================================================
+# CONFIRMED by reading a real Bambu project, 2026-09-05. plate.py imports this
+# rather than guessing, because guessing at this format has cost two rounds.
+#
+# Per-object settings are <metadata key="..." value="..."/> children of <object>
+# in Metadata/model_settings.config:
+#
+#     <object id="2">
+#       <metadata key="name"                    value="..."/>
+#       <metadata key="brim_type"               value="outer_only"/>
+#       <metadata key="enable_support"          value="1"/>
+#       <metadata key="support_threshold_angle" value="32"/>
+#       <part id="1" subtype="normal_part"> ... </part>
+#     </object>
+#
+# Three things that were guesses and are now facts:
+#   * booleans serialise as the STRING "1" / "0", not "true"/"false";
+#   * numbers serialise as strings too ("32", not 32);
+#   * Bambu writes ONLY THE KEYS THAT DIFFER from the plate default. An object
+#     with three overrides carries three metadata lines, not the full set. So
+#     the emitter must write overrides, not a complete config, or every object
+#     will pin every value and the plate profile stops meaning anything.
+#
+# STILL UNKNOWN: the subtype spelling for support enforcer / blocker volumes.
+# The sample project had only 'normal_part'. Add one in Studio and re-ingest.
+VALUE_TRUE, VALUE_FALSE = "1", "0"
+PART_SUBTYPE_NORMAL = "normal_part"
+
+
 
 def _read(zf, name):
     try:
