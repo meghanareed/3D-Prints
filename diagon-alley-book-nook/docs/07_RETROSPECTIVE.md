@@ -140,3 +140,141 @@ on physical grounds, `orient.py` choosing orientations by measurement, `plates.p
 "is the one on my shelf still good", and the documents generated from the model so they
 cannot drift. The problem was never the tooling. It was that the tooling was pointed at
 the model instead of at the machine.
+
+---
+
+# Part two — the restart, and where it stopped the second time
+
+The project restarted on a strict gate: fix the mount in one file, print one small
+coupon, print nothing over 10 g until something assembles. Written at the point where
+the second attempt stopped, with a printed FIRST_FIT plate on the bench that again did
+not go together.
+
+## What was actually achieved
+
+* **The joint question was answered, by printing.** Two coupons, ~35 g total. P1 and P2
+  locate; glue retains; 0.30 mm per side. That number is now measured rather than
+  guessed, which is more than the first attempt ever had.
+* **The 13A window frame seated in a tile cut from the real wall.** One physical fit,
+  and the only one in the whole project.
+* **The rounded-corner diagnosis was confirmed on the bench** — a square-cornered bore
+  cut 0.05 mm *looser* per side still would not sit square on its peg while the round
+  one did.
+
+Everything else below is what went wrong.
+
+## The pattern, again
+
+Every defect in part two was found by a printed part or by the owner's eye. Not one was
+found by a check before it reached the printer. The checks were then written *after*
+each — which is better than not writing them, and is still the same failure mode the
+first retrospective named. Fourteen checks now exist that did not; all fourteen were
+paid for in filament.
+
+Worse: **`verify.py` reported "0 failures" on a model whose printed plate was
+unusable.** Passing the suite never meant printable, and saying "0 failures" as though
+it did was misleading.
+
+## Defects found by the owner, not by me
+
+| | What was wrong |
+|---|---|
+| 1 | **The coupon ladder measured nothing.** Six stations labelled 0.20–0.45 were cut at one clearance — the value never reached the round bore. Cross-sections were identical to four decimal places. |
+| 2 | The coupon's lead-in counterbore was at the **blind end** of the bore, not the mouth. |
+| 3 | **Signs printed face down**, laying every raised letter on the bed to be crushed. |
+| 4 | **Sign lettering ran off the plate.** The fitter assumed 0.62 em of advance per character; all-caps bold serif is nearer 0.72. |
+| 5 | **Eight of twelve signs had type between 1.97 and 3.05 mm** — stems thinner than one extrusion. None of it would have read. |
+| 6 | **Three swing signs could never be attached to anything.** Sign eye, bracket eye and chain end-link are three closed rings, printed separately; there is no order of operations that threads them. |
+| 7 | The printed **"chain" is not a chain** — consecutive links overlap by 0.10 mm³ and fuse into a rigid strip. |
+| 8 | **21 of 21 wall mounts fouled the facade.** Signs, brackets, lanterns and props take their coordinates from one table and the shopfronts from another; nothing had ever compared them. |
+| 9 | The **notice board and its poster layer shared one socket** — two pegs, one hole. |
+| 10 | **`31B` was two disconnected solids** — its wall peg placed 3.2 mm clear of the body. |
+| 11 | A round peg lying in a sign's own plane **prints its first layers into air** over a 3.5 mm cantilever. |
+| 12 | **The pin sprue was destroyed by its own brim.** The brim flooded between pins spaced 4 mm apart and tore them off on removal — so no pin joint on the plate could be tested at all. |
+| 13 | **Facade parts still print round pegs standing up.** This is the *original* complaint from the very first print — blobbed vertical posts — and it was never fixed. Signs were converted to sockets and loose pins; the 119 facade parts were not. `11K`'s back printing badly is that same defect. |
+| 14 | The FIRST_FIT plate carried **pieces that mate with nothing on it**. A plate about fits, with parts that fit nothing. |
+
+## Defects I introduced while fixing other things
+
+* Widening the bracket eye made the ring **tangent** to the arm — and a tangent solid is
+  a separate solid. The bracket silently became three pieces. (Tangency has now caused
+  this three times in the project.)
+* The arch allowance for P2 pairs was applied to **P1 mounts as well**, which sit on the
+  arch crown where there is no dip. It pushed the peg off the top of the frame and broke
+  `14B`, `23H` and `20B`.
+* `check_sign_text` measured the lettering in the part's frame and the part on the bed —
+  **two different coordinate spaces**. It passed every flat sign, whose rotation is
+  identity and where the spaces coincide, and called every rotated one face-down
+  whichever way it turned.
+* Rotating a fused sign the wrong way, then the other wrong way, because I reasoned
+  about the rotation instead of measuring where the letters landed.
+
+## Process failures
+
+**`check_manifest` reads the last BUILD, not the model.** It reported "182 parts, all
+single-solid" for as long as `out/manifest.json` was older than whatever broke a part.
+`31B` was broken underneath it the whole time. A check that reads a cached artefact and
+reports it as current is worse than no check. It now warns when the model is newer, and
+`check_every_part_builds()` rebuilds all 182 and counts — which found three broken parts
+in its first run.
+
+**Sampling instead of sweeping.** `check_fits` tests three parts. `check_all_mates`
+tests 119. The difference between those two is exactly the class of bug that shipped.
+When a check *can* be exhaustive it should be, even if it is slow.
+
+**Guessing instead of measuring**, repeatedly: the per-character advance width, the arch
+rise, which side of the body a peg lands on, which way a part rotates. Every one of them
+was wrong, and every one was a one-line measurement away from being right.
+
+**Fixing one dimension breaks another.** Sign text size, plate size and wall layout are
+coupled: making the type legible widens the plate, which moves it on the wall, which
+moves its socket. I solved these one at a time and re-ran the checks, so the file moved
+under the owner between prints. There is no joint solve, and there should be.
+
+**A check I could not trust.** I wrote a "nothing starts in mid-air" check, built a
+regression test from the known-bad peg, and the test passed clean — the check did not
+work. Rewritten to measure lateral growth, it then failed a part that is demonstrably
+fine. I deleted it rather than ship it. **That gap is still open:** nothing in the suite
+detects an unsupported overhang.
+
+**A false choice offered to the owner.** I framed it as "keep tuning and the file keeps
+moving, or print what's here" — when the honest position is that the tuning is necessary
+and the drip-feed was my process problem, not a cost the owner should absorb. They said
+so, correctly.
+
+## Still open when it stopped
+
+1. **Facade parts print round pegs vertically** — the original defect, unfixed. The
+   remedy is known and proven on signs: socket in the part, socket in the wall, loose
+   pin. It was never applied to the 119.
+2. **No unsupported-overhang check.**
+3. **Brim strategy is per-part and wrong for sprues.** `needs_brim` looks at bed area and
+   tippiness; it cannot see that a brim will flood the 4 mm gaps between sixteen pins.
+4. **The kit has never been regenerated.** `out/` is from before the clearance change,
+   the flat change, the pin joints, the tenons, the sign redesign and the mount moves.
+   There are no current plate files, no plate maps and no parts list.
+5. **Nothing over 6 g of the redesigned kit has been printed.**
+6. Never tested: the acetate glazing, whether 3.5 mm raised type actually reads, the
+   T5 tenon, any pin joint at all.
+7. **`11K` could probably just be part of the wall face** — a flat board with no
+   undercuts, printed in the same orientation. That question was asked and never
+   answered; it would remove a part, a joint and two vertical pegs.
+
+## For the next project
+
+Everything in the first retrospective still stands. Added:
+
+1. **A check that reads a cached file must say so.** Better: rebuild and measure.
+2. **Every mating pair needs a physical-motion test** — build both halves, apply the real
+   transform, measure the interference. Not "both were built from the same numbers".
+   This project has three separate bugs that a same-numbers check passed.
+3. **Tangency is not contact.** Anything placed to touch must be made to overlap.
+4. **Measure, do not derive**, whenever a measurement is available: text extents, where
+   a feature lands after a rotation, which side of a body a point falls on.
+5. **A test plate must have every piece mate with another piece on it**, and the
+   consumables it depends on — pins, hooks — have to survive their own removal. A plate
+   whose fasteners break on the brim tests nothing.
+6. **Do not report "0 failures" as if it meant "will work".** Say what was checked and
+   what was not.
+7. **Fix a class, not an instance.** Signs got sockets and pins; the facade did not, and
+   the same complaint came back four prints later on a different part.
