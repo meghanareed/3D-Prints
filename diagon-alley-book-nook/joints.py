@@ -121,10 +121,12 @@ def socket(depth=None, clearance=None):
 
     bore = d_solid(dia, flat, depth)
 
-    # lead-in: widens outward at the mouth so the male finds the hole
+    # Lead-in: widens toward the mouth so the male finds the hole. It must sit INSIDE
+    # the material, spanning z=0..lead -- built below the mouth plane it removes nothing
+    # but air, which is what it did until measured: 0.06 mm3 of a 10.6 mm3 cut.
     mouth = (cq.Workplane("XY").circle(dia / 2 + lead)
              .workplane(offset=lead).circle(dia / 2)
-             .loft(combine=True).translate((0, 0, -lead)))
+             .loft(combine=True))
 
     # blind end: a cone, apex up. 60 deg included -> every wall is 60 deg from horizontal,
     # comfortably self-supporting.
@@ -323,6 +325,28 @@ def self_test():
 
     # Socket must swallow the male with relief to spare, so the part seats on its face.
     t("socket is deeper than the peg", float(P.SOCKET_DEPTH) > float(P.PEG_L))
+
+    # The blind cone must clear the SLICER'S OWN threshold, with margin. At 60 deg
+    # included the half-angle was exactly 30 and the threshold is exactly 30 -- Bambu
+    # flagged every socket block as having floating regions. A value sitting on the line
+    # is the worst place for it, and this check reads the profile rather than a constant
+    # so it moves if the profile does.
+    half = float(P.BLIND_BORE_CONE) / 2.0
+    thresh = float(P.PROFILE["support_threshold_angle"])
+    t("blind cone clears the slicer's support threshold", thresh - half >= 5.0,
+      f"{half:.1f} deg from axis vs {thresh:.0f} deg threshold, margin {thresh - half:+.1f}")
+
+    # The lead-in has to be INSIDE the material. Built below the mouth plane it removes
+    # nothing but air -- which is what it did, undetected, until the volume was measured.
+    box = cq.Workplane("XY").box(16, 16, 14, centered=(True, True, False))
+    with_lead = box.cut(_place(socket(), (0, 0, 0), "+Z"))
+    c = float(P.FIT_CLEARANCE)
+    bore_only = box.cut(_place(d_solid(float(P.PEG_D) + 2 * c, float(P.D_FLAT) + c,
+                                       float(P.SOCKET_DEPTH)), (0, 0, 0), "+Z"))
+    cone_vol = (1 / 3) * math.pi * ((float(P.PEG_D) + 2 * c) / 2) ** 2 * blind_cone_rise()
+    extra = _vol(bore_only) - _vol(with_lead)
+    t("the lead-in actually cuts material", extra > cone_vol + 0.5,
+      f"{extra:.2f} mm3 removed beyond the bore, cone alone is {cone_vol:.2f}")
 
     # A blind bore has to actually be BLIND. The cone that makes it self-supporting adds
     # its own rise, and the first coupon plate sized its blocks to the bore alone -- so

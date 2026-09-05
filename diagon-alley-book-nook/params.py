@@ -277,10 +277,14 @@ PIN_L = Param(5.0, ASSUMED,
               "them is how the engagement problem hid in the first place", "R-5")
 LEAD_IN_CHAMFER = Param(0.50, ASSUMED, "45 deg at every socket mouth. Do not remove -- but "
                         "note it eats engagement depth, which is R-5's whole point", "R-5")
-BLIND_BORE_CONE = Param(60.0, ASSUMED,
-                        "degrees of included angle at a blind bore's end, so a "
-                        "downward-facing socket is self-supporting and the pin gets a "
-                        "positive depth stop", "R-5")
+BLIND_BORE_CONE = Param(45.0, ASSUMED,
+                        "INCLUDED angle at a blind bore's end, so a downward-facing "
+                        "socket is self-supporting and the male gets a positive depth "
+                        "stop. 45 included = 22.5 deg from the axis, which clears the "
+                        "profile's 30 deg support threshold by 7.5. It was 60 -- exactly "
+                        "ON the threshold -- and Bambu flagged every socket block as "
+                        "having floating regions. Borderline is the worst place to sit: "
+                        "it costs 1.2 mm of block height to be unambiguous", "R-5")
 TEXT_DEPTH = Param(0.6, ASSUMED,
                    "exactly 3 layers at 0.2, so an AMS colour change lands on a clean "
                    "boundary. 0.5 was 2.5 layers and could not", "R-15")
