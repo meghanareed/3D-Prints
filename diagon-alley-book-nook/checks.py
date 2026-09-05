@@ -44,8 +44,9 @@ UNCHECKED = [
     "Unsupported overhang. Written once, its own regression test failed to catch a "
     "known-bad part, a rewrite failed a good part, and it was deleted rather than "
     "shipped. Still open, and now partly mitigated by supports being allowed.",
-    "Anything requiring built geometry -- part volumes, real first-layer area, actual "
-    "wall thickness behind a socket. Those arrive with the geometry modules.",
+    "Part volumes, real first-layer area, and actual wall thickness behind a socket. "
+    "The JOINT geometry is now built and physically tested (check_joints_assemble); "
+    "everything else still arrives with its module.",
     "Whether a printed joint holds. Only a bench answers that; see the R-register.",
 ]
 
@@ -233,6 +234,23 @@ def check_lighting_geometry():
     return out
 
 
+# =================================================================== geometry ==
+@check("the joint geometry, built and physically inserted")
+def check_joints_assemble():
+    """Delegates to joints.self_test(), which builds both halves and applies the real
+    insertion. Imported lazily: it pulls in CadQuery, which is slow and which crashes on
+    interpreter teardown, and most runs of this file do not need geometry at all.
+    """
+    try:
+        import joints
+    except ImportError as exc:
+        return [(WARN, f"CadQuery not importable, joint geometry unchecked: {exc}")]
+    out = [(FAIL, f"{name}" + (f" [{detail}]" if detail else ""))
+           for ok, name, detail in joints.self_test() if not ok]
+    n = len(joints.self_test())
+    return out or [(OK, f"all {n} joint assembly tests pass, insertion actually applied")]
+
+
 # ======================================================================= meta ==
 @check("every check in this module is actually in the registry")
 def check_registry_complete():
@@ -276,4 +294,9 @@ def run(verbose=False):
 
 
 if __name__ == "__main__":
-    sys.exit(1 if run("-v" in sys.argv) else 0)
+    failed = run("-v" in sys.argv)
+    # This file may now import CadQuery via check_joints_assemble, so it inherits OCCT's
+    # teardown crash. See the README: flush, then os._exit, or the gate lies.
+    sys.stdout.flush()
+    sys.stderr.flush()
+    os._exit(1 if failed else 0)
