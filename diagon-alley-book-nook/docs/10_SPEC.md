@@ -2,6 +2,8 @@
 
 **Read this first, then `07_RETROSPECTIVE.md`, then `08_JOINT_DESIGN.md`.**
 
+§8 records the decisions already taken. §9 is what two reference models were measured to do differently, and it changes the shape of Phase 2 onward.
+
 This is the working spec for finishing the Diagon Alley book nook. It exists because two
 attempts to build it as one 182-part kit both ended with a bench full of parts that would
 not go together. The design is not the problem and the printer is not the problem. The
@@ -21,7 +23,7 @@ printed until Phase 1 is glued together and sitting on the desk.
 | Repo | `meghanareed/3d-prints`, `diagon-alley-book-nook/` |
 | Branch | `claude/diagon-alley-book-nook-svpb8h` |
 | Printer | Bambu P2S, 0.4 mm nozzle, PLA, 0.2 mm layers |
-| Model | 181 parts, ~1687 g if it were all printed |
+| Model | 181 parts, ~1687 g if it were all printed — **too many; see §9** |
 | Printed so far | ~6 trial parts, one wall face, two coupons, one first-fit plate |
 | Assembled so far | **one** window frame in a tile of its own wall |
 
@@ -139,8 +141,16 @@ round pin. A round pin in that plane cannot print.
 **J7 — Every part is one connected solid.** Tangency is not contact: anything placed to
 touch must be made to overlap.
 
-**J8 — Every printed part lies flat with its decorative face up or down by intent**, and
+**J8 — A small part lies flat with its decorative face up or down by intent**, and
 nothing on it starts in mid-air.
+
+**J9 — Supports are allowed, and expected, on grouped parts.** This is a reversal. The
+kit was built under a no-supports rule, and that rule is the reason it has 181 parts: no
+supports means everything must lie flat, which means flat plates, which means joints, and
+every failure in this project happened at a joint. Both reference models print with
+supports on (§9). A shopfront printed standing up with supports has no joints to get
+wrong. Use supports on anything grouped; keep J8 for the small flat parts that do not
+need them.
 
 ---
 
@@ -210,12 +220,18 @@ glue solid. No part rocks on brick relief. No part stands proud.
 
 **Cut if it stalls:** drop to three parts, or to a half-height wall.
 
-### Phase 2 — The rest of the left facade
+### Phase 2 — The rest of the left facade, REGROUPED
 
-The remaining ~38 left-wall parts: windows, doors, shopfronts, stall risers, cornices,
-quoins, drainpipes.
+Not the remaining 38 parts as 38 parts. Regroup them per **D2** and **R1**: each shop
+becomes one object — windows, door, riser, pilasters, fascia, cornice and its patch of
+wall together — printed standing up with supports. Flat boards fuse into the wall face
+per **D1**. Target: **under 20 parts on this wall**, from 44.
 
-**Exit test:** the whole left wall dressed, every part glued, nothing missing.
+This is a real piece of modelling work, not a repack. Budget for it, and do it only after
+Phase 1 has proved the wall, the socket, the pin and the glue at small scale.
+
+**Exit test:** the whole left wall dressed, every part glued, nothing missing, and the
+part count for the wall under 20.
 
 ### Phase 3 — The right wall
 
@@ -235,10 +251,11 @@ its own with the alley the right width front and back.
 
 ### Phase 5 — Signs, brackets, lanterns, props
 
-Everything that hangs on a wall. Hanging signs are fused to their brackets and turned to
-face the opening; flat plates pin on. This phase has the most unfinished business:
-`check_mount_crowding` and `check_hung_clearance` pass now, but no hung part has ever
-been printed and fitted.
+Everything that hangs on a wall. Per **D2** and **R3** this is **one or two sprues, not
+25 parts**: all the signs for a wall on a common frame, snipped off, painted, glued.
+Hanging signs stay fused to their brackets and turned to face the opening; flat plates
+pin on. This phase has the most unfinished business: `check_mount_crowding` and
+`check_hung_clearance` pass now, but no hung part has ever been printed and fitted.
 
 **Exit test:** every sign and lantern mounted, and the lettering readable at arm's length
 from the front of the alley.
@@ -254,11 +271,17 @@ come apart to reach it.
 
 ### Phase 7 — Glazing and paint
 
-0.5 mm acetate cut from template `71A`, glued behind the frames. Paint scheme, and the
-paint handles that already exist as jigs.
+Try **printed glazing first** (**R5**): a single 0.2 mm layer in transparent or white
+filament, as the reference model does, rather than cutting acetate. Template `71A` is the
+fallback if it does not diffuse well.
 
-**Exit test:** glazed and painted, and nothing bound up by paint thickness — a 0.30 mm
-clearance takes about two coats before it stops fitting.
+Paint happens **before assembly** (**D3**), so this phase largely moves earlier in
+practice — the parts of each phase get painted as they come off the plate. What stays
+here is the scheme, the masking rule and the final touch-in.
+
+**Exit test:** glazed and painted, and nothing bound up by paint thickness — two coats
+close a 0.30 mm clearance, so either the mating faces were masked or the clearance was
+opened to 0.45 first.
 
 ### Phase 8 — The case
 
@@ -279,6 +302,9 @@ shelf between books.
 4. Do Phase 1 step 1: pegs to sockets across the facade. That is the single change that
    addresses the oldest unfixed complaint in the project.
 5. Print the pin sprue on its own before anything else.
+6. Read §9 before touching Phase 2. The regrouping there is the largest single
+   improvement available to this project and it invalidates a lot of the current
+   `data/facade.py` structure — do not start it until Phase 1 has passed.
 
 ---
 
@@ -340,16 +366,111 @@ Madam Malkin's on the lozenge directory, and Gringotts on the directional arrow.
 
 ---
 
-## 8. Open decisions
+## 8. Decisions taken
 
-These need an answer from the owner and should not be guessed:
+These were open; they are now answered and are binding on the phases above.
 
-1. **Should the L2 fascia board just be part of the wall face?** It is a flat board with
-   no undercuts printed in the same orientation. Fusing it removes a part, a joint and
-   two mounts; it costs the ability to paint it separately. The same question applies to
-   stall risers, cornices and quoins — possibly a dozen parts.
-2. **How much of the kit is actually wanted?** 181 parts is a very large model. Phases
-   5–8 are roughly half of it. Stopping after Phase 4 gives a lit-less, unglazed but
-   complete alley.
-3. **Paint before or after assembly?** It changes the clearance rule: 0.30 mm takes about
-   two coats before parts stop fitting.
+**D1 — Flat boards become part of the wall face.** The L2 fascia, stall risers,
+cornices, quoins, lintels and keystones are flat boards with no undercuts, printed in the
+same orientation as the wall. They fuse into `wall_face()`. Roughly a dozen parts, a
+dozen joints and two dozen mounts disappear.
+
+**D2 — Group aggressively. Fewer, larger parts.** See §9: the reference models do the
+whole job in 12 parts and 1 part respectively. The rule is now **a part is a group of
+things you would paint the same colour and glue together anyway.** Specifically:
+
+* a **shopfront** is one part — its windows, door, stall riser, pilasters, fascia and
+  cornice together, and its patch of wall with it;
+* **all the small signs on one wall are one part**, on a common sprue or frame, not
+  fifteen separate plates;
+* window boxes, brackets and ironwork group with whatever they sit on.
+
+The target for Phase 2 is **under 20 parts per wall**, not 44.
+
+**D3 — Paint before assembly.** Parts are painted while separate, then glued. This has a
+consequence that must be designed in, not discovered: **two coats close a 0.30 mm
+clearance.** Either mask every mating surface, or open locating features to 0.45 mm and
+let the glue take up the slack. Decide which before Phase 2, and record it in
+`params.py`.
+
+**D4 — Still open: how much of the kit is wanted.** Phases 5–8 are roughly half of it.
+Stopping after Phase 4 gives an unlit, unglazed but complete alley.
+
+---
+
+## 9. What the reference models do
+
+Two third-party Diagon Alley nooks were measured — not copied, and no geometry from them
+goes into this kit. What they show is a completely different construction philosophy, and
+it is the better one.
+
+| | `Harry_Potter_Diagon_Alley` | `diagon3` |
+|---|---|---|
+| Objects | **12** | **1** |
+| Largest | 186 × 140 × 177 mm | 164 × 102 × 169 mm |
+| Layer height | 0.2 | 0.28 |
+| Infill | 15 % | 5 % |
+| Walls | 2 | 2 |
+| **Supports** | **on**, normal auto, 30° | **on**, tree auto, 15° |
+| Brim | none | outer only |
+| Printer | P1S | A1 mini |
+
+This kit has **181 parts**. That is the whole difference.
+
+### What their part list is called
+
+`Flourish_Blotts_Storefront_and_Wall_with_sign` · `Olivanders_Storefront_Wall_Remastered`
+· `Quality_Quidditch_Storefront_and_Wall` · `Store_Signs` (all of them, one part) ·
+`Ollivanders_Window_Boxes` · `Modular_Enclosure_3Walls` ·
+`Modular_Enclosure_Removable_Wall` · `Top_And_Front` · `Bottom` · `windows`
+
+A whole shop — its windows, its door, its wall and its sign — is **one printed object**.
+Three enclosure walls are one object. Every store sign is one object.
+
+### The five things worth taking
+
+**R1 — Supports are allowed.** Both reference models print with supports on. This kit
+banned them from the start, and that ban is the root of its shape: no supports means
+everything must lie flat, which means a hundred flat plates, which means two hundred
+joints, which is where every failure in this project came from. **Allowing supports on
+the big grouped parts collapses the part count and removes most of the joints.** The cost
+is support removal on interior faces, which the reference models evidently accept.
+
+**R2 — A shopfront is one part, not thirty.** Windows, door, riser, pilasters, fascia,
+cornice and sign in one object, printed standing up with its bay windows projecting.
+Nothing to align, nothing to glue, no clearance to get wrong.
+
+**R3 — All the signs on one object.** `Store_Signs v14` is 52.6 × 18 × 4 mm and carries
+the lot. Snip them off a sprue, paint, glue. This is what the owner asked for and the
+reference confirms it works.
+
+**R4 — Access is a removable wall, not removable parts.** `Modular_Enclosure_3Walls`
+plus `Modular_Enclosure_Removable_Wall` — a 5.5 mm panel that lifts out. That is how you
+reach the lighting, and it is much simpler than making every facade element demountable.
+It also satisfies the standing requirement that the walls come apart for the puck light.
+
+**R5 — Printed glazing.** `windows.stl` is 62 × 82 × **0.2 mm** — a single layer,
+printed in transparent or white filament, not cut acetate. One layer of PLA diffuses an
+LED nicely and needs no knife, no template and no cutting jig. Worth trying before the
+acetate route; template `71A` becomes a fallback.
+
+### What this kit does better, and should keep
+
+* **Forced perspective.** Neither reference has it. The scale ladder is the thing that
+  makes a 197 mm alley read as a street, and it is already built and working.
+* **Parametric everything.** A shop is a table row. Adding one is a row, not a mesh.
+* **The verification suite.** Fourteen checks that came out of real failures. The
+  reference models are static meshes with none of that.
+* **Measured joints.** 0.30 glued, round features, no vertical pegs.
+
+### What this means for the phases
+
+Phase 1 stands as written — one wall, six parts — because it proves the wall and the
+joint. **Phase 2 changes**: instead of dressing the left wall with 38 individual parts,
+regroup it into shopfront-sized objects per D2, allow supports on them per R1, and aim
+for under 20 parts on the wall. Phase 5 (signs) becomes one or two sprues rather than 25
+parts.
+
+Do not regroup before Phase 1 passes. The point of Phase 1 is to prove the wall, the
+socket, the pin and the glue with something small; regrouping first would put a 100 mm
+shopfront on the bed before any joint has been shown to work.
