@@ -316,6 +316,14 @@ behind the face if a deeper bore is ever wanted.
 it on the first plate by printing both lengths. The constraint is the material each part
 can offer behind its face, which is a build-time sweep, not a judgement call.
 
+> **Corrected once `params.py` existed to do the arithmetic.** An *integral peg* and a
+> *loose pin* need different lengths and this plan had them conflated. A peg enters **one**
+> socket, so 4.0 long grips 3.5 mm — fine. A pin is **split between two**, so 4.0 gives
+> 2.0 of travel and only **1.5 mm of grip per side** after the mouth chamfer, which is
+> under the floor this very section is about. **`PIN_L` is 5.0** (2.0 per side); `PEG_L`
+> stays 4.0. `params.sanity()` caught this on its first run, which is the whole argument
+> for §6.2's ordering — write the checks before the geometry, not after the print.
+
 ### 6.4 First plate
 
 `SPEC.md` sequences "pin sprue alone" first. **P6** says every piece on a test plate must
