@@ -236,6 +236,14 @@ WIRE_CAVITY_D   = Param(6.0, CHOSEN, "between inner wall and outer skin. WIRING 
 WIRE_CHANNEL_W  = Param(6.0, CHOSEN, "concealed vertical channel in each wall module, "
                                      "dropping into the floor channel. The floor is the "
                                      "wiring highway; nothing runs across visible brick")
+ROOF_BAND_H     = Param(34.0, CHOSEN, "the top band of facade carried by the removable "
+                                      "roof section instead of by the wall module. Not "
+                                      "cosmetic: a full-height module is 245.8 mm and "
+                                      "255.8 with its brim on a 256 bed. Splitting the "
+                                      "wall lengthways does not help -- height is the "
+                                      "binding dimension -- so the roof takes the top and "
+                                      "the seam lands at the roofline, where a real "
+                                      "building has one")
 ROOF_LIP_D      = Param(10.0, CHOSEN, "concealed inner lip on the removable roof. Ambient "
                                       "LEDs sit behind it, so a viewer sees the glow on "
                                       "the buildings and cobbles, never the emitter")
@@ -334,6 +342,9 @@ ALLEY_W_REAR = ALLEY_W_FRONT - 2 * CANT_OFFSET
 # piece decides whether the wall can be one object or must be panels (PLAN 6.6 / 6.9).
 WALL_FACE_L = ALLEY_D
 WALL_FACE_H = SCENE_H
+WALL_MODULES_PER_WALL = 2      # each 12 in side wall splits into two ~6 in modules
+WALL_MODULE_H = SCENE_H - ROOF_BAND_H
+WALL_MODULE_L = ALLEY_D / WALL_MODULES_PER_WALL
 
 MM_PER_IN = 25.4
 
@@ -398,29 +409,34 @@ def sanity():
         bad.append(f"profile ships brim_type={BRIM_TYPE_IN_PROFILE!r}; it must be "
                    f"overridden to {BRIM_TYPE_WANTED!r} at the plate AND set per object "
                    f"(B2) -- Auto gave a 15 mm2 plaque no brim and it came off the bed")
-    margin = min(BED_X, BED_Y) - max(WALL_FACE_L, WALL_FACE_H)
-    if margin < 20.0:
-        bad.append(
-            f"a one-piece wall face is {WALL_FACE_L:.0f} x {WALL_FACE_H:.0f} on a "
-            f"{float(BED_X):.0f} bed -- {margin:.1f} mm of margin. That is not a fit, it "
-            f"is a coincidence. The wall must be PANELS (PLAN 6.6), not one object")
+    # Not "does a one-piece wall fit" -- that decision is taken. Does the module we
+    # actually build fit, at the split we actually chose?
+    if WALL_MODULES_PER_WALL < 2:
+        bad.append(f"a one-piece wall face is {WALL_FACE_L:.0f} x {WALL_FACE_H:.0f} on a "
+                   f"{float(BED_X):.0f} bed and cannot print. WALL_MODULES_PER_WALL must "
+                   f"be >= 2")
     # A tall part still has to fit WITH its brim, and the brim is 5 mm on every side.
     # Splitting a wall lengthways does not help: the binding dimension is scene height.
-    brimmed = SCENE_H + 2 * BRIM_WIDTH
+    brimmed = WALL_MODULE_H + 2 * BRIM_WIDTH
     if brimmed > min(BED_X, BED_Y) - 10.0:
         bad.append(
-            f"a full-height wall module is {SCENE_H:.0f} mm tall, {brimmed:.0f} mm with "
-            f"its brim, on a {float(BED_X):.0f} bed. Splitting the wall lengthways does "
-            f"NOT help -- height is the binding dimension. Either let the removable roof "
-            f"section carry the top band, or place the module diagonally")
+            f"a wall module is {WALL_MODULE_H:.0f} mm tall, {brimmed:.0f} mm with its "
+            f"brim, on a {float(BED_X):.0f} bed. Height is the binding dimension -- "
+            f"splitting the wall lengthways does NOT help. Give the removable roof "
+            f"section a taller band (ROOF_BAND_H), or place the module diagonally")
     if ARCH_OPENING_W <= ALLEY_W_FRONT:
         bad.append(f"arch opening {float(ARCH_OPENING_W):.0f} is not wider than the "
                    f"{ALLEY_W_FRONT:.0f} alley -- the reveal will shadow the near "
                    f"shopfronts off-axis (PLAN 6.10)")
-    if ELEPHANT_FOOT > 0 and XY_HOLE_COMP == 0:
-        bad.append(f"elephant foot {float(ELEPHANT_FOOT)} with hole compensation 0: every "
-                   f"socket mouth gets MORE material and none of it is corrected (B8). "
-                   f"The model must carry the correction")
+    # B8 is real -- elephant foot adds material at the socket mouth and hole compensation
+    # is 0, so nothing corrects it. But FIT_CLEARANCE was MEASURED on printed sockets
+    # against printed pegs, so all of that is ALREADY INSIDE the 0.30. Adding a second
+    # compensation term would double-count it and open every joint too far. This only
+    # becomes a fault if the clearance ever stops being a measured number.
+    if ELEPHANT_FOOT > 0 and XY_HOLE_COMP == 0 and FIT_CLEARANCE.src != MEASURED:
+        bad.append(f"elephant foot {float(ELEPHANT_FOOT)} with hole compensation 0, and "
+                   f"FIT_CLEARANCE is {FIT_CLEARANCE.src}, not measured -- nothing "
+                   f"corrects the material added at a socket mouth (B8)")
     return bad
 
 
