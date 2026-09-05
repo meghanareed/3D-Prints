@@ -54,6 +54,24 @@ def d_solid(dia, flat, length):
     return body.cut(knife)
 
 
+def _d_loft(r0, f0, r1, f1, height):
+    """Loft one D-section to another: arc of radius r, closed by a chord f off the axis.
+
+    Needed so the lead-in can taper D-to-D. A circular chamfer around a D bore undercuts
+    the flat wall, which is a different defect from having no chamfer at all.
+    """
+    for r, f in ((r0, f0), (r1, f1)):
+        if f >= r:
+            raise ValueError(f"flat {f} is outside radius {r}")
+    h0 = math.sqrt(r0 * r0 - f0 * f0)
+    h1 = math.sqrt(r1 * r1 - f1 * f1)
+    return (cq.Workplane("XY")
+            .moveTo(-h0, -f0).threePointArc((0.0, r0), (h0, -f0)).close()
+            .workplane(offset=height)
+            .moveTo(-h1, -f1).threePointArc((0.0, r1), (h1, -f1)).close()
+            .loft(ruled=True))
+
+
 def _taper_tool(dia, length, cham, both_ends):
     """A cylinder whose end(s) taper in by `cham` at 45 deg.
 
@@ -121,15 +139,24 @@ def socket(depth=None, clearance=None):
 
     bore = d_solid(dia, flat, depth)
 
-    # Lead-in: widens toward the mouth so the male finds the hole. It must sit INSIDE
-    # the material, spanning z=0..lead -- built below the mouth plane it removes nothing
-    # but air, which is what it did until measured: 0.06 mm3 of a 10.6 mm3 cut.
-    mouth = (cq.Workplane("XY").circle(dia / 2 + lead)
-             .workplane(offset=lead).circle(dia / 2)
-             .loft(combine=True))
+    # Lead-in: widens toward the mouth so the male finds the hole. Two things it has to
+    # get right, and it got both wrong in turn.
+    #
+    # It must sit INSIDE the material, spanning z=0..lead. Built below the mouth plane it
+    # removes nothing but air -- 0.06 mm3 of a 10.6 mm3 cut, until that was measured.
+    #
+    # And it must follow the D, not be a circle. A ROUND chamfer around a D-SECTIONED
+    # bore cuts 1.10 mm past the flat wall in 0.50 mm of height -- a 24 degree overhang,
+    # under the slicer's own 30 degree threshold -- and leaves the flat cantilevered over
+    # its own lead-in. Bambu called that one "floating cantilever". Lofting D to D keeps
+    # the chamfer at a uniform 45 degrees the whole way round, flat included.
+    mouth = _d_loft(dia / 2 + lead, flat + lead, dia / 2, flat, lead)
 
-    # blind end: a cone, apex up. 60 deg included -> every wall is 60 deg from horizontal,
-    # comfortably self-supporting.
+    # Blind end: a cone, apex up, so a downward-facing bore needs no bridge. Circular
+    # rather than D-sectioned on purpose -- it must fully cover the D cross-section, and
+    # widening the void at the tip costs nothing because the keying happens along the
+    # bore's length, not at its end. Angle is BLIND_BORE_CONE, kept clear of the
+    # slicer's support threshold by the self-test.
     half = math.radians(float(P.BLIND_BORE_CONE) / 2.0)
     rise = (dia / 2.0) / math.tan(half)
     cone = (cq.Workplane("XY").circle(dia / 2)
