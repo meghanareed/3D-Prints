@@ -421,10 +421,20 @@ def sanity():
     if PLATE_SPACING < 2 * BRIM_WIDTH + 1.0:
         bad.append(f"plate spacing {float(PLATE_SPACING)} is under 2 x brim + 1 -- "
                    f"neighbouring brims will merge into a raft (B3)")
+    # B2 -- the profile ships auto_brim and Auto gave a 15 mm2 plaque no brim at all.
+    # This is only a fault if nothing corrects it, so ask the emitter rather than the
+    # profile: plate.py overrides it at write time. Imported lazily so params stays
+    # dependency-free.
     if BRIM_TYPE_IN_PROFILE != BRIM_TYPE_WANTED:
-        bad.append(f"profile ships brim_type={BRIM_TYPE_IN_PROFILE!r}; it must be "
-                   f"overridden to {BRIM_TYPE_WANTED!r} at the plate AND set per object "
-                   f"(B2) -- Auto gave a 15 mm2 plaque no brim and it came off the bed")
+        try:
+            import plate
+            fixed = plate.PLATE_OVERRIDES.get("brim_type") == BRIM_TYPE_WANTED
+        except Exception:
+            fixed = False
+        if not fixed:
+            bad.append(f"profile ships brim_type={BRIM_TYPE_IN_PROFILE!r} and nothing "
+                       f"overrides it to {BRIM_TYPE_WANTED!r} (B2) -- Auto gave a 15 mm2 "
+                       f"plaque no brim and it came off the bed")
     # Not "does a one-piece wall fit" -- that decision is taken. Does the module we
     # actually build fit, at the split we actually chose?
     if WALL_MODULES_PER_WALL < 2:
