@@ -501,3 +501,60 @@ parts.
 Do not regroup before Phase 1 passes. The point of Phase 1 is to prove the wall, the
 socket, the pin and the glue with something small; regrouping first would put a 100 mm
 shopfront on the bed before any joint has been shown to work.
+
+---
+
+## 10. Brims — everything learned the hard way
+
+A recurring and expensive class. Four separate prints were damaged or wasted by brim
+behaviour, and the cause was different every time.
+
+**B1 — A brim setting in a 3MF is silently ignored unless the file is a real Bambu
+project.** The first project files were written with `<metadata name="Application">` set
+to the model's own name. Bambu Studio answered *"The 3mf file has invalid config, load
+geometry data only"*, dropped every setting on the floor and sliced with the default
+brim. Nothing in the message says "your brim was ignored". The tag must start with
+`BambuStudio-`; `mf3.check_project()` asserts it. Verified against
+`bbs_3mf.cpp` at tag `v02.08.02.61`.
+
+**B2 — Set the brim per object, not by Auto.** Bambu keeps a per-object `brim_type` in
+`Metadata/model_settings.config`. The slicer's Auto brim looked at a 15 mm² wall plaque
+and a 3 mm sill and gave them no brim; they came off the plate. Decide per part in the
+model and write it into the file.
+
+**B3 — Plate spacing must be `2 × brim width + 1`.** With a 5 mm brim that is **11 mm**,
+not the 6 mm that was there. At 6 mm the brims of neighbours merge: **22 of the 64
+left-facade parts fused into a single raft**, and a raft that peels takes every part on
+it. The price of the correct gap is one extra plate. It is worth it.
+
+**B4 — Never brim a sprue, a comb, or anything with internal gaps.** The pin sprue —
+sixteen pins on a runner at 4 mm pitch — was destroyed by its own brim: `outer_only`
+flooded the gaps between the pins and tore them off on removal. **No pin joint on that
+test plate could be tried at all.** `needs_brim()` looks at bed area, height and
+slenderness; it cannot see that a part's own outline has 4 mm channels in it. Sprues get
+`brim = False` explicitly, and their runner provides the adhesion instead.
+
+**B5 — One definition of "needs a brim", in one place.** There were three, in three
+files, and they disagreed: a part that had already failed on the bed was warned about by
+one, listed without a brim by another, and shipped with no brim by the third. The rule
+lives in `build.needs_brim()` and everything else asks it.
+
+**B6 — What actually needs one.** The heuristics, which flagged 49 of 182 parts:
+
+| Trigger | Threshold |
+|---|---|
+| small footprint | first layer < 25 mm² |
+| tippy | height > 2 × the narrower footprint dimension |
+| wide and thin | longer side > 150 mm **and** (height < 6 mm or bed < 25 % of footprint) |
+| a strip | length > 8 × width **and** width < 8 mm |
+| top-heavy | downward-facing area > 50 mm² **and** > 4 × the bed area |
+
+**B7 — The reference models barely use brims.** `Harry_Potter_Diagon_Alley` prints with
+`no_brim`; `diagon3` with `outer_only`. Both print few, large, well-planted objects. A
+kit that needs 49 brims is telling you its parts are too small and too many — which is
+what §9 fixes. **Grouping is the real brim fix.**
+
+**B8 — Settings that go with it**, from `05_PRINT_SETTINGS.md`: `brim_type = outer_only`,
+`brim_width = 5`, and note that the profile's `elefant_foot_compensation` is 0.15 while
+`xy_hole_compensation` is 0 — so every socket mouth gets *more* material and none of it
+is corrected. That is part of why sockets print undersize.
