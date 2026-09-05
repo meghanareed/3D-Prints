@@ -119,7 +119,8 @@ Two of those are genuinely good and will be tempting. Resist both:
 `profiles/P2S_project_settings.config` is the one edge case: it is not code, it is a
 vendored Bambu Studio export. It should be **re-exported fresh from the installed Bambu
 Studio for the actual P2S** rather than copied — see R-3, which was already a live
-research item because the vendored one dates from the P1S era.
+research item -- though see the correction in §9: the vendored profile is a genuine
+P2S export, so R-3 is narrower than first written.
 
 ---
 
@@ -1343,7 +1344,7 @@ which is the only kind of evidence this project has ever actually learned from.
 |---|---|---|---|
 | ~~R-1~~ | ~~Which Python has a CadQuery wheel~~ | **Closed.** `cp314` wheel exists; 3.14.3 works | — |
 | ~~R-2~~ | ~~Pin the versions~~ | **Closed.** `pip freeze > requirements.txt` | — |
-| **R-3** | Re-export the **P2S** profile from the installed Bambu Studio; confirm build volume, and the elephant-foot and hole-compensation defaults | The vendored profile is a P1S-era export. A wrong elephant foot closes a socket mouth, which is precisely how attempt one died | First print |
+| **R-3** | Re-export the profile from the installed Bambu Studio | **Corrected:** the vendored profile *is* a genuine `Bambu Lab P2S` export at 0.4 mm — read out of `printer_model`, not assumed. What is unverified is that it matches the current Studio version and AMS setup; it carries 7 filament slots where a later project carried 8. Lower risk than first written, still worth two minutes. Run `python ingest.py <project>.3mf --install` | First print |
 | **R-4** | Confirm a generated 3MF opens, slices and prints | Bambu only accepts a project whose `Application` metadata starts with `BambuStudio-`; that took two rounds of guessing to find last time. Format-correct ≠ prints | First print |
 | **R-5** | **Peg diameter, engagement and clearance** — test **Ø3.0 at 0.30/side into Ø3.6**, 4 mm long, on plate 1 | §6.3 and §6.9. Ø3.0 moves away from the small-feature edge; 4 mm finally clears the 2 mm engagement floor guidance names. Note 0.25/side is the *guessed* number attempt one failed on — do not standardise on Ø3.5 | Geometry, and the alley's standard |
 | **R-6** | Does 0.30 + gel CA hold on a **vertical** wall | Both coupons were tested flat in the hand. The wall stands up and the parts hang off it | Phase 1 exit |

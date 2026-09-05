@@ -71,11 +71,13 @@ def check_no_assumed_in_critical():
     return out
 
 
-@check("the slicer profile is the real one, not the inherited P1S export")
+@check("the slicer profile is this machine's current one")
 def check_profile_is_current():
     if P.PROFILE_IS_STALE:
-        return [(WARN, "using the archived P1S-era profile. Every MACHINE value carries "
-                       "the R-3 caveat -- re-export from Bambu Studio for the P2S")]
+        return [(WARN, "using the profile vendored in archive/. It IS a Bambu Lab P2S "
+                       "profile at 0.4 -- checked, not assumed -- but it predates the "
+                       "current Studio session (7 filament slots, not 8). Re-export to "
+                       "close R-3")]
     return [(OK, "profile is the project's own export")]
 
 

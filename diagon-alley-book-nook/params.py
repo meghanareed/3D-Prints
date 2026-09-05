@@ -49,10 +49,11 @@ class Param(float):
 
 
 # ------------------------------------------------------------------ the profile --
-# R-3: this is still the P1S-era export vendored during attempt two. Re-export it from
-# Bambu Studio for the actual P2S before anything is printed. Until that happens every
-# MACHINE value below carries the R-3 caveat, which is the provenance system earning
-# its keep on day one.
+# R-3: this profile IS a genuine 'Bambu Lab P2S' export at a 0.4 nozzle -- verified by
+# reading printer_model out of it, after an earlier note in this file wrongly called it
+# a P1S-era export. What is NOT verified is that it matches the Bambu Studio version and
+# AMS slot count in use now: it carries 7 filament slots where a later project carried 8.
+# So the caveat is narrower than it was -- not 'wrong machine', but 'possibly stale'.
 PROFILE_PATH = os.path.join(HERE, "profiles", "P2S_project_settings.config")
 _FALLBACK = os.path.join(HERE, "archive", "profiles", "P2S_project_settings.config")
 
@@ -72,7 +73,8 @@ if not os.path.exists(_path):
 with open(_path, encoding="utf8") as fh:
     PROFILE = json.load(fh)
 
-_R3 = "R-3 (profile is the P1S-era export; re-export for the P2S)" if PROFILE_IS_STALE else ""
+_R3 = ("R-3 (P2S profile, but vendored from an older Studio session -- re-export to "
+       "confirm)") if PROFILE_IS_STALE else ""
 
 
 def machine(key, why, index=None):
