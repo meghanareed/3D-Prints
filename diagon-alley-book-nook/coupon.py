@@ -41,6 +41,29 @@ MULLIONS = [1.0, 1.2, 1.6]
 TEXT_SIZES = [2.5, 3.0, 4.0, 6.0]
 
 
+# Every label actually stamped, so checks.py can validate what is USED rather than a
+# hand-written list that drifts from it.
+LABELS_USED = []
+
+
+def _bars(solid, n, z, at=(0, 0), length=7.0, width=1.6, gap=1.6, h=0.8):
+    """`n` raised bars -- identification that cannot fail to print.
+
+    Text is a poor way to name a small part on a 0.4 mm nozzle: plate 1's labels came
+    out as blobs and three socket blocks became indistinguishable, which lost the
+    clearance answer the plate was built to get. A bar is 1.6 x 7 mm, far above the
+    minimum dependable feature, and countable by eye or thumb.
+    """
+    span = n * width + (n - 1) * gap
+    out = solid
+    for i in range(n):
+        x = at[0] - span / 2 + width / 2 + i * (width + gap)
+        out = out.union(cq.Workplane("XY")
+                        .box(width, length, h + 0.3, centered=(True, True, False))
+                        .translate((x, at[1], z - 0.3)))
+    return out
+
+
 def _stamp_many(solid, lines, face="top", z=None):
     """Stamp several labels on ONE face, at a z captured BEFORE any of them is applied.
 
@@ -56,10 +79,20 @@ def _stamp_many(solid, lines, face="top", z=None):
     return solid
 
 
-def _stamp(solid, text, size=3.2, at=None, face="top", z=None):
+def _stamp(solid, text, size=None, at=None, face="top", z=None):
     """Emboss a label. Twelve pieces come off this plate and a bench cannot tell a 0.25
     socket from a 0.35 one by eye -- naming them is not decoration, it is the difference
     between a result and a pile of plastic."""
+    # Default to the size that MEASURED as legible. Plate 1 printed 2.4, 3.0 and 3.4 mm
+    # labels as blobs -- every one of them under one extrusion of stem -- and the socket
+    # blocks became unidentifiable, which cost the answer the plate existed to get.
+    size = float(P.TEXT_SIZE_MIN if size is None else size)
+    ok, stroke, floor = P.text_prints(size)
+    if not ok:
+        raise ValueError(f"label {text!r} at {size} mm has a {stroke:.2f} mm stroke, "
+                         f"under the measured {floor:.2f} mm floor -- it will print as "
+                         f"blobs, as plate 1 did")
+    LABELS_USED.append((text, size))
     if z is None:
         bb = solid.val().BoundingBox()
         z = bb.zmax if face == "top" else bb.zmin
@@ -92,8 +125,7 @@ def peg_tile(n=len(CLEARANCES)):
         tile = tile.union(J.peg().translate((x, 0, t)))
     # z=t explicitly: the pegs stand 4 mm above this face, so bb.zmax is the peg TIPS
     # and a label placed there would float in mid-air.
-    tile = _stamp_many(tile, [("PEG TILE  R-14", 4.0, (0, 13.0)),
-                              ("do pegs blob on a big plate?", 2.6, (0, -13.0))], z=t)
+    tile = _stamp(tile, "PEGS R14", at=(0, 13.5), z=t)
     return tile
 
 
@@ -107,7 +139,10 @@ def socket_block(clearance, label=None):
     blk = cq.Workplane("XY").box(w, d, t, centered=(True, True, False))
     blk = J.socket_in(blk, (0, 0, 0), "+Z", clearance=clearance)
     if label:
-        blk = _stamp_many(blk, [("SKT", 3.0, (0, 4.5)), (label, 4.4, (0, -2.5))])
+        # Belt and braces on the one identification that matters: big legible digits
+        # AND a countable bar code. 1 bar = 0.25, 2 = 0.30, 3 = 0.35.
+        blk = _stamp(blk, label, at=(0, -3.0))
+        blk = _bars(blk, {0.25: 1, 0.30: 2, 0.35: 3}[round(clearance, 2)], t, at=(0, 4.5))
     return blk
 
 
@@ -150,7 +185,7 @@ def pin_sprue(n=6, pitch=None):
     tab = (cq.Workplane("XY").box(14.0, 7.0, 2.0, centered=(True, True, False))
            .translate((0, ty - 0.5, 0)))
     out = out.union(tab)
-    out = _stamp(out, "PINS", 3.4, at=(0, ty + 3.0), z=2.0)
+    out = _stamp(out, "FLAT", at=(0, ty + 3.2), z=2.0)
     return out
 
 
@@ -183,7 +218,7 @@ def pin_sprue_vertical(n=6, pitch=None):
         # at ONE end, not two. The blind cone gives the buried end its clearance anyway.
         out = out.union(J.peg(length=float(P.PIN_L), root=0.8)
                         .translate((x, 2.0, base_t)))
-    return _stamp(out, "PINS UP", 3.2, at=(0, -3.5), z=base_t)
+    return _stamp(out, "UP", at=(0, -3.5), z=base_t)
 
 
 def pin_pair(clearance):
@@ -194,8 +229,8 @@ def pin_pair(clearance):
     a = J.socket_facing(a, (0, 0, t), "-Z", clearance=clearance)
     b = cq.Workplane("XY").box(w, d, t, centered=(True, True, False))
     b = J.socket_facing(b, (0, 0, 0), "+Z", clearance=clearance)
-    a = _stamp_many(a, [("PIN A", 3.4, (0, 4.5)), ("+B+pin", 2.4, (0, -4.5))])
-    b = _stamp_many(b, [("PIN B", 3.4, (0, 4.5)), ("+A+pin", 2.4, (0, -4.5))])
+    a = _bars(_stamp(a, "A", at=(0, -3.0)), 1, t, at=(0, 4.5))
+    b = _bars(_stamp(b, "B", at=(0, -3.0)), 2, t, at=(0, 4.5))
     return a, b
 
 
@@ -251,7 +286,9 @@ def text_plate(sizes=TEXT_SIZES):
     """
     pad, lead = 3.0, 2.0
     h = pad * 2 + sum(sizes) + lead * (len(sizes) - 1)
-    w = 46.0
+    # Sized from the text, not guessed at. 46 mm was too narrow for OLLIVANDERS at 6 mm
+    # and it lost its O and its S off the ends -- the same overflow as attempt two.
+    w = max(P.text_width("OLLIVANDERS", max(sizes)) + 2 * pad, 46.0)
     plate = cq.Workplane("XY").box(w, h, 1.6, centered=(True, True, False))
     y = h / 2 - pad
     for s in sizes:
@@ -276,7 +313,7 @@ def bow_facet(facets=5, w=26.0, h=22.0, proj=9.0):
     body = cq.Workplane("XY").polyline(pts).close().extrude(h)
     # Labelled LOOK because it mates with nothing -- R-17 asks whether five facets read
     # as a curve once painted, which is a question for an eye, not a caliper.
-    return _stamp(body, "BOW  LOOK", 3.0, at=(0, proj / 2))
+    return _stamp(body, "BOW", at=(0, proj / 2))
 
 
 # ==================================================================== the plate ==

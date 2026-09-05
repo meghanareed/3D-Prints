@@ -133,6 +133,16 @@ FIT_CLEARANCE = Param(
 CRUSH_RIBS = False   # measured, not a parameter: plate 2 made the joint permanent on one
                      # peg and impossible on two. Kept as a named constant so the reason
                      # travels with the decision.
+
+# THE SCATTER SURVIVED THE SIZE INCREASE. Plate 1 carried two pin pairs cut to the SAME
+# 0.30 clearance at Ø3.0, and they did not behave the same: pair A dropped its pin when
+# inverted, pair B held it. That is the identical result coupon plate 1 got at Ø2.4 --
+# seven sockets, one number, three held and four dropped. Going from 2.4 to 3.0 mm made
+# the joint more forgiving to assemble and did NOT make it repeatable.
+#
+# So "locate, then glue" is not a stage this design passes through on its way to a press
+# fit. It is the answer, at both diameters tried.
+SOCKET_SCATTER_CONFIRMED_AT = 3.0
 XY_REPEATABILITY = Param(
     0.20, MEASURED, "+/- on a well-calibrated machine. Any fit tighter than this is a "
     "coin toss, not a joint", "attempt one bench")
@@ -264,17 +274,20 @@ COBBLE_CHAMFER  = Param(0.4, CHOSEN, "top-edge bevel -- this is what catches dry
 # =================================================================== assumed ==
 # NOT VALIDATED. Each carries the research item that settles it. Nothing load-bearing
 # should depend on one of these without the R-number being closed first.
-PEG_D = Param(3.0, ASSUMED,
-              "up from 2.4: published tolerance tables start at 6 mm and small features "
-              "round off below the nozzle width, so bigger is more forgiving", "R-5")
+PEG_D = Param(3.0, MEASURED,
+              "up from 2.4. Plate 1: every peg entered its socket by thumb, and both pin "
+              "pairs took a pin cleanly. Bigger IS more forgiving -- but note what it did "
+              "NOT fix, below", "plate 1")
 PEG_L = Param(4.0, ASSUMED,
               "INTEGRAL peg -- the whole length enters ONE socket, so with a 0.5 lead-in "
               "this grips over 3.5 mm. This is the wall-peg case (sign, flat trim)", "R-5")
-PIN_L = Param(5.0, ASSUMED,
+PIN_L = Param(5.0, MEASURED,
               "LOOSE pin -- the length is SPLIT between two sockets, so each side gets "
               "half minus a chamfer. 4.0 would give only 1.5 mm per side, under the 2 mm "
               "floor; 5.0 gives exactly 2.0. These are different numbers and conflating "
-              "them is how the engagement problem hid in the first place", "R-5")
+              "them is how the engagement problem hid in the first place. Plate 1: both "
+              "pin pairs closed flush over a 5.0 pin -- nothing held the faces "
+              "apart", "plate 1")
 LEAD_IN_CHAMFER = Param(0.50, ASSUMED, "45 deg at every socket mouth. Do not remove -- but "
                         "note it eats engagement depth, which is R-5's whole point", "R-5")
 BLIND_BORE_CONE = Param(45.0, ASSUMED,
@@ -288,9 +301,25 @@ BLIND_BORE_CONE = Param(45.0, ASSUMED,
 TEXT_DEPTH = Param(0.6, ASSUMED,
                    "exactly 3 layers at 0.2, so an AMS colour change lands on a clean "
                    "boundary. 0.5 was 2.5 layers and could not", "R-15")
-TEXT_STROKE_MIN = Param(0.5, ASSUMED,
-                        "the REAL legibility limit is stroke, not glyph height: a stem "
-                        "must be at least one extrusion and comfortably more", "R-10")
+# ---- settled by the plate-1 print, 2026-09-05 ----------------------------------
+TEXT_STROKE_MIN = Param(0.70, MEASURED,
+                        "stroke, not glyph height, is the limit -- and 0.5 was optimistic. "
+                        "A four-size ladder printed on plate 1 located the threshold: "
+                        "0.30 and 0.36 mm strokes came out as blobs, 0.48 held partially, "
+                        "0.72 held. One extrusion (0.42) is the floor; 0.70 is where it "
+                        "is reliable", "plate 1")
+TEXT_SIZE_MIN = Param(6.0, MEASURED,
+                      "glyph height that actually READS, for a bold serif whose stem is "
+                      "0.12 of its size. Follows from TEXT_STROKE_MIN, not chosen "
+                      "separately -- a fatter face goes smaller and a finer one cannot",
+                      "plate 1")
+TEXT_ADVANCE_EM = Param(0.72, MEASURED,
+                        "advance width per character, all-caps bold serif. 0.62 was "
+                        "ASSUMED in attempt two and ran the lettering off the plate; the "
+                        "same mistake shipped again on plate 1, where OLLIVANDERS at 6 mm "
+                        "measured 47.5 mm on a 46 mm plate and lost its O and its S off "
+                        "the two ends. Measure text against the thing it sits on",
+                        "attempt two + plate 1")
 PAINT_PER_COAT = Param(0.0, ASSUMED,
                        "UNKNOWN. D3 turns on 'two coats close a 0.30 clearance', which is "
                        "a plausible number nobody has put calipers on. 0.0 here is a "
@@ -395,6 +424,30 @@ def assumptions_in_critical_use(used):
     """
     return [REGISTRY[n] for n in sorted(used)
             if n in REGISTRY and REGISTRY[n].src == ASSUMED]
+
+
+def text_width(text, size, advance=None):
+    """How wide raised lettering will actually be.
+
+    Nobody guesses this again. It has now run lettering off a plate twice: 0.62 em was
+    assumed in attempt two, and plate 1 lost the O and the S off OLLIVANDERS because the
+    same check still did not exist.
+    """
+    return len(text) * float(size) * float(TEXT_ADVANCE_EM if advance is None else advance)
+
+
+def text_fits(text, size, plate_width, margin=1.0):
+    """Does it fit, with margin? Returns (ok, width, available)."""
+    w = text_width(text, size)
+    avail = float(plate_width) - 2 * margin
+    return w <= avail, w, avail
+
+
+def text_prints(size, stem_ratio=None):
+    """Will the stems survive? Returns (ok, stroke, floor)."""
+    r = float(TYPE_STEM_RATIO if stem_ratio is None else stem_ratio)
+    stroke = float(size) * r
+    return stroke >= float(TEXT_STROKE_MIN), stroke, float(TEXT_STROKE_MIN)
 
 
 def _is_multiple(value, step, tol=1e-6):

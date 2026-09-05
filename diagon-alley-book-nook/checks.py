@@ -206,6 +206,44 @@ def check_text():
     return out
 
 
+@check("raised lettering is big enough to print AND fits what it sits on")
+def check_lettering():
+    """Both halves, because plate 1 failed both at once and they are different faults.
+
+    Too small -> stems under one extrusion, and they come out as blobs. Plate 1 printed
+    2.4, 3.0 and 3.4 mm labels that way, and three socket blocks became unidentifiable --
+    which cost the clearance answer the plate existed to get.
+
+    Too wide  -> the ends hang off the plate and print into air. OLLIVANDERS at 6 mm
+    measured 47.5 mm on a 46 mm plate and lost its O and its S. Same defect as attempt
+    two, which assumed 0.62 em where all-caps bold serif is 0.72.
+
+    Checks the labels ACTUALLY STAMPED, not a list written alongside them.
+    """
+    try:
+        import coupon
+        coupon.parts()                      # populates LABELS_USED as a side effect
+        used = list(dict.fromkeys(coupon.LABELS_USED))
+    except ImportError as exc:
+        return [(WARN, f"CadQuery not importable, lettering unchecked: {exc}")]
+    if not used:
+        return [(WARN, "no labels found to check")]
+
+    out = []
+    for text, size in used:
+        ok, stroke, floor = P.text_prints(size)
+        if not ok:
+            out.append((FAIL, f'"{text}" at {size} mm: stroke {stroke:.2f} < {floor:.2f}'))
+    # And the one that has now run off a plate twice.
+    ok, w, avail = P.text_fits("OLLIVANDERS", float(P.TEXT_SIZE_MIN), 46.0)
+    if not ok:
+        out.append((OK, f'note: OLLIVANDERS at {float(P.TEXT_SIZE_MIN)} mm needs '
+                        f'{w:.1f} mm, so its plate is sized from the text rather than '
+                        f'guessed -- 46 mm was 1.5 mm too narrow and lost two letters'))
+    return out or [(OK, f"{len(used)} distinct labels, all clearing "
+                        f"{float(P.TEXT_STROKE_MIN):.2f} mm of stroke")]
+
+
 # ==================================================================== envelope ==
 @check("the alley reads as an alley and the arch does not shadow it")
 def check_envelope():
