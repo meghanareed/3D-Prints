@@ -301,6 +301,20 @@ SUPPORT_THRESHOLD = Param(30.0, ASSUMED,
                           "neither has brick relief under its overhangs", "R-9")
 
 # ================================================================== derived ==
+D_FLAT = Param(0.9, ASSUMED,
+               "the D-flat, this far off the peg axis. It only KEYS while "
+               "D_FLAT + clearance < PEG_D/2: turned 180 deg the male presents its arc "
+               "at PEG_D/2 where the bore presents its flat. At 0.9 on a 3.0 peg that "
+               "leaves 0.30 mm of interference the wrong way round at 0.30 clearance, "
+               "and keeps most of the section. The old kit ran a flat that had ALREADY "
+               "stopped keying and nobody knew", "R-5")
+PEG_TIP_CHAMFER = Param(0.30, ASSUMED, "45 deg at the male tip. Does more for assembly "
+                                       "than any clearance tweak", "R-5")
+PEG_ROOT = Param(1.0, ASSUMED,
+                 "how far a peg sinks into its parent. Sized exactly to the surface it "
+                 "stands on, a peg is only TANGENT and OCCT leaves it a separate solid -- "
+                 "that split a part into two pieces three times in the old kit", "R-5")
+
 SOCKET_D = Param(PEG_D + 2 * FIT_CLEARANCE, ASSUMED,
                  "3.0 + 0.30/side = 3.6. NOT 3.4 and NOT 3.5 -- those are 0.20 and 0.25 "
                  "per side, and 0.25 is the guessed number attempt one shipped on and "
