@@ -121,7 +121,7 @@ def peg(length=None, root=None):
 
 
 # ------------------------------------------------------------------- female --
-def socket(depth=None, clearance=None):
+def socket(depth=None, clearance=None, cone=True):
     """The CUTTING solid for a bore. Mouth at z=0, blind end up at +depth.
 
     Three parts, each earning its place:
@@ -130,6 +130,15 @@ def socket(depth=None, clearance=None):
         measured nothing;
       * a cone at the blind end, so a socket facing DOWN on the plate is self-supporting
         and needs no bridge, and so the male gets a positive depth stop.
+
+    `cone=False` for a bore that is HORIZONTAL in the print orientation. The cone is
+    support, not function: a sideways bore has no downward-facing blind end and needs
+    none, and it costs 4.22 mm of material behind every socket -- which on a storefront
+    flange is the difference between a 10.4 mm strip and a 6.2 mm one. A flat blind end
+    is a perfectly good depth stop; it is only unprintable pointing down.
+
+    Do NOT pass cone=False for a socket that opens downward on the plate. checks.py
+    cannot tell the difference, and neither can the slicer until it prints.
     """
     depth = float(P.SOCKET_DEPTH if depth is None else depth)
     c = float(P.FIT_CLEARANCE if clearance is None else clearance)
@@ -159,11 +168,13 @@ def socket(depth=None, clearance=None):
     # slicer's support threshold by the self-test.
     half = math.radians(float(P.BLIND_BORE_CONE) / 2.0)
     rise = (dia / 2.0) / math.tan(half)
-    cone = (cq.Workplane("XY").circle(dia / 2)
-            .workplane(offset=rise).circle(0.01)
-            .loft(combine=True).translate((0, 0, depth)))
+    if not cone:
+        return bore.union(mouth)
 
-    return bore.union(mouth).union(cone)
+    cone_cut = (cq.Workplane("XY").circle(dia / 2)
+                .workplane(offset=rise).circle(0.01)
+                .loft(combine=True).translate((0, 0, depth)))
+    return bore.union(mouth).union(cone_cut)
 
 
 # A socket placed on a REVERSED normal is flipped 180 deg to get there, and that flip
@@ -196,7 +207,7 @@ def blind_cone_rise(clearance=None):
     return (dia / 2.0) / math.tan(math.radians(float(P.BLIND_BORE_CONE) / 2.0))
 
 
-def socket_min_material(depth=None, clearance=None, floor=1.2):
+def socket_min_material(depth=None, clearance=None, floor=1.2, cone=True):
     """Material a socket needs behind its mouth to stay BLIND.
 
     The cone that makes a downward-facing bore self-supporting is not free: it adds its
@@ -206,16 +217,17 @@ def socket_min_material(depth=None, clearance=None, floor=1.2):
     over the cone tip.
     """
     depth = float(P.SOCKET_DEPTH if depth is None else depth)
-    return depth + blind_cone_rise(clearance) + floor
+    return depth + (blind_cone_rise(clearance) if cone else 0.0) + floor
 
 
-def socket_in(solid, point, normal="+Z", rot=0.0, depth=None, clearance=None):
+def socket_in(solid, point, normal="+Z", rot=0.0, depth=None, clearance=None,
+              cone=True):
     """Cut a socket into `solid` at `point`, opening along `normal`.
 
     `rot` is taken as given. For a joint where a pin is SHARED with the facing part, pass
     `rot=mate_rot(normal)` -- or use `socket_facing`, which does it for you.
     """
-    return solid.cut(_place(socket(depth, clearance), point, normal, rot))
+    return solid.cut(_place(socket(depth, clearance, cone), point, normal, rot))
 
 
 def socket_facing(solid, point, normal="+Z", rot=0.0, depth=None, clearance=None):

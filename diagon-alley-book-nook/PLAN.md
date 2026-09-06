@@ -1543,3 +1543,110 @@ See §6.13 for the derived geometry and the three things it moves.)*
                                               └─ Phase 2
 
 The environment is no longer on this path. The first real gate is a 2 g print.
+
+### 6.19 Plate 5 — printed. The joint is right; the glazing was not
+
+The peg joint passed: *"fits perfectly."* That closes the mating question plate 5 was
+built to ask. Three things came back with it, and all three were found by **looking at
+the printed part**, not by any check — the same pattern §6.18 recorded.
+
+**1. The storefront glazing had no transoms.** `window()` has grown rows since plate 3.
+`storefront()` never did, because it carried its **own copy** of the pane arithmetic and
+that copy only ever computed `cols`. Both functions were "working", and nothing compared
+them. The result was nine full-height bars per facet, tied at top and bottom only.
+
+Printed standing, a bar like that is a **free-standing tower**: about 2.5 mm² per layer,
+no adjacent material to cool against, and the nozzle returning to the same spot every
+layer. It came out visibly ropy along its whole length — *"pile up along the top where it
+couldn't form correctly"* — and one separator snapped taking the part off the plate.
+
+The fix is one shared `pane_grid()` used by the flat window, the fused relief and the
+storefront alike. The storefront facet now glazes **9 × 5** instead of 9 × 1. The transoms
+are the structural fix and the authenticity fix at once: every leaded window on the
+reference street runs muntins both ways, and a tied bar is not a tower.
+
+> The general lesson is now **rule 15**: tie a thin feature in two directions.
+
+**2. `MULLION` was 1.2 mm — 2.86 extrusions.** A wall that is not a whole number of beads
+leaves the slicer to improvise across the entire lattice. Now **1.26 mm, exactly three**,
+which is still above `MIN_FEATURE_T` and is checked by a self-test rather than remembered.
+
+> The general lesson is now **rule 14**.
+
+**3. Depth.** The reference street reads deep because its glazing is *set back*, not
+because it has more parts. Each facet gets a raised architrave (`STORE_REVEAL` 1.0 mm)
+around its opening — **added, not carved**, so the muntins keep the full wall thickness
+behind them. On the angled facets the band ran 0.6 mm past the back of the bay, which is
+0.6 mm of gap in front of the part; the body is now trimmed to the mounting plane and a
+self-test holds it there.
+
+**Also this round, from the same part:**
+
+- Storefront sockets bore **sideways**, so they take no blind cone — the cone is support
+  for a *downward*-facing bore and nothing else. `socket(cone=False)` drops the side
+  strips from 10.4 mm to **6.2 mm**. This is what the user's question *"why are the end
+  sockets so much thicker this time?"* was pointing at.
+- The `open at the back` check measured a raw volume and so failed permanently on the
+  bay's own side walls. It measures the **blocked fraction** now (1.7% vs a 15% limit; a
+  full-width flange is ~100%).
+- `layout()` never considered turning a part, so plate 5 stacked **267 mm deep on a
+  256 mm bed** — and said so in a printed line that nothing acted on. It now tries a 90°
+  Z rotation (free: nothing moves relative to gravity) and **overflow is a failure.**
+- `build_entries()` read its solid back out of `items` rather than from `placed`, so any
+  transform the packer applied would have been silently dropped. Coupled properly.
+
+### 6.20 The fins come off — the socket moves into the bay
+
+Looking at the sliced plate, the storefront had two flat tabs hung off its sides carrying
+the sockets. The request was to put the sockets in the **back edge of the bay** instead,
+*"would have to angle it a bit more hence may not work"* — with one hard constraint: the
+wall is already printed and will not be reprinted, so a new storefront has to drop onto
+**pegs that already exist**.
+
+It works, and the intuition about the angle was the right one.
+
+The reason the tabs existed at all: `store_points()` puts the sockets at `w/2 +
+FLANGE_W/2` = **±47.5**, and the bow's own back corners are at **±45**. The socket was
+2.5 mm outside the bay, so there was no bay material to bore into and the part grew a tab
+to reach it.
+
+So flare the back of the bow past the socket rather than reaching out to it. The
+footprint gains a `flare` (7 mm each side) and a straight `ret`urn before the facets
+start:
+
+```
+(-52, 0) -> (-52, -7) -> (-26, -31.2) -> (26, -31.2) -> (52, -7) -> (52, 0)
+```
+
+The same jamb block now sits **inside** a continuous outer surface instead of hanging off
+it, and the end facets angle in more steeply — which is what "angle it a bit more" meant.
+
+**The return is not optional, and this is the part that nearly did not work.** A pure
+flare — corner straight to facet, no return — angles away from the bore too fast: the
+facet has left x = 47.5 by 4.6 mm of depth and the socket needs 6.2 mm, so the bore would
+break out through the side of the bay. The 7 mm return is what holds the wall parallel
+long enough to take the hole.
+
+| | before | after |
+|---|---|---|
+| overall width | 104 mm (90 bow + 2 tabs) | **104 mm** (104 bow, no tabs) |
+| socket positions | ±47.5, z 8 / 63 | **unchanged** |
+| back aperture blocked | 1.7% | **0.0%** |
+| mass | 36.7 g | 46.0 g |
+| mate interference | 0.0000 mm³ | **0.0000 mm³** |
+
+The 9 g is the honest cost: the bay is genuinely bigger, and its front facet grows from
+45 to 52 mm. Nothing else moved.
+
+Four self-tests now pin this, because the failure mode is a part that no longer fits
+hardware that physically exists — worse than a part that merely looks wrong:
+
+- sockets are at exactly `[(-47.5, 8), (47.5, 8), (-47.5, 63), (47.5, 63)]`
+- the bay reaches 52.0 mm where the socket needs 50.09 mm of half-width
+- the return (7.0 mm) is deeper than the bore (6.2 mm)
+- the part is no wider than its own footprint — the architrave stands proud along each
+  facet normal, which near the corner points outward in x, so it is trimmed flush to the
+  return rather than being allowed to push the part back over width
+
+**Plate 6 (`--store`) is the storefront on its own**, so the shop can be iterated without
+reprinting 65 g of wall behind it.

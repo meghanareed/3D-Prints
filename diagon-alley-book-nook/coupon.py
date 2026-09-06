@@ -434,6 +434,16 @@ def wall_panel():
     return [("00_wall_panel", wall.panel(), None)]
 
 
+def storefront_only():
+    """Plate 6 -- the storefront on its own, to swap onto a wall that is already printed.
+
+    The socket positions are PINNED (elements.py self-tests them), so a new storefront
+    drops onto the pegs of a wall printed against any earlier revision. That is the whole
+    point of this plate: iterate the shop without reprinting 65 g of wall behind it.
+    """
+    return [("00_storefront", E.storefront(90.0, 72.0), None)]
+
+
 def wall_and_shop():
     """Plate 5 -- a real wall module and the storefront that hangs on it.
 

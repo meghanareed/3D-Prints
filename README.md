@@ -10,8 +10,7 @@ paid for in filament.
 | | |
 |---|---|
 | Starting a **new** model | Read this file top to bottom first. Everything in it applies to anything printed here |
-| Working on the **book nook** | [`diagon-alley-book-nook/`](diagon-alley-book-nook/) — its `PLAN.md` is the live document |
-| Working on the **inhaler clicker** | [`inhaler-clicker/`](inhaler-clicker/) — its `README.md` is the live document |
+| Working on **any existing** model | Go to its folder and read the `README.md` there. This file does not describe any project |
 
 Every rule below exists because breaking it cost a print. Where a number came off a
 printed part rather than a datasheet, it says so.
@@ -99,6 +98,16 @@ Adding a second correction opens every joint too far.
 13. **Three copies of anything you are measuring, never one.** Socket-to-socket scatter
     here is wider than the entire clearance range worth testing, so a single sample tells
     you about that sample. Two plates have now been spent learning this.
+14. **Make every thin wall a whole number of extrusions** — a multiple of **0.42 mm**.
+    Anything in between leaves the slicer to improvise: it either over-widens the beads
+    or squeezes in a gap fill, and both come out as a visibly ropy, piled-up surface.
+    1.2 mm looks like a round number and is 2.86 beads; **1.26 mm is three.** A printed
+    shopfront's glazing bars showed this along their whole length.
+15. **Tie a thin feature in two directions.** A bar held only at its two ends is a
+    free-standing tower on a part that prints standing — a few mm² per layer, no time to
+    cool, nowhere for the nozzle to go — so it piles up as it climbs and snaps when the
+    part is flexed off the plate. Cross it. The cross-piece costs nothing, and it is
+    usually what the real object looks like anyway: window muntins run both ways.
 
 ## Brims
 
@@ -230,49 +239,28 @@ Each of these came from a defect that shipped.
 
 # Projects
 
+One folder per project, and **each one has its own README** — architecture, decisions and
+open questions live there, not here. This list is only a pointer.
+
 ### [`diagon-alley-book-nook/`](diagon-alley-book-nook/)
 
 A parametric illuminated book nook — a narrow crooked wizarding shopping lane,
 **8 × 10.5 × 12 in**, with forced perspective, hidden LED wiring and a removable outer
-brick skin for access.
+brick skin for access. Two previous attempts at a 182-part kit are archived rather than
+forgotten.
 
-| | |
-|---|---|
-| [`PLAN.md`](diagon-alley-book-nook/PLAN.md) | the live document — architecture, decisions, research register |
-| [`SPEC.md`](diagon-alley-book-nook/SPEC.md) | phases and the exit test for each |
-| [`params.py`](diagon-alley-book-nook/params.py) | every dimension, with its provenance |
-| [`checks.py`](diagon-alley-book-nook/checks.py) | the check suite — registry-driven, printer-aware |
-| [`joints.py`](diagon-alley-book-nook/joints.py) | the D-pin and its socket, tested by real insertion |
-| [`coupon.py`](diagon-alley-book-nook/coupon.py) · [`plate.py`](diagon-alley-book-nook/plate.py) | the test plate, and the Bambu project writer |
-| [`ingest.py`](diagon-alley-book-nook/ingest.py) | read settings back out of a saved Bambu project |
-| [`archive/`](diagon-alley-book-nook/archive/) | two previous attempts — the record, **not** the starting point |
-
-Two attempts were made at building it as a 182-part kit; both ended with a bench of parts
-that would not go together. The reasons are written down rather than forgotten, in
-[`07_RETROSPECTIVE.md`](diagon-alley-book-nook/archive/docs/07_RETROSPECTIVE.md),
-[`08_JOINT_DESIGN.md`](diagon-alley-book-nook/archive/docs/08_JOINT_DESIGN.md) and
-[`09_COUPON_RESULTS.md`](diagon-alley-book-nook/archive/docs/09_COUPON_RESULTS.md).
+→ [`diagon-alley-book-nook/README.md`](diagon-alley-book-nook/README.md)
 
 ### [`inhaler-clicker/`](inhaler-clicker/)
 
 A life-size faux inhaler whose canister is the button, over a hidden MX keyboard switch.
 **83 mm** tall, three printed parts, raised two-colour lettering. A novelty fidget — the
-mouthpiece cavity is blind and `checks.py` asserts it stays that way.
+mouthpiece cavity is blind and its check suite asserts it stays that way.
 
-| | |
-|---|---|
-| [`README.md`](inhaler-clicker/README.md) | the live document — what the reference model measured, and the five places the spec and this machine disagree |
-| [`params.py`](inhaler-clicker/params.py) | every dimension with its provenance, plus the vertical stack the mechanism derives from |
-| [`switch.py`](inhaler-clicker/switch.py) | the MX interface, tested by inserting a switch-shaped solid into it |
-| [`mech.py`](inhaler-clicker/mech.py) | the canister and its collar, tested by actually pressing it |
-| [`ref/`](inhaler-clicker/ref/) | a third-party clicker that works, and the source of half of `params.py` |
-
-The switch mount was read off that reference model rather than guessed: the retention is
-the switch's own clips hooking under a **1.5 mm** plate band with 0.5 mm of relief, not a
-press fit against the pocket. A design built to the spec's 2.0–2.2 mm shelf would have
-had nothing holding the switch in.
+→ [`inhaler-clicker/README.md`](inhaler-clicker/README.md)
 
 ---
 
-**`params.py` is the authority; this file is the human summary.** Where they disagree, the
-code wins — it is the one that can fail a build.
+**Each project's `params.py` is the authority for that project; this file is the human
+summary of the machine.** Where code and prose disagree, the code wins — it is the one
+that can fail a build.

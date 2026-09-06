@@ -1,4 +1,6 @@
 .venv/
-out/
 __pycache__/
 *.pyc
+
+# out/ IS committed, deliberately. The plates and STLs are the point of the repo --
+# clone it and print, without installing CadQuery to regenerate them first.

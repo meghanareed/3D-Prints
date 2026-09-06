@@ -82,6 +82,17 @@ def layout(items, bed=None, spacing=None):
     placed, x, y, row_h = [], margin, margin, 0.0
     for name, solid, brim in items:
         w, d, _ = _footprint(solid)
+        # A part that will not fit BESIDE its neighbour may fit TURNED. Rotation about Z
+        # is the one transform that is free here: it moves nothing relative to gravity,
+        # so the face on the plate, every overhang and every bridge are exactly as they
+        # were. Plate 5 is the case -- a 141 mm panel and a 104 mm storefront will not
+        # sit side by side on a 256 mm bed, but the storefront turned is 32 mm wide and
+        # they fit with room to spare instead of stacking 267 mm deep.
+        # Only tried when the part is actually in the way: an un-turned plate is easier
+        # to read against the model.
+        if x > margin and x + w + margin > bed and x + d + margin <= bed:
+            solid = solid.rotate((0, 0, 0), (0, 0, 1), 90)
+            w, d = d, w
         if x + w + margin > bed:                     # new shelf
             x, y, row_h = margin, y + row_h + gap, 0.0
         placed.append((name, solid, brim, x + w / 2, y + d / 2))
@@ -205,8 +216,10 @@ SLICE_INFO = ('<?xml version="1.0" encoding="UTF-8"?>\n<config>\n  <header>\n'
 def build_entries(items):
     placed, _ = layout(items)
     entries = []
-    for i, (name, solid, brim) in enumerate(
-            [(n, s, b) for n, s, b in items], start=1):
+    # Take the solid from PLACED, not from items. The packer may have turned it, and
+    # reading the solid back out of the original list is how a layout that fits writes a
+    # file that does not.
+    for i, (name, solid, brim, _px, _py) in enumerate(placed, start=1):
         pl = placed[i - 1]
         settings = {}
         if brim is False:
@@ -317,11 +330,14 @@ def coupon_items(which="plate1"):
         return coupon.wall_panel()
     if which == "shop":
         return coupon.wall_and_shop()
+    if which == "store":
+        return coupon.storefront_only()
     return coupon.parts()
 
 
 if __name__ == "__main__":
     which = ("rerun" if "--rerun" in sys.argv else
+             "store" if "--store" in sys.argv else
              "shop" if "--shop" in sys.argv else
              "panel" if "--panel" in sys.argv else
              "wall" if "--wall" in sys.argv else "plate1")
@@ -337,12 +353,17 @@ if __name__ == "__main__":
     path = os.path.join(P.out_dir("print"), {"rerun": "plate_2_clearance.3mf",
                                   "wall": "plate_3_wall.3mf",
                                   "panel": "plate_4_panel.3mf",
-                                  "shop": "plate_5_wall_and_shop.3mf"}.get(
+                                  "shop": "plate_5_wall_and_shop.3mf",
+                                  "store": "plate_6_storefront.3mf"}.get(
                                       which, "plate_1_coupon.3mf"))
     write(items, path)
 
     bad = 0
-    for ok, name, detail in self_test(path):
+    # A plate that overflows the bed was a printed warning and nothing else, which is a
+    # warning nobody reads. It fails now.
+    checks = [(height <= bed, "the layout fits the bed",
+               f"{height:.0f} mm deep on a {bed:.0f} mm bed")] + self_test(path)
+    for ok, name, detail in checks:
         print(f"  {'ok  ' if ok else 'FAIL'}  {name}" + (f"   [{detail}]" if detail else ""))
         bad += not ok
 
