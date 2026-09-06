@@ -28,6 +28,22 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
+# Two output folders, because they answer different questions.
+#
+#   out/print/   Bambu PROJECT files. THIS is what you send to the printer -- settings
+#                baked in per object, brim and supports already decided. If it is not in
+#                here it is not meant to be printed.
+#   out/stl/     geometry only, for looking at. An STL carries no settings, so slicing
+#                one by hand re-opens every decision plate.py already made.
+OUT_PRINT = os.path.join(HERE, "out", "print")
+OUT_STL = os.path.join(HERE, "out", "stl")
+
+
+def out_dir(kind="print"):
+    d = OUT_PRINT if kind == "print" else OUT_STL
+    os.makedirs(d, exist_ok=True)
+    return d
+
 MACHINE = "machine"
 MEASURED = "measured"
 CHOSEN = "chosen"

@@ -438,8 +438,7 @@ if __name__ == "__main__":
         bad += not ok
 
     if "--step" in sys.argv:
-        out = os.path.join(HERE, "out")
-        os.makedirs(out, exist_ok=True)
+        out = P.out_dir("stl")
         cq.exporters.export(pin().val(), os.path.join(out, "pin.stl"))
         cq.exporters.export(peg().val(), os.path.join(out, "peg.stl"))
         print(f"\n  wrote pin.stl and peg.stl to {out}")

@@ -54,11 +54,58 @@ def tile(w=62.0, h=52.0, t=None, elements=(), brick=True, seed=None):
             add, cut = E.window_relief(ew, eh)
             body = body.cut(cut.translate((cx, cy, t / 2)))
             body = body.union(add.translate((cx, cy, t)))
+        elif kind == "storefront":
+            # One big opening behind the whole shop, and four pegs where the storefront's
+            # sockets ACTUALLY land -- via the same transform that places the part, not a
+            # hand-written copy of it. Writing the mapping out by hand put them on the
+            # wrong side and one millimetre off, which is the whole 21-of-21 failure in
+            # miniature: two expressions of one relationship, and only one of them right.
+            body = body.cut(cq.Workplane("XY")
+                            .box(ew - 8.0, eh - 14.0, 40.0, centered=(True, True, True))
+                            .translate((cx, cy, t / 2)))
+            for wx, wy in storefront_peg_xy(ew, eh, cx, cy, t):
+                body = body.union(J.peg().translate((wx, wy, t)))
         else:
             body = body.cut(E.wall_opening(ew, eh).translate((cx, cy, t / 2)))
             for px, py in E.flange_points(ew, eh):
                 body = body.union(J.peg().translate((cx + px, cy + py, t)))
     return body
+
+
+def _store_transform(ew, eh, cx, cy, t):
+    """The one place the standing->flat mapping is written down.
+
+    Returns (rotate_fn, dx, dy, dz). Everything that needs to know where a storefront
+    feature ends up on the wall goes through this: the part itself, and the pegs.
+    """
+    t = float(P.WALL_FACE_T if t is None else t)
+    probe = E.storefront(ew, eh).rotate((0, 0, 0), (1, 0, 0), 90)
+    bb = probe.val().BoundingBox()
+    return (lambda s: s.rotate((0, 0, 0), (1, 0, 0), 90),
+            cx, cy - eh / 2 - bb.ymin, t - bb.zmin)
+
+
+def storefront_peg_xy(ew, eh, cx, cy, t=None):
+    """Where a storefront's sockets land on the flat wall. Derived, never retyped."""
+    _rot, dx, dy, _dz = _store_transform(ew, eh, cx, cy, t)
+    # +90 about X sends a point (x, y, z) to (x, -z, y); the sockets sit at y=0.
+    return [(px + dx, -pz + dy) for px, pz in E.store_points(ew, eh)]
+
+
+def mate_storefront(store, ew, eh, cx, cy, t=None):
+    """Lay a standing storefront against a flat wall.
+
+    The storefront is built STANDING -- x across, y projecting out of the wall, z up it --
+    and the wall is built FLAT with its face on +Z. So the two frames disagree and a
+    rotation is genuinely required here, unlike the flat window in mate().
+
+    +90 about X is the one that works, and it was chosen by CHECKING the direction each
+    axis lands on rather than picturing it: the storefront's -Y (where its sockets open)
+    maps to the wall's -Z, which is exactly where the wall's +Z pegs come from. -90 sends
+    the projection INTO the wall, which looks identical in a description and is wrong.
+    """
+    rot, dx, dy, dz = _store_transform(ew, eh, cx, cy, t)
+    return rot(store).translate((dx, dy, dz))
 
 
 def mate(element_solid, ew, eh, cx, cy, t=None):
@@ -204,8 +251,7 @@ if __name__ == "__main__":
           f"{plate.val().Volume() * 1.24e-3:.1f} g")
 
     if "--export" in sys.argv:
-        d = os.path.join(HERE, "out")
-        os.makedirs(d, exist_ok=True)
+        d = P.out_dir("stl")
         cq.exporters.export(plate.val(), os.path.join(d, "wall_tile.stl"))
         cq.exporters.export(E.window().val(), os.path.join(d, "wall_tile_window.stl"))
         print(f"  wrote wall_tile.stl and wall_tile_window.stl to {d}")

@@ -315,11 +315,14 @@ def coupon_items(which="plate1"):
         return coupon.wall_gate()
     if which == "panel":
         return coupon.wall_panel()
+    if which == "shop":
+        return coupon.wall_and_shop()
     return coupon.parts()
 
 
 if __name__ == "__main__":
     which = ("rerun" if "--rerun" in sys.argv else
+             "shop" if "--shop" in sys.argv else
              "panel" if "--panel" in sys.argv else
              "wall" if "--wall" in sys.argv else "plate1")
     items = coupon_items(which)
@@ -331,11 +334,10 @@ if __name__ == "__main__":
     print(f"  layout {height:.0f} mm deep on a {bed:.0f} mm bed"
           f"{'  -- OVERFLOWS' if height > bed else ''}\n")
 
-    out_dir = os.path.join(HERE, "out")
-    os.makedirs(out_dir, exist_ok=True)
-    path = os.path.join(out_dir, {"rerun": "plate_2_clearance.3mf",
+    path = os.path.join(P.out_dir("print"), {"rerun": "plate_2_clearance.3mf",
                                   "wall": "plate_3_wall.3mf",
-                                  "panel": "plate_4_panel.3mf"}.get(
+                                  "panel": "plate_4_panel.3mf",
+                                  "shop": "plate_5_wall_and_shop.3mf"}.get(
                                       which, "plate_1_coupon.3mf"))
     write(items, path)
 

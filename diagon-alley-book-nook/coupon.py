@@ -434,6 +434,29 @@ def wall_panel():
     return [("00_wall_panel", wall.panel(), None)]
 
 
+def wall_and_shop():
+    """Plate 5 -- a real wall module and the storefront that hangs on it.
+
+    The first time the two halves of the architecture appear together: a DUMB wall that
+    prints flat with brick and fused windows, and a STOREFRONT that prints standing,
+    projects 32 mm, and mounts on four pegs.
+
+    The storefront is the part rule 9 actually justifies. Its orientation genuinely
+    disagrees with the wall's -- one lies down, the other stands -- and no amount of
+    fusing reconciles that. Everything flat fuses; this does not.
+    """
+    import wall
+    ew, eh = 90.0, 72.0
+    cx, cy = 70.5, 45.0
+    panel = wall.tile(float(P.WALL_MODULE_L), float(P.WALL_MODULE_H),
+                      elements=[("storefront", ew, eh, cx, cy),
+                                ("window_fused", 36.0, 46.0, 38.0, 125.0),
+                                ("window_fused", 36.0, 46.0, 103.0, 125.0),
+                                ("window_fused", 28.0, 34.0, 70.5, 180.0)])
+    return [("00_wall_panel", panel, None),
+            ("01_storefront", E.storefront(ew, eh), None)]
+
+
 def tile_with(ew, eh, spots, w=62.0, h=108.0):
     import wall
     return wall.tile(w, h, elements=[("window", ew, eh, cx, cy) for cx, cy in spots])
@@ -543,8 +566,7 @@ if __name__ == "__main__":
     print("  closes R-5, R-10, R-14, R-15, R-17 and part of R-9 if it assembles")
 
     if "--export" in sys.argv:
-        d = os.path.join(HERE, "out", "coupon")
-        os.makedirs(d, exist_ok=True)
+        d = P.out_dir("stl")
         for name, solid, _ in parts():
             cq.exporters.export(solid.val(), os.path.join(d, f"{name}.stl"))
         print(f"\n  wrote {len(parts())} STLs to {d}")

@@ -212,8 +212,7 @@ if __name__ == "__main__":
     print(f"  {st['solids']} groove solids -> 1 cut on the plate")
 
     if "--export" in sys.argv:
-        d = os.path.join(HERE, "out")
-        os.makedirs(d, exist_ok=True)
+        d = P.out_dir("stl")
         plate = cq.Workplane("XY").box(60, 40, 2.5, centered=(False, False, False))
         faced, _ = brick_face(plate, 60, 40, at=(0, 0, 2.5))
         cq.exporters.export(faced.val(), os.path.join(d, "texture_sample.stl"))

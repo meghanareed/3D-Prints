@@ -215,8 +215,7 @@ if __name__ == "__main__":
         bad += not ok
 
     if "--export" in sys.argv:
-        d = os.path.join(HERE, "out")
-        os.makedirs(d, exist_ok=True)
+        d = P.out_dir("stl")
         cq.exporters.export(window().val(), os.path.join(d, "window_sample.stl"))
         print(f"\n  wrote {d}/window_sample.stl")
 
@@ -224,3 +223,92 @@ if __name__ == "__main__":
     sys.stdout.flush()
     sys.stderr.flush()
     os._exit(1 if bad else 0)
+
+
+# ================================================================== storefront ==
+# The element that DOES earn being a part. A wall prints flat and face-up; a bay window
+# projects 35 mm and must print standing, so the two want opposite orientations and no
+# amount of fusing reconciles them. That difference is exactly what rule 9 asks for.
+STORE_WALL_T = 2.0       # skin of the bay -- it is hollow behind for light
+STORE_SILL = 4.0         # base course the whole thing stands on
+STORE_CORNICE = 5.0      # cap over the glazing
+
+
+def _bow_footprint(w, proj, facets, inset=0.0):
+    """The plan of a faceted bow, as points. Back edge closed along y=0.
+
+    Faceted rather than round on purpose: it prints better, the flats take flat glazing,
+    and plate 3's bow read as curved at arm's length. `inset` shrinks it for the hollow.
+    """
+    pts = []
+    for i in range(facets + 1):
+        a = math.pi * i / facets
+        pts.append((-math.cos(a) * (w / 2 - inset), math.sin(a) * (proj - inset)))
+    return pts
+
+
+def storefront(w=90.0, h=72.0, proj=None, facets=3, t=None):
+    """A bow-fronted shop window: sill, faceted glazing, cornice, and a back flange.
+
+    Built STANDING -- base on z=0, growing up, back face at y=0 -- because that is how it
+    prints and how it hangs on the wall. Hollow behind, so the light the nook exists for
+    gets through.
+    """
+    proj = float(P.STOREFRONT_PROJ if proj is None else proj)
+    t = STORE_WALL_T if t is None else t
+    glaz_h = h - STORE_SILL - STORE_CORNICE
+
+    outer = _bow_footprint(w, proj, facets)
+    body = cq.Workplane("XY").polyline(outer).close().extrude(h)
+
+    # hollow: the same plan, inset, cut from sill top to under the cornice
+    inner = _bow_footprint(w, proj, facets, inset=t)
+    void = (cq.Workplane("XY").polyline(inner).close().extrude(h)
+            .translate((0, 0, STORE_SILL)))
+    body = body.cut(void)
+
+    # glazing: one opening per facet, panes sized by MAX_PANE_W like every other window
+    for i in range(facets):
+        (x0, y0), (x1, y1) = outer[i], outer[i + 1]
+        mx, my = (x0 + x1) / 2, (y0 + y1) / 2
+        seg = math.hypot(x1 - x0, y1 - y0)
+        ang = math.degrees(math.atan2(y1 - y0, x1 - x0))
+        open_w = seg - 2 * FRAME_LIP
+        if open_w <= 4.0:
+            continue
+        cols = max(1, math.ceil((open_w + MULLION) / (float(P.MAX_PANE_W) + MULLION)))
+        pw = (open_w - (cols - 1) * MULLION) / cols
+        for c in range(cols):
+            ox = -open_w / 2 + pw / 2 + c * (pw + MULLION)
+            pane = (cq.Workplane("XZ")
+                    .box(pw, glaz_h - 2 * FRAME_LIP, 4 * proj,
+                         centered=(True, True, True))
+                    .translate((ox, 0, STORE_SILL + glaz_h / 2))
+                    .rotate((0, 0, 0), (0, 0, 1), ang)
+                    .translate((mx, my, 0)))
+            body = body.cut(pane)
+
+    # back flange: the face that meets the wall, and what carries the sockets
+    fh = h
+    flange = (cq.Workplane("XY")
+              .box(w + 2 * FLANGE_W, STORE_WALL_T, fh, centered=(True, False, False))
+              .translate((0, -STORE_WALL_T, 0)))
+    body = body.union(flange)
+    for x, z in store_points(w, h):
+        # socket_FACING, not socket_in. "-Y" is a reversed normal, and the 180 degree flip
+        # that gets a socket there MIRRORS its D-flat -- so a peg built the other way up
+        # meets arc where it expects flat and fouls by 0.76 mm3 apiece. joints.mate_rot
+        # exists for exactly this and this is the third time it has caught me.
+        body = J.socket_facing(body, (x, 0.0, z), "-Y")
+    return body
+
+
+def store_points(w, h):
+    """The four peg positions for a storefront, in ITS frame (x across, z up).
+
+    Same job as flange_points and the same reason for four: a 90 mm part on two points
+    rocks. Out at the flange edges, clear of the glazing.
+    """
+    x = w / 2 + FLANGE_W / 2
+    return [(-x, STORE_SILL + 4.0), (x, STORE_SILL + 4.0),
+            (-x, h - STORE_CORNICE - 4.0), (x, h - STORE_CORNICE - 4.0)]
