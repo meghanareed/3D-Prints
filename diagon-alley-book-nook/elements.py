@@ -201,28 +201,24 @@ def self_test():
     # The wall's opening must clear the panes and stay inside the frame -- see the
     # docstring: matching fine geometry on both halves is the 21-of-21 failure.
     ob = wall_opening(w, h).val().BoundingBox()
+    # A storefront must be OPEN AT THE BACK. It is lit from behind, and a flange that
+    # spans the width is a wall across the one place light has to pass.
+    sf = storefront()
+    sb = sf.val().BoundingBox()
+    back = (cq.Workplane("XY")
+            .box(90.0 - 4, 1.0, 72.0 - STORE_SILL - STORE_CORNICE - 4,
+                 centered=(True, True, False))
+            .translate((0, -STORE_WALL_T / 2, STORE_SILL + 2)))
+    blocked_back = sf.intersect(back)
+    bv = blocked_back.val().Volume() if blocked_back.solids().vals() else 0.0
+    t("the storefront is open at the back", bv < 1.0,
+      f"{bv:.1f} mm3 of material across the back opening -- a full-width flange puts "
+      f"{'a wall' if bv > 1 else 'nothing'} where the light comes in")
+
     t("wall opening clears the panes but hides behind the frame",
       ob.xlen > w and ob.xlen < w + 2 * FRAME_LIP,
       f"opening {ob.xlen:.1f} vs pane {w:.1f}, frame {w + 2 * FRAME_LIP:.1f}")
     return out
-
-
-if __name__ == "__main__":
-    print("elements -- the window\n")
-    bad = 0
-    for ok, name, detail in self_test():
-        print(f"  {'ok  ' if ok else 'FAIL'}  {name}" + (f"   [{detail}]" if detail else ""))
-        bad += not ok
-
-    if "--export" in sys.argv:
-        d = P.out_dir("stl")
-        cq.exporters.export(window().val(), os.path.join(d, "window_sample.stl"))
-        print(f"\n  wrote {d}/window_sample.stl")
-
-    print(f"\n  {bad} failures")
-    sys.stdout.flush()
-    sys.stderr.flush()
-    os._exit(1 if bad else 0)
 
 
 # ================================================================== storefront ==
@@ -288,12 +284,19 @@ def storefront(w=90.0, h=72.0, proj=None, facets=3, t=None):
                     .translate((mx, my, 0)))
             body = body.cut(pane)
 
-    # back flange: the face that meets the wall, and what carries the sockets
-    fh = h
-    flange = (cq.Workplane("XY")
-              .box(w + 2 * FLANGE_W, STORE_WALL_T, fh, centered=(True, False, False))
-              .translate((0, -STORE_WALL_T, 0)))
-    body = body.union(flange)
+    # Back flange: SIDE STRIPS ONLY, never a full plate.
+    #
+    # It was a full-width plate first, and that is a wall across the back of a window --
+    # the one place in the whole model where light has to get through. A storefront lit
+    # from behind with its back closed is an unlit storefront.
+    #
+    # The flange exists to carry sockets, and sockets are at the sides. So put material
+    # only where a socket needs it and leave the middle open to the light box.
+    strip_w = FLANGE_W + 4.0
+    for sx in (-1, 1):
+        body = body.union(cq.Workplane("XY")
+                          .box(strip_w, STORE_WALL_T, h, centered=(True, False, False))
+                          .translate((sx * (w / 2 + FLANGE_W / 2), -STORE_WALL_T, 0)))
     for x, z in store_points(w, h):
         # socket_FACING, not socket_in. "-Y" is a reversed normal, and the 180 degree flip
         # that gets a socket there MIRRORS its D-flat -- so a peg built the other way up
@@ -312,3 +315,23 @@ def store_points(w, h):
     x = w / 2 + FLANGE_W / 2
     return [(-x, STORE_SILL + 4.0), (x, STORE_SILL + 4.0),
             (-x, h - STORE_CORNICE - 4.0), (x, h - STORE_CORNICE - 4.0)]
+
+
+if __name__ == "__main__":
+    print("elements -- the window\n")
+    bad = 0
+    for ok, name, detail in self_test():
+        print(f"  {'ok  ' if ok else 'FAIL'}  {name}" + (f"   [{detail}]" if detail else ""))
+        bad += not ok
+
+    if "--export" in sys.argv:
+        d = P.out_dir("stl")
+        cq.exporters.export(window().val(), os.path.join(d, "window_sample.stl"))
+        print(f"\n  wrote {d}/window_sample.stl")
+
+    print(f"\n  {bad} failures")
+    sys.stdout.flush()
+    sys.stderr.flush()
+    os._exit(1 if bad else 0)
+
+
