@@ -239,7 +239,11 @@ def _bow_footprint(w, proj, facets, inset=0.0):
     pts = []
     for i in range(facets + 1):
         a = math.pi * i / facets
-        pts.append((-math.cos(a) * (w / 2 - inset), math.sin(a) * (proj - inset)))
+        # -Y, not +Y. Built bulging toward +Y it needed a +90 rotation to get its
+        # projection out of the wall, and +90 also turns the part upside down -- sill at
+        # the top, open end at the bottom. Bulging the other way lets -90 do both jobs
+        # right. Handedness, not a sign slip: no rotation fixes a mirrored frame.
+        pts.append((-math.cos(a) * (w / 2 - inset), -math.sin(a) * (proj - inset)))
     return pts
 
 
@@ -259,7 +263,11 @@ def storefront(w=90.0, h=72.0, proj=None, facets=3, t=None):
 
     # hollow: the same plan, inset, cut from sill top to under the cornice
     inner = _bow_footprint(w, proj, facets, inset=t)
-    void = (cq.Workplane("XY").polyline(inner).close().extrude(h)
+    # STOP UNDER THE CORNICE. Extruding the void the full height and shifting it up by the
+    # sill ran it straight out of the top, so the bay was a tube open at one end -- and
+    # mounted, that open end faced down and leaked light out under the shop.
+    void = (cq.Workplane("XY").polyline(inner).close()
+            .extrude(h - STORE_SILL - STORE_CORNICE)
             .translate((0, 0, STORE_SILL)))
     body = body.cut(void)
 
@@ -292,17 +300,28 @@ def storefront(w=90.0, h=72.0, proj=None, facets=3, t=None):
     #
     # The flange exists to carry sockets, and sockets are at the sides. So put material
     # only where a socket needs it and leave the middle open to the light box.
+    # The strips must be DEEP, not just present. A socket needs socket_min_material of
+    # material behind its mouth and a 2 mm flange has none of it -- the bore came out as
+    # a through hole with 2 mm of engagement, and when the mouth moved it cut pure air and
+    # all four pegs fouled. The strips run FORWARD into the bay's depth, alongside the
+    # bow rather than in front of it, so they take nothing from the light path.
     strip_w = FLANGE_W + 4.0
+    strip_d = J.socket_min_material()
     for sx in (-1, 1):
         body = body.union(cq.Workplane("XY")
-                          .box(strip_w, STORE_WALL_T, h, centered=(True, False, False))
-                          .translate((sx * (w / 2 + FLANGE_W / 2), -STORE_WALL_T, 0)))
+                          .box(strip_w, strip_d, h, centered=(True, False, False))
+                          .translate((sx * (w / 2 + FLANGE_W / 2), -strip_d, 0)))
     for x, z in store_points(w, h):
-        # socket_FACING, not socket_in. "-Y" is a reversed normal, and the 180 degree flip
-        # that gets a socket there MIRRORS its D-flat -- so a peg built the other way up
-        # meets arc where it expects flat and fouls by 0.76 mm3 apiece. joints.mate_rot
-        # exists for exactly this and this is the third time it has caught me.
-        body = J.socket_facing(body, (x, 0.0, z), "-Y")
+        # socket_in here, NOT socket_facing -- and that is the opposite of what the flat
+        # window needs. Whether the D-flat wants compensating depends on the total
+        # rotation a socket ends up under, which is the build handedness AND the assembly
+        # rotation together. Changing the footprint to bulge -Y changed the assembly
+        # rotation from +90 to -90, and that flipped the answer.
+        #
+        # Both were tried and MEASURED against the real wall: compensated fouls by
+        # 6.41 mm3, uncompensated by 0.0000. There is no rule to remember here, only a
+        # test -- which is why wall.py mates a storefront to a panel on every run.
+        body = J.socket_in(body, (x, 0.0, z), "-Y")
     return body
 
 

@@ -79,17 +79,17 @@ def _store_transform(ew, eh, cx, cy, t):
     feature ends up on the wall goes through this: the part itself, and the pegs.
     """
     t = float(P.WALL_FACE_T if t is None else t)
-    probe = E.storefront(ew, eh).rotate((0, 0, 0), (1, 0, 0), 90)
+    probe = E.storefront(ew, eh).rotate((0, 0, 0), (1, 0, 0), -90)
     bb = probe.val().BoundingBox()
-    return (lambda s: s.rotate((0, 0, 0), (1, 0, 0), 90),
+    return (lambda s: s.rotate((0, 0, 0), (1, 0, 0), -90),
             cx, cy - eh / 2 - bb.ymin, t - bb.zmin)
 
 
 def storefront_peg_xy(ew, eh, cx, cy, t=None):
     """Where a storefront's sockets land on the flat wall. Derived, never retyped."""
     _rot, dx, dy, _dz = _store_transform(ew, eh, cx, cy, t)
-    # +90 about X sends a point (x, y, z) to (x, -z, y); the sockets sit at y=0.
-    return [(px + dx, -pz + dy) for px, pz in E.store_points(ew, eh)]
+    # -90 about X sends a point (x, y, z) to (x, z, -y); the sockets sit at y=flange.
+    return [(px + dx, pz + dy) for px, pz in E.store_points(ew, eh)]
 
 
 def mate_storefront(store, ew, eh, cx, cy, t=None):
@@ -99,10 +99,12 @@ def mate_storefront(store, ew, eh, cx, cy, t=None):
     and the wall is built FLAT with its face on +Z. So the two frames disagree and a
     rotation is genuinely required here, unlike the flat window in mate().
 
-    +90 about X is the one that works, and it was chosen by CHECKING the direction each
-    axis lands on rather than picturing it: the storefront's -Y (where its sockets open)
-    maps to the wall's -Z, which is exactly where the wall's +Z pegs come from. -90 sends
-    the projection INTO the wall, which looks identical in a description and is wrong.
+    -90 about X, and the storefront is BUILT to suit it -- bulging toward -Y so that one
+    rotation gets the projection out of the wall AND leaves the part upright. Built the
+    other way it needed +90, which does get the projection out but turns the shop upside
+    down: sill at the top, open end at the bottom, light leaking out underneath. That is
+    handedness, and no choice of rotation fixes a mirrored frame -- the fix was in how the
+    footprint is drawn.
     """
     rot, dx, dy, dz = _store_transform(ew, eh, cx, cy, t)
     return rot(store).translate((dx, dy, dz))
@@ -225,6 +227,37 @@ def self_test():
             holes += 1
     t_("light gets through every window", holes == len(PANEL_WINDOWS),
        f"{holes} of {len(PANEL_WINDOWS)} panes clear")
+
+    # A STOREFRONT must mate too, and this is the check that catches a mirrored D-flat --
+    # which has now gone both ways in this file depending on build handedness. No rule is
+    # remembered; the assembly is performed and measured.
+    sew, seh, scx, scy = 90.0, 72.0, 70.5, 45.0
+    spanel = tile(float(P.WALL_MODULE_L), float(P.WALL_MODULE_H),
+                  elements=[("storefront", sew, seh, scx, scy)], brick=False)
+    shop = E.storefront(sew, seh)
+    splaced = mate_storefront(shop, sew, seh, scx, scy)
+    sf_foul = spanel.intersect(splaced)
+    sv = sf_foul.val().Volume() if sf_foul.solids().vals() else 0.0
+    t_("the storefront mounts on its pegs", sv < 1e-6, f"interference {sv:.4f} mm3")
+
+    sb = splaced.val().BoundingBox()
+    t_("the storefront projects OUT of the wall, not into it", sb.zmax > t + 20,
+       f"reaches {sb.zmax - t:.1f} mm proud")
+
+    # Upright, not upside down. Built bulging +Y it came out inverted -- sill at the top,
+    # open end at the bottom, light leaking out under the shop.
+    #
+    # Comparing the volume of each end cap does NOT test this: a 4 mm sill and a 5 mm
+    # cornice weigh almost the same and the check read 6685 against 6685. Transform a
+    # point KNOWN to be in the sill and ask where it lands instead. Same discipline as
+    # flat_side() -- measure where a feature goes, do not infer it from the rotation.
+    rot, dx, dy, dz = _store_transform(sew, seh, scx, scy, t)
+    sill_pt = cq.Workplane("XY").box(1, 1, 1).translate((0, -1.0, E.STORE_SILL / 2))
+    landed = rot(sill_pt).translate((dx, dy, dz)).val().Center()
+    t_("the shop is the right way up",
+       landed.y < (sb.ymin + sb.ymax) / 2,
+       f"a point inside the sill lands at y={landed.y:.1f}, "
+       f"below the mid-height {(sb.ymin + sb.ymax) / 2:.1f}")
 
     # The flip that is NOT needed must still be wrong, or mate() is doing nothing and a
     # future edit could quietly put one back.
