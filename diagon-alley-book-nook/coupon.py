@@ -419,6 +419,21 @@ def wall_gate():
             ("01_window_mounted", E.window(ew, eh), None)]
 
 
+def wall_panel():
+    """Plate 4 -- Phase 1's exit test. A wall that looks like a wall.
+
+    141 x 212 mm, the real module size, brick over the whole face and five windows FUSED
+    into it. Not a coupon: this is a piece of the model.
+
+    73 g and five hours, which is the biggest thing this project has committed to in three
+    attempts -- and it is committing to geometry that has already printed. Brick, fused
+    windows, pane bridging and the mortar pattern all came off plate 3; what is new is
+    only the SIZE.
+    """
+    import wall
+    return [("00_wall_panel", wall.panel(), None)]
+
+
 def tile_with(ew, eh, spots, w=62.0, h=108.0):
     import wall
     return wall.tile(w, h, elements=[("window", ew, eh, cx, cy) for cx, cy in spots])

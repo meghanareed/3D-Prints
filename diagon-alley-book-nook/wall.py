@@ -78,6 +78,36 @@ def mate(element_solid, ew, eh, cx, cy, t=None):
     return element_solid.translate((cx, cy, t - bb.zmin))
 
 
+# The first real wall module. Storeys, not a scatter of holes: a wall reads as a
+# building because its openings line up in courses and shrink as they go up, and that is
+# cheaper to get right in a table than by eye.
+PANEL_WINDOWS = [
+    # (w, h, cx, cy)  -- ground floor
+    (36.0, 50.0, 38.0, 30.0),
+    (36.0, 50.0, 103.0, 30.0),
+    # first floor
+    (36.0, 46.0, 38.0, 100.0),
+    (36.0, 46.0, 103.0, 100.0),
+    # attic, smaller and set in
+    (28.0, 34.0, 70.5, 165.0),
+]
+
+
+def panel(w=None, h=None, windows=None, seed=None):
+    """A real wall module: brick over the whole face, windows FUSED into it.
+
+    No mounted parts on a flat wall any more -- plate 3 printed a fused window beside a
+    mounted one and they look the same at arm's length, so the fused one wins and takes a
+    part, a joint, a flange and four sockets with it. What arrives here as `window_fused`
+    used to be four separate objects.
+    """
+    w = float(P.WALL_MODULE_L if w is None else w)
+    h = float(P.WALL_MODULE_H if h is None else h)
+    wins = PANEL_WINDOWS if windows is None else windows
+    return tile(w, h, elements=[("window_fused", ew, eh, cx, cy)
+                                for ew, eh, cx, cy in wins], seed=seed)
+
+
 # ==================================================================== self-test ==
 def self_test():
     out = []
@@ -123,6 +153,31 @@ def self_test():
     t_("nothing but pegs stands proud under the element",
        proud_v < pegs_v * 1.35,
        f"{proud_v:.0f} mm3 above the face, pegs alone are ~{pegs_v:.0f}")
+
+    # The real module, at the size that ships.
+    pan = panel()
+    pb = pan.val().BoundingBox()
+    t_("panel is one solid", len(pan.solids().vals()) == 1,
+       f"{len(pan.solids().vals())} solids")
+    bed = min(float(P.BED_X), float(P.BED_Y))
+    t_("panel fits the bed with its brim",
+       max(pb.xlen, pb.ylen) + 2 * float(P.BRIM_WIDTH) <= bed,
+       f"{max(pb.xlen, pb.ylen) + 2 * float(P.BRIM_WIDTH):.0f} on {bed:.0f}")
+    # Probe inside ONE PANE, not the window centre -- the centre of a fused window is a
+    # mullion, so a probe the width of the opening correctly finds material and tells you
+    # nothing. And distinct loop names: reusing ew/eh/cx/cy here shadowed the outer ones
+    # and sent the flip test's window to the attic window's coordinates, off the tile.
+    holes = 0
+    for pwid, phgt, pcx, pcy in PANEL_WINDOWS:
+        pc, pr_ = E.panes_for(pwid, phgt)
+        pane_w = (pwid - (pc - 1) * E.MULLION) / pc
+        pane_h = (phgt - (pr_ - 1) * E.MULLION) / pr_
+        probe = (cq.Workplane("XY")
+                 .box(pane_w * 0.6, pane_h * 0.6, 40).translate((pcx, pcy, t / 2)))
+        if not pan.intersect(probe).solids().vals():
+            holes += 1
+    t_("light gets through every window", holes == len(PANEL_WINDOWS),
+       f"{holes} of {len(PANEL_WINDOWS)} panes clear")
 
     # The flip that is NOT needed must still be wrong, or mate() is doing nothing and a
     # future edit could quietly put one back.

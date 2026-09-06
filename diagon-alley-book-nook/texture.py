@@ -119,9 +119,19 @@ def mortar(width, height, depth=None, seed=None):
                               centered=(True, True, False))
                          .translate(((a + b) / 2, (y0 + y1) / 2, -back)))
 
-    cutter = parts[0]
-    for p in parts[1:]:
-        cutter = cutter.union(p)
+    # Union as a BALANCED TREE, not a running total. Folding 300 grooves into one
+    # accumulator means every step boolean-ing against an ever-larger solid; pairing them
+    # up keeps both operands small and turns O(n) big unions into O(log n) rounds. A wall
+    # panel has ~300 grooves where the test tile had 26, and the difference is minutes.
+    level = parts
+    while len(level) > 1:
+        nxt = []
+        for i in range(0, len(level) - 1, 2):
+            nxt.append(level[i].union(level[i + 1]))
+        if len(level) % 2:
+            nxt.append(level[-1])
+        level = nxt
+    cutter = level[0]
     return cutter, dict(horizontals=n_h, verticals=n_v, worn=worn, missing=missing,
                         solids=len(parts))
 

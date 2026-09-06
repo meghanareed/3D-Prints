@@ -313,11 +313,14 @@ def coupon_items(which="plate1"):
         return coupon.clearance_rerun()
     if which == "wall":
         return coupon.wall_gate()
+    if which == "panel":
+        return coupon.wall_panel()
     return coupon.parts()
 
 
 if __name__ == "__main__":
     which = ("rerun" if "--rerun" in sys.argv else
+             "panel" if "--panel" in sys.argv else
              "wall" if "--wall" in sys.argv else "plate1")
     items = coupon_items(which)
     placed, height = layout(items)
@@ -331,7 +334,8 @@ if __name__ == "__main__":
     out_dir = os.path.join(HERE, "out")
     os.makedirs(out_dir, exist_ok=True)
     path = os.path.join(out_dir, {"rerun": "plate_2_clearance.3mf",
-                                  "wall": "plate_3_wall.3mf"}.get(
+                                  "wall": "plate_3_wall.3mf",
+                                  "panel": "plate_4_panel.3mf"}.get(
                                       which, "plate_1_coupon.3mf"))
     write(items, path)
 
