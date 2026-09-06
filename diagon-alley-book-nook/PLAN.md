@@ -1650,3 +1650,53 @@ hardware that physically exists — worse than a part that merely looks wrong:
 
 **Plate 6 (`--store`) is the storefront on its own**, so the shop can be iterated without
 reprinting 65 g of wall behind it.
+
+### 6.21 The curtain under the cornice — and why the orientation stays
+
+Printed, the inside of the bay had *"an incredible amount of stringing... for the first
+couple [layers] but then holds together perfectly fine on the top."* The question that
+came with it: would printing it **on its front** be better, so the layers build upward?
+
+It would not, and the geometry says why.
+
+**What is actually happening.** The cornice is a 5 mm solid cap over a hollow bay, so its
+underside is a bridge. The void's plan is **100 × 29.5 mm**, and its back edge is *open*
+across 86 mm between the jambs — that gap is the light path. A bridge needs anchors at
+both ends, so with the back open the only run available is **sideways, the full 100 mm**.
+That is the curtain. It is not stringing and not a temperature problem; it is a 100 mm
+bridge doing exactly what a 100 mm bridge does.
+
+**The three orientations.**
+
+| | exterior | the ceiling | the visible bow facets |
+|---|---|---|---|
+| **standing** (current) | no overhangs | 100 mm bridge | **vertical walls — smoothest possible** |
+| on its **front** | flares outward at **47°** — support on the bow itself | fine | against the plate, and scarred by support |
+| on its **back** | tapers inward, no overhangs | fine — the cap becomes a vertical wall | **47° slopes: visible stair-stepping** |
+
+Front-down is the worst of the three: the part widens from 52 mm at the front facet to
+104 mm at the returns over 24.25 mm of rise, which is a 47° overhang on the one surface
+that has to look good.
+
+Back-down is genuinely better for the ceiling — it turns the cap into a vertical wall —
+but it lays the bow facets over at 47°, which trades a hidden defect for stair-stepping
+on the money surface, and it turns the sockets into downward-facing bores that need
+their cones back (rule 4) and the 10.4 mm jambs with them.
+
+**Standing is right.** The defect is on a hidden interior surface and the fix belongs in
+the geometry, not the orientation.
+
+**The fix: a header across the top of the back opening.** Anchor the ceiling's back edge
+and the same bridge runs front-to-back instead — **29.5 mm**, which this machine does
+cleanly. It costs nothing: it sits in the 3.2 mm dead band between the glazing head
+(z = 63.8) and the underside of the cornice (z = 67), which the cornice already blocks.
+
+The honest residue: the header's *own* underside is still an 86 mm bridge, 2 mm wide.
+Nothing anchors the back plane at that height, so no amount of geometry removes it — one
+thin bar instead of the whole ceiling. Supports would clear it (rule 10 permits them
+here, and rule 11 is satisfied: the sockets are bored inside the jambs and no support can
+reach them), but 63 mm columns filling the bay to fix a hidden surface is not a trade
+worth making.
+
+Two tests hold it: the ceiling has a back anchor, and the header sits above the glazing
+head so it can never start costing light.

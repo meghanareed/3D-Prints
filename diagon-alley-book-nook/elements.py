@@ -44,6 +44,7 @@ PANE_CHAMFER = 0.8       # at the top corners of each pane
 STORE_PANE_W = 9.0       # a shopfront is glazed finer than a plain window
 STORE_PANE_H = 11.0
 STORE_REVEAL = 1.0       # architrave proud of the glazing, so the panes read as set back
+STORE_HEADER_T = 2.0     # lintel across the top of the back opening -- see storefront()
 
 
 def flange_points(w, h):
@@ -280,6 +281,20 @@ def self_test():
     t("nothing hangs outside the bow", abs(sb.xlen - 2 * _half) < 0.01,
       f"{sb.xlen:.2f} wide vs a {2 * _half:.0f} mm footprint")
 
+    # The ceiling over the bay is a bridge. Anchored on three sides it spans the full
+    # width; anchored on four it spans the depth. That is a 100 mm bridge against a
+    # 29.5 mm one, and the difference printed as a curtain of strands.
+    _glaz = 72.0 - STORE_SILL - STORE_CORNICE
+    _hdr_top, _hdr_bot = STORE_SILL + _glaz, STORE_SILL + _glaz / 2 + (_glaz - 2 * FRAME_LIP) / 2
+    probe = (cq.Workplane("XY").box(20.0, STORE_HEADER_T, 0.4, centered=(True, False, False))
+             .translate((0, -STORE_HEADER_T, _hdr_top - 0.4)))
+    anchored = sf.intersect(probe)
+    t("the ceiling has a back anchor to bridge to",
+      anchored.solids().vals() and anchored.val().Volume() > 10.0,
+      f"header {_hdr_bot:.1f} -> {_hdr_top:.1f} mm turns a 100 mm bridge into a 29.5 mm one")
+    t("the header costs no light", _hdr_bot >= STORE_SILL + _glaz / 2 + (_glaz - 2 * FRAME_LIP) / 2 - 1e-9,
+      f"sits above the glazing head at z={_hdr_bot:.1f}")
+
     t("the mounting face is the rearmost plane", sb.ymax < 1e-6,
       f"ymax {sb.ymax:.3f} -- proud material behind the part is a gap in front of it")
 
@@ -382,6 +397,8 @@ def storefront(w=90.0, h=72.0, proj=None, facets=3, t=None):
     body = body.cut(void)
 
     # glazing: one opening per facet, panes sized by MAX_PANE_W like every other window
+    open_h = glaz_h - 2 * FRAME_LIP
+    zc = STORE_SILL + glaz_h / 2
     g0 = _bow_glazed(facets, ret)
     for i in range(g0, g0 + facets):
         (x0, y0), (x1, y1) = outer[i], outer[i + 1]
@@ -391,8 +408,6 @@ def storefront(w=90.0, h=72.0, proj=None, facets=3, t=None):
         open_w = seg - 2 * FRAME_LIP
         if open_w <= 4.0:
             continue
-        open_h = glaz_h - 2 * FRAME_LIP
-        zc = STORE_SILL + glaz_h / 2
         rects, cols, rows = pane_grid(open_w, open_h, STORE_PANE_W, STORE_PANE_H)
         for ox, oy, pw, ph in rects:
             pane = (cq.Workplane("XZ")
@@ -441,6 +456,29 @@ def storefront(w=90.0, h=72.0, proj=None, facets=3, t=None):
     #
     # The flange exists to carry sockets, and sockets are at the sides. So put material
     # only where a socket needs it and leave the middle open to the light box.
+    # Header across the top of the back opening.
+    #
+    # The cornice is a 5 mm solid cap over a hollow bay, so its underside is a bridge.
+    # With the back open across 86 mm that bridge can only run SIDEWAYS -- the full
+    # 100 mm width -- and it printed as a curtain of drooping strands hanging inside the
+    # shop. Anchor the back edge and the SAME ceiling bridges front-to-back instead:
+    # 29.5 mm, which this machine does cleanly.
+    #
+    # It costs no light. It sits in the dead band between the top of the glazing and the
+    # underside of the cornice, which the cornice is already blocking.
+    #
+    # Its own underside is still a bridge -- 86 mm of it, 2 mm wide. That is the honest
+    # residue: one thin bar instead of the whole ceiling. Nothing anchors the back plane
+    # at that height, so there is no orientation-free way to remove it; only supports or
+    # a different print orientation would, and both cost more than they save (see PLAN
+    # 6.21).
+    hdr_top = STORE_SILL + glaz_h
+    hdr_bot = zc + open_h / 2
+    body = body.union(cq.Workplane("XY")
+                      .box(2 * half, STORE_HEADER_T, hdr_top - hdr_bot,
+                           centered=(True, False, False))
+                      .translate((0, -STORE_HEADER_T, hdr_bot)))
+
     # The jambs must be DEEP, not just present. A socket needs socket_min_material of
     # material behind its mouth and a 2 mm flange has none of it -- the bore came out as
     # a through hole with 2 mm of engagement, and when the mouth moved it cut pure air and
