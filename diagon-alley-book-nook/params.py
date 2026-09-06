@@ -285,6 +285,16 @@ ARCH_OPENING_W  = Param(182.0, CHOSEN, "7.17 in. clear, out of 8 in. exterior --
 PERSP_STRENGTH  = Param(0.42, CHOSEN, "element scale at the rear = 1 - this. The thing "
                                       "that makes a 197 mm alley read as a street")
 BRICK_RELIEF    = Param(0.6, CHOSEN, "mortar groove depth. 0.5-0.8 is the useful band")
+MAX_PANE_W = Param(12.0, MEASURED,
+                   "the widest pane whose top bridges cleanly. Plate 1 printed 12 mm "
+                   "openings at three mullion thicknesses and the tops came out; nothing "
+                   "wider has been tried. This is the constraint on a window, NOT its "
+                   "overall width -- a 36 mm window on two columns has 17.4 mm panes, "
+                   "which is an untested bridge. Scaling a window up adds mullions; it "
+                   "does not stretch panes", "plate 1")
+MAX_PANE_H = Param(16.0, CHOSEN,
+                   "no measurement behind this one -- pane HEIGHT is not a bridge, it is "
+                   "just wall. Kept so tall windows get transoms and look like windows")
 BRICK_LENGTH    = Param(18.0, CHOSEN, "a stretcher, front-plane size")
 BRICK_HEIGHT    = Param(6.0, CHOSEN, "one course")
 MORTAR_GAP      = Param(1.2, CHOSEN, "joint width. Must be >= 2 line widths or the "

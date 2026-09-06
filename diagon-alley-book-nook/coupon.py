@@ -369,7 +369,7 @@ def clearance_rerun():
 
 
 # ============================================================== plate 3: the wall ==
-def wall_gate():
+def wall_gate_old():
     """Plate 3 -- Phase 1's actual exit test, at tile scale.
 
     The joint is settled. What is not settled is the WALL: whether a facade part seats
@@ -388,6 +388,35 @@ def wall_gate():
     for i, _ in enumerate(spots):
         out.append((f"01_window_{chr(ord('a') + i)}", E.window(ew, eh), None))
     return out
+
+
+def wall_gate():
+    """Plate 3 -- Phase 1's exit test, and rule 9 put to a vote.
+
+    Built at SHIPPING scale (36 x 50), not at the old table's 22 x 30. A bigger window is
+    not the same test: at 36 mm on two columns the panes would be 17.4 mm and the bridge
+    at each pane top is longer than anything printed. `panes_for()` gives it three columns
+    and 11.2 mm panes instead -- near the 12 mm that plate 1 proved. Testing at a size
+    that will not ship measures a window nobody is going to build.
+
+    ONE FUSED, ONE MOUNTED, same window, same tile.
+
+      fused    frame and mullions as relief on the wall, panes cut through. No part, no
+               joint, no flange, no four sockets. What rule 9 says a flat window on a
+               flat-printing wall should be.
+      mounted  a separate part on four pegs. What a STOREFRONT earns, because it prints
+               standing while the wall prints flat -- borrowed here as the comparison.
+
+    Arithmetic cannot answer which looks better, and looking better is most of why this
+    is being built. So print both and hold them at arm's length.
+    """
+    import wall
+    ew, eh = 36.0, 50.0
+    fused_at, mounted_at = (38.0, 40.0), (38.0, 108.0)
+    t = wall.tile(76.0, 150.0, elements=[("window_fused", ew, eh, *fused_at),
+                                         ("window", ew, eh, *mounted_at)])
+    return [("00_wall_tile", t, None),
+            ("01_window_mounted", E.window(ew, eh), None)]
 
 
 def tile_with(ew, eh, spots, w=62.0, h=108.0):

@@ -47,9 +47,17 @@ def tile(w=62.0, h=52.0, t=None, elements=(), brick=True, seed=None):
         body, _stats = T.brick_face(body, w, h, at=(0, 0, t), seed=seed)
 
     for kind, ew, eh, cx, cy in elements:
-        body = body.cut(E.wall_opening(ew, eh).translate((cx, cy, t / 2)))
-        for px, py in E.flange_points(ew, eh):
-            body = body.union(J.peg().translate((cx + px, cy + py, t)))
+        if kind == "window_fused":
+            # Rule 9 applied rather than asserted: same orientation, same filament, and
+            # its cavity is a hole -- so it does not earn being a part. Frame and mullions
+            # become relief on the wall face; the panes are cut straight through.
+            add, cut = E.window_relief(ew, eh)
+            body = body.cut(cut.translate((cx, cy, t / 2)))
+            body = body.union(add.translate((cx, cy, t)))
+        else:
+            body = body.cut(E.wall_opening(ew, eh).translate((cx, cy, t / 2)))
+            for px, py in E.flange_points(ew, eh):
+                body = body.union(J.peg().translate((cx + px, cy + py, t)))
     return body
 
 

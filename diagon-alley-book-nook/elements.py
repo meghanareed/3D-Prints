@@ -61,13 +61,30 @@ def _pane_cut(pw, ph, t, chamfer=PANE_CHAMFER):
     return cq.Workplane("XY").polyline(pts).close().extrude(t + 2).translate((0, 0, -1))
 
 
-def window(w=22.0, h=30.0, cols=2, rows=3, t=None, mullion=MULLION):
+def panes_for(w, h):
+    """How many panes a window of this size needs.
+
+    Driven by the pane, not the window. A bigger window gets MORE mullions at the same
+    pane size, because the pane top is a bridge and 12 mm is the widest one measured. The
+    naive alternative -- keep 2x3 and let the panes grow -- puts a 17.4 mm bridge in a
+    36 mm window, which nothing has printed.
+    """
+    cols = max(1, math.ceil((w + MULLION) / (float(P.MAX_PANE_W) + MULLION)))
+    rows = max(1, math.ceil((h + MULLION) / (float(P.MAX_PANE_H) + MULLION)))
+    return cols, rows
+
+
+def window(w=22.0, h=30.0, cols=None, rows=None, t=None, mullion=MULLION):
     """A window frame: outer band, mullions, hollow back, flange with four sockets.
 
     Built face-up in XY. The visible face is +Z; the flange and sockets are on -Z, which
     is the side that meets the wall.
     """
     t = float(P.WALL_FACE_T if t is None else t)
+    if cols is None or rows is None:
+        auto_c, auto_r = panes_for(w, h)
+        cols = auto_c if cols is None else cols
+        rows = auto_r if rows is None else rows
     ow, oh = w + 2 * FRAME_LIP, h + 2 * FRAME_LIP
     fw, fh = ow + 2 * FLANGE_W, oh + 2 * FLANGE_W
 
@@ -93,6 +110,36 @@ def window(w=22.0, h=30.0, cols=2, rows=3, t=None, mullion=MULLION):
     for x, y in flange_points(w, h):
         body = J.socket_in(body, (x, y, 0), "+Z")
     return body
+
+
+def window_relief(w=22.0, h=30.0, t=None, mullion=MULLION):
+    """The same window, FUSED into a wall instead of pinned to it.
+
+    Returns (add, cut): raised frame and mullions to union onto the wall face, and the
+    pane grid to cut through it. No flange, no sockets, no joint -- because a flat window
+    on a flat-printing wall needs none of the three things rule 9 says earn a part its
+    separation. It is the same orientation, the same filament, and its cavity is a hole.
+
+    Whether it LOOKS as good is the one thing arithmetic cannot answer, which is why one
+    of each goes on plate 3.
+    """
+    t = float(P.WALL_FACE_T if t is None else t)
+    cols, rows = panes_for(w, h)
+    ow, oh = w + 2 * FRAME_LIP, h + 2 * FRAME_LIP
+
+    band = cq.Workplane("XY").box(ow, oh, 1.4, centered=(True, True, False))
+    pw = (w - (cols - 1) * mullion) / cols
+    ph = (h - (rows - 1) * mullion) / rows
+    grid = None
+    for c in range(cols):
+        for r in range(rows):
+            x = -w / 2 + pw / 2 + c * (pw + mullion)
+            y = -h / 2 + ph / 2 + r * (ph + mullion)
+            pane = _pane_cut(pw, ph, 40.0).translate((x, y, -20.0))
+            grid = pane if grid is None else grid.union(pane)
+    full = cq.Workplane("XY").box(w, h, 1.4, centered=(True, True, False))
+    add = band.cut(cq.Workplane("XY").box(w, h, 4.0, centered=(True, True, True)))               .union(full.cut(grid))
+    return add, grid
 
 
 def wall_opening(w=22.0, h=30.0):
