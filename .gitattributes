@@ -1,0 +1,21 @@
+# Git GUESSES whether a file is text, and on Windows it rewrites the line endings of
+# anything it decides is. These formats are binary, and a single CRLF substitution
+# inside one is a corrupt file that still looks perfectly committed:
+#
+#   *.stl   32,532 NUL bytes in one sample -- raw floats
+#   *.3mf   a zip, and its compressed streams contain literal CRLF byte pairs
+#
+# The guess is right today, but it is re-made on every clone, on machines whose
+# core.autocrlf we do not control. The printable output IS this repo, so pin it.
+#
+# Deliberately NOT listed: *.step and the slicer *.config files. STEP is an ASCII
+# format and both are genuinely text, currently stored with CRLF. Marking them binary
+# -- or switching the repo to `* text=auto` -- rewrites content this change has no
+# business touching.
+
+*.3mf   binary
+*.stl   binary
+*.zip   binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
