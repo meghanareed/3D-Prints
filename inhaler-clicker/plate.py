@@ -222,6 +222,32 @@ def build_entries(items):
     return entries
 
 
+def split_to_plates(items, bed=None, spacing=None):
+    """Break a set of parts into bed-sized groups. Returns [[items], [items], ...].
+
+    Three copies of every swept value is rule 13, and it takes Prototype A past what one
+    bed holds. Packing them into one plate anyway would silently drop parts off the far
+    edge -- shelf-packing does not fail, it just keeps going.
+    """
+    # One spacing gap of headroom. Packing to 252 of 256 mm leaves 4 mm for a brim that
+    # is 5 mm wide, and the shelf-packer does not know that -- it reports a depth, it
+    # does not check one.
+    bed = float(P.BED_X if bed is None else bed)
+    limit = bed - float(P.PLATE_SPACING)
+    groups, current = [], []
+    for item in items:
+        trial = current + [item]
+        _, depth = layout(trial, bed=bed, spacing=spacing)
+        if depth > limit and current:
+            groups.append(current)
+            current = [item]
+        else:
+            current = trial
+    if current:
+        groups.append(current)
+    return groups
+
+
 def write(items, path, title="Inhaler clicker"):
     entries = build_entries(items)
     with open(P.PROFILE_PATH, encoding="utf8") as fh:
@@ -298,31 +324,42 @@ def self_test(path):
 
 if __name__ == "__main__":
     import coupon
+    import mech
 
-    items = coupon.parts()
-    placed, depth = layout(items)
     bed = float(P.BED_X)
-    print("plate -- Bambu project writer\n")
-    print(f"  {len(items)} objects, spacing {float(P.PLATE_SPACING):.0f} mm (2 x brim + 1)")
-    print(f"  layout {depth:.0f} mm deep on a {bed:.0f} mm bed"
-          f"{'  -- OVERFLOWS' if depth > bed else ''}\n")
-
     out_dir = os.path.join(HERE, "out")
     os.makedirs(out_dir, exist_ok=True)
-    path = os.path.join(out_dir, "plate_1_coupon.3mf")
-    write(items, path, title="Inhaler clicker -- Prototype A coupons")
 
-    bad = 0
-    for ok, name, detail in self_test(path):
-        print(f"  {'ok  ' if ok else 'FAIL'}  {name}" + (f"   [{detail}]" if detail else ""))
-        bad += not ok
+    jobs = [(f"A{i + 1}", g, f"Inhaler clicker -- Prototype A coupons {i + 1}")
+            for i, g in enumerate(split_to_plates(coupon.parts()))]
+    jobs.append(("B", [("PROTO_B_skeleton", mech.skeleton(), None)],
+                 "Inhaler clicker -- Prototype B mechanism skeleton"))
+
+    print("plate -- Bambu project writer\n")
+    print(f"  spacing {float(P.PLATE_SPACING):.0f} mm (2 x brim + 1) on a {bed:.0f} mm bed\n")
+
+    bad, written = 0, []
+    for tag, group, title in jobs:
+        _, depth = layout(group)
+        path = os.path.join(out_dir, f"plate_{tag}.3mf")
+        write(group, path, title=title)
+        fails = [r for r in self_test(path) if not r[0]]
+        bad += len(fails)
+        print(f"  plate_{tag}  {len(group):3d} objects  {depth:5.0f} mm deep"
+              f"{'  -- OVERFLOWS' if depth > bed else ''}"
+              f"   {len(fails)} failures")
+        for _, name, detail in fails:
+            print(f"      FAIL  {name}" + (f"   [{detail}]" if detail else ""))
+        written.append(path)
 
     if "--write" not in sys.argv:
-        os.remove(path)
-        print(f"\n  {bad} failures  (pass --write to keep the file)")
+        for p in written:
+            os.remove(p)
+        print(f"\n  {bad} failures  (pass --write to keep the files)")
     else:
         print(f"\n  {bad} failures")
-        print(f"  wrote {path}  ({os.path.getsize(path) / 1024:.0f} kB)")
+        for p in written:
+            print(f"  wrote {os.path.basename(p)}  ({os.path.getsize(p) / 1024:.0f} kB)")
 
     sys.stdout.flush()
     sys.stderr.flush()

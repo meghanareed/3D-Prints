@@ -117,10 +117,6 @@ PRESS_FIT_CLEARANCE = Param(
     "per side, AND GLUE IT. Seven identical sockets cut to one number: three held a peg, "
     "four dropped it. No nominal clearance gives a repeatable press fit at small scale",
     "../README.md")
-TEXT_STROKE_MIN = Param(
-    0.5, MEASURED,
-    "stroke is the limit, not glyph height. A bold face goes smaller than a fine one",
-    "../README.md")
 
 # ================================================================== the MX switch ==
 # Everything in this block is read off ref/blank_clicker_sample.3mf, a working
@@ -262,10 +258,69 @@ TEXT_RAISE = Param(
     0.60, CHOSEN,
     "spec section 12. Three layers at 0.20 -- and NOT a whole number of layers at the "
     "0.16 the spec recommends in section 16, which is the contradiction sanity() fails on")
-TEXT_H_SMALL = Param(3.5, CHOSEN, "spec section 12: 3-3.5")
-TEXT_H_WHEEZY = Param(4.5, CHOSEN, "spec section 12: 4-5, the focal point")
+# Settled by the book nook's plate 1 and promoted into ../README.md. These are the
+# numbers that made the spec's lettering plan impossible, so they sit above the sizes
+# rather than below them.
+TEXT_STROKE_MIN = Param(
+    0.70, MEASURED,
+    "stroke, not glyph height, is the limit. A four-size ladder located it: 0.30 and "
+    "0.36 mm strokes printed as blobs, 0.48 held partially, 0.72 held. One extrusion "
+    "(0.42) is the floor; 0.70 is where it is reliable", "../README.md, plate 1")
+TYPE_STEM_RATIO = Param(
+    0.12, MEASURED,
+    "a bold serif stem is this fraction of its glyph size. Conservative for a face as "
+    "heavy as Arial Black, which is the point -- R-5 has not measured the face in use",
+    "../README.md")
+TEXT_SIZE_MIN = Param(
+    6.0, MEASURED,
+    "glyph height that actually reads. Follows from TEXT_STROKE_MIN and TYPE_STEM_RATIO, "
+    "not chosen separately", "../README.md, plate 1")
+TEXT_ADVANCE_EM = Param(
+    0.72, MEASURED,
+    "advance width per character, all-caps bold. 0.62 was assumed twice next door and "
+    "ran the lettering off the plate both times. Measure text against the thing it sits "
+    "on", "../README.md, plate 1")
+
+# The spec asked for 3-3.5 mm text with WHEEZY at 4-5, on a 29 mm wide face. At 3.5 the
+# stem is 0.42 mm -- one extrusion, the blob end of the ladder -- and IT AIN'T EASY at a
+# printable 6 mm is 56 mm wide against 27 mm of face. It does not fit horizontally at any
+# size that prints.
+#
+# So the lettering runs VERTICALLY, up the 63 mm axis, the way a pharmacy label does.
+# Two columns, both landing at 56.2 mm of the 61 available, which is why they are
+# different sizes: it makes them the same length.
+TEXT_VERTICAL = True
+TEXT_H_SMALL = Param(6.0, CHOSEN, "= TEXT_SIZE_MIN. There is no room below it")
+TEXT_H_WHEEZY = Param(
+    6.5, CHOSEN,
+    "spec section 12 wants WHEEZY as the focal point. Enlarging the whole second column "
+    "is how that survives a vertical layout")
+TEXT_LINE_GAP = Param(2.0, CHOSEN, "between the two columns, across the body's width")
 TEXT_FONT = "Arial Black"       # not a Param: it is a string, and it is a guess. R-5.
-TEXT_LINES = ("IT AIN'T EASY", "BEING", "WHEEZY")
+TEXT_LINES = (("IT AIN'T EASY", TEXT_H_SMALL), ("BEING WHEEZY", TEXT_H_WHEEZY))
+
+
+def text_width(text, size):
+    """How wide raised lettering will actually be. Nobody guesses this again."""
+    return len(text) * float(size) * float(TEXT_ADVANCE_EM)
+
+
+def text_fits(text, size, along, margin=1.0):
+    """Does it fit along `along` mm, with margin? Returns (ok, width, available)."""
+    w = text_width(text, size)
+    avail = float(along) - 2 * margin
+    return w <= avail, w, avail
+
+
+def text_prints(size):
+    """Will the stems survive? Returns (ok, stroke, floor)."""
+    stroke = float(size) * float(TYPE_STEM_RATIO)
+    return stroke >= float(TEXT_STROKE_MIN), stroke, float(TEXT_STROKE_MIN)
+
+
+def text_flat_width():
+    """How much flat face the columns need, across the body's width."""
+    return sum(float(s) for _, s in TEXT_LINES) + float(TEXT_LINE_GAP) * (len(TEXT_LINES) - 1)
 
 
 # ============================================================= the vertical stack ==
@@ -439,6 +494,23 @@ def sanity():
                    "and section 1 of the spec says do not build one")
     if _under(TEXT_RAISE, LAYER * 2):
         bad.append("raised text under two layers will not survive a colour change")
+
+    # -- lettering. Measured against the face it sits on, not eyeballed --------
+    # The vertical layout runs each column up BODY_HEIGHT; the columns stack across the
+    # FLAT of the front face, which is the width minus both corner radii.
+    for txt, size in TEXT_LINES:
+        ok, stroke, floor = text_prints(size)
+        if not ok:
+            bad.append(f"{txt!r} at {float(size)} mm has a {stroke:.2f} mm stem, under "
+                       f"the {floor:.2f} mm stroke floor -- it prints as blobs")
+        ok, w, avail = text_fits(txt, size, BODY_HEIGHT)
+        if not ok:
+            bad.append(f"{txt!r} at {float(size)} mm is {w:.1f} mm long and only "
+                       f"{avail:.1f} mm of body height is available to run it up")
+    flat = float(BODY_WIDTH) - 2 * float(BODY_CORNER_R)
+    if _under(flat, text_flat_width()):
+        bad.append(f"the lettering columns need {text_flat_width():.1f} mm across the "
+                   f"face and only {flat:.1f} mm of it is flat between the corner radii")
     if _under(PLATE_SPACING, 2 * BRIM_WIDTH + 1.0):
         bad.append(f"plate spacing {float(PLATE_SPACING)} is under 2 x brim + 1")
 
