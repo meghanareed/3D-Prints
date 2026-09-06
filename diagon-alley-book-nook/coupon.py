@@ -28,6 +28,7 @@ import sys
 
 import cadquery as cq
 
+import elements as E
 import joints as J
 import params as P
 
@@ -365,6 +366,33 @@ def clearance_rerun():
             out.append((f"01_socket_{int(c * 100)}_{chr(ord('a') + i)}",
                         socket_block(c, str(int(c * 100))), None))
     return out
+
+
+# ============================================================== plate 3: the wall ==
+def wall_gate():
+    """Plate 3 -- Phase 1's actual exit test, at tile scale.
+
+    The joint is settled. What is not settled is the WALL: whether a facade part seats
+    flat on brick relief instead of rocking on it, whether the four-point flange works,
+    and -- R-6, still open and the criterion Phase 1 is actually judged on -- whether the
+    joint holds when the wall is VERTICAL and glued. Every fit so far has been flat on a
+    bench.
+
+    Two windows rather than one, because two is what shows whether the wall is square.
+    One part can be crooked and still look fine.
+    """
+    ew, eh = 22.0, 30.0
+    spots = [(31.0, 30.0), (31.0, 78.0)]
+    t = tile_with(ew, eh, spots)
+    out = [("00_wall_tile", t, None)]
+    for i, _ in enumerate(spots):
+        out.append((f"01_window_{chr(ord('a') + i)}", E.window(ew, eh), None))
+    return out
+
+
+def tile_with(ew, eh, spots, w=62.0, h=108.0):
+    import wall
+    return wall.tile(w, h, elements=[("window", ew, eh, cx, cy) for cx, cy in spots])
 
 
 def _bbox(w):

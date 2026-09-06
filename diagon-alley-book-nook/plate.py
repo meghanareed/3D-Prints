@@ -309,12 +309,17 @@ def self_test(path):
 
 def coupon_items(which="plate1"):
     import coupon
-    return coupon.clearance_rerun() if which == "rerun" else coupon.parts()
+    if which == "rerun":
+        return coupon.clearance_rerun()
+    if which == "wall":
+        return coupon.wall_gate()
+    return coupon.parts()
 
 
 if __name__ == "__main__":
-    rerun = "--rerun" in sys.argv
-    items = coupon_items("rerun" if rerun else "plate1")
+    which = ("rerun" if "--rerun" in sys.argv else
+             "wall" if "--wall" in sys.argv else "plate1")
+    items = coupon_items(which)
     placed, height = layout(items)
     bed = float(P.BED_X)
     print("plate -- Bambu project writer\n")
@@ -325,8 +330,9 @@ if __name__ == "__main__":
 
     out_dir = os.path.join(HERE, "out")
     os.makedirs(out_dir, exist_ok=True)
-    path = os.path.join(out_dir,
-                        "plate_2_clearance.3mf" if rerun else "plate_1_coupon.3mf")
+    path = os.path.join(out_dir, {"rerun": "plate_2_clearance.3mf",
+                                  "wall": "plate_3_wall.3mf"}.get(
+                                      which, "plate_1_coupon.3mf"))
     write(items, path)
 
     bad = 0

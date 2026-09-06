@@ -285,6 +285,17 @@ ARCH_OPENING_W  = Param(182.0, CHOSEN, "7.17 in. clear, out of 8 in. exterior --
 PERSP_STRENGTH  = Param(0.42, CHOSEN, "element scale at the rear = 1 - this. The thing "
                                       "that makes a 197 mm alley read as a street")
 BRICK_RELIEF    = Param(0.6, CHOSEN, "mortar groove depth. 0.5-0.8 is the useful band")
+BRICK_LENGTH    = Param(18.0, CHOSEN, "a stretcher, front-plane size")
+BRICK_HEIGHT    = Param(6.0, CHOSEN, "one course")
+MORTAR_GAP      = Param(1.2, CHOSEN, "joint width. Must be >= 2 line widths or the "
+                                     "nozzle cannot cut the groove at all")
+BRICK_WORN_FRAC = Param(0.06, CHOSEN, "fraction of bricks knocked back a little, so the "
+                                      "face is not a grid of identical rectangles")
+BRICK_MISSING_FRAC = Param(0.015, CHOSEN, "fraction cut right back to the mortar line")
+BRICK_JITTER    = Param(0.35, CHOSEN, "mm of random slop in a brick's end position")
+RANDOM_SEED     = Param(20260905, CHOSEN, "so a wall is identical between builds -- a "
+                                          "texture that moves under you cannot be "
+                                          "compared between prints")
 COBBLE_RELIEF   = Param(0.8, CHOSEN, "stone height above the joint")
 COBBLE_CHAMFER  = Param(0.4, CHOSEN, "top-edge bevel -- this is what catches dry-brushing")
 
