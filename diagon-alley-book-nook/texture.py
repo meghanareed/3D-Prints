@@ -52,9 +52,21 @@ def brick_ends(width, course_index, brick_l=None, jitter=None, rng=None):
     xs, x = [], offset - bl
     while x < width + bl:
         if 0 < x < width:
-            xs.append(min(max(x + rng.uniform(-jit, jit), 0.6), width - 0.6))
+            xs.append(x + rng.uniform(-jit, jit))
         x += bl
-    return xs
+
+    # Drop any joint that would leave a stub. Clamping it to the edge instead -- which is
+    # what this did first -- just moves the sliver rather than removing it, and plate 3
+    # printed the result as a visible gap in the second course.
+    floor = bl * float(P.MIN_BRICK_FRAC)
+    kept = []
+    for j in sorted(xs):
+        if j < floor or (width - j) < floor:
+            continue
+        if kept and (j - kept[-1]) < floor:
+            continue
+        kept.append(j)
+    return kept
 
 
 def mortar(width, height, depth=None, seed=None):
@@ -161,6 +173,17 @@ def self_test():
     a, _ = mortar(30, 20)
     b, _ = mortar(30, 20)
     t("same seed gives the same wall", abs(a.val().Volume() - b.val().Volume()) < 1e-6)
+
+    # No slivers. A stub brick beside full ones reads as a gap, not as brickwork.
+    floor = float(P.BRICK_LENGTH) * float(P.MIN_BRICK_FRAC)
+    rng2 = _rng()
+    shortest = 99.0
+    for ci in range(int(h / float(P.BRICK_HEIGHT))):
+        e = [0.0] + brick_ends(w, ci, rng=rng2) + [w]
+        shortest = min(shortest, min(b - a for a, b in zip(e, e[1:])))
+    t("no brick is a sliver", shortest >= floor - 1e-6,
+      f"shortest {shortest:.2f} mm, floor {floor:.2f} -- plate 3 printed a 3.8 mm stub "
+      f"and it read as a gap")
 
     t("variation is present but sparse", 0 < st["worn"] + st["missing"] <= st["verticals"],
       f"{st['worn']} worn, {st['missing']} missing, of ~{st['verticals']} bricks")

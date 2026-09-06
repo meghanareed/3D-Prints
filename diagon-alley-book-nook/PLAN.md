@@ -1078,6 +1078,37 @@ plate-1 failures retroactively. `_stamp` now refuses to build a label under the 
 **And identification no longer trusts text.** Countable raised bars, 1.6 × 7 mm, far above
 the minimum feature. Text can fail to print; a bar cannot.
 
+### 6.18 Plate 3 — printed. Fused wins, and that removes a part class
+
+Two windows, same size, same tile: one **fused** into the wall as relief, one **mounted**
+on four pegs. Held at arm's length **they look the same**.
+
+**So flat windows fuse.** No part, no joint, no flange, no four sockets, no four pegs —
+for every window on every flat-printing wall in the alley. Rule 9 said a flat element on a
+flat wall earns none of the three things that justify separation; plate 3 is the evidence
+rather than the assertion, and it is the single largest part-count reduction available
+short of the Phase 2 regroup.
+
+What keeps the mounted path: a **storefront module prints standing while the wall prints
+flat**, which is a genuine difference of orientation, so it still earns being a part. The
+`window()` element and its flange are not wasted — they become the mounting system for
+storefronts, signs and lamps. What is retired is using them for *flat trim*.
+
+Brickwork came out well, with one defect worth keeping the note on.
+
+#### The brick gap, and why it was there
+
+A 3.8 mm stub brick at the end of every unoffset course. The tile is 76 mm wide and a
+stretcher is 18, so four whole bricks fill 72 and leave 4 — and a 4 mm stub beside 18 mm
+neighbours does not read as a short brick, it reads as **a gap**, which is exactly how it
+was spotted.
+
+The first version clamped a joint that fell near an edge to 0.6 mm inside it, which moves
+the sliver rather than removing it. `MIN_BRICK_FRAC` (0.35) now **drops** any joint that
+would leave a stub under a third of a brick, and the end brick simply runs long. That is
+what a bricklayer does: cut a closer, never lay a sliver. Shortest brick went 3.75 → 8.68
+mm, and `texture.py` fails the build if one appears again.
+
 ### 6.17 Plate 2 — printed. The clearance moved
 
 | Bars | Clearance | Result |

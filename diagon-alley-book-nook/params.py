@@ -302,6 +302,13 @@ MORTAR_GAP      = Param(1.2, CHOSEN, "joint width. Must be >= 2 line widths or t
 BRICK_WORN_FRAC = Param(0.06, CHOSEN, "fraction of bricks knocked back a little, so the "
                                       "face is not a grid of identical rectangles")
 BRICK_MISSING_FRAC = Param(0.015, CHOSEN, "fraction cut right back to the mortar line")
+MIN_BRICK_FRAC  = Param(0.35, CHOSEN,
+                        "shortest brick allowed, as a fraction of a full stretcher. A "
+                        "course whose width is not a neat multiple of the brick length "
+                        "ends in a stub, and a 3.8 mm stub beside 18 mm neighbours does "
+                        "not read as a short brick -- it reads as a GAP, which is what "
+                        "plate 3 showed. A bricklayer cuts a closer; nobody lays a "
+                        "sliver. Drop the joint instead and let the end brick run long")
 BRICK_JITTER    = Param(0.35, CHOSEN, "mm of random slop in a brick's end position")
 RANDOM_SEED     = Param(20260905, CHOSEN, "so a wall is identical between builds -- a "
                                           "texture that moves under you cannot be "
